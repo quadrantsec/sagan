@@ -114,7 +114,7 @@ This links the rule to a classification. Classification can be used to determine
 
 **classtype: exploit-attempt;**
 
-A "exploit-attempt" classification is a priority 1 (highest) level event. For a complete list of classification types, see http://github.com/beave/sagan-rules/blob/master/classification.config
+A "exploit-attempt" classification is a priority 1 (highest) level event. For a complete list of classification types, see http://github.com/quadrantsec/sagan-rules/blob/master/classification.config
 
 content
 -------
@@ -702,7 +702,7 @@ sid
 
 **sid: 5001021;**
 
-Sagan signatures start at 5000000. To view the "last used" signature, see https://github.com/beave/sagan-rules/blob/master/.last_used_sid
+Sagan signatures start at 5000000. To view the "last used" signature, see https://github.com/quadrantsec/sagan-rules/blob/master/.last_used_sid
 
 syslog_tag
 ----------
