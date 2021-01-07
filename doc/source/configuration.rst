@@ -48,7 +48,7 @@ Example ``rsyslog`` "pipe" configuration, can be installed as
        constant(value="\n")
    }
    
-   *.*  action(type="ompipe" pipe="var/sagan/fifo/sagan.fifo" template="SaganPipe")
+   *.*  action(type="ompipe" pipe="/var/sagan/fifo/sagan.fifo" template="SaganPipe")
 
 NOTE: rsyslog's "msg" property includes
 `the space after the colon <https://www.rsyslog.com/log-normalization-and-the-leading-space/>`_.
@@ -183,7 +183,7 @@ Example ``syslog-ng`` "pipe" configuration::
    # This line ties the sources and destinations together.
 
    log { source(s_src); destination(sagan_fifo); };
-   log { source{syslog_in}; destination(sagan_fifo); };
+   log { source(syslog_in); destination(sagan_fifo); };
 
 
 
@@ -214,7 +214,7 @@ Example ``syslog-ng`` JSON configuration::
    # This line ties the sources and destinations together.
 
    log { source(s_src); destination(sagan_fifo); };
-   log { source{syslog_in}; destination(sagan_fifo); };
+   log { source(syslog_in); destination(sagan_fifo); };
 
 
 nxlog
@@ -663,7 +663,7 @@ This points Sagan to the ``classications.config``.  The ``classifications.config
 that maps classification types (ie - "attempted recon") to a priority level (ie - "1").  This 
 data is used in rules via the ``classtype`` keyword.  
 
-https://github.com/quadrantsec/sagan-rules/blob/master/classification.config
+https://github.com/beave/sagan-rules/blob/master/classification.config
 
 gen-msg-map
 ~~~~~~~~~~~
@@ -671,7 +671,7 @@ gen-msg-map
 The ``gen-msg-map`` is used to point ``processors`` to their "generator id".  The Sagan engine
 uses an ID of "1".  This file is used to assign other ``processors`` other IDs. 
 
-https://github.com/quadrantsec/sagan-rules/blob/master/gen-msg.map
+https://github.com/beave/sagan-rules/blob/master/gen-msg.map
 
 reference
 ~~~~~~~~~
@@ -679,7 +679,7 @@ reference
 The ``reference`` option points Sagan to where the ``reference.config`` file is located on the 
 file system.  This file is used with the ``reference`` rule keyword.  
 
-https://github.com/quadrantsec/sagan-rules/blob/master/reference.config
+https://github.com/beave/sagan-rules/blob/master/reference.config
 
 protocol-map
 ~~~~~~~~~~~~
@@ -692,7 +692,7 @@ be a router log that contains the term "TCP" or "icmp" in it.  Sagan will "see" 
 the protocol within the log message internally.  The ``protocol-map`` is used by the ``parse_proto``
 rule keyword.
 
-https://github.com/quadrantsec/sagan-rules/blob/master/protocol.map
+https://github.com/beave/sagan-rules/blob/master/protocol.map
 
 flexbit-storage
 ~~~~~~~~~~~~~~~
@@ -742,7 +742,7 @@ used with the ``json-software`` option to tell Sagan how do decode incoming JSON
 named pipe.  To use the ``json-map`` option, Sagan will need to be compiled with the 
 ``libfastjson`` or ``liblognorm``.
 
-https://github.com/quadrantsec/sagan-rules/blob/master/json-input.map
+https://github.com/beave/sagan-rules/blob/master/json-input.map
 
 json-sofware
 ~~~~~~~~~~~~
@@ -778,7 +778,7 @@ wins.  That is,  the mapping with the most fields identified will "win" and Saga
 mapping with the log message.   This can be useful for directly processing Suricata EVE logs and
 Splunk forwarded logs.
 
-https://github.com/quadrantsec/sagan-rules/blob/master/json-input.map
+https://github.com/beave/sagan-rules/blob/master/json-input.map
 
 
 parse_ip
@@ -997,7 +997,7 @@ Example ``plog`` subsection::
      #
      # For more information,  please see: 
      #
-     # https://raw.githubusercontent.com/quadrantsec/sagan/master/src/sagan-plog.c
+     # https://raw.githubusercontent.com/beave/sagan/master/src/sagan-plog.c
 
      plog:
 
@@ -1223,7 +1223,7 @@ Example ``eve-log`` subsection::
      # replacement for "unified2" with software like "Meer".  For more 
      # information on Meer, Check out:
      #
-     # https://github.com/quadrantsec/meer
+     # https://github.com/beave/meer
 
      - eve-log:
          enabled: no

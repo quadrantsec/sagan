@@ -26,7 +26,8 @@ can write also write out JSON which can be ingested by Elasticsearch
 and viewed with console like Kibana, EVEbox, etc. 
 
 Sagan supports many different output formats,  log normalization 
-(via liblognorm),  GeoIP detection, script execution on event and more.
+(via liblognorm),  GeoIP detection, script execution on event and
+automatic firewall support via "Snortsam" (see http://www.snortsam.net).  
 
 Sagan uses the GNU "artisic style". 
 
@@ -55,7 +56,7 @@ For more general Sagan information, please visit the offical Sagan web site:
 https://sagan.quadrantsec.com. 
 
 For Sagan documentation to assist with installation, rule writing, etc.  Check out:
-https://sagan.readthedocs.io/
+https://sagan.readthedocs.io/en/latest/
 
 For help & assistence,  check out the Sagan mailing list.  If it located at:
 https://groups.google.com/forum/#!forum/sagan-users.  You can also ask questions on the
@@ -63,5 +64,5 @@ Sagan chat system at https://m.telephreak.org/sagan/channels/town-square.  The c
 is similar to "Slack".
 
 If you're looking for Sagan rule sets on Github,  they are located at:
-https://github.com/quadrantsec/sagan-rules
+https://github.com/beave/sagan-rules
 
