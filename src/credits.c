@@ -84,7 +84,13 @@ void Credits(void)
     fprintf(stderr, "\"YoichSec\" (Github)\t\t\t\tChanging rules to match Suricata/Snort.\n");
     fprintf(stderr, "\"3vilJohn\" (Twitter)\t\t\t\tVarious bug reports & testing.\n");
     fprintf(stderr, "Kenneth Shelton (@netwatcher)\t\t\tIPv6 support, bug fixes.\n");
-    fprintf(stderr, "Brian Candler (@candlerb)\t\t\tLots of bug fixes, enchancements, improvements.");
+    fprintf(stderr, "Brian Candler (@candlerb)\t\t\tLots of bug fixes, enchancements, improvements.\n");
+    fprintf(stderr, "Peter Urbanec (peterirbanec)\t\t\tFixes for GCC 10 issues.\n");
+    fprintf(stderr, "Stef Roskan (smr1983)\t\t\t\tAdded 'username' to flexbits & other fixes.\n");
+    fprintf(stderr, "\"litew\"\t\t\t\t\t\tCorrections to documentation.\n");
+    fprintf(stderr, "\"dr-dd\"\t\t\t\t\t\tCorrections to documentation.\n");
+    fprintf(stderr, "Brian Candler\t\t\t\t\tVarious JSON and documentation fixes.\n");
+    fprintf(stderr, "\"rfoster55\"\t\t\t\t\tSimplification of 'routing.c'.\n");
 
     fprintf(stderr, "\n");
 
