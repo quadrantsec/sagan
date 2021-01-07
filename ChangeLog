@@ -79,7 +79,7 @@
 
 		  https://github.com/beave/sagan/commit/7b93e22af3e870509b2a89dd0d0a7b5e8ed21f31
 
-		* Added new "client-stats" output option.  This take a log line from a
+		* Added new "client-stats" output option.  This takes a log line from a
 		  reporting "host" every X seconds and records it.  This can be useful for
 		  tracking what is sending data along with a small example type.
 
