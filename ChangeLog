@@ -1,4 +1,4 @@
-2020/10/?? -	Sagan 2.0.0 released. 
+2021/01/?? -	Sagan 2.0.0 released. 
 
 		* New JSON parsing and rule options! For more information on how Sagan
 		  can do JSON processing,  see:
@@ -14,6 +14,12 @@
 		  "json_meta_content" - https://sagan.readthedocs.io/en/latest/rule-keywords.html#json-meta-content
 		  "json_meta_nocase" - https://sagan.readthedocs.io/en/latest/rule-keywords.html#json-meta-nocase
 		  "json_meta_strstr" - https://sagan.readthedocs.io/en/latest/rule-keywords.html#json-meta-strstr
+
+		* Added new GeoIP data to EVE output (city, postal code, lat/long, etc).  This requires 
+		  you to use the Maxmind "city" databases. 
+
+		* New rule options "append_program".  Appends the "program" field to the end of the message 
+		  field.
 
 		* Removed all libcurl dependencies.  It was over kill and cause memory leaks for Bluedot.
 
@@ -57,10 +63,11 @@
 
 		  https://github.com/beave/sagan/commit/c85d9f6c26d4fb85c4f68ab16ed35c462f3c0624
 
-
 		* Fixed "follow flow" option that would only follow up to 512 flows. 
 
 		* Removed "Snortsam" and Unified2 support. 
+
+		* "perfmon" output is deperciated and will be remove on the next release.
 
 		* New rule option "event_type" add.  These is essentially an alias for 
 		  "program".  This makes it less confusing when working with logs like 
@@ -68,12 +75,19 @@
 
 		* First GeoIP destination bug. 
 
+		* Fixed fault on "Dynamic rules". 
+
+		  https://github.com/beave/sagan/commit/7b93e22af3e870509b2a89dd0d0a7b5e8ed21f31
+
 		* Added new "client-stats" output option.  This take a log line from a
 		  reporting "host" every X seconds and records it.  This can be useful for
 		  tracking what is sending data along with a small example type.
 
 		* Re-worked how Sagan writes out EVE data.  This allows EVE files to be
 		  truncated,  renamed, etc and makes it easy for "log rotation" routines. 
+
+		* Added "bytes_total" and "bytes_ignored" count to Sagan stats output. 
+		  This shows "how much" data Sagan has processed. 
 
 		* Lots of memory & CPU usage improvements. 
 
