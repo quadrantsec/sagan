@@ -1,5 +1,11 @@
 2021/01/?? -	Sagan 2.0.0 released. 
 
+
+		* The Sagan repos have moved!  They can now be found at:
+
+		  https://github.com/quadrantsec/sagan 
+		  https://github.com/quadrantsec/sagan-rules
+
 		* New JSON parsing and rule options! For more information on how Sagan
 		  can do JSON processing,  see:
 
