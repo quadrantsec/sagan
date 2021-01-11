@@ -89,6 +89,10 @@
 		* Added "bytes_total" and "bytes_ignored" count to Sagan stats output. 
 		  This shows "how much" data Sagan has processed. 
 
+		* Added "username" to flexbits. Thanks Stef Roskam!
+
+		  https://github.com/beave/sagan/pull/164
+
 		* Lots of memory & CPU usage improvements. 
 
 2019/07/03 - 	Sagan 1.2.2 released. 
