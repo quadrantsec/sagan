@@ -76,10 +76,8 @@ struct _SaganConfig
     char         sagan_log_filepath[MAXPATH];
 
     FILE         *sagan_log_stream;
-    bool	 sagan_log_stream_status;
     int		 sagan_log_stream_int;
 
-    int          sagan_log_fd;
     char         sagan_lockfile_full[MAXPATH];
     char	 sagan_lockfile[MAXPATH];
     char	 sagan_lockpath[MAXPATH];

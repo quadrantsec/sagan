@@ -294,7 +294,7 @@ void Sig_Handler( void )
                             exit(-1);
                         }
 
-                    config->sagan_log_fd = fileno( config->sagan_log_stream );
+                    config->sagan_log_stream_int = fileno( config->sagan_log_stream );
 
                     /******************/
                     /* Reset counters */
