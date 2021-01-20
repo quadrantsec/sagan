@@ -577,7 +577,7 @@ int main(int argc, char **argv)
 
         }
 
-//    config->sagan_log_fd = fileno( config->sagan_log_stream );
+    config->sagan_log_stream_int = fileno( config->sagan_log_stream );
 
     /* Become a daemon if requested */
 

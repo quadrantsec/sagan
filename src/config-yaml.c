@@ -247,8 +247,6 @@ void Load_YAML_Config( char *yaml_file )
             config->sagan_proto = 17;           /* Default to UDP */
             config->max_processor_threads = MAX_PROCESSOR_THREADS;
 
-            config->sagan_log_fd        = -1;
-
             /* Copy default FIFO */
 
             if ( config->sagan_is_file == false )
