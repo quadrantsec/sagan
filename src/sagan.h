@@ -189,7 +189,6 @@ struct _SaganCounters
     uint64_t sagan_log_drop;
     uint64_t dns_cache_count;
     uint64_t dns_miss_count;
-    uint64_t fwsam_count;
     uint64_t ignore_count;
     uint64_t blacklist_count;
     uint64_t bytes_total;
@@ -336,7 +335,6 @@ struct _SaganDebug
 
     bool debugsyslog;
     bool debugload;
-    bool debugfwsam;
     bool debugexternal;
     bool debugthreads;
     bool debugflexbit;

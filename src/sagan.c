@@ -420,12 +420,6 @@ int main(int argc, char **argv)
                             debugflag = true;
                         }
 
-                    if (Sagan_strstr(optarg, "fwsam"))
-                        {
-                            debug->debugfwsam = true;
-                            debugflag = true;
-                        }
-
                     if (Sagan_strstr(optarg, "external"))
                         {
                             debug->debugexternal = true;
@@ -583,7 +577,7 @@ int main(int argc, char **argv)
 
         }
 
-    config->sagan_log_fd = fileno( config->sagan_log_stream );
+//    config->sagan_log_fd = fileno( config->sagan_log_stream );
 
     /* Become a daemon if requested */
 

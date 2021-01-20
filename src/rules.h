@@ -267,9 +267,6 @@ struct _Rule_Struct
     int after2_count;
     int after2_seconds;
 
-    unsigned char fwsam_src_or_dst;             /* 1 == src,  2 == dst */
-    unsigned long fwsam_seconds;
-
     bool meta_content_flag;
     bool meta_content_case[MAX_META_CONTENT];
     bool meta_content_not[MAX_META_CONTENT];
