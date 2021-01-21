@@ -283,9 +283,9 @@ int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
                     if ( !memcmp(ip_convert, SaganBluedotIPQueue[i].ip, MAXIPBIT) )
                         {
 
-                            pthread_mutex_lock(&SaganProcBluedotIPWorkMutex);
+//                            pthread_mutex_lock(&SaganProcBluedotIPWorkMutex);
                             memset(SaganBluedotIPQueue[i].ip, 0, MAXIPBIT);
-                            pthread_mutex_unlock(&SaganProcBluedotIPWorkMutex);
+//                            pthread_mutex_unlock(&SaganProcBluedotIPWorkMutex);
 
                         }
 
@@ -304,9 +304,9 @@ int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
                     if ( !strcasecmp(data, SaganBluedotHashQueue[i].hash ) )
                         {
 
-                            pthread_mutex_lock(&SaganProcBluedotHashWorkMutex);
+ //                           pthread_mutex_lock(&SaganProcBluedotHashWorkMutex);
                             memset(SaganBluedotHashQueue[i].hash, 0, SHA256_HASH_SIZE+1);
-                            pthread_mutex_unlock(&SaganProcBluedotHashWorkMutex);
+ //                           pthread_mutex_unlock(&SaganProcBluedotHashWorkMutex);
 
                         }
 
@@ -325,9 +325,9 @@ int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
                     if ( !strcasecmp(data, SaganBluedotURLQueue[i].url ) )
                         {
 
-                            pthread_mutex_lock(&SaganProcBluedotURLWorkMutex);
+  //                          pthread_mutex_lock(&SaganProcBluedotURLWorkMutex);
                             memset(SaganBluedotURLQueue[i].url, 0, sizeof(SaganBluedotURLQueue[i].url));
-                            pthread_mutex_unlock(&SaganProcBluedotURLWorkMutex);
+  //                          pthread_mutex_unlock(&SaganProcBluedotURLWorkMutex);
                         }
                 }
 
@@ -344,9 +344,9 @@ int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
                     if ( !strcasecmp(data, SaganBluedotFilenameQueue[i].filename ) )
                         {
 
-                            pthread_mutex_lock(&SaganProcBluedotFilenameWorkMutex);
+   //                         pthread_mutex_lock(&SaganProcBluedotFilenameWorkMutex);
                             memset(SaganBluedotFilenameQueue[i].filename, 0, sizeof(SaganBluedotFilenameQueue[i].filename));
-                            pthread_mutex_unlock(&SaganProcBluedotFilenameWorkMutex);
+   //                         pthread_mutex_unlock(&SaganProcBluedotFilenameWorkMutex);
                         }
 
                 }
@@ -365,9 +365,9 @@ int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
                     if ( !strcasecmp(data, SaganBluedotJA3Queue[i].ja3 ) )
                         {
 
-                            pthread_mutex_lock(&SaganProcBluedotJA3WorkMutex);
+    //                        pthread_mutex_lock(&SaganProcBluedotJA3WorkMutex);
                             memset(SaganBluedotJA3Queue[i].ja3, 0, sizeof(SaganBluedotJA3Queue[i].ja3));
-                            pthread_mutex_unlock(&SaganProcBluedotJA3WorkMutex);
+    //                        pthread_mutex_unlock(&SaganProcBluedotJA3WorkMutex);
                         }
 
                 }
