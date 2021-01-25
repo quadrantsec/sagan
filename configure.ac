@@ -100,6 +100,12 @@ AC_ARG_ENABLE(redis,
   [ REDIS="no" ]
 )
 
+AC_ARG_ENABLE(tcmalloc,
+  [  --enable-tcmalloc  Enable TCMalloc support.],
+  [ TCMALLOC="$enableval"],
+  [ TCMALLOC="no" ]
+)
+
 AC_ARG_WITH(esmtp_includes,
         [  --with-esmtp-includes=DIR    libesmtp include directory],
         [with_esmtp_includes="$withval"],[with_esmtp_includes="no"])
@@ -548,6 +554,12 @@ if test "$FASTJSON" = "yes"; then
 	AC_CHECK_LIB(fastjson, main,,AC_MSG_ERROR(The libfastjson library cannot be found.
 This library can be located at https://github.com/rsyslog/libfastjson. ))
 	fi
+
+if test "$TCMALLOC" = "yes"; then
+       AC_MSG_RESULT([------- TCMalloc support is enabled -------])
+       AC_CHECK_LIB(tcmalloc,main,,AC_MSG_ERROR(The TCMalloc library cannot be found.
+If you're not interested in Redis support use the --disable-tcmalloc flag.))
+       fi
 
 if test "$LOGNORM" = "yes"; then
        AC_MSG_RESULT([------- liblognorm support is enabled -------])
