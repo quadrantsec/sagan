@@ -95,13 +95,13 @@ AC_ARG_ENABLE(system-strstr,
 )
 
 AC_ARG_ENABLE(redis,
-  [  --enable-redis  Enable Redis support.],
+  [  --enable-redis          Enable Redis support.],
   [ REDIS="$enableval"],
   [ REDIS="no" ]
 )
 
 AC_ARG_ENABLE(tcmalloc,
-  [  --enable-tcmalloc  Enable TCMalloc support.],
+  [  --enable-tcmalloc       Enable TCMalloc support.],
   [ TCMALLOC="$enableval"],
   [ TCMALLOC="no" ]
 )
@@ -163,7 +163,7 @@ fi
 # -- 
 
 AC_ARG_ENABLE(libfastjson,
-  [  --disable-libfastjson         Disable libfastjson support.],
+  [  --disable-libfastjson   Disable libfastjson support.],
   [ FASTJSON="$enableval"],
   [ FASTJSON="yes" ]
 )
