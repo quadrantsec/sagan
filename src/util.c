@@ -1410,3 +1410,23 @@ uint32_t Djb2_Hash(const char *str)
     return(hash);
 }
 
+/***************************************************************************
+ * ValidateMessage - Make sure the message we have is valid and not ASCII
+ * 13, 10 or 0.
+ ***************************************************************************/
+
+
+bool ValidateMessage( const char *message )
+{
+
+    if ( (int)message[0] == 10 || (int)message[1] == 10 ||
+            (int)message[0] == 13 || (int)message[1] == 13 ||
+            (int)message[0] == 0  || (int)message[1] == 0 )
+        {
+            return(false);
+        }
+
+    return(true);
+
+}
+

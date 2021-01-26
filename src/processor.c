@@ -145,10 +145,10 @@ void Processor ( void )
 
             __atomic_add_fetch(&proc_running, 1, __ATOMIC_SEQ_CST);
 
-	    if ( proc_running > counters->max_threads_used )
-	    	{
-		__atomic_store_n(&counters->max_threads_used, proc_running, __ATOMIC_SEQ_CST);
-		}
+            if ( proc_running > counters->max_threads_used )
+                {
+                    __atomic_store_n(&counters->max_threads_used, proc_running, __ATOMIC_SEQ_CST);
+                }
 
             /* Process local syslog buffer */
 

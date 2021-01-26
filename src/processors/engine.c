@@ -580,39 +580,108 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
                             flag = true;
 
+                            bool validate_flag = ValidateMessage( SaganProcSyslog_LOCAL->syslog_message );
+
                             if ( rulestruct[b].content_count > 0 )
                                 {
-                                    flag = Content(b, SaganProcSyslog_LOCAL->syslog_message );
+
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = Content(b, SaganProcSyslog_LOCAL->syslog_message );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
                                 }
 
                             if ( flag == true && rulestruct[b].pcre_count > 0 )
                                 {
-                                    flag = PcreS(b, SaganProcSyslog_LOCAL->syslog_message );
+
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = PcreS(b, SaganProcSyslog_LOCAL->syslog_message );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
                                 }
 
                             if ( flag == true && rulestruct[b].meta_content_count > 0 )
                                 {
-                                    flag = Meta_Content(b, SaganProcSyslog_LOCAL->syslog_message);
+
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = Meta_Content(b, SaganProcSyslog_LOCAL->syslog_message);
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
                                 }
 
                             if ( flag == true && rulestruct[b].json_pcre_count > 0 )
                                 {
-                                    flag = JSON_Pcre(b, SaganProcSyslog_LOCAL );
+
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = JSON_Pcre(b, SaganProcSyslog_LOCAL );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
                                 }
 
                             if ( flag == true && rulestruct[b].json_content_count > 0 )
                                 {
-                                    flag = JSON_Content(b, SaganProcSyslog_LOCAL );
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = JSON_Content(b, SaganProcSyslog_LOCAL );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
                                 }
 
                             if ( flag == true && rulestruct[b].json_meta_content_count > 0 )
                                 {
-                                    flag = JSON_Meta_Content(b, SaganProcSyslog_LOCAL );
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = JSON_Meta_Content(b, SaganProcSyslog_LOCAL );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
                                 }
 
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
-                                    flag = Event_ID( b, SaganProcSyslog_LOCAL );
+
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = Event_ID( b, SaganProcSyslog_LOCAL );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
                                 }
 
                         }

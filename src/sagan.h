@@ -129,6 +129,7 @@ bool	Check_Content_Not( const char *s );
 uint32_t Djb2_Hash(const char *str);
 bool    Starts_With(const char *str, const char *prefix);
 bool	Is_IP_Range (char *str);
+bool    ValidateMessage( const char *message );
 
 #if defined(F_GETPIPE_SZ) && defined(F_SETPIPE_SZ)
 void      Set_Pipe_Size( FILE * );
@@ -193,6 +194,7 @@ struct _SaganCounters
     uint64_t blacklist_count;
     uint64_t bytes_total;
     uint64_t bytes_ignored;
+    uint64_t null_message;
 
     uint64_t alert_total;
 
