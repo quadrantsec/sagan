@@ -96,8 +96,9 @@
 /* Define to 1 if you have the `rt' library (-lrt). */
 #undef HAVE_LIBRT
 
-/* Define to 1 if you have the `tcmalloc' library (-ltcmalloc). */
-#undef HAVE_LIBTCMALLOC
+/* Define to 1 if you have the `tcmalloc_minimal' library
+   (-ltcmalloc_minimal). */
+#undef HAVE_LIBTCMALLOC_MINIMAL
 
 /* Define to 1 if you have the `yaml' library (-lyaml). */
 #undef HAVE_LIBYAML
