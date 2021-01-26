@@ -207,6 +207,7 @@ struct _SaganCounters
     uint64_t malformed_message;
 
     uint64_t worker_thread_exhaustion;
+    uint32_t max_threads_used;
 
     int	     ruleset_track_count;
 
@@ -214,9 +215,6 @@ struct _SaganCounters
     uint64_t blacklist_lookup_count;
 
     uint32_t client_stats_count;
-
-    int	     thread_output_counter;
-    int	     thread_processor_counter;
 
     int	     flexbit_total_counter;
     int	     xbit_total_counter;

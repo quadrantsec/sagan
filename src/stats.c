@@ -121,7 +121,7 @@ void Statistics( void )
 
             Sagan_Log(NORMAL, "           Thread Exhaustion          : %" PRIu64 " (%.3f%%)", counters->worker_thread_exhaustion,  CalcPct( counters->worker_thread_exhaustion, counters->events_received) );
 
-            Sagan_Log(NORMAL, "           Thread Usage               : %d/%d (%.3f%%)", proc_running, config->max_processor_threads, CalcPct( proc_running, config->max_processor_threads ));
+            Sagan_Log(NORMAL, "           Thread Usage               : %d/%d/%d (%.3f%%)", proc_running, counters->max_threads_used, config->max_processor_threads, CalcPct( proc_running, config->max_processor_threads ));
 
             if (config->sagan_droplist_flag)
                 {
