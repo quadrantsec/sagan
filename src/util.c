@@ -696,7 +696,7 @@ void Var_To_Value(const char *in_str, char *str, size_t size)
     char *ptmp = NULL;
     char *tok = NULL;
     char tmp2[MAX_VAR_VALUE_SIZE] = { 0 };
-    char tmp3[MAX_VAR_VALUE_SIZE] = { 0 };
+    char tmp3[MAX_VAR_VALUE_SIZE+1] = { 0 };
     char tmp_result[MAX_VAR_VALUE_SIZE] = { 0 };
     char tmp[MAX_VAR_VALUE_SIZE] = { 0 };
 

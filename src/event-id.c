@@ -63,7 +63,7 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     char alter_message[MAX_SYSLOGMSG] = { 0 };
-    char tmp_content[9] = { 0 };
+    char tmp_content[MAX_EVENT_ID + 10] = { 0 };
 
     int i = 0;
 

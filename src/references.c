@@ -53,7 +53,7 @@ void Load_Reference( const char *ruleset )
 
     FILE *reffile;
 
-    char refbuf[1024];
+    char refbuf[1024] = { 0 }; 
     char *saveptr=NULL;
     char *tmptoken=NULL;
     char *laststring=NULL;
@@ -149,11 +149,10 @@ void Reference_Lookup( int rulemem, int type, char *str, size_t size )
     char *tmptok=NULL;
     char *tmp=NULL;
 
-    char reftype[25];
-    char url[255];
-
-    char refinfo[512];
-    char refinfo2[512];
+    char reftype[25] = { 0 }; 
+    char url[8192] = { 0 };
+    char refinfo[10240] = { 0 };
+    char refinfo2[10240+10] = { 0 };
 
     for (i=0; i <= rulestruct[rulemem].ref_count; i++ )
         {
@@ -192,12 +191,12 @@ void Reference_Lookup( int rulemem, int type, char *str, size_t size )
                         {
                             if ( type == 0 )
                                 {
-                                    snprintf(refinfo2, sizeof(refinfo2)-1, "[Xref => %s%s]",  refstruct[b].s_refurl, url);
+                                    snprintf(refinfo2, sizeof(refinfo2), "[Xref => %s%s]",  refstruct[b].s_refurl, url);
                                 }
 
                             if ( type == 1 )
                                 {
-                                    snprintf(refinfo2, sizeof(refinfo2)-1, "Reference:%s%s\n", refstruct[b].s_refurl, url);
+                                    snprintf(refinfo2, sizeof(refinfo2), "Reference:%s%s\n", refstruct[b].s_refurl, url);
                                 }
 
                             strlcat(reftmp,  refinfo2,  sizeof(reftmp));

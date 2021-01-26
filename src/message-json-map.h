@@ -59,7 +59,7 @@ struct _JSON_Message_Map_Found
 {
 
     char program[MAX_SYSLOG_PROGRAM];
-    char message[MAX_SYSLOGMSG];
+    char message[MAX_SYSLOGMSG - 1];
 
     char src_ip[MAXIP];
     char dst_ip[MAXIP];

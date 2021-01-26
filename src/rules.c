@@ -193,7 +193,8 @@ void Load_Rules( const char *ruleset )
     int port_1_count=0;
     int port_2_count=0;
 
-    bool pcreflag=0;
+    bool pcreflag = false;
+
     int pcreoptions=0;
 
     int i=0;
@@ -2027,7 +2028,8 @@ void Load_Rules( const char *ruleset )
 
                             Between_Quotes(tmptoken, tmp2, sizeof(tmp2));
 
-                            pcreflag=0;
+                            pcreflag=false;
+
                             memset(pcrerule, 0, sizeof(pcrerule));
 
                             for ( i = 1; i < strlen(tmp2); i++)
@@ -2035,10 +2037,10 @@ void Load_Rules( const char *ruleset )
 
                                     if ( tmp2[i] == '/' && tmp2[i-1] != '\\' )
                                         {
-                                            pcreflag++;
+                                            pcreflag = true;
                                         }
 
-                                    if ( pcreflag == 0 )
+                                    if ( pcreflag == false )
                                         {
                                             snprintf(tmp, sizeof(tmp), "%c", tmp2[i]);
                                             strlcat(pcrerule, tmp, sizeof(pcrerule));
@@ -2046,32 +2048,32 @@ void Load_Rules( const char *ruleset )
 
                                     /* are we /past/ and at the args? */
 
-                                    if ( pcreflag == 1 )
+                                    if ( pcreflag == true )
                                         {
 
                                             switch(tmp2[i])
                                                 {
 
                                                 case 'i':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_CASELESS;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_CASELESS;
                                                     break;
                                                 case 's':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_DOTALL;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_DOTALL;
                                                     break;
                                                 case 'm':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_MULTILINE;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_MULTILINE;
                                                     break;
                                                 case 'x':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_EXTENDED;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_EXTENDED;
                                                     break;
                                                 case 'A':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_ANCHORED;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_ANCHORED;
                                                     break;
                                                 case 'E':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_DOLLAR_ENDONLY;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_DOLLAR_ENDONLY;
                                                     break;
                                                 case 'G':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_UNGREEDY;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_UNGREEDY;
                                                     break;
 
                                                 }
@@ -2079,7 +2081,7 @@ void Load_Rules( const char *ruleset )
                                 }
 
 
-                            if ( pcreflag == 0 )
+                            if ( pcreflag == false )
                                 {
                                     Sagan_Log(ERROR, "[%s, line %d] Missing last '/' in json_pcre: %s at line %d, Abort", __FILE__, __LINE__, ruleset_fullname, linecount);
                                 }
@@ -2598,7 +2600,8 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "The \"pcre\" appears to be incomplete at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            pcreflag=0;
+                            pcreflag=false;
+
                             memset(pcrerule, 0, sizeof(pcrerule));
 
                             for ( i = 1; i < strlen(tmp2); i++)
@@ -2606,10 +2609,10 @@ void Load_Rules( const char *ruleset )
 
                                     if ( tmp2[i] == '/' && tmp2[i-1] != '\\' )
                                         {
-                                            pcreflag++;
+                                            pcreflag = true;
                                         }
 
-                                    if ( pcreflag == 0 )
+                                    if ( pcreflag == false )
                                         {
                                             snprintf(tmp, sizeof(tmp), "%c", tmp2[i]);
                                             strlcat(pcrerule, tmp, sizeof(pcrerule));
@@ -2617,32 +2620,32 @@ void Load_Rules( const char *ruleset )
 
                                     /* are we /past/ and at the args? */
 
-                                    if ( pcreflag == 1 )
+                                    if ( pcreflag == true )
                                         {
 
                                             switch(tmp2[i])
                                                 {
 
                                                 case 'i':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_CASELESS;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_CASELESS;
                                                     break;
                                                 case 's':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_DOTALL;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_DOTALL;
                                                     break;
                                                 case 'm':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_MULTILINE;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_MULTILINE;
                                                     break;
                                                 case 'x':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_EXTENDED;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_EXTENDED;
                                                     break;
                                                 case 'A':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_ANCHORED;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_ANCHORED;
                                                     break;
                                                 case 'E':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_DOLLAR_ENDONLY;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_DOLLAR_ENDONLY;
                                                     break;
                                                 case 'G':
-                                                    if ( pcreflag == 1 ) pcreoptions |= PCRE_UNGREEDY;
+                                                    if ( pcreflag == true ) pcreoptions |= PCRE_UNGREEDY;
                                                     break;
 
 

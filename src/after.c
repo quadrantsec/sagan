@@ -53,7 +53,7 @@ bool After2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_dst, 
 
     time_t t;
     struct tm *now;
-    char  timet[20];
+    char  timet[20] = { 0 };
 
     int i;
 
@@ -70,7 +70,7 @@ bool After2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_dst, 
     uint32_t dst_port_tmp = 0;
     uint32_t src_port_tmp = 0;
 
-    char hash_string[128] = { 0 };
+    char hash_string[MAXIP + MAXIP + MAX_USERNAME_SIZE + 10] = { 0 };
     char debug_string[64] = { 0 };
 
     uint32_t hash;

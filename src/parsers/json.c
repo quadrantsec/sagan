@@ -82,7 +82,7 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslo
                                     val = json_object_iter_peek_value(&it);
                                     val_str = json_object_get_string(val);
 
-                                    snprintf(SaganProcSyslog_LOCAL->json_key[json_count], sizeof(SaganProcSyslog_LOCAL->json_key[json_count]), "%s.%s", SaganProcSyslog_LOCAL->json_key[i], key);
+                                    snprintf(SaganProcSyslog_LOCAL->json_key[json_count], JSON_MAX_KEY_SIZE, "%s.%s", SaganProcSyslog_LOCAL->json_key[i], key);
                                     SaganProcSyslog_LOCAL->json_key[json_count][sizeof(SaganProcSyslog_LOCAL->json_key[json_count]) - 1] = '\0';
                                     strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], val_str, sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
 

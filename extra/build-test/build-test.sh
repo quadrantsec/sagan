@@ -11,6 +11,7 @@
 #   2018/05/08 - Added FLAGS for make
 #   2019/11/03 - Removed --disable-snortsam
 #   2020/11/20 - Remove --disable-libdnet
+#   2021/01/26 - Added --enable-tcmalloc
 
 # Champ Clark III 
 
@@ -23,12 +24,13 @@
 #  --enable-geoip          Enable Maxmind GeoIP support.  
 #  --enable-system-strstr  Enable system strstr.  
 #  --enable-redis	   Enable redis support.
-#  --disable-libfastjson   Endbale libfastjson
+#  --disable-libfastjson   Enable libfastjson
+#  --enable-tcmalloc	   Enable Google's TCMalloc
 
 
-STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson"
-ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-libfastjson"
-NOFLAG="--disable-syslog --disable-lognorm --disable-libpcap --disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-libfastjson"
+STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc"
+ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-libfastjson --enable-tcmalloc"
+NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-libfastjson --disable-tcmalloc"
 
 LOG="output.log" 
 

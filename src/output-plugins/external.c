@@ -73,7 +73,7 @@ void External_Thread ( _Sagan_Event *Event, char *execute_script )
     char timebuf[64] = { 0 };
 
     char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
-    char data[MAX_SYSLOGMSG*2] = { 0 };
+    char data[MAX_SYSLOGMSG*3] = { 0 };
 
 
     char *drop=NULL;

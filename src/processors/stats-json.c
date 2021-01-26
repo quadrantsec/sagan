@@ -175,8 +175,8 @@ void Stats_JSON_Handler( void )
 
     char json_1[1024] = { 0 };
     char json_2[1024] = { 0 };
-    char json_head[1024] = { 0 };
-    char json_final[1024] = { 0 };
+    char json_head[1024*3] = { 0 };
+    char json_final[1024*3+11] = { 0 };
 
     while(1)
         {

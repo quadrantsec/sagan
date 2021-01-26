@@ -320,8 +320,8 @@ bool Clean_IPC_Object( int type )
                     for ( i = 0; i < new_count; i++ )
                         {
                             flexbit_ipc[i].flexbit_state = temp_flexbit_ipc[i].flexbit_state;
-                            memcpy(temp_flexbit_ipc[i].ip_src, temp_flexbit_ipc[i].ip_src, sizeof(temp_flexbit_ipc[i].ip_src));
-                            memcpy(temp_flexbit_ipc[i].ip_dst, temp_flexbit_ipc[i].ip_dst, sizeof(temp_flexbit_ipc[i].ip_dst));
+                            memcpy(flexbit_ipc[i].ip_src, temp_flexbit_ipc[i].ip_src, sizeof(flexbit_ipc[i].ip_src));
+                            memcpy(flexbit_ipc[i].ip_dst, temp_flexbit_ipc[i].ip_dst, sizeof(flexbit_ipc[i].ip_dst));
                             flexbit_ipc[i].flexbit_expire = temp_flexbit_ipc[i].flexbit_expire;
                             flexbit_ipc[i].expire = temp_flexbit_ipc[i].expire;
                             strlcpy(flexbit_ipc[i].flexbit_name, temp_flexbit_ipc[i].flexbit_name, sizeof(flexbit_ipc[i].flexbit_name));
@@ -467,7 +467,7 @@ void IPC_Init(void)
     bool new_counters = 0;
     bool new_object = 0;
 
-    char tmp_object_check[255] = { 0 };
+    char tmp_object_check[MAXPATH*3] = { 0 };
 
     Sagan_Log(NORMAL, "Initializing shared memory objects.");
     Sagan_Log(NORMAL, "---------------------------------------------------------------------------");

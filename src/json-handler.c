@@ -356,7 +356,7 @@ void Format_JSON_Log_EVE( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct time
 
     struct json_object *jobj;
     char timebuf[64] = { 0 };
-    char tmp[32] = { 0 };
+    char tmp[MAX_SYSLOG_DATE + MAX_SYSLOG_TIME] = { 0 };
 
     CreateIsoTimeString(&tp, timebuf, sizeof(timebuf));
 

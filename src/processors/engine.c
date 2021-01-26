@@ -91,7 +91,7 @@ extern struct _SaganConfig *config;
 
 extern struct _Sagan_IPC_Counters *counters_ipc;
 
-bool reload_rules;
+extern bool reload_rules;
 
 void Sagan_Engine_Init ( void )
 {
@@ -210,7 +210,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
     char tmpbuf[256] = { 0 };
     char s_msg[1024] = { 0 };
 
-    char syslog_append_program[MAX_SYSLOGMSG] = { 0 };
+    char syslog_append_program[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6] = { 0 };
     char syslog_append_orig_message[MAX_SYSLOGMSG] = { 0 };
     bool append_program_flag = false;
 
@@ -294,7 +294,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
               SaganProcSyslog_LOCAL->syslog_program[1] == '{' ) )
         {
 
-            char tmp_json[MAX_SYSLOGMSG] = { 0 };
+            char tmp_json[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM] = { 0 };
 
             if ( debug->debugjson )
                 {
@@ -425,7 +425,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
             if ( SaganProcSyslog_LOCAL->hostname[0] != '\0' )
                 {
-                    char tmp_normalize_http_uri[MAX_HOSTNAME_SIZE + MAX_URL_SIZE] = { 0 };
+                    char tmp_normalize_http_uri[MAX_HOSTNAME_SIZE + MAX_URL_SIZE + 1] = { 0 };
                     snprintf(tmp_normalize_http_uri, sizeof(tmp_normalize_http_uri), "%s%s", SaganProcSyslog_LOCAL->hostname, SaganProcSyslog_LOCAL->url);
                     normalize_http_uri = tmp_normalize_http_uri;
                 }
