@@ -557,8 +557,7 @@ This library can be located at https://github.com/rsyslog/libfastjson. ))
 
 if test "$TCMALLOC" = "yes"; then
        AC_MSG_RESULT([------- TCMalloc support is enabled -------])
-       AC_CHECK_LIB(tcmalloc_minimal,main,,AC_MSG_ERROR(The TCMalloc library cannot be found.
-If you're not interested in Redis support use the --disable-tcmalloc flag.))
+       AC_CHECK_LIB(tcmalloc_minimal,main,,AC_MSG_ERROR(The libtcmalloc_minimal library cannot be found.))
        fi
 
 if test "$LOGNORM" = "yes"; then
