@@ -52,7 +52,6 @@
 /* Processors */
 
 #include "processors/blacklist.h"
-#include "processors/perfmon.h"
 #include "processors/zeek-intel.h"
 
 #ifdef HAVE_LIBYAML
@@ -1408,11 +1407,6 @@ void Load_YAML_Config( char *yaml_file )
                                     sub_type = YAML_PROCESSORS_TRACK_CLIENTS;
                                 }
 
-                            else if (!strcmp(value, "perfmonitor"))
-                                {
-                                    sub_type = YAML_PROCESSORS_PERFMON;
-                                }
-
                             else if (!strcmp(value, "client-stats"))
                                 {
                                     sub_type = YAML_PROCESSORS_CLIENT_STATS;
@@ -1586,43 +1580,6 @@ void Load_YAML_Config( char *yaml_file )
                                         }
 
                                 } /* if sub_type == YAML_PROCESSORS_STATS_JSON */
-
-
-                            else if ( sub_type == YAML_PROCESSORS_PERFMON )
-                                {
-
-                                    if (!strcmp(last_pass, "enabled"))
-                                        {
-
-                                            if ( !strcasecmp(value, "yes") || !strcasecmp(value, "true") || !strcasecmp(value, "enabled") )
-                                                {
-                                                    config->perfmonitor_flag = true;
-                                                }
-                                        }
-
-                                    else if (!strcmp(last_pass, "time") && config->perfmonitor_flag == true )
-                                        {
-
-                                            Var_To_Value(value, tmp, sizeof(tmp));
-                                            config->perfmonitor_time = atoi(tmp);
-
-                                            if ( config->perfmonitor_time == 0 )
-                                                {
-
-                                                    Sagan_Log(ERROR, "[%s, line %d] 'processor' : 'perfmonitor' - 'time' has to be a non-zero value. Abort!!", __FILE__, __LINE__);
-                                                }
-
-                                        }
-
-                                    else if (!strcmp(last_pass, "filename") && config->perfmonitor_flag == true )
-                                        {
-
-                                            Var_To_Value(value, tmp, sizeof(tmp));
-                                            strlcpy(config->perfmonitor_file_name, tmp, sizeof(config->perfmonitor_file_name));
-
-                                        }
-
-                                } /* if sub_type == YAML_PROCESSORS_PERFMON */
 
                             else if ( sub_type == YAML_PROCESSORS_BLACKLIST )
                                 {

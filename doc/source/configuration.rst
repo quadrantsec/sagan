@@ -1059,6 +1059,8 @@ Example ``rule-tracking`` subsection::
 perfmonitor
 -----------
 
+** PERFMON has been deperciated for JSON stats as of 2.0.1 **
+
 The ``perfmonitor`` processor records Sagan statistics to a CSV file.  This can provide useful data
 about detection and the performance of Sagan.  The ``time`` option sets how often Sagan should
 record ``perfmonitor`` data.

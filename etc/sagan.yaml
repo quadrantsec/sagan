@@ -339,18 +339,6 @@ processors:
       subtract_old_values: true
       filename: "$LOG_PATH/stats/stats.json"
  
-  # The "perfmonitor" processor write statistical information every specified
-  # number of seconds ("time") to a CSV file.  This data can be useful for 
-  # tracking the performance of Sagan.  This data can also be used with 
-  # RRDTool to generate graphs.  
-  #
-  # [WARNING: This option will be depreciated in 2.0.1.  See 'stats-json']
-
-  - perfmonitor:
-      enabled: no
-      time: 600
-      filename: "$LOG_PATH/stats/sagan.stats"
-
   # The "blacklist" process reads in a list of hosts/networks that are
   # considered "bad".  For example, you might pull down a list like SANS
   # DShield (http://feeds.dshield.org/block.txt) for Sagan to use.  If Sagan

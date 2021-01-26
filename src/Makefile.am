@@ -76,7 +76,6 @@ AUTOMAKE_OPIONS=foreign no-dependencies subdir-objects
                                                        processors/track-clients.c \
                                                        processors/bluedot.c \
                                                        processors/blacklist.c \
-                                                       processors/perfmon.c \
 						       processors/stats-json.c \
 						       processors/client-stats.c \
                                                        processors/zeek-intel.c \

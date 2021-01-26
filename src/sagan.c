@@ -89,7 +89,6 @@
 #include "rules.h"
 #include "processors/blacklist.h"
 #include "processors/track-clients.h"
-#include "processors/perfmon.h"
 #include "processors/client-stats.h"
 #include "processors/zeek-intel.h"
 #include "processors/stats-json.h"
@@ -191,15 +190,6 @@ int main(int argc, char **argv)
     char redis_reply[5];
     char redis_command[300];
 #endif
-
-    /****************************************************************************/
-    /* Perfmonitor local variables                                              */
-    /****************************************************************************/
-
-    pthread_t perfmonitor_thread;
-    pthread_attr_t thread_perfmonitor_attr;
-    pthread_attr_init(&thread_perfmonitor_attr);
-    pthread_attr_setdetachstate(&thread_perfmonitor_attr,  PTHREAD_CREATE_DETACHED);
 
     /****************************************************************************/
     /* JSON Stats local variables                                               */
@@ -802,20 +792,6 @@ int main(int argc, char **argv)
     Sagan_Log(NORMAL, "---------------------------------------------------------------------------");
 
     IPC_Init();
-
-    if ( config->perfmonitor_flag )
-        {
-
-            Sagan_Perfmonitor_Open();
-
-            rc = pthread_create( &perfmonitor_thread, NULL, (void *)Sagan_Perfmonitor_Handler, NULL );
-
-            if ( rc != 0 )
-                {
-                    Remove_Lock_File();
-                    Sagan_Log(ERROR, "[%s, line %d] Error creating Perfmonitor thread [error: %d].", __FILE__, __LINE__, rc);
-                }
-        }
 
     if ( config->stats_json_flag )
         {

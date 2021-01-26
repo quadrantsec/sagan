@@ -147,14 +147,6 @@ struct _SaganConfig
     FILE	*client_stats_file_stream;
     int		client_stats_file_stream_int;
 
-    bool	perfmonitor_flag;
-    int		perfmonitor_time;
-    char	perfmonitor_file_name[MAXPATH];
-
-    FILE	*perfmonitor_file_stream;
-    int		perfmonitor_file_stream_int;
-    bool        perfmonitor_file_stream_status;
-
     bool	stats_json_sub_old_values;
     bool	stats_json_flag;
     bool	stats_json_file_stream_status;

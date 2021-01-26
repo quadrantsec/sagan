@@ -56,7 +56,6 @@
 #include "gen-msg.h"
 #include "classifications.h"
 
-#include "processors/perfmon.h"
 #include "rules.h"
 #include "ignore-list.h"
 #include "flow.h"
@@ -127,7 +126,6 @@ void Sig_Handler( void )
     sigset_t signal_set;
     int sig;
 
-    bool orig_perfmon_value = false;
     bool orig_stats_json_value = false;
     bool orig_client_stats_value = false;
 
@@ -253,12 +251,6 @@ void Sig_Handler( void )
 
                         }
 
-
-                    if ( config->perfmonitor_flag == true && config->perfmonitor_file_stream_status == true )
-                        {
-                            Sagan_Perfmonitor_Close();
-                        }
-
                     if ( config->stats_json_flag == true && config->stats_json_file_stream_status == true )
                         {
                             Stats_JSON_Close();
@@ -318,25 +310,15 @@ void Sig_Handler( void )
                     /* Disabled and reset processors. */
                     /**********************************/
 
-                    /* Note: Processors that run as there own thread (perfmon, plog) cannot be
+                    /* Note: Processors that run as there own thread (plog) cannot be
                      * loaded via SIGHUP.  They must be loaded at run time.  Once they are loaded,
                      * they cannot be disabled/re-enabled. */
 
                     /* Single Threaded processors */
 
-                    /* Perfmon */
-
-                    if ( config->perfmonitor_flag == true && orig_perfmon_value == false )
-                        {
-                            Sagan_Perfmonitor_Close();
-                            orig_perfmon_value = true;
-                        }
-
-                    config->perfmonitor_flag = false;
-
                     /* Stats JSON */
 
-                    if ( config->stats_json_flag == true && orig_perfmon_value == false )
+                    if ( config->stats_json_flag == true && orig_stats_json_value == false )
                         {
                             Stats_JSON_Close();
                             orig_stats_json_value = true;
@@ -464,21 +446,6 @@ void Sig_Handler( void )
                     /************************************************************/
                     /* Re-load primary configuration (rules/classifictions/etc) */
                     /************************************************************/
-
-                    /* Perfmon */
-
-                    if ( config->perfmonitor_flag == true )
-                        {
-                            if ( orig_perfmon_value == true )
-                                {
-                                    Sagan_Perfmonitor_Open();
-                                }
-                            else
-                                {
-                                    Sagan_Log(WARN, "** 'perfmonitor' must be loaded at runtime! NOT loading 'perfmonitor'!");
-                                    config->perfmonitor_flag = false;
-                                }
-                        }
 
                     /* JSON Stats */
 
