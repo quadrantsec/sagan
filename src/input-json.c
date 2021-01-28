@@ -86,8 +86,6 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     memcpy(SaganProcSyslog_LOCAL->syslog_facility, "UNDEFINED", 9);
     memcpy(SaganProcSyslog_LOCAL->syslog_host, "0.0.0.0", 8);
 
-    memcpy(SaganProcSyslog_LOCAL->event_id, "UNDEFINED", 8);
-
     /* Search through all key/values looking for embedded JSON */
 
     Parse_JSON( syslog_string, SaganProcSyslog_LOCAL );

@@ -85,6 +85,7 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
                     /* Basically - depth: 8; offset: 0; */
 
+
                     strlcpy(alter_message, SaganProcSyslog_LOCAL->syslog_message, 8);
                     tmp_content[0] = '\0';
 
@@ -96,6 +97,9 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
                     if ( Sagan_stristr(alter_message, tmp_content, 0 ))
                         {
+                            /* Copy event_id for later use and for debugging output */
+
+                            memcpy(SaganProcSyslog_LOCAL->event_id, rulestruct[position].event_id[i],sizeof(SaganProcSyslog_LOCAL->event_id));
                             return(true);
                         }
                 }

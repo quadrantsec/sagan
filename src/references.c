@@ -53,7 +53,7 @@ void Load_Reference( const char *ruleset )
 
     FILE *reffile;
 
-    char refbuf[1024] = { 0 }; 
+    char refbuf[1024] = { 0 };
     char *saveptr=NULL;
     char *tmptoken=NULL;
     char *laststring=NULL;
@@ -149,7 +149,7 @@ void Reference_Lookup( int rulemem, int type, char *str, size_t size )
     char *tmptok=NULL;
     char *tmp=NULL;
 
-    char reftype[25] = { 0 }; 
+    char reftype[25] = { 0 };
     char url[8192] = { 0 };
     char refinfo[10240] = { 0 };
     char refinfo2[10240+10] = { 0 };
