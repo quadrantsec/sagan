@@ -95,9 +95,6 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
                     /* Search.  If we find it,  return true! */
 
-		    printf("|%s|%s|\n", alter_message, tmp_content );
-
-                    //if ( Sagan_stristr(alter_message, tmp_content, 0 ))
 		    if ( Sagan_strstr( alter_message, tmp_content ))
                         {
                             /* Copy event_id for later use and for debugging output */
