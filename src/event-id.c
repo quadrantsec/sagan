@@ -86,7 +86,7 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
                     /* Basically - depth: 8; offset: 0; */
 
 
-                    strlcpy(alter_message, SaganProcSyslog_LOCAL->syslog_message, 8);
+                    strlcpy(alter_message, SaganProcSyslog_LOCAL->syslog_message, 10);
                     tmp_content[0] = '\0';
 
                     /* New equivalent to a "content" */
@@ -95,7 +95,10 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
                     /* Search.  If we find it,  return true! */
 
-                    if ( Sagan_stristr(alter_message, tmp_content, 0 ))
+		    printf("|%s|%s|\n", alter_message, tmp_content );
+
+                    //if ( Sagan_stristr(alter_message, tmp_content, 0 ))
+		    if ( Sagan_strstr( alter_message, tmp_content ))
                         {
                             /* Copy event_id for later use and for debugging output */
 
