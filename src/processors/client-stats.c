@@ -137,55 +137,34 @@ void Client_Stats_Handler( void )
                     Sagan_Log(DEBUG,"[%s, line %d] Writing client stats %s.", __FILE__, __LINE__, config->client_stats_file_name );
                 }
 
-
-            gettimeofday(&tp, 0);
-            CreateIsoTimeString(&tp, timebuf, sizeof(timebuf));
-
-            jobj = json_object_new_object();
-
-            json_object *jarray_ip = json_object_new_array();
-            json_object *jarray_epoch = json_object_new_array();
-            json_object *jarray_program = json_object_new_array();
-            json_object *jarray_message = json_object_new_array();
-
-            json_object *jdate = json_object_new_string(timebuf);
-            json_object_object_add(jobj,"timestamp", jdate);
-
-            json_object *jevent_type = json_object_new_string( "client_stats" );
-            json_object_object_add(jobj,"event_type", jevent_type);
-
-            json_object *jarray_sensor = json_object_new_string( config->sagan_sensor_name );
-            json_object_object_add(jobj,"sensor_name", jarray_sensor);
-
-
-            /* Update any existing client stats */
-
             for ( i = 0; i < counters->client_stats_count; i++ )
                 {
 
-                    json_object *jstring_ip = json_object_new_string(Client_Stats[i].ip);
-                    json_object_array_add(jarray_ip,jstring_ip);
+                    gettimeofday(&tp, 0);
+                    CreateIsoTimeString(&tp, timebuf, sizeof(timebuf));
 
-                    json_object *jstring_epoch = json_object_new_int(Client_Stats[i].epoch);
-                    json_object_array_add(jarray_epoch,jstring_epoch);
+                    jobj = json_object_new_object();
 
-                    json_object *jstring_program = json_object_new_string(Client_Stats[i].program);
-                    json_object_array_add(jarray_program,jstring_program);
+                    json_object *jdate = json_object_new_string(timebuf);
+                    json_object_object_add(jobj,"timestamp", jdate);
 
-                    json_object *jstring_message = json_object_new_string(Client_Stats[i].message);
-                    json_object_array_add(jarray_message,jstring_message);
+                    json_object *jevent_type = json_object_new_string( "client_stats" );
+                    json_object_object_add(jobj,"event_type", jevent_type);
 
-                }
+                    json_object *jarray_sensor = json_object_new_string( config->sagan_sensor_name );
+                    json_object_object_add(jobj,"sensor_name", jarray_sensor);
 
-            /* If there is no data,  don't bother writing */
+                    json_object *jipaddr = json_object_new_string( Client_Stats[i].ip  );
+                    json_object_object_add(jobj,"ip_address", jipaddr);
 
-            if ( counters->client_stats_count != 0 )
-                {
+                    json_object *jtimestamp = json_object_new_int64( Client_Stats[i].epoch );
+                    json_object_object_add(jobj,"timestamp", jtimestamp);
 
-                    json_object_object_add(jobj,"ip_addresses", jarray_ip);
-                    json_object_object_add(jobj,"timestamp", jarray_epoch);
-                    json_object_object_add(jobj,"program", jarray_program);
-                    json_object_object_add(jobj,"message", jarray_message);
+                    json_object *jprogram = json_object_new_string( Client_Stats[i].program );
+                    json_object_object_add(jobj,"program", jprogram);
+
+                    json_object *jmessage = json_object_new_string( Client_Stats[i].message );
+                    json_object_object_add(jobj,"message", jmessage);
 
                     File_Lock( config->client_stats_file_stream_int );
 
@@ -194,11 +173,13 @@ void Client_Stats_Handler( void )
 
                     File_Unlock( config->client_stats_file_stream_int );
 
+
+                    json_object_put(jobj);
                 }
 
-            json_object_put(jobj);
             sleep(config->client_stats_time);
         }
+
 
 
 }
