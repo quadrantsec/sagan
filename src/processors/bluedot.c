@@ -970,7 +970,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
 
             if ( counters->bluedot_ip_queue_current >= config->bluedot_ip_queue )
                 {
-                    Sagan_Log(NORMAL, "[%s, line %d] Out of IP queue space! Considering increasing cache size!", __FILE__, __LINE__);
+                    Sagan_Log(NORMAL, "[%s, line %d] Out of IP queue space! Considering increasing queue size!", __FILE__, __LINE__);
                     return(false);
                 }
 
@@ -1040,7 +1040,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
 
             if ( counters->bluedot_hash_queue_current >= config->bluedot_hash_queue )
                 {
-                    Sagan_Log(NORMAL, "[%s, line %d] Out of hash queue space! Considering increasing cache size!", __FILE__, __LINE__);
+                    Sagan_Log(NORMAL, "[%s, line %d] Out of hash queue space! Considering increasing queue size!", __FILE__, __LINE__);
                     return(false);
                 }
 
@@ -1112,7 +1112,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
 
             if ( counters->bluedot_url_queue_current >= config->bluedot_url_queue )
                 {
-                    Sagan_Log(NORMAL, "[%s, line %d] Out of URL queue space! Considering increasing cache size!", __FILE__, __LINE__);
+                    Sagan_Log(NORMAL, "[%s, line %d] Out of URL queue space! Considering increasing queue size!", __FILE__, __LINE__);
                     return(false);
                 }
 
@@ -1183,7 +1183,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
 
             if ( counters->bluedot_filename_queue_current >= config->bluedot_filename_queue )
                 {
-                    Sagan_Log(NORMAL, "[%s, line %d] Out of filename queue space! Considering increasing cache size!", __FILE__, __LINE__);
+                    Sagan_Log(NORMAL, "[%s, line %d] Out of filename queue space! Considering increasing queue size!", __FILE__, __LINE__);
                     return(false);
                 }
 
@@ -1254,7 +1254,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
 
             if ( counters->bluedot_ja3_queue_current >= config->bluedot_ja3_queue )
                 {
-                    Sagan_Log(NORMAL, "[%s, line %d] Out of JA3 queue space! Considering increasing cache size!", __FILE__, __LINE__);
+                    Sagan_Log(NORMAL, "[%s, line %d] Out of JA3 queue space! Considering increasing queue size!", __FILE__, __LINE__);
                     return(false);
                 }
 
