@@ -571,6 +571,8 @@ int main(int argc, char **argv)
 
     /* Become a daemon if requested */
 
+    Sagan_Log(NORMAL, "Sagan's PID is %d", getpid() );
+
     if ( config->daemonize )
         {
 
