@@ -1,3 +1,43 @@
+2021/02/08 -	Sagan 2.0.1 released.
+
+		* Multiple bug fixes that address compile time issues with GCC 10. 
+
+		* Can now compile with Google's TCMalloc (--enable-tcmalloc).  This 
+		  might result in less memory usage and a minor increase in performance.
+
+		* Bug fix for "event_id" not working in certain situations.  Thanks to
+		  Ivan Kuncl (iku899) at Github for reporting this issue. 
+
+		  https://github.com/quadrantsec/sagan/issues/8
+
+		* Bug fix for segfault when running with --daemon flag.  Thanks to 
+		  Stef Roskam (smr1983) for reporting and patching this.
+
+		  https://github.com/quadrantsec/sagan/issues/2
+
+		* A lot of "cleanup" work provided by Jonas Smedegaad (jonassmedegaard). 
+		  This involved proper git "tagging", typo's, dirty source trees, etc. 
+
+		* Removed unneeded pthead_mutex_locks() in bluedot.c.  This should
+		  cause a minor performance increase.  Also some other minor Bluedot
+		  performance enhancements.
+
+		* Removed the "perfmon" function.  Use "stats-json" instead!
+
+		* Added a "Max threads used" statistics.  This assists with properly
+	 	  tuning the number of threads in your sagan.yaml.  It displays the 
+		  max number of threads during the lifetime of Sagan.
+
+		* Bypass content/pcre when syslog "message" is null. 
+
+		  https://github.com/quadrantsec/sagan/commit/261adc243a4a43dd5c87483d31c1aacce73b95d2
+
+		* Simplified the was "client-stats" functions.  Now writes out one JSON
+		  object for each log source detected.   This change is also reflected in
+		  Meer. 
+
+		* Sagan now records PID on startup & minor typo's fixed. 
+
 2021/01/11 -	Sagan 2.0.0 released. 
 
 		* The Sagan repos have moved!  They can now be found at:
