@@ -163,17 +163,15 @@ sagan-core:
     json-software: syslog-ng               # by "software" type. 
 
     # "parse-json-message" allows Sagan to detect and decode JSON within a 
-    # syslog "message" field.  If a decoder/mapping is found,  then Sagan will
-    # extract the JSON values within the messages.  The "parse-json-program"
-    # tells Sagan to start looking for JSON within the "program" field.  Some
-    # systems (i.e. - Splunk) start JSON within the "program" field and
-    # into the "message" field.  This option tells Sagan to "append" the 
-    # strings together (program+message) and then decode.  The "json-message-map"
-    # tells Sagan how to decode JSON values when they are encountered.
-
+    # syslog "message" field.  When JSON is detected,  rule options like 
+    # "json_content", "json_map", "json_pcre", etc can be used.  In some 
+    # situations,  due to a lack of "program",  the JSON message might start 
+    # in the syslog "program" field and over run into the "message" syslog 
+    # field.  In these cases the "parse-json-program" configuration option 
+    # will append the "program" and "message" together to produce valid JSON.
+    
     parse-json-message: disabled
     parse-json-program: disabled
-    json-message-map: "$RULE_PATH/json-message.map"
 
   # This controls how the "parse_src_ip" and "parse_dst_ip" function within a rule. 
    

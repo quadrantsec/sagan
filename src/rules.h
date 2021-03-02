@@ -28,6 +28,7 @@
 
 #define		VALID_RULE_OPTIONS "parse_port,parse_proto,parse_proto_program,flexbits_upause,xbits_upause,flexbits_pause,xbits_pause,default_proto,default_src_port,default_dst_port,parse_src_ip,parse_dst_ip,parse_hash,xbits,flexbits,dynamic_load,country_code,meta_content,meta_nocase,rev,classtype,program,event_type,reference,sid,syslog_tag,syslog_facility,syslog_level,syslog_priority,pri,priority,email,normalize,msg,content,nocase,offset,meta_offset,depth,meta_depth,distance,meta_distance,within,meta_within,pcre,alert_time,threshold,after,blacklist,bro-intel,zeek-intel,external,bluedot,metadata,event_id,json_content,json_nocase,json_pcre,json_meta_content,json_meta_nocase,json_strstr,json_meta_strstr,append_program,json_contains,json_map"
 
+/* JSON Mapping in rules */
 
 #define		JSON_MAP_SRC_IP		1
 #define         JSON_MAP_DEST_IP        2
@@ -46,7 +47,6 @@
 #define         JSON_MAP_URL		15
 #define         JSON_MAP_JA3            16
 #define		JSON_MAP_PROTO		17
-
 
 typedef struct _Rules_Loaded _Rules_Loaded;
 struct _Rules_Loaded

@@ -1922,7 +1922,7 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].meta_content_case[meta_content_count-1] = 1;
                         }
 
-                    /* "json_content" works like "content" but on JSON key/values */
+                    /* JSON "mapping" */
 
                     if (!strcmp(rulesplit, "json_map"))
                         {
@@ -2035,12 +2035,12 @@ void Load_Rules( const char *ruleset )
                                     rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_PROTO;
                                 }
 
+			    /* Not valid map specified */
 
                             if ( rulestruct[counters->rulecount].json_map_type[json_map_count] == 0 )
                                 {
                                     Sagan_Log(ERROR, "[%s, line %d] json_map type '%s' is invalid at line %d in %s - Abort", __FILE__, __LINE__, json_map_type, linecount, ruleset_fullname);
                                 }
-
 
                             tmptoken = strtok_r(NULL, ",", &saveptrrule2);
 
@@ -2055,6 +2055,8 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_map_count = json_map_count;
 
                         }
+
+		    /* "json_content" works like "content" but on JSON key/values */
 
                     if (!strcmp(rulesplit, "json_content"))
                         {
