@@ -2127,7 +2127,7 @@ void Load_Rules( const char *ruleset )
                     if (!strcmp(rulesplit, "json_meta_strstr") || !strcmp(rulesplit, "json_meta_contains") )
                         {
                             strtok_r(NULL, ":", &saveptrrule2);
-                            rulestruct[counters->rulecount].json_meta_strstr[json_content_count-1] = 1;
+                            rulestruct[counters->rulecount].json_meta_strstr[json_meta_content_count-1] = 1;
                         }
 
                     /* Search JSON via PCRE */
