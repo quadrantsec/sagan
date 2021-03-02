@@ -20,4 +20,5 @@
 
 
 void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+void Get_Key_Value( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, const char *key, char *value, size_t size);
 

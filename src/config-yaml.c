@@ -58,10 +58,6 @@
 #include <yaml.h>
 #endif
 
-#ifdef HAVE_LIBFASTJSON
-#include "message-json-map.h"
-#endif
-
 #ifdef WITH_BLUEDOT
 #include "processors/bluedot.h"
 
@@ -732,12 +728,13 @@ void Load_YAML_Config( char *yaml_file )
                                         }
 
 #ifdef HAVE_LIBFASTJSON
-
+/*
                                     else if (!strcmp(last_pass, "json-message-map" ) && ( config->parse_json_message == true || config->parse_json_program == true  ) )
                                         {
                                             Var_To_Value(value, tmp, sizeof(tmp));
                                             strlcpy(config->json_message_map_file, tmp, sizeof(config->json_message_map_file));
                                         }
+					*/
 
 #endif
 
@@ -2860,17 +2857,15 @@ void Load_YAML_Config( char *yaml_file )
 
     if ( config->input_type == INPUT_JSON )
         {
-
             Load_Input_JSON_Map( config->json_input_map_file );
-
         }
 
-    if ( config->parse_json_message == true || config->parse_json_program == true )
-        {
-
-            Load_Message_JSON_Map( config->json_message_map_file );
-
-        }
+    /*
+        if ( config->parse_json_message == true || config->parse_json_program == true )
+            {
+                Load_Message_JSON_Map( config->json_message_map_file );
+            }
+    	*/
 
 
 #endif

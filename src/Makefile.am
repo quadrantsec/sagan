@@ -49,7 +49,6 @@ AUTOMAKE_OPIONS=foreign no-dependencies subdir-objects
 						       input-pipe.c \
 						       input-json.c \
 						       input-json-map.c \
-						       message-json-map.c \
                                                        util-strlcpy.c \
                                                        util-strlcat.c \
                                                        util-base64.c \

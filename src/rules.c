@@ -177,6 +177,9 @@ void Load_Rules( const char *ruleset )
 
     int content_count=0;
     int json_content_count=0;
+
+    uint8_t json_map_count=0;
+
     int meta_content_count=0;
     int meta_content_converted_count=0;
     int json_meta_content_converted_count=0;
@@ -257,6 +260,7 @@ void Load_Rules( const char *ruleset )
             json_meta_content_count=0;
             content_count=0;
             json_content_count=0;
+            json_map_count=0;
             meta_content_count=0;
             meta_content_converted_count=0;
             flexbit_count=0;
@@ -1919,6 +1923,138 @@ void Load_Rules( const char *ruleset )
                         }
 
                     /* "json_content" works like "content" but on JSON key/values */
+
+                    if (!strcmp(rulesplit, "json_map"))
+                        {
+
+                            if ( json_map_count > MAX_JSON_MAP )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] There is to many \"json_map\" objects in the rule at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            arg = strtok_r(NULL, ":", &saveptrrule2);
+
+                            if ( arg == NULL )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] To few arguments for rule options \"json_map\" at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            tmptoken = strtok_r(arg, ",", &saveptrrule2);
+
+                            if ( tmptoken == NULL )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Expected a json_map type,  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            char json_map_type[32] = { 0 };
+
+                            Between_Quotes(tmptoken, json_map_type, sizeof(json_map_type));
+
+                            if ( !strcmp(json_map_type, "src_ip" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_SRC_IP;
+                                }
+
+                            else if ( !strcmp(json_map_type, "dest_ip" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_DEST_IP;
+                                }
+
+                            else if ( !strcmp(json_map_type, "src_port" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_SRC_PORT;
+                                }
+
+                            else if ( !strcmp(json_map_type, "dest_port" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_DEST_PORT;
+                                }
+
+                            else if ( !strcmp(json_map_type, "username" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_USERNAME;
+                                }
+
+                            else if ( !strcmp(json_map_type, "message" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_MESSAGE;
+                                }
+
+                            else if ( !strcmp(json_map_type, "program" ) || !strcmp(json_map_type, "event_type" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_PROGRAM;
+                                }
+
+                            else if ( !strcmp(json_map_type, "event_id" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_EVENT_ID;
+                                }
+
+                            else if ( !strcmp(json_map_type, "flow_id" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_FLOW_ID;
+                                }
+
+                            else if ( !strcmp(json_map_type, "md5" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_MD5;
+                                }
+
+                            else if ( !strcmp(json_map_type, "sha1" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_SHA1;
+                                }
+
+                            else if ( !strcmp(json_map_type, "sha256" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_SHA256;
+                                }
+
+                            else if ( !strcmp(json_map_type, "filename" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_FILENAME;
+                                }
+
+                            else if ( !strcmp(json_map_type, "hostname" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_HOSTNAME;
+                                }
+
+                            else if ( !strcmp(json_map_type, "url" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_URL;
+                                }
+
+                            else if ( !strcmp(json_map_type, "ja3" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_JA3;
+                                }
+
+                            else if ( !strcmp(json_map_type, "proto" ) )
+                                {
+                                    rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_PROTO;
+                                }
+
+
+                            if ( rulestruct[counters->rulecount].json_map_type[json_map_count] == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] json_map type '%s' is invalid at line %d in %s - Abort", __FILE__, __LINE__, json_map_type, linecount, ruleset_fullname);
+                                }
+
+
+                            tmptoken = strtok_r(NULL, ",", &saveptrrule2);
+
+                            if ( tmptoken == NULL )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Expected a json_map key,  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_map_key[json_map_count], sizeof(rulestruct[counters->rulecount].json_map_key[json_map_count]));
+
+                            json_map_count++;
+                            rulestruct[counters->rulecount].json_map_count = json_map_count;
+
+                        }
 
                     if (!strcmp(rulesplit, "json_content"))
                         {

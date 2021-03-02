@@ -47,7 +47,7 @@
 
 #ifdef HAVE_LIBFASTJSON
 #include "input-json.h"
-#include "message-json-map.h"
+//#include "message-json-map.h"
 #endif
 
 #include "processors/engine.h"
