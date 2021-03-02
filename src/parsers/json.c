@@ -84,7 +84,23 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslo
 
                                     snprintf(SaganProcSyslog_LOCAL->json_key[json_count], JSON_MAX_KEY_SIZE, "%s.%s", SaganProcSyslog_LOCAL->json_key[i], key);
                                     SaganProcSyslog_LOCAL->json_key[json_count][sizeof(SaganProcSyslog_LOCAL->json_key[json_count]) - 1] = '\0';
-                                    strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], val_str, sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
+
+                                    if ( val_str != NULL )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], val_str, sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
+                                        }
+                                    else
+                                        {
+					    printf("COPT NUKLL\n");
+                                            strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], "null", sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
+                                        }
+
+                                    if ( debug->debugjson )
+                                        {
+
+                                            Sagan_Log(DEBUG, "[%s, line %d] Key: %s, Value: %s", __FILE__, __LINE__, SaganProcSyslog_LOCAL->json_key[json_count], SaganProcSyslog_LOCAL->json_value[json_count] );
+
+                                        }
 
                                     json_count++;
 
