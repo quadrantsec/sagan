@@ -63,6 +63,7 @@
 #include "json-meta-content.h"
 
 #include "parsers/parsers.h"
+#include "parsers/json.h"
 
 #include "processors/engine.h"
 #include "processors/zeek-intel.h"

@@ -91,7 +91,6 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslo
                                         }
                                     else
                                         {
-                                            printf("COPT NUKLL\n");
                                             strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], "null", sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
                                         }
 
