@@ -261,7 +261,6 @@ void Sig_Handler( void )
                             Client_Stats_Close();
                         }
 
-                    Remove_Lock_File();
                     exit(0);
                     break;
 
