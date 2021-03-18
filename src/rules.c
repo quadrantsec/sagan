@@ -2035,7 +2035,7 @@ void Load_Rules( const char *ruleset )
                                     rulestruct[counters->rulecount].json_map_type[json_map_count] = JSON_MAP_PROTO;
                                 }
 
-			    /* Not valid map specified */
+                            /* Not valid map specified */
 
                             if ( rulestruct[counters->rulecount].json_map_type[json_map_count] == 0 )
                                 {
@@ -2056,7 +2056,7 @@ void Load_Rules( const char *ruleset )
 
                         }
 
-		    /* "json_content" works like "content" but on JSON key/values */
+                    /* "json_content" works like "content" but on JSON key/values */
 
                     if (!strcmp(rulesplit, "json_content"))
                         {
