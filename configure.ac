@@ -106,6 +106,12 @@ AC_ARG_ENABLE(tcmalloc,
   [ TCMALLOC="no" ]
 )
 
+AC_ARG_ENABLE(jsoninput,
+  [  --disable-jsoninput     Disable JSON input support.],
+  [ JSONINPUT="$enableval"],
+  [ JSONINPUT="yes" ]
+)
+
 AC_ARG_WITH(esmtp_includes,
         [  --with-esmtp-includes=DIR    libesmtp include directory],
         [with_esmtp_includes="$withval"],[with_esmtp_includes="no"])
@@ -559,6 +565,12 @@ if test "$TCMALLOC" = "yes"; then
        AC_MSG_RESULT([------- TCMalloc support is enabled -------])
        AC_CHECK_LIB(tcmalloc_minimal,main,,AC_MSG_ERROR(The libtcmalloc_minimal library cannot be found.))
        fi
+
+if test "$JSONINPUT" = "yes"; then
+       AC_MSG_RESULT([------- JSON input is enabled -------])
+       AC_DEFINE(WITH_JSON_INPUT, 1, With JSON Input)
+       fi
+
 
 if test "$LOGNORM" = "yes"; then
        AC_MSG_RESULT([------- liblognorm support is enabled -------])

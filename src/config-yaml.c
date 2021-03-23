@@ -2842,7 +2842,8 @@ void Load_YAML_Config( char *yaml_file )
 
         }
 
-#ifdef HAVE_LIBFASTJSON
+
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
 
     if ( config->input_type == INPUT_JSON )
         {

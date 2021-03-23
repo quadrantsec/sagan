@@ -29,7 +29,7 @@ libfastjson is required for Sagan to function!
 #endif
 
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
 
 #include <stdio.h>
 #include <string.h>

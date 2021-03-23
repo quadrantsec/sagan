@@ -302,7 +302,7 @@ int main(int argc, char **argv)
     memset(dnscache, 0, sizeof(_SaganDNSCache));
 
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
 
     /* Allocate memory for global Syslog_JSON_Map */
 
@@ -312,17 +312,6 @@ int main(int argc, char **argv)
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for Syslog_JSON_Map. Abort!", __FILE__, __LINE__);
         }
-
-    /* Allocate memory for global Syslog_Message_JSON_Map */
-
-    /*
-        JSON_Message_Map = malloc(sizeof(_JSON_Message_Map));
-
-        if ( JSON_Message_Map == NULL )
-            {
-                Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for JSON_Message_Map. Abort!", __FILE__, __LINE__);
-            }
-    	*/
 
 #endif
 
@@ -1222,7 +1211,14 @@ int main(int argc, char **argv)
 
                                     /* We're not threads here so no reason to lock */
 
-                                    counters->bytes_total = counters->bytes_total + strlen( syslogstring );
+                                    uint32_t bytes_total = strlen( syslogstring );
+
+                                    counters->bytes_total = counters->bytes_total + bytes_total;
+
+                                    if ( bytes_total > counters->max_bytes_length )
+                                        {
+                                            counters->max_bytes_length = bytes_total;
+                                        }
 
                                     /* Check for "drop" to save CPU from "ignore list" */
 
@@ -1256,7 +1252,7 @@ int main(int argc, char **argv)
 
                                             /* Copy data to _LOCAL array */
 
-                                            strlcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
+                                            memcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
 
                                             batch_count++;
                                         }

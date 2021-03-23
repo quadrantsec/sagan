@@ -22,7 +22,9 @@
 #include "config.h"             /* From autoconf */
 #endif
 
-#ifdef HAVE_LIBFASTJSON
+//#ifdef HAVE_LIBFASTJSON
+
+#ifdef WITH_JSON_INPUT
 
 #include <stdio.h>
 #include <string.h>

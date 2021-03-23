@@ -363,6 +363,9 @@
 /* With Bluedot */
 #undef WITH_BLUEDOT
 
+/* With JSON Input */
+#undef WITH_JSON_INPUT
+
 /* With Syslog */
 #undef WITH_SYSLOG
 

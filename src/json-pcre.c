@@ -24,6 +24,8 @@
 #include "config.h"             /* From autoconf */
 #endif
 
+#ifdef WITH_JSON_INPUT
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -72,3 +74,4 @@ bool JSON_Pcre(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
     return(true);
 }
 
+#endif

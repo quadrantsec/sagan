@@ -274,6 +274,9 @@ void Stats_JSON_Handler( void )
             json_object_object_add(jobj_captured,"bytes_ignored", jbytes_ignored);
             last_bytes_ignored = counters->bytes_ignored;
 
+            json_object *jmax_log_bytes = json_object_new_int64( counters->max_bytes_length );
+            json_object_object_add(jobj_captured,"max_bytes_log_line", jmax_log_bytes);
+
             /* prevent floating point exceptions */
 
             if ( uptime_seconds != 0 && counters->events_received != 0 )

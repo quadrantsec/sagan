@@ -78,10 +78,6 @@
 #include "liblognormalize.h"
 #endif
 
-//#ifdef HAVE_LIBFASTJSON
-//#include "message-json-map.h"
-//#endif
-
 #include "output-plugins/eve.h"
 
 extern struct _SaganCounters *counters;
@@ -212,7 +208,11 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
     char tmpbuf[256] = { 0 };
     char s_msg[1024] = { 0 };
 
+#ifdef WITH_JSON_INPUT
+
     char tmp_json_value[JSON_MAX_VALUE_SIZE] = { 0 };
+
+#endif
 
     char syslog_append_program[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6] = { 0 };
     char syslog_append_orig_message[MAX_SYSLOGMSG] = { 0 };
@@ -277,7 +277,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
     gettimeofday(&tp, 0);       /* Store event time as soon as we get it */
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
 
     /* If "parse-json-program" is enabled, we'll look for signs in the program
        field for JSON.  If we find it,  we'll append the program and message
@@ -633,6 +633,8 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
                                 }
 
+#ifdef WITH_JSON_INPUT
+
                             if ( flag == true && rulestruct[b].json_pcre_count > 0 )
                                 {
 
@@ -675,6 +677,8 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
                                         }
                                 }
 
+#endif
+
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
 
@@ -697,10 +701,12 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
                     if ( pre_match == false && flag == true )
                         {
 
-			    /* If we have JSON maps, apply them! */
+                            /* If we have JSON maps, apply them! */
 
                             if ( rulestruct[b].json_map_count > 0 )
                                 {
+
+#ifdef WITH_JSON_INPUT
 
                                     for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                         {
@@ -816,6 +822,8 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
                                                 }
                                         }
+#endif
+
                                 }
 
 #ifdef HAVE_LIBLOGNORM

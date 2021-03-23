@@ -112,6 +112,7 @@ void Statistics( void )
             Sagan_Log(NORMAL, "  (_o_)    Received/Processed/Ignored : %" PRIu64 "/%" PRIu64 "/%" PRIu64 " (%.3f%%/%.3f%%)", counters->events_received, counters->events_processed, counters->ignore_count, CalcPct(counters->events_processed, counters->events_received), CalcPct(counters->ignore_count, counters->events_received));
             Sagan_Log(NORMAL, "  /   \\/)  Signatures matched         : %" PRIu64 " (%.3f%%)", counters->saganfound, CalcPct(counters->saganfound, counters->events_received ) );
             Sagan_Log(NORMAL, "           Bytes Processed            : %" PRIu64 "", counters->bytes_total);
+            Sagan_Log(NORMAL, "           Max log ling size          : %d bytes", counters->max_bytes_length);
             Sagan_Log(NORMAL, " (|| ||)   Alerts                     : %" PRIu64 " (%.3f%%)",  counters->alert_total, CalcPct( counters->alert_total, counters->events_received) );
             Sagan_Log(NORMAL, "  oo-oo    After                      : %" PRIu64 " (%.3f%%)",  counters->after_total, CalcPct( counters->after_total, counters->events_received) );
             Sagan_Log(NORMAL, "           Threshold                  : %" PRIu64 " (%.3f%%)", counters->threshold_total, CalcPct( counters->threshold_total, counters->events_received) );
@@ -129,7 +130,8 @@ void Statistics( void )
                     Sagan_Log(NORMAL, "           Bytes Ignored              : %" PRIu64 " (%.3f%%)", counters->bytes_ignored, CalcPct( counters->bytes_ignored, counters->bytes_total) );
                 }
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+
             if ( config->parse_json_program == true || config->parse_json_message == true )
                 {
                     Sagan_Log(NORMAL, "           JSON Input                 : %" PRIu64 " (%.3f%%)", counters->json_input_count, CalcPct( counters->json_input_count, counters->events_received) );
@@ -192,7 +194,7 @@ void Statistics( void )
             Sagan_Log(NORMAL, "           Null Messages              : %" PRIu64 " (%.3f%%)", counters->null_message, CalcPct(counters->malformed_message, counters->events_received) );
 
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
 
             if ( config->parse_json_program == true || config->parse_json_message == true )
                 {

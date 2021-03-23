@@ -193,6 +193,7 @@ struct _SaganCounters
     uint64_t ignore_count;
     uint64_t blacklist_count;
     uint64_t bytes_total;
+    uint64_t max_bytes_length;
     uint64_t bytes_ignored;
     uint64_t null_message;
 
@@ -315,7 +316,8 @@ struct _SaganCounters
     uint64_t redis_writer_threads_drop;
 #endif
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+
     int json_message_map;
 
     uint64_t json_input_count;
@@ -406,9 +408,13 @@ struct _Sagan_Proc_Syslog
     char ja3[MD5_HASH_SIZE+1];
     char username[MAX_USERNAME_SIZE+1];
 
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+
     int json_count;
     char json_key[JSON_MAX_OBJECTS][JSON_MAX_KEY_SIZE];
     char json_value[JSON_MAX_OBJECTS][JSON_MAX_VALUE_SIZE];
+
+#endif
 
 };
 
@@ -419,7 +425,8 @@ struct _Sagan_Pass_Syslog
 };
 
 
-#ifdef HAVE_LIBFASTJSON
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+
 
 typedef struct _Syslog_JSON_Map _Syslog_JSON_Map;
 struct _Syslog_JSON_Map

@@ -46,31 +46,31 @@ typedef void json_object;
 #define CLUSTER_NAME		"default_cluster_name"
 #define MMAP_VERSION		2.0
 
-#define CLASSBUF		1024
+#define CLASSBUF		256
 #define RULEBUF			5128
-#define CONFBUF			4096
-
-#define	MAX_COUNTRY		16
+#define CONFBUF			32768
 
 #define	MAX_SYSLOG_HOST		50
-#define MAX_SYSLOG_FACILITY	50
-#define MAX_SYSLOG_PRIORITY	50
-#define MAX_SYSLOG_LEVEL	50
-#define MAX_SYSLOG_TAG		50
-#define MAX_SYSLOG_DATE		50
-#define MAX_SYSLOG_TIME		50
+#define MAX_SYSLOG_FACILITY	15
+#define MAX_SYSLOG_PRIORITY	20
+#define MAX_SYSLOG_LEVEL	15
+#define MAX_SYSLOG_TAG		10
+#define MAX_SYSLOG_DATE		32
+#define MAX_SYSLOG_TIME		32
 #define MAX_SYSLOG_PROGRAM	50
-#define MAX_SYSLOGMSG		65536
+#define MAX_SYSLOGMSG		32768
 
-#define JSON_MAX_NEST	      20
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+
 #define JSON_MAX_SIZE	      MAX_SYSLOGMSG
 
 /* This is used in JSON message/program parsing */
 
-#define JSON_MAX_OBJECTS        256
-#define JSON_MAX_KEY_SIZE       64
-#define JSON_MAX_VALUE_SIZE	32768
-#define	JSON_MAX_MAP		20
+#define JSON_MAX_OBJECTS        64
+#define JSON_MAX_KEY_SIZE       32
+#define JSON_MAX_VALUE_SIZE	2048
+
+#endif
 
 #define DEFAULT_JSON_INPUT_MAP          "/usr/local/etc/sagan-rules/json-input.map"
 #define INPUT_PIPE                      1
@@ -85,25 +85,18 @@ typedef void json_object;
 
 #define MAXPATH 		255		/* Max path for files/directories */
 #define MAXHOST         	255		/* Max host length */
-#define MAXPROGRAM		32		/* Max syslog 'program' length */
-#define MAXDATE			25		/* Max syslog 'date' length */
-#define MAXTIME			10		/* Max syslog 'time length */
-#define MAXFACILITY		25		/* Max syslog 'facility' length */
-#define MAXPRIORITY		20		/* Max syslog 'priority' length */
-#define MAXTAG			32		/* Max syslog 'tag' length */
-#define MAXLEVEL		15		/* Max syslog 'level' length */
 
 #define MAX_SAGAN_MSG		 256		/* Max "msg" option size */
 
 #define MAX_PCRE_SIZE		 1024		/* Max pcre length in a rule */
-#define MAX_SYSLOG_TAG_SIZE 256     /* Max syslog_tag length in a rule */
+#define MAX_SYSLOG_TAG_SIZE 	 64     /* Max syslog_tag length in a rule */
 
 #define MAX_FIFO_SIZE		1048576		/* Max pipe/FIFO size in bytes/pages */
 
 #define MAX_THREADS     	4096            /* Max system threads */
 
 #define MAX_VAR_NAME_SIZE  	64		/* Max "var" name size */
-#define MAX_VAR_VALUE_SIZE 	32768		/* Max "var" value size */
+#define MAX_VAR_VALUE_SIZE 	CONFBUF		/* Max "var" value size */
 
 #define MAX_PCRE		10		/* Max PCRE within a rule */
 #define MAX_CONTENT		30		/* Max 'content' within a rule */
@@ -119,7 +112,6 @@ typedef void json_object;
 #define MAX_JSON_META_ITEM_SIZE 512
 #define MAX_JSON_META_CONTENT_ITEMS 256
 #define	MAX_JSON_MAP		20
-
 
 #define MAX_FLEXBITS		10		/* Max 'flexbits' within a rule */
 #define MAX_XBITS               10              /* Max 'xbits' within a rule */
@@ -252,6 +244,8 @@ typedef void json_object;
 
 /* For JSON input */
 
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+
 #define JSON_INPUT_S_SOURCE             32
 #define JSON_INPUT_S_SOURCE_MAX_SIZE    160
 #define JSON_INPUT_S_SOURCE_MAX_COUNT   5
@@ -348,3 +342,4 @@ typedef void json_object;
 #define JSON_INPUT_PROTO_MAX_SIZE	160
 #define JSON_INPUT_PROTO_MAX_COUNT	5
 
+#endif

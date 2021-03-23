@@ -25,6 +25,8 @@
 #include "config.h"             /* From autoconf */
 #endif
 
+#ifdef WITH_JSON_INPUT
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -159,3 +161,5 @@ bool JSON_Meta_Content_Search(int rule_position, const char *json_string, int i 
 
     return(false);
 }
+
+#endif
