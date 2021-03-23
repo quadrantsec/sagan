@@ -393,6 +393,50 @@ depend on JSON mapping and can be used on any located key.  For example:
 
 **json_pcre: "sni", "/www.quadrantsec.com/i";**
 
+json_map
+~~~~~~~~
+
+.. option:: json_map: "internal_value", "key"; 
+
+**json_map: "src_ip", ".ClientIP";** 
+
+The above example would map Sagan's internal "src_ip" to what JSON value is stored in the key "ClientIP". 
+
+This maps a JSON "key" to an internal Sagan engine value.  This can be useful to map a JSON value so
+it can be used with other keywords like ``after``, ``threshold``, ``bluedot``, ``blacklist``, ``flexbits``, 
+``xbits``, ``zeekintel``, etc.  Valid "internal" Sagan values are: 
+
+``src_ip`` - Maps to the internal "source" TCP/IP address.  Once mapped, the data from the JSON can be used with keywords such as ``after``, ``threshold``, ``xbits``, ``flexbits``, ``bluedot``, ``country_code``, ``blacklist``, ``zeekintel``. 
+
+``dest_ip`` - Maps to the internal "destination" TCP/IP address. Once mapped, the data from the JSON can be used with keywords such as ``after``, ``threshold``, ``xbits``, ``flexbits``, ``bluedot``, ``country_code``, ``blacklist``, ``zeekintel``.
+
+``src_port`` - Maps to the internal "source" TCP/IP port. Once mapped,  the data from the JSON can be used with ``flexbits`` keyword.
+
+``dest_port`` - Maps to the internal "destination" TCP/IP port. Maps to the internal "source" TCP/IP port. Once mapped,  the data from the JSON can be used with ``flexbits`` keyword.
+
+``message`` - Replaces existing "syslog" message with the value within the specified key.  Once mapped,  the JSON value can used with keywords like ``parse_src_ip``, ``parse_dst_ip``, ``pcre``, ``content``, ``meta_content``, etc. 
+
+``program`` - Replaces existing "program" message with the value within the specified key. Once mapped, the JSON value can be used with the rule keywords like ``program`` and ``event_type``. 
+
+``event_type`` - This is an alias for ``program``.
+
+``event_id`` - Maps to the internal "event_id" value.  Once mapped, the JSON value can be used with the ``event_id`` rule keyword. 
+
+``md5`` - Maps to internal MD5 value.  Once mapped, the JSON value can be used with the keywords ``bluedot``, ``blacklist``  and ``zeekintel``. 
+
+``sha1`` - Maps to internal SHA1 value. Once mapped, the JSON value can be used with the keywords ``bluedot``, ``blacklist``  and ``zeekintel``.
+
+``sha256`` - Maps to internal SHA256 values. Once mapped, the JSON value can be used with the keywords ``bluedot``, ``blacklist``  and ``zeekintel``.
+
+``filename`` - Maps to internal 'filename' value. Once mapped, the JSON value can be used with the keywords ``bluedot``, ``blacklist``  and ``zeekintel``.
+
+``hostname`` - Maps to internal 'hostname' value. Once mapped, the JSON value can be used with the keywords ``bluedot``, ``blacklist``  and ``zeekintel``.
+
+``url`` - Maps to internal 'URL' value. Once mapped, the JSON value can be used with the keywords ``bluedot``, ``blacklist``  and ``zeekintel``.
+
+``proto`` - Maps to internal 'proto' value.  The key is expect to be "UDP", "TCP" or "ICMP".  The value is can insensitive. 
+
+
 json_meta_content
 -----------------
 
