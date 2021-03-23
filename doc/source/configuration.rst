@@ -1212,7 +1212,7 @@ to read,  while others might be better for outputing to databases like Elasticse
 eve-log
 -------
 
-Sagan can write to `Suricata's <https://suricata-ids.io>`_ "Extensible Event Format", better
+Sagan can write to `Suricata's <https://suricata-ids.org>`_ "Extensible Event Format", better
 known as "EVE".  This is a JSON format in which events (alerts, etc) are written to.  This data
 can then be used to transport data into Elasticsearch (using software like Logstash) or `Meer <https://meer.readthedocs.org>`_ (for MySQL/MariaDB/PostgreSQL) output.  If you are looking to get alert
 data into any database back end,  you'll likely want to enable this output plugin.
