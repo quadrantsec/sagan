@@ -95,7 +95,7 @@ void Sagan_Engine_Init ( void )
     /* Nothing to do yet */
 }
 
-int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_flag )
+int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sagan_JSON *JSON_LOCAL, bool dynamic_rule_flag )
 {
 
     /* GeoIP source information */
@@ -208,7 +208,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
     char tmpbuf[256] = { 0 };
     char s_msg[1024] = { 0 };
 
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
     char tmp_json_value[JSON_MAX_VALUE_SIZE] = { 0 };
 
@@ -277,67 +277,64 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
     gettimeofday(&tp, 0);       /* Store event time as soon as we get it */
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#ifdef HAVE_LIBFASTJSON
 
     /* If "parse-json-program" is enabled, we'll look for signs in the program
        field for JSON.  If we find it,  we'll append the program and message
        field */
 
 
-    if ( config->parse_json_program == true || config->parse_json_message == true )
+    if ( config->json_parse_data == true )
         {
+
             SaganProcSyslog_LOCAL->src_ip[0] = '\0';
             SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
             SaganProcSyslog_LOCAL->src_port = 0;
             SaganProcSyslog_LOCAL->dst_port = 0;
             SaganProcSyslog_LOCAL->proto = 0;
 
-        }
+            /* If we detect JSON in the "program" field,  append the program with the
+            * message */
 
-    if ( config->parse_json_program == true &&
-            ( SaganProcSyslog_LOCAL->syslog_program[0] == '{' ||
-              SaganProcSyslog_LOCAL->syslog_program[1] == '{' ) )
-        {
-
-            char tmp_json[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM] = { 0 };
-
-            if ( debug->debugjson )
+            if ( SaganProcSyslog_LOCAL->syslog_program[0] == '{' ||
+                    SaganProcSyslog_LOCAL->syslog_program[1] == '{' )
                 {
-                    Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within program \"%s\"", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_program );
+
+                    char tmp_json[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM] = { 0 };
+
+                    if ( debug->debugjson )
+                        {
+                            Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within program \"%s\", appending to syslog 'message'.", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_program );
+                        }
+
+                    /* Merge program+message */
+
+                    snprintf(tmp_json, sizeof(tmp_json), "%s%s", SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
+
+                    /* Zero out program (might get set by JSON) */
+
+                    SaganProcSyslog_LOCAL->syslog_program[0] = '\0';
+                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, sizeof(SaganProcSyslog_LOCAL->syslog_message));
+
                 }
 
-            /* Merge program+message */
+            /* Check the "message" for possible JSON.  Keep in mind,  it could have been appended
+             * from above! */
 
-            snprintf(tmp_json, sizeof(tmp_json), "%s%s", SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
-
-            /* Zero out program (might get set by JSON) */
-
-            SaganProcSyslog_LOCAL->syslog_program[0] = '\0';
-            strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, sizeof(SaganProcSyslog_LOCAL->syslog_message));
-
-            /* Parse JSON */
-
-            Parse_JSON( SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL);
-
-        }
-
-    /* If "parse-json-message" is enabled, we'll look for signs in the message for
-           JSON */
-
-
-    if ( config->parse_json_message == true &&
-            ( SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
-              SaganProcSyslog_LOCAL->syslog_message[2] == '{'  ) )
-        {
-
-            if ( debug->debugjson )
+            if ( SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
+                    SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
                 {
-                    Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within message \"%s\".", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_message);
+
+                    if ( debug->debugjson )
+                        {
+                            Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within message \"%s\".", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_message);
+                        }
+
+                    Parse_JSON( SaganProcSyslog_LOCAL->syslog_message, JSON_LOCAL);
+
                 }
 
-            Parse_JSON( SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL);
-
-        }
+        } /* if ( config->json_parse_data */
 
 #endif
 
@@ -633,14 +630,14 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
 
                                 }
 
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
                             if ( flag == true && rulestruct[b].json_pcre_count > 0 )
                                 {
 
                                     if ( validate_flag == true )
                                         {
-                                            flag = JSON_Pcre(b, SaganProcSyslog_LOCAL );
+                                            flag = JSON_Pcre(b, JSON_LOCAL );
                                         }
                                     else
                                         {
@@ -654,7 +651,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
                                 {
                                     if ( validate_flag == true )
                                         {
-                                            flag = JSON_Content(b, SaganProcSyslog_LOCAL );
+                                            flag = JSON_Content(b, JSON_LOCAL );
                                         }
                                     else
                                         {
@@ -668,7 +665,7 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
                                 {
                                     if ( validate_flag == true )
                                         {
-                                            flag = JSON_Meta_Content(b, SaganProcSyslog_LOCAL );
+                                            flag = JSON_Meta_Content(b, JSON_LOCAL );
                                         }
                                     else
                                         {
@@ -706,12 +703,12 @@ int Sagan_Engine ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, bool dynamic_rule_
                             if ( rulestruct[b].json_map_count > 0 )
                                 {
 
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
                                     for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                         {
 
-                                            Get_Key_Value( SaganProcSyslog_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
+                                            Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
 
                                             if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
                                                 {

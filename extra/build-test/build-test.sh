@@ -26,11 +26,12 @@
 #  --enable-redis	   Enable redis support.
 #  --disable-libfastjson   Enable libfastjson
 #  --enable-tcmalloc	   Enable Google's TCMalloc
+#  --disable-jsoninput     Disabled JSON input
 
 
-STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc"
-ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-libfastjson --enable-tcmalloc"
-NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-libfastjson --disable-tcmalloc"
+STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc --enable-jsoninput"
+ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-libfastjson --enable-tcmalloc -enable-jsoninput"
+NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-libfastjson --disable-tcmalloc --disable-jsoninput"
 
 LOG="output.log" 
 

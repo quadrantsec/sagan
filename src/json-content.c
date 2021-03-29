@@ -25,7 +25,7 @@
 #include "config.h"             /* From autoconf */
 #endif
 
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -41,7 +41,7 @@
 
 extern struct _Rule_Struct *rulestruct;
 
-bool JSON_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
+bool JSON_Content(int rule_position, _Sagan_JSON *JSON_LOCAL)
 {
 
     int i = 0;
@@ -54,12 +54,12 @@ bool JSON_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
 
             key_search = false;
 
-            for (a=0; a < SaganProcSyslog_LOCAL->json_count; a++)
+            for (a=0; a < JSON_LOCAL->json_count; a++)
                 {
 
                     /* Search for the "key" specified in json_content */
 
-                    if ( !strcmp(SaganProcSyslog_LOCAL->json_key[a], rulestruct[rule_position].json_content_key[i] ) )
+                    if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_content_key[i] ) )
                         {
 
                             key_search = true;
@@ -74,7 +74,7 @@ bool JSON_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
                                     if ( rulestruct[rule_position].json_content_not[i] == false )
                                         {
 
-                                            if ( Search_Nocase(SaganProcSyslog_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == false  )
+                                            if ( Search_Nocase(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == false  )
                                                 {
 
                                                     return(false);
@@ -85,7 +85,7 @@ bool JSON_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
                                     else
                                         {
 
-                                            if ( Search_Nocase(SaganProcSyslog_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == true )
+                                            if ( Search_Nocase(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == true )
                                                 {
                                                     return(false);
                                                 }
@@ -102,7 +102,7 @@ bool JSON_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
                                     if ( rulestruct[rule_position].json_content_not[i] == false )
                                         {
 
-                                            if ( Search_Case(SaganProcSyslog_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) ==  false )
+                                            if ( Search_Case(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) ==  false )
                                                 {
                                                     return(false);
                                                 }
@@ -111,7 +111,7 @@ bool JSON_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
                                     else
                                         {
 
-                                            if ( Search_Case(SaganProcSyslog_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) == true )
+                                            if ( Search_Case(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) == true )
                                                 {
                                                     return(false);
                                                 }

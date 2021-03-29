@@ -22,9 +22,7 @@
 #include "config.h"             /* From autoconf */
 #endif
 
-//#ifdef HAVE_LIBFASTJSON
-
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
 #include <stdio.h>
 #include <string.h>
@@ -38,7 +36,7 @@
 extern struct _SaganCounters *counters;
 extern struct _SaganDebug *debug;
 
-void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
 {
 
     struct json_object *json_obj = NULL;
@@ -59,17 +57,17 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslo
 
     json_count = 1;
 
-    SaganProcSyslog_LOCAL->json_key[0][0] = '\0';
-    strlcpy(SaganProcSyslog_LOCAL->json_value[0], syslog_string, sizeof(SaganProcSyslog_LOCAL->json_value[0]));
+    JSON_LOCAL->json_key[0][0] = '\0';
+    strlcpy(JSON_LOCAL->json_value[0], syslog_string, sizeof(JSON_LOCAL->json_value[0]));
 
     for (i = 0; i < json_count; i++ )
         {
 
 
-            if ( SaganProcSyslog_LOCAL->json_value[i][0] == '{' || SaganProcSyslog_LOCAL->json_value[i][1] == '{' )
+            if ( JSON_LOCAL->json_value[i][0] == '{' || JSON_LOCAL->json_value[i][1] == '{' )
                 {
 
-                    json_obj = json_tokener_parse(SaganProcSyslog_LOCAL->json_value[i]);
+                    json_obj = json_tokener_parse(JSON_LOCAL->json_value[i]);
 
                     if ( json_obj != NULL )
                         {
@@ -84,22 +82,22 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslo
                                     val = json_object_iter_peek_value(&it);
                                     val_str = json_object_get_string(val);
 
-                                    snprintf(SaganProcSyslog_LOCAL->json_key[json_count], JSON_MAX_KEY_SIZE, "%s.%s", SaganProcSyslog_LOCAL->json_key[i], key);
-                                    SaganProcSyslog_LOCAL->json_key[json_count][sizeof(SaganProcSyslog_LOCAL->json_key[json_count]) - 1] = '\0';
+                                    snprintf(JSON_LOCAL->json_key[json_count], JSON_MAX_KEY_SIZE, "%s.%s", JSON_LOCAL->json_key[i], key);
+                                    JSON_LOCAL->json_key[json_count][sizeof(JSON_LOCAL->json_key[json_count]) - 1] = '\0';
 
                                     if ( val_str != NULL )
                                         {
-                                            strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], val_str, sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
+                                            strlcpy(JSON_LOCAL->json_value[json_count], val_str, sizeof(JSON_LOCAL->json_value[json_count]));
                                         }
                                     else
                                         {
-                                            strlcpy(SaganProcSyslog_LOCAL->json_value[json_count], "null", sizeof(SaganProcSyslog_LOCAL->json_value[json_count]));
+                                            strlcpy(JSON_LOCAL->json_value[json_count], "null", sizeof(JSON_LOCAL->json_value[json_count]));
                                         }
 
                                     if ( debug->debugjson )
                                         {
 
-                                            Sagan_Log(DEBUG, "[%s, line %d] Key: %s, Value: %s", __FILE__, __LINE__, SaganProcSyslog_LOCAL->json_key[json_count], SaganProcSyslog_LOCAL->json_value[json_count] );
+                                            Sagan_Log(DEBUG, "[%s, line %d] Key: %s, Value: %s", __FILE__, __LINE__, JSON_LOCAL->json_key[json_count], JSON_LOCAL->json_value[json_count] );
 
                                         }
 
@@ -116,21 +114,21 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProcSyslo
         }
 
 
-    SaganProcSyslog_LOCAL->json_count = json_count;
+    JSON_LOCAL->json_count = json_count;
 
 }
 
-void Get_Key_Value( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, const char *key, char *value, size_t size)
+void Get_Key_Value( struct _Sagan_JSON *JSON_LOCAL, const char *key, char *value, size_t size)
 {
 
     uint16_t a = 0;
 
-    for ( a = 0; a < SaganProcSyslog_LOCAL->json_count; a++ )
+    for ( a = 0; a < JSON_LOCAL->json_count; a++ )
         {
 
-            if ( !strcmp( SaganProcSyslog_LOCAL->json_key[a], key ) )
+            if ( !strcmp( JSON_LOCAL->json_key[a], key ) )
                 {
-                    snprintf(value, size, "%s", SaganProcSyslog_LOCAL->json_value[a]);
+                    snprintf(value, size, "%s", JSON_LOCAL->json_value[a]);
                     return;
                 }
         }

@@ -316,11 +316,10 @@ struct _SaganCounters
     uint64_t redis_writer_threads_drop;
 #endif
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#if defined(HAVE_LIBFASTJSON)
 
     int json_message_map;
 
-    uint64_t json_input_count;
     uint64_t malformed_json_input_count;
 
     uint64_t json_mp_count;
@@ -408,15 +407,21 @@ struct _Sagan_Proc_Syslog
     char ja3[MD5_HASH_SIZE+1];
     char username[MAX_USERNAME_SIZE+1];
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+};
 
-    int json_count;
+/* Don't #ifdef,  because we still need placeholders even when
+ * JSON isn't enabled */
+
+typedef struct _Sagan_JSON _Sagan_JSON;
+struct _Sagan_JSON
+{
+
+    uint16_t json_count;
     char json_key[JSON_MAX_OBJECTS][JSON_MAX_KEY_SIZE];
     char json_value[JSON_MAX_OBJECTS][JSON_MAX_VALUE_SIZE];
 
-#endif
-
 };
+
 
 typedef struct _Sagan_Pass_Syslog _Sagan_Pass_Syslog;
 struct _Sagan_Pass_Syslog
@@ -425,8 +430,7 @@ struct _Sagan_Pass_Syslog
 };
 
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
-
+#if defined(HAVE_LIBFASTJSON)
 
 typedef struct _Syslog_JSON_Map _Syslog_JSON_Map;
 struct _Syslog_JSON_Map

@@ -727,22 +727,17 @@ int main(int argc, char **argv)
 #ifdef HAVE_LIBFASTJSON
 
     Sagan_Log(NORMAL, "Named pipe/FIFO input type: %s", config->input_type == INPUT_PIPE ? "Pipe":"JSON");
-    Sagan_Log(NORMAL, "Parse JSON in message: %s", config->parse_json_message == true ? "Enabled":"Disabled");
-    Sagan_Log(NORMAL, "Parse JSON in program: %s", config->parse_json_program == true ? "Enabled":"Disabled");
-    Sagan_Log(NORMAL, "Client Stats         : %s", config->client_stats_flag == true ? "Enabled":"Disabled");
-
+    Sagan_Log(NORMAL, "Parse log for JSON        : %s", config->json_parse_data == true ? "Enabled":"Disabled");
+    Sagan_Log(NORMAL, "Client Stats              : %s", config->client_stats_flag == true ? "Enabled":"Disabled");
 
 #endif
 
-    Sagan_Log(NORMAL, "Syslog batch: %d", config->max_batch);
+    Sagan_Log(NORMAL, "Syslog batch:             : %d", config->max_batch);
 
 
 #ifdef PCRE_HAVE_JIT
 
-    if ( config->pcre_jit )
-        {
-            Sagan_Log(NORMAL, "PCRE JIT is enabled.");
-        }
+    Sagan_Log(NORMAL, "PCRE JIT                  : %s", config->pcre_jit == true ? "Enabled":"Disabled");
 
 #endif
 

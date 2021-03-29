@@ -47,7 +47,6 @@
 
 #ifdef HAVE_LIBFASTJSON
 #include "input-json.h"
-//#include "message-json-map.h"
 #endif
 
 #include "processors/engine.h"
@@ -97,7 +96,6 @@ void Processor ( void )
 
     memset(SaganProcSyslog_LOCAL, 0, sizeof(struct _Sagan_Proc_Syslog));
 
-
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc(sizeof(struct _Sagan_Pass_Syslog));
 
@@ -107,6 +105,26 @@ void Processor ( void )
         }
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+
+
+    struct _Sagan_JSON *JSON_LOCAL = NULL;
+
+#if defined(HAVE_LIBFASTJSON)
+
+    if ( config->input_type == INPUT_JSON || config->parse_json_message == true || config->parse_json_program == true )
+        {
+
+            JSON_LOCAL = malloc(sizeof(struct _Sagan_JSON));
+
+            if ( JSON_LOCAL == NULL )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_JSON. ABort!", __FILE__, __LINE__);
+                }
+
+            memset(JSON_LOCAL, 0, sizeof(struct _Sagan_JSON));
+        }
+
+#endif
 
     int i;
 
@@ -137,7 +155,6 @@ void Processor ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, i, SaganPassSyslog[proc_msgslot].syslog[i]);
                         }
 
-//                    strlcpy(SaganPassSyslog_LOCAL->syslog[i],  SaganPassSyslog[proc_msgslot].syslog[i], sizeof(SaganPassSyslog_LOCAL->syslog[i]));
                     memcpy(SaganPassSyslog_LOCAL->syslog[i],  SaganPassSyslog[proc_msgslot].syslog[i], sizeof(SaganPassSyslog_LOCAL->syslog[i]));
 
                 }
@@ -157,16 +174,17 @@ void Processor ( void )
             for (i=0; i < config->max_batch; i++)
                 {
 
+
                     if ( config->input_type == INPUT_PIPE )
                         {
                             SyslogInput_Pipe( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL );
                         }
 
-#ifdef WITH_JSON_INPUT
+#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
 
                     else
                         {
-                            SyslogInput_JSON( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL );
+                            SyslogInput_JSON( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL, JSON_LOCAL );
                         }
 
 #endif
@@ -194,7 +212,7 @@ void Processor ( void )
                                 }
                         }
 
-                    (void)Sagan_Engine( SaganProcSyslog_LOCAL, dynamic_rule_flag );
+                    (void)Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, dynamic_rule_flag );
 
                     /* If this is a dynamic run,  reset back to normal */
 

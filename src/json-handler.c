@@ -1,5 +1,4 @@
 /* $Id$ */
-
 /*
 ** Copyright (C) 2009-2021 Quadrant Information Security <quadrantsec.com>
 ** Copyright (C) 2009-2021 Champ Clark III <cclark@quadrantsec.com>

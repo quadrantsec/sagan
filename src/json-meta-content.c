@@ -25,7 +25,7 @@
 #include "config.h"             /* From autoconf */
 #endif
 
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -41,7 +41,7 @@
 
 extern struct _Rule_Struct *rulestruct;
 
-bool JSON_Meta_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
+bool JSON_Meta_Content(int rule_position, _Sagan_JSON *JSON_LOCAL)
 {
 
     int i=0;
@@ -53,17 +53,17 @@ bool JSON_Meta_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LO
     for (i=0; i < rulestruct[rule_position].json_meta_content_count; i++)
         {
 
-            for (a=0; a < SaganProcSyslog_LOCAL->json_count; a++)
+            for (a=0; a < JSON_LOCAL->json_count; a++)
                 {
 
                     /* Locate the key (if it's avaliable */
 
-                    if ( !strcmp(SaganProcSyslog_LOCAL->json_key[a], rulestruct[rule_position].json_meta_content_key[i] ) )
+                    if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_meta_content_key[i] ) )
                         {
 
                             /* Key found, test for json_meta_content */
 
-                            rc = JSON_Meta_Content_Search(rule_position, SaganProcSyslog_LOCAL->json_value[a], i );
+                            rc = JSON_Meta_Content_Search(rule_position, JSON_LOCAL->json_value[a], i );
 
 
                             /* Got hit */

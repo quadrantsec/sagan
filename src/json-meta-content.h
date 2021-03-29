@@ -18,7 +18,7 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-bool JSON_Meta_Content(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL);
+bool JSON_Meta_Content(int rule_position, _Sagan_JSON *JSON_LOCAL);
 bool JSON_Meta_Content_Search(int rule_position, const char *json_string, int i );
 
 

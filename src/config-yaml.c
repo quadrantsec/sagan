@@ -200,6 +200,7 @@ void Load_YAML_Config( char *yaml_file )
 
             config->parse_json_message = false;
             config->parse_json_program = false;
+            config->json_parse_data = false;
 
 #endif
 
@@ -681,53 +682,63 @@ void Load_YAML_Config( char *yaml_file )
 
 #ifndef HAVE_LIBFASTJSON
 
-                                    else if (!strcmp(last_pass, "parse-json-message"))
-                                        {
-                                            if (!strcasecmp(value, "enabled" && !strcasecmp(value, "true" ) )
-                                            {
+                                    /* Added 2021/03/29 - REMOVE later */
 
-                                                Sagan_Log(ERROR, "[%s, line %d] sagan:core 'parse-json-message' isn't supported.  No JSON support. Abort!", __FILE__, __LINE__);
-                                                }
-
-
-                                        }
-
-#endif
-
-                                    else if (!strcmp(last_pass, "parse-json-message"))
+                                    else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
                                         {
 
-                                            if (!strcasecmp(value, "enabled") || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes") )
+                                            Sagan_Log(WARN, "The option 'parse-json-message' and 'parse-json-program' have been depreciated.  Use 'json-parsedata' instead");
+
+                                            if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
                                                 {
-                                                    config->parse_json_message = true;
+                                                    Sagan_Log(ERROR, "[%s, line %d] sagan:core 'json-parse-data' is disabled because Sagan lacks JSON support. Abort!", __FILE__, __LINE__);
                                                 }
+
                                         }
 
-
-#ifndef HAVE_LIBFASTJSON
-
-                                    else if (!strcmp(last_pass, "parse-json-program"))
+                                    else if ( !strcmp(last_pass, "json-parse-data") )
                                         {
-                                            if (!strcasecmp(value, "enabled" && !strcasecmp(value, "true" ) )
-                                            {
+                                            if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
+                                                {
 
-                                                Sagan_Log(ERROR, "[%s, line %d] sagan:core 'parse-json-program' isn't supported.  No JSON support. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] sagan:core 'json-parse-data' is disabled because Sagan lacks JSON support. Abort!", __FILE__, __LINE__);
                                                 }
 
                                         }
 
 #endif
 
-                                    else if (!strcmp(last_pass, "parse-json-program"))
+#ifdef HAVE_LIBFASTJSON
+
+                                    /* Added 2021/03/29 - REMOVE later */
+
+
+                                    else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
+                                        {
+
+                                            Sagan_Log(WARN, "The option 'parse-json-message' and 'parse-json-program' have been depreciated.  Enabling 'json-parse-data' instead but please fix your Sagan configuratons.");
+
+                                            if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
+                                                {
+                                                    config->json_parse_data = true;
+                                                }
+
+                                        }
+
+                                    else if (!strcmp(last_pass, "json-parse-data"))
                                         {
 
                                             if (!strcasecmp(value, "enabled") || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes") )
                                                 {
-                                                    config->parse_json_program = true;
+                                                    config->json_parse_data = true;
                                                 }
                                         }
+#endif
+
+
 
 #ifndef HAVE_LIBFASTJSON
+
 
                                     else if (!strcmp(last_pass, "input-type"))
                                         {

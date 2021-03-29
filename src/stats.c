@@ -112,7 +112,7 @@ void Statistics( void )
             Sagan_Log(NORMAL, "  (_o_)    Received/Processed/Ignored : %" PRIu64 "/%" PRIu64 "/%" PRIu64 " (%.3f%%/%.3f%%)", counters->events_received, counters->events_processed, counters->ignore_count, CalcPct(counters->events_processed, counters->events_received), CalcPct(counters->ignore_count, counters->events_received));
             Sagan_Log(NORMAL, "  /   \\/)  Signatures matched         : %" PRIu64 " (%.3f%%)", counters->saganfound, CalcPct(counters->saganfound, counters->events_received ) );
             Sagan_Log(NORMAL, "           Bytes Processed            : %" PRIu64 "", counters->bytes_total);
-            Sagan_Log(NORMAL, "           Max log ling size          : %d bytes", counters->max_bytes_length);
+            Sagan_Log(NORMAL, "           Largest log size (bytes)   : %d bytes", counters->max_bytes_length);
             Sagan_Log(NORMAL, " (|| ||)   Alerts                     : %" PRIu64 " (%.3f%%)",  counters->alert_total, CalcPct( counters->alert_total, counters->events_received) );
             Sagan_Log(NORMAL, "  oo-oo    After                      : %" PRIu64 " (%.3f%%)",  counters->after_total, CalcPct( counters->after_total, counters->events_received) );
             Sagan_Log(NORMAL, "           Threshold                  : %" PRIu64 " (%.3f%%)", counters->threshold_total, CalcPct( counters->threshold_total, counters->events_received) );
@@ -130,11 +130,10 @@ void Statistics( void )
                     Sagan_Log(NORMAL, "           Bytes Ignored              : %" PRIu64 " (%.3f%%)", counters->bytes_ignored, CalcPct( counters->bytes_ignored, counters->bytes_total) );
                 }
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#if defined(HAVE_LIBFASTJSON)
 
             if ( config->parse_json_program == true || config->parse_json_message == true )
                 {
-                    Sagan_Log(NORMAL, "           JSON Input                 : %" PRIu64 " (%.3f%%)", counters->json_input_count, CalcPct( counters->json_input_count, counters->events_received) );
                     Sagan_Log(NORMAL, "           JSON Program/Message       : %" PRIu64 " (%.3f%%)", counters->json_mp_count, CalcPct( counters->json_mp_count, counters->events_received) );
 
                 }
@@ -142,6 +141,7 @@ void Statistics( void )
 #endif
 
 #ifdef HAVE_LIBMAXMINDDB
+
             Sagan_Log(NORMAL, "           GeoIP Hits:                : %" PRIu64 " (%.3f%%)", counters->geoip2_hit, CalcPct( counters->geoip2_hit, counters->events_received) );
             Sagan_Log(NORMAL, "           GeoIP Lookups:             : %" PRIu64 "", counters->geoip2_lookup);
             Sagan_Log(NORMAL, "           GeoIP Errors               : %" PRIu64 "", counters->geoip2_error);
@@ -194,11 +194,10 @@ void Statistics( void )
             Sagan_Log(NORMAL, "           Null Messages              : %" PRIu64 " (%.3f%%)", counters->null_message, CalcPct(counters->malformed_message, counters->events_received) );
 
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#if defined(HAVE_LIBFASTJSON)
 
             if ( config->parse_json_program == true || config->parse_json_message == true )
                 {
-                    Sagan_Log(NORMAL, "           JSON Input                 : %" PRIu64 " (%.3f%%)", counters->malformed_json_input_count, CalcPct(counters->malformed_json_input_count, counters->events_received) );
                     Sagan_Log(NORMAL, "           JSON Program/Messages      : %" PRIu64 " (%.3f%%)", counters->malformed_json_mp_count, CalcPct(counters->malformed_json_mp_count, counters->events_received) );
 
                 }

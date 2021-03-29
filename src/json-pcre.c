@@ -7,7 +7,8 @@
 ** published by the Free Software Foundation.  You may not use, modify or
 ** distribute this program under any other version of the GNU General
 ** Public License.
-**                                                                                                  ** This program is distributed in the hope that it will be useful,
+**
+** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
@@ -24,7 +25,7 @@
 #include "config.h"             /* From autoconf */
 #endif
 
-#ifdef WITH_JSON_INPUT
+#ifdef HAVE_LIBFASTJSON
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -39,7 +40,7 @@
 
 extern struct _Rule_Struct *rulestruct;
 
-bool JSON_Pcre(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
+bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
 {
 
     int i=0;
@@ -51,13 +52,13 @@ bool JSON_Pcre(int rule_position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL)
     for (i=0; i < rulestruct[rule_position].json_pcre_count; i++)
         {
 
-            for (a=0; a < SaganProcSyslog_LOCAL->json_count; a++)
+            for (a=0; a < JSON_LOCAL->json_count; a++)
                 {
 
-                    if ( !strcmp(SaganProcSyslog_LOCAL->json_key[a], rulestruct[rule_position].json_pcre_key[i] ) )
+                    if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_pcre_key[i] ) )
                         {
 
-                            rc = pcre_exec( rulestruct[rule_position].json_re_pcre[i], rulestruct[rule_position].json_pcre_extra[i], SaganProcSyslog_LOCAL->json_value[a], (int)strlen(SaganProcSyslog_LOCAL->json_value[a]), 0, 0, ovector, PCRE_OVECCOUNT);
+                            rc = pcre_exec( rulestruct[rule_position].json_re_pcre[i], rulestruct[rule_position].json_pcre_extra[i], JSON_LOCAL->json_value[a], (int)strlen(JSON_LOCAL->json_value[a]), 0, 0, ovector, PCRE_OVECCOUNT);
 
                             /* If it's _not_ a match, no need to test other conditions */
 

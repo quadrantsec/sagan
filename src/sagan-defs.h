@@ -60,7 +60,7 @@ typedef void json_object;
 #define MAX_SYSLOG_PROGRAM	50
 #define MAX_SYSLOGMSG		32768
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#ifdef HAVE_LIBFASTJSON
 
 #define JSON_MAX_SIZE	      MAX_SYSLOGMSG
 
@@ -244,7 +244,7 @@ typedef void json_object;
 
 /* For JSON input */
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#if defined(HAVE_LIBFASTJSON)
 
 #define JSON_INPUT_S_SOURCE             32
 #define JSON_INPUT_S_SOURCE_MAX_SIZE    160
