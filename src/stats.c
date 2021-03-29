@@ -142,10 +142,12 @@ void Statistics( void )
 
 #ifdef HAVE_LIBMAXMINDDB
 
-            Sagan_Log(NORMAL, "           GeoIP Hits:                : %" PRIu64 " (%.3f%%)", counters->geoip2_hit, CalcPct( counters->geoip2_hit, counters->events_received) );
-            Sagan_Log(NORMAL, "           GeoIP Lookups:             : %" PRIu64 "", counters->geoip2_lookup);
-            Sagan_Log(NORMAL, "           GeoIP Errors               : %" PRIu64 "", counters->geoip2_error);
-#
+            if ( config->have_geoip2 == true )
+                {
+                    Sagan_Log(NORMAL, "           GeoIP Hits:                : %" PRIu64 " (%.3f%%)", counters->geoip2_hit, CalcPct( counters->geoip2_hit, counters->events_received) );
+                    Sagan_Log(NORMAL, "           GeoIP Lookups:             : %" PRIu64 "", counters->geoip2_lookup);
+                    Sagan_Log(NORMAL, "           GeoIP Errors               : %" PRIu64 "", counters->geoip2_error);
+                }
 
 #endif
 
