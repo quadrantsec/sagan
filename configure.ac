@@ -112,6 +112,13 @@ AC_ARG_ENABLE(jsoninput,
   [ JSONINPUT="yes" ]
 )
 
+AC_ARG_ENABLE(largejson,
+  [  --enable-largejson      Enable large JSON support for JSON input.],
+  [ LARGEJSON="$enableval"],
+  [ LARGEJSON="no" ]
+)
+
+
 AC_ARG_WITH(esmtp_includes,
         [  --with-esmtp-includes=DIR    libesmtp include directory],
         [with_esmtp_includes="$withval"],[with_esmtp_includes="no"])
@@ -571,6 +578,10 @@ if test "$JSONINPUT" = "yes"; then
        AC_DEFINE(WITH_JSON_INPUT, 1, With JSON Input)
        fi
 
+if test "$LARGEJSON" = "yes"; then
+       AC_MSG_RESULT([------- Large JSON support enabled -------])
+       AC_DEFINE(WITH_LARGE_JSON, 1, With large JSON)
+       fi
 
 if test "$LOGNORM" = "yes"; then
        AC_MSG_RESULT([------- liblognorm support is enabled -------])
