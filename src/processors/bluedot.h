@@ -25,7 +25,6 @@
  *
  */
 
-
 #ifdef WITH_BLUEDOT
 
 #define BLUEDOT_PROCESSOR_USER_AGENT "User-Agent: Sagan-SIEM"

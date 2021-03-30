@@ -18,13 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-/* key.c
- *
- * This runs as a thread for stdin.  This allows users,  when running
- * in the foreground,  to hit "enter" to see statistics of sagan.
- *
- */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"             /* From autoconf */
 #endif

@@ -18,8 +18,4 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *, int, _Sagan_Processor_Info *, char *, char * );

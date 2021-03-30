@@ -666,22 +666,6 @@ void Load_YAML_Config( char *yaml_file )
 
 #ifndef HAVE_LIBFASTJSON
 
-                                    else if (!strcmp(last_pass, "keys-in-message"))
-                                        {
-                                            if (!strcasecmp(value, "enabled" && !strcasecmp(value, "true" ) )
-                                            {
-
-                                                Sagan_Log(ERROR, "[%s, line %d] sagan:core 'keys-in--message' isn't supported.  No JSON support. Abort!", __FILE__, __LINE__);
-                                                }
-
-
-                                        }
-
-#endif
-
-
-#ifndef HAVE_LIBFASTJSON
-
                                     /* Added 2021/03/29 - REMOVE later */
 
                                     else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )

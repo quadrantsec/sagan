@@ -35,7 +35,7 @@ NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --d
 
 LOG="output.log" 
 
-MAKE_FLAGS="-j5"
+MAKE_FLAGS="-j7"
 
 autoreconf -vfi
 
@@ -62,8 +62,8 @@ if [ "$?" != "0" ]
 	exit
 	fi
 
-echo "**** ALL FLAGS ****"
-echo "**** ALL FLAGS ****" >> $LOG
+echo "**** ALL FLAGS : $ALLFLAGS ****"
+echo "**** ALL FLAGS : $ALLFLAGS ****" >> $LOG
 
 make clean
 cd tools && make clean && cd .. 
@@ -85,8 +85,8 @@ if [ "$?" != "0" ]
 	exit
         fi
 
-echo "****  NO FLAGS ****"
-echo "****  NO FLAGS ****" >> $LOG
+echo "****  NO FLAGS : $NOFLAG ****"
+echo "****  NO FLAGS : $NOFLAG ****" >> $LOG
 
 make clean
 cd tools && make clean && cd ..
@@ -107,6 +107,9 @@ if [ "$?" != "0" ]
         echo "Error on standard build!";
 	exit
         fi
+
+echo "--------------------[ Rotating Through Flags ]--------------------"
+echo "--------------------[ Rotating Through Flags ]--------------------" >> $LOG
 
 for I in $STANDARD
 do

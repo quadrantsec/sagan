@@ -24,8 +24,6 @@
  *
  */
 
-#include <inttypes.h>
-
 void Format_JSON_Alert_EVE( _Sagan_Event *, char *, size_t);
 void Format_JSON_Log_EVE( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct timeval tp, char *, size_t );
 

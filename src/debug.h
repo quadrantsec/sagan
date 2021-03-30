@@ -18,6 +18,5 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-
 void Debug_Sagan_Proc_Syslog ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
 

@@ -23,12 +23,6 @@
  * Sagan GeoIP prototypes
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
-//#ifdef HAVE_LIBMAXMINDDB
-
 #define GEOIP_MISS	0
 #define GEOIP_HIT	1
 #define GEOIP_SKIP	2
@@ -64,7 +58,4 @@ struct _Sagan_GeoIP_Skip
 
 void Open_GeoIP2_Database( void );
 int GeoIP2_Lookup_Country( char *ipaddr, int rule_position, struct _GeoIP *GeoIP );
-
-
-//#endif
 

@@ -18,8 +18,4 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 bool Check_Flow( int b, int ip_porto, unsigned char *ip_src_bits, int normalize_src_port, unsigned char *ip_dst_bits, int normalize_dst_port);

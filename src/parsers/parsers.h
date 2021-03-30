@@ -18,10 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 #include "parsers/strstr-asm/strstr-hook.h"
 
 int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cache );

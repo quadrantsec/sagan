@@ -92,7 +92,6 @@
 #include "processors/zeek-intel.h"
 #include "processors/stats-json.h"
 
-
 #ifdef HAVE_LIBLOGNORM
 #include "liblognormalize.h"
 #endif
@@ -925,7 +924,7 @@ int main(int argc, char **argv)
 #endif
 
 
-    /* Sagan Bro Intel processor *******************************************/
+    /* Sagan Zeek Intel processor *******************************************/
 
     if ( config->brointel_flag )
         {

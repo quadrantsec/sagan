@@ -18,8 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#include "sagan-defs.h"
-
 void Sagan_Blacklist_Load ( void );
 void Sagan_Blacklist_Init( void );
 bool Sagan_Blacklist_IPADDR( unsigned char * );

@@ -18,10 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 /* Storage for protocol.map (program search) */
 
 typedef struct _Sagan_Protocol_Map_Program _Sagan_Protocol_Map_Program;

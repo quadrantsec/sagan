@@ -18,10 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 bool Meta_Content(int rule_position, const char *syslog_message);
 bool Meta_Content_Search(char *syslog_msg, int rule_position, int meta_content_count);
 

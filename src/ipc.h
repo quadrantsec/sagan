@@ -20,16 +20,12 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-/* sagan-ipc.c
+/* ipc.h
  *
  * This allows Sagan to share data with other Sagan processes. This is for
  * Inter-process communications (IPC).
  *
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
 
 void IPC_Init(void);
 bool Clean_IPC_Object( int );

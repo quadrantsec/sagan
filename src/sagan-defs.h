@@ -25,10 +25,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 #include <syslog.h>
 
 #if defined HAVE_LIBLOGNORM || defined WITH_BLUEDOT
@@ -60,8 +56,6 @@ typedef void json_object;
 #define MAX_SYSLOG_PROGRAM	50
 #define MAX_SYSLOGMSG		32768
 
-#ifdef HAVE_LIBFASTJSON
-
 #define JSON_MAX_SIZE	      MAX_SYSLOGMSG
 
 /* This is used in JSON message/program parsing */
@@ -69,8 +63,6 @@ typedef void json_object;
 #define JSON_MAX_OBJECTS        64
 #define JSON_MAX_KEY_SIZE       32
 #define JSON_MAX_VALUE_SIZE	2048
-
-#endif
 
 #define DEFAULT_JSON_INPUT_MAP          "/usr/local/etc/sagan-rules/json-input.map"
 #define INPUT_PIPE                      1

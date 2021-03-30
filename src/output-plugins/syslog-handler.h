@@ -25,9 +25,5 @@
 *
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
 void Alert_Syslog( _Sagan_Event * );
 

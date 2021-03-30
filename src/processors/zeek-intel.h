@@ -18,7 +18,7 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-/* sagan-bro-intel.c
+/* zeek-intel.c
 *
 * This allows Sagan to read in Bro Intel files,  like those from Critical
 * Stack (https://intel.criticalstack.com).

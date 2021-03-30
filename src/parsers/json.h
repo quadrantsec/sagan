@@ -18,7 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-
 void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL );
 void Get_Key_Value( struct _Sagan_JSON *JSON_LOCAL, const char *key, char *value, size_t size);
 

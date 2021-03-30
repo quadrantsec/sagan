@@ -18,12 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
-
-#include "sagan-defs.h"
-
 bool Flexbit_Condition_MMAP ( int, char *, char *, int, int, char * );
 void Flexbit_Cleanup_MMAP( void );
 void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username, char *syslog_message );
