@@ -22,7 +22,8 @@ vars:
   sagan-groups: 
 
     FIFO: "/var/sagan/fifo/sagan.fifo"
-    RULE_PATH: "/usr/local/etc/sagan-rules"
+    #RULE_PATH: "/usr/local/etc/sagan-rules"
+    RULE_PATH: "/home/champ/code/sagan-rules"
     LOCKFILE: "/var/run/sagan/sagan.pid"
     LOG_PATH: "/var/log/sagan"	
 
@@ -136,7 +137,7 @@ sagan-core:
     chown-fifo: yes             # Change ownership of FIFO to the "sagan" user.
     xbit-storage: mmap          # "redis" or "mmap"
 
-    max-threads: 100            # Increase this if the system is under heavy load.
+    max-threads: 1              # Increase this if the system is under heavy load.
 
 
     # Sagan can sends logs in "batches" for performance reasons. In most 
@@ -387,7 +388,7 @@ processors:
   # http://blog.bro.org/2014/01/intelligence-data-and-bro_4980.html
   # https://www.bro.org/sphinx-git/frameworks/intel.html
   #
-  # A good aggregate source of Bro Intelligence data is at: 
+  # A good aggregate source of Zeek Intelligence data is at: 
   #
   # https://intel.criticalstack.com/
 
@@ -478,21 +479,27 @@ outputs:
 ##############################################################################
 
 # It is unlikely you want to have _all_ rules enabled! You'll want to tailor 
-# & enable rules for your specific needs!
+# & enable rules for your specific needs!  Enable only what you need!  See the
+# "dynamic-load" section of the sagan.yaml to have Sagan assist with detecting
+# different log types.  Remember;  The more signatures enabled, the more CPU
+# it takes to process events! 
  
 rules-files: 
 
-  #############################################################################
-  # Dynamic rules - Only use if you have the 'dynamic_load' processor enabled #
-  #############################################################################
+  ##################################################################################
+  # Dynamic signatures - Only use if you have the 'dynamic_load' processor enabled #
+  ##################################################################################
 
   #- $RULE_PATH/dynamic.rules
 
-  #############################################################################
-  # GeoIP rules - Only use if you have $HOME_COUNTRY and 'geoip' core enabled #
-  #############################################################################
+  ##################################################################################
+  # GeoIP signatures - Only use if you have $HOME_COUNTRY and 'geoip' core enabled #
+  ##################################################################################
 
+  #- $RULE_PATH/azure-eventhub-ad-geoip.rules
+  #- $RULE_PATH/checkpoint-geoip.rules
   #- $RULE_PATH/cisco-geoip.rules
+  #- $RULE_PATH/cisco-ise-geoip.rules
   #- $RULE_PATH/citrix-geoip.rules
   #- $RULE_PATH/courier-geoip.rules
   #- $RULE_PATH/f5-big-ip-geoip.rules
@@ -500,22 +507,34 @@ rules-files:
   #- $RULE_PATH/fortinet-geoip.rules
   #- $RULE_PATH/imapd-geoip.rules
   #- $RULE_PATH/juniper-geoip.rules
+  #- $RULE_PATH/msapi-azuread-geoip.rules
+  #- $RULE_PATH/msapi-exchange-geoip.rules
+  #- $RULE_PATH/msapi-microsoftflow-geoip.rules
+  #- $RULE_PATH/msapi-microsoftforms-geoip.rules
+  #- $RULE_PATH/msapi-microsoftstream-geoip.rules
+  #- $RULE_PATH/msapi-microsoftteams-geoip.rules
+  #- $RULE_PATH/msapi-onedrive-geoip.rules
+  #- $RULE_PATH/msapi-powerbi-geoip.rules
+  #- $RULE_PATH/msapi-sharepoint-geoip.rules
   #- $RULE_PATH/openssh-geoip.rules
+  #- $RULE_PATH/palo-alto-geoip.rules
   #- $RULE_PATH/proftpd-geoip.rules
   #- $RULE_PATH/riverbed-geoip.rules
   #- $RULE_PATH/snort-geoip.rules
   #- $RULE_PATH/ssh-tectia-server-geoip.rules
   #- $RULE_PATH/vmware-geoip.rules
   #- $RULE_PATH/vsftpd-geoip.rules
+  #- $RULE_PATH/watchguard-geoip.rules
   #- $RULE_PATH/windows-geoip.rules
   #- $RULE_PATH/windows-owa-geoip.rules
   #- $RULE_PATH/zimbra-geoip.rules
 
-  #############################################################################
-  # Aetas rules - Only use if $SAGAN_HOUR/$SAGAN_DAY is defined!              #
-  #############################################################################
+  ##################################################################################
+  # Aetas (time based) signatures - Only use if $SAGAN_HOUR/$SAGAN_DAY is defined! #
+  ##################################################################################
 
-  #- $RULE_PATH/cisco-aetas.res
+  #- $RULE_PATH/checkpoint-aetas.rules
+  #- $RULE_PATH/cisco-aetas.rules
   #- $RULE_PATH/fatpipe-aetas.rules
   #- $RULE_PATH/fortinet-aetas.rules
   #- $RULE_PATH/juniper-aetas.rules
@@ -526,42 +545,46 @@ rules-files:
   #- $RULE_PATH/windows-aetas.rules
 
   #############################################################################
-  # Malware rules - Rules useful for detecting malware.                       #
+  # Malware signatures - useful for detecting malware.                        #
   #############################################################################
 
   #- $RULE_PATH/cisco-malware.rules
   #- $RULE_PATH/fortinet-malware.rules
   #- $RULE_PATH/nfcapd-malware.rules
   #- $RULE_PATH/proxy-malware.rules
-  #- $RULE_PATH/windows-malware.rules
+  - $RULE_PATH/windows-malware.rules
 
-  #############################################################################
-  # Blacklist rules - Make sure the 'blacklist' processor is enabled!         #
-  #############################################################################
+  ##################################################################################
+  # Blacklist signatures - Make sure the 'blacklist' processor is enabled!         #
+  ##################################################################################
 
-  #- $RULE_PATH/blacklist.rules
+  #- $RULE_PATH/blacklist.rules		    # Generic blacklist rules. Could be NOISY
+  #- $RULE_PATH/checkpoint-blacklist.rules
   #- $RULE_PATH/cisco-blacklist.rules
+  #- $RULE_PATH/cisco-ise-blacklist.rules
   #- $RULE_PATH/citrix-blacklist.rules
   #- $RULE_PATH/windows-blacklist.rules
   #- $RULE_PATH/windows-owa-blacklist.rules
-  
+
+  ##################################################################################
+  # Zeek Intel sigantures - Make sure the 'zeek-intel processor is enabled!        #
+  ##################################################################################
+
+  #- $RULE_PATH/cisco-ise-zeek-intel.rules
+  #- $RULE_PATH/cisco-zeek-intel.rules
+  #- $RULE_PATH/citrix-zeek-intel.rules
+  #- $RULE_PATH/windows-owa-zeek-intel.rules
+  #- $RULE_PATH/windows-zeek-intel.rules
+  #- $RULE_PATH/zeek-intel.rules
+
   #############################################################################
-  # Bro Intel rules - Make sure the 'bro-intel processor is enabled!          #
+  # Bluedot signatures - Make sure the 'bluedot' processor is enabled!        #
   #############################################################################
 
-  #- $RULE_PATH/cisco-brointel.rules
-  #- $RULE_PATH/citrix-brointel.rules
-  #- $RULE_PATH/windows-brointel.rules
-  #- $RULE_PATH/windows-owa-brointel.rules
-  #- $RULE_PATH/bro-intel.rules
-
-  #############################################################################
-  # Bluedot rules - Make sure the 'bluedot' processor is enabled!             #
-  #############################################################################
-
-  #- $RULE_PATH/bluedot.rules
-  #- $RULE_PATH/bro-bluedot.rules
+  #- $RULE_PATH/bluedot.rules			# "Generic" Bluedot rules are NOISY
+  #- $RULE_PATH/checkpoint-bluedot.rules
   #- $RULE_PATH/cisco-bluedot.rules
+  #- $RULE_PATH/cisco-ise-bluedot.rules
   #- $RULE_PATH/citrix-bluedot.rules
   #- $RULE_PATH/courier-bluedot.rules
   #- $RULE_PATH/f5-big-ip-bluedot.rules
@@ -569,6 +592,15 @@ rules-files:
   #- $RULE_PATH/fortinet-bluedot.rules
   #- $RULE_PATH/imapd-bluedot.rules
   #- $RULE_PATH/juniper-bluedot.rules
+  #- $RULE_PATH/msapi-azuread-bluedot.rules
+  #- $RULE_PATH/msapi-exchange-bluedot.rules
+  #- $RULE_PATH/msapi-microsoftflow-bluedot.rules
+  #- $RULE_PATH/msapi-microsoftforms-bluedot.rules
+  #- $RULE_PATH/msapi-microsoftstream-bluedot.rules
+  #- $RULE_PATH/msapi-microsoftteams-bluedot.rules
+  #- $RULE_PATH/msapi-onedrive-bluedot.rules
+  #- $RULE_PATH/msapi-powerbi-bluedot.rules
+  #- $RULE_PATH/msapi-sharepoint-bluedot.rules
   #- $RULE_PATH/openssh-bluedot.rules
   #- $RULE_PATH/proftpd-bluedot.rules
   #- $RULE_PATH/riverbed-bluedot.rules
@@ -578,139 +610,167 @@ rules-files:
   #- $RULE_PATH/vsftpd-bluedot.rules
   #- $RULE_PATH/windows-bluedot.rules
   #- $RULE_PATH/windows-owa-bluedot.rules
+  #- $RULE_PATH/zscaler-bluedot.rules
+  #- $RULE_PATH/zeek-bluedot.rules
 
-  ################################################################################
-  # Correlated rules - Rules that use xbits/flexbits to detect malicious behavor #
-  ################################################################################
+  ##########################################################################################
+  # Correlated signatures - signatures that use xbits/flexbits to detect malicious behavor #
+  ##########################################################################################
 
-  - $RULE_PATH/cisco-correlated.rules
-  - $RULE_PATH/citrix-correlated.rules
-  - $RULE_PATH/courier-correlated.rules
-  - $RULE_PATH/fatpipe-correlated.rules
-  - $RULE_PATH/fortinet-correlated.rules
-  - $RULE_PATH/imapd-correlated.rules
+  #- $RULE_PATH/cisco-correlated.rules
+  #- $RULE_PATH/citrix-correlated.rules
+  #- $RULE_PATH/courier-correlated.rules
+  #- $RULE_PATH/fatpipe-correlated.rules
+  #- $RULE_PATH/fortinet-correlated.rules
+  #- $RULE_PATH/imapd-correlated.rules
   - $RULE_PATH/openssh-correlated.rules
-  - $RULE_PATH/ssh-tectia-server-correlated.rules
-  - $RULE_PATH/vmware-correlated.rules
-  - $RULE_PATH/vsftpd-correlated.rules
+  #- $RULE_PATH/ssh-tectia-server-correlated.rules
+  #- $RULE_PATH/vmware-correlated.rules
+  #- $RULE_PATH/vsftpd-correlated.rules
   - $RULE_PATH/windows-correlated.rules
-  - $RULE_PATH/windows-owa-correlated.rules
+  #- $RULE_PATH/windows-owa-correlated.rules
 
-  #############################################################################
-  # Standard rules - Rules that do not require any dependencies.              #
-  #############################################################################
+  ##############################################################################
+  # Standard signatures - signatures that do not require any dependencies.     #
+  ##############################################################################
 
-  #- $RULE_PATH/as400.rules
-  - $RULE_PATH/adtran.rules
-  - $RULE_PATH/apache.rules
-  - $RULE_PATH/apc-emu.rules
-  - $RULE_PATH/arp.rules
+  #- $RULE_PATH/adtran.rules
+  #- $RULE_PATH/apache.rules	# You'll need Apache to send logs via syslog
+  #- $RULE_PATH/apc-emu.rules
+  #- $RULE_PATH/arp.rules
   #- $RULE_PATH/artillery.rules
-  - $RULE_PATH/asterisk.rules
-  - $RULE_PATH/attack.rules
-  - $RULE_PATH/barracuda.rules
-  - $RULE_PATH/bash.rules
+  #- $RULE_PATH/as400.rules
+  #- $RULE_PATH/asterisk.rules
+  #- $RULE_PATH/attack.rules
+  - $RULE_PATH/auditd.rules
+  #- $RULE_PATH/azure-eventhub-ad.rules
+  #- $RULE_PATH/barracuda.rules
+  #- $RULE_PATH/bash.rules
   - $RULE_PATH/bind.rules
-  - $RULE_PATH/carbonblack.rules
-  - $RULE_PATH/bonding.rules
-  - $RULE_PATH/bro-ids.rules
-  - $RULE_PATH/cacti-thold.rules
-  #- $RULE_PATH/cisco-acs.rules
-  - $RULE_PATH/cisco-ise.rules
-  - $RULE_PATH/cisco-cucm.rules
-  - $RULE_PATH/cisco-ios.rules
-  - $RULE_PATH/cisco-meraki.rules
-  - $RULE_PATH/cisco-pixasa.rules
+  #- $RULE_PATH/bonding.rules
+  #- $RULE_PATH/cacti-thold.rules
+  #- $RULE_PATH/carbonblack.rules
+  #- $RULE_PATH/centrify.rules
+  #- $RULE_PATH/checkpoint.rules
+  #- $RULE_PATH/cisco-amp.rules
+  #- $RULE_PATH/cisco-cucm.rules
+  #- $RULE_PATH/cisco-ios.rules
+  #- $RULE_PATH/cisco-ise.rules
+  #- $RULE_PATH/cisco-meraki.rules
+  #- $RULE_PATH/cisco-pixasa.rules
   #- $RULE_PATH/cisco-prime.rules
-  #- $RULE_PATH/cisco-sdee.rules
-  - $RULE_PATH/cisco-wlc.rules
-  - $RULE_PATH/citrix.rules
-  - $RULE_PATH/courier.rules
-  - $RULE_PATH/cylance.rules
-  #- $RULE_PATH/deleted.rules
+  #- $RULE_PATH/cisco-wlc.rules
+  #- $RULE_PATH/citrix.rules
+  #- $RULE_PATH/cloudtrail.rules
+  #- $RULE_PATH/courier.rules
+  #- $RULE_PATH/crowdstrike.rules
+  #- $RULE_PATH/cylance.rules
   #- $RULE_PATH/digitalpersona.rules
-  - $RULE_PATH/dovecot.rules
-  - $RULE_PATH/f5-big-ip.rules
-  - $RULE_PATH/fatpipe.rules
-  - $RULE_PATH/fipaypin.rules
-  - $RULE_PATH/fortinet.rules
-  - $RULE_PATH/ftpd.rules
-  #- $RULE_PATH/grsec.rules
-  - $RULE_PATH/honeyd.rules
+  #- $RULE_PATH/dovecot.rules
+  #- $RULE_PATH/f5-big-ip.rules
+  #- $RULE_PATH/fatpipe.rules
+  #- $RULE_PATH/fingerprint.rules
+  #- $RULE_PATH/fipaypin.rules
+  #- $RULE_PATH/fortinet.rules
+  #- $RULE_PATH/ftpd.rules
+  #- $RULE_PATH/gcp-scc.rules		# Google Cloud Platform
+  #- $RULE_PATH/grsec.rules		# Linux kernel security extensions "grsecurity"
+  #- $RULE_PATH/honeyd.rules
   #- $RULE_PATH/hordeimp.rules
-  #- $RULE_PATH/hostapd.rules
-  - $RULE_PATH/huawei.rules
-  - $RULE_PATH/imapd.rules
-  - $RULE_PATH/ipop3d.rules
-  - $RULE_PATH/juniper.rules
-  #- $RULE_PATH/kismet.rules
-  - $RULE_PATH/knockd.rules
+  #- $RULE_PATH/hostapd.rules		# Used by some wireless routers
+  #- $RULE_PATH/huawei.rules
+  #- $RULE_PATH/imapd.rules
+  #- $RULE_PATH/incapsula.rules
+  #- $RULE_PATH/ipop3d.rules
+  #- $RULE_PATH/juniper.rules
+  #- $RULE_PATH/kismet.rules		# Requires a modified verison of the kismet_server
+  #- $RULE_PATH/knockd.rules
   - $RULE_PATH/linux-kernel.rules
-  - $RULE_PATH/milter.rules
-  - $RULE_PATH/mongodb.rules
-  - $RULE_PATH/mysql.rules
-  - $RULE_PATH/nexpose.rules
-  - $RULE_PATH/nfcapd.rules
-  - $RULE_PATH/nginx.rules
+  #- $RULE_PATH/mcafee-web-gateway.rules
+  #- $RULE_PATH/microsoft-atp.rules
+  #- $RULE_PATH/milter.rules		# For sendmail "milter"
+  #- $RULE_PATH/mongodb.rules
+  #- $RULE_PATH/msapi-airinvestigation.rules
+  #- $RULE_PATH/msapi-azuread.rules
+  #- $RULE_PATH/msapi-exchange.rules
+  #- $RULE_PATH/msapi-onedrive.rules
+  #- $RULE_PATH/msapi-securitycompliancecenter.rules
+  #- $RULE_PATH/msapi-sharepoint.rules
+  #- $RULE_PATH/msapi-threatintelligence.rules
+  #- $RULE_PATH/ms-defender.rules
+  #- $RULE_PATH/mysql.rules
+  #- $RULE_PATH/netskope.rules
+  #- $RULE_PATH/nexpose.rules
+  #- $RULE_PATH/nfcapd.rules		# Requires a modified version of nfcapd
+  #- $RULE_PATH/nginx.rules		# Make sure nginx send logs via syslog!
   - $RULE_PATH/ntp.rules
+  #- $RULE_PATH/nxlog.rules
+  #- $RULE_PATH/office365.rules		# Uses the Microsoft supplied JAVA Office365 software
+  #- $RULE_PATH/onelogin.rules
   - $RULE_PATH/openssh.rules
-  - $RULE_PATH/openvpn.rules
-  - $RULE_PATH/oracle.rules
-  #- $RULE_PATH/ossec-mi.rules
-  #- $RULE_PATH/ossec.rules
-  - $RULE_PATH/palo-alto.rules
-  - $RULE_PATH/php.rules
-  - $RULE_PATH/postfix.rules
-  - $RULE_PATH/postgresql.rules
-  - $RULE_PATH/pptp.rules
-  - $RULE_PATH/procurve.rules
-  - $RULE_PATH/proftpd.rules
-  - $RULE_PATH/pure-ftpd.rules
-  - $RULE_PATH/racoon.rules
-  - $RULE_PATH/riverbed.rules
-  - $RULE_PATH/roundcube.rules
-  - $RULE_PATH/rsync.rules
-  - $RULE_PATH/samba.rules
-  - $RULE_PATH/sendmail.rules
-  - $RULE_PATH/snort.rules
-  - $RULE_PATH/solaris.rules
-  - $RULE_PATH/sonicwall.rules
-  - $RULE_PATH/squid.rules
-  - $RULE_PATH/ssh-tectia-server.rules
-  - $RULE_PATH/su.rules
-  - $RULE_PATH/symantec-ems.rules
-  - $RULE_PATH/syslog.rules
-  - $RULE_PATH/tcp.rules
-  - $RULE_PATH/telnet.rules
-  - $RULE_PATH/trendmicro.rules
-  - $RULE_PATH/tripwire.rules
-  - $RULE_PATH/vmpop3d.rules
-  - $RULE_PATH/vmware.rules
-  - $RULE_PATH/vpopmail.rules
-  - $RULE_PATH/vsftpd.rules
-  - $RULE_PATH/web-attack.rules
+  #- $RULE_PATH/openvpn.rules
+  #- $RULE_PATH/oracle.rules
+  #- $RULE_PATH/palo-alto.rules
+  #- $RULE_PATH/passwordstate.rules
+  #- $RULE_PATH/php.rules		# Requires Apache to send logs via syslog
+  #- $RULE_PATH/postfix.rules
+  #- $RULE_PATH/postgresql.rules
+  #- $RULE_PATH/pptp.rules
+  #- $RULE_PATH/procurve.rules
+  #- $RULE_PATH/proftpd.rules
+  #- $RULE_PATH/proofpoint.rules	# Requires access to the Proofpoint API
+  #- $RULE_PATH/pure-ftpd.rules
+  #- $RULE_PATH/racoon.rules
+  #- $RULE_PATH/riverbed.rules
+  #- $RULE_PATH/roundcube.rules
+  #- $RULE_PATH/rsa-dpm.rules
+  #- $RULE_PATH/rsync.rules
+  #- $RULE_PATH/samba.rules
+  #- $RULE_PATH/sendmail.rules
+  #- $RULE_PATH/snort.rules
+  #- $RULE_PATH/solaris.rules
+  #- $RULE_PATH/sonicwall.rules
+  #- $RULE_PATH/sophos.rules
+  #- $RULE_PATH/squid.rules
+  #- $RULE_PATH/ssh-tectia-server.rules
+  #- $RULE_PATH/su.rules
+  #- $RULE_PATH/symantec-ems.rules
+  - $RULE_PATH/syslog.rules		# Very generic syslog signatures
+  #- $RULE_PATH/tcp.rules
+  #- $RULE_PATH/telnet.rules
+  #- $RULE_PATH/trendmicro.rules
+  #- $RULE_PATH/tripwire.rules
+  #- $RULE_PATH/vmpop3d.rules
+  #- $RULE_PATH/vmware.rules
+  #- $RULE_PATH/vpopmail.rules
+  #- $RULE_PATH/vsftpd.rules
+  #- $RULE_PATH/watchguard.rules
+  #- $RULE_PATH/web-attack.rules
   #- $RULE_PATH/weblabrinth.rules
-  - $RULE_PATH/windows-applocker.rules
+  #- $RULE_PATH/windows-applocker.rules
   - $RULE_PATH/windows-auth.rules
-  - $RULE_PATH/windows-emet.rules
+  #- $RULE_PATH/windows-emet.rules
   - $RULE_PATH/windows-misc.rules
-  - $RULE_PATH/windows-mssql.rules
+  #- $RULE_PATH/windows-mssql.rules
+  #- $RULE_PATH/windows-owa.rules
   - $RULE_PATH/windows-security.rules
-  - $RULE_PATH/windows-owa.rules
-  - $RULE_PATH/windows.rules
   - $RULE_PATH/windows-sysmon.rules
-  - $RULE_PATH/wordpress.rules
-  - $RULE_PATH/xinetd.rules
-  - $RULE_PATH/yubikey.rules
-  - $RULE_PATH/zeus.rules
-  - $RULE_PATH/zimbra.rules
+  #- $RULE_PATH/wordpress.rules
+  #- $RULE_PATH/xinetd.rules
+  #- $RULE_PATH/yubikey.rules
+  #- $RULE_PATH/zeus.rules
+  #- $RULE_PATH/zimbra.rules
+  #- $RULE_PATH/zingbox.rules
+  #- $RULE_PATH/zscaler.rules
 
-#
-# Include other configs
-#
 
-# Includes.  Files included here will be handled as if they were
-# inlined in this configuration file.
+# You can also "include" configuration files.  This can be useful when 
+# splitting up the sagan.yaml!  Included files will be treated the same
+# as if they where loaded inline.  For example: 
 
 #include: "/usr/local/etc/include1.yaml"
-#include: "$RULE_PATH/include2.yaml"
+#include: "$RULE_PATH/my-rules.yaml"		# Keep _could_ keep your 
+                                                # signatures in a separate 
+                                                # file!
+
+
