@@ -632,64 +632,71 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
 #ifdef HAVE_LIBFASTJSON
 
-                            if ( flag == true && rulestruct[b].json_pcre_count > 0 )
+                            /* Make sure we have JSON to processes */
+
+                            if ( JSON_LOCAL->json_count > 0 )
                                 {
 
-                                    if ( validate_flag == true )
+                                    if ( flag == true && rulestruct[b].json_pcre_count > 0 )
                                         {
-                                            flag = JSON_Pcre(b, JSON_LOCAL );
-                                        }
-                                    else
-                                        {
-                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-                                            flag = false;
+
+                                            if ( validate_flag == true )
+                                                {
+                                                    flag = JSON_Pcre(b, JSON_LOCAL );
+                                                }
+                                            else
+                                                {
+                                                    __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                                    flag = false;
+                                                }
+
                                         }
 
-                                }
+                                    if ( flag == true && rulestruct[b].json_content_count > 0 )
+                                        {
+                                            if ( validate_flag == true )
+                                                {
+                                                    flag = JSON_Content(b, JSON_LOCAL );
+                                                }
+                                            else
+                                                {
+                                                    __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                                    flag = false;
+                                                }
 
-                            if ( flag == true && rulestruct[b].json_content_count > 0 )
-                                {
-                                    if ( validate_flag == true )
-                                        {
-                                            flag = JSON_Content(b, JSON_LOCAL );
-                                        }
-                                    else
-                                        {
-                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-                                            flag = false;
                                         }
 
-                                }
-
-                            if ( flag == true && rulestruct[b].json_meta_content_count > 0 )
-                                {
-                                    if ( validate_flag == true )
+                                    if ( flag == true && rulestruct[b].json_meta_content_count > 0 )
                                         {
-                                            flag = JSON_Meta_Content(b, JSON_LOCAL );
+                                            if ( validate_flag == true )
+                                                {
+                                                    flag = JSON_Meta_Content(b, JSON_LOCAL );
+                                                }
+                                            else
+                                                {
+                                                    __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                                    flag = false;
+                                                }
                                         }
-                                    else
-                                        {
-                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-                                            flag = false;
-                                        }
-                                }
 
 #endif
 
-                            if ( flag == true && rulestruct[b].event_id_count > 0 )
-                                {
-
-                                    if ( validate_flag == true )
+                                    if ( flag == true && rulestruct[b].event_id_count > 0 )
                                         {
-                                            flag = Event_ID( b, SaganProcSyslog_LOCAL );
-                                        }
-                                    else
-                                        {
-                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-                                            flag = false;
+
+                                            if ( validate_flag == true )
+                                                {
+                                                    flag = Event_ID( b, SaganProcSyslog_LOCAL );
+                                                }
+                                            else
+                                                {
+                                                    __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                                    flag = false;
+                                                }
+
                                         }
 
-                                }
+                                } /* if ( JSON_LOCAL->json_count > 0 ) */
 
                         }
 

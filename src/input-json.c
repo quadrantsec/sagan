@@ -24,7 +24,7 @@
 #include "config.h"             /* From autoconf */
 #endif
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#if defined(HAVE_LIBFASTJSON)
 
 #include <stdio.h>
 #include <string.h>

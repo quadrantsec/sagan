@@ -301,7 +301,7 @@ int main(int argc, char **argv)
     memset(dnscache, 0, sizeof(_SaganDNSCache));
 
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#if defined(HAVE_LIBFASTJSON)
 
     /* Allocate memory for global Syslog_JSON_Map */
 

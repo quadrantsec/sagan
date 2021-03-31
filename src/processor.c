@@ -149,7 +149,6 @@ void Processor ( void )
             for (i=0; i < config->max_batch; i++)
                 {
 
-
                     if (debug->debugsyslog)
                         {
                             Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, i, SaganPassSyslog[proc_msgslot].syslog[i]);
@@ -169,18 +168,23 @@ void Processor ( void )
                     __atomic_store_n(&counters->max_threads_used, proc_running, __ATOMIC_SEQ_CST);
                 }
 
-            /* Process local syslog buffer */
+
+	    /* Processes local buffer */
 
             for (i=0; i < config->max_batch; i++)
                 {
+		 
+	  	    /* Reset json_count to 0 from previous value.  This is for input or JSON
+		     * detected within the log */
 
+    		    JSON_LOCAL->json_count = 0; 
 
                     if ( config->input_type == INPUT_PIPE )
                         {
                             SyslogInput_Pipe( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL );
                         }
 
-#if defined(HAVE_LIBFASTJSON) && defined(WITH_JSON_INPUT)
+#ifdef HAVE_LIBFASTJSON
 
                     else
                         {

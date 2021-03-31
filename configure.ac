@@ -106,12 +106,6 @@ AC_ARG_ENABLE(tcmalloc,
   [ TCMALLOC="no" ]
 )
 
-AC_ARG_ENABLE(jsoninput,
-  [  --disable-jsoninput     Disable JSON input support.],
-  [ JSONINPUT="$enableval"],
-  [ JSONINPUT="yes" ]
-)
-
 AC_ARG_ENABLE(largejson,
   [  --enable-largejson      Enable large JSON support for JSON input.],
   [ LARGEJSON="$enableval"],
@@ -571,11 +565,6 @@ This library can be located at https://github.com/rsyslog/libfastjson. ))
 if test "$TCMALLOC" = "yes"; then
        AC_MSG_RESULT([------- TCMalloc support is enabled -------])
        AC_CHECK_LIB(tcmalloc_minimal,main,,AC_MSG_ERROR(The libtcmalloc_minimal library cannot be found.))
-       fi
-
-if test "$JSONINPUT" = "yes"; then
-       AC_MSG_RESULT([------- JSON input is enabled -------])
-       AC_DEFINE(WITH_JSON_INPUT, 1, With JSON Input)
        fi
 
 if test "$LARGEJSON" = "yes"; then
