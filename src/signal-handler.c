@@ -193,9 +193,6 @@ void Sig_Handler( void )
 
 #endif
 
-                    fflush(config->sagan_log_stream);               /* Close the sagan.log */
-                    fclose(config->sagan_log_stream);
-
                     /* IPC Shared Memory */
 
                     if ( config->shm_counters_status == true )
@@ -261,6 +258,7 @@ void Sig_Handler( void )
                             Client_Stats_Close();
                         }
 
+                    fclose(config->sagan_log_stream);
                     Remove_Lock_File();
 
                     exit(0);

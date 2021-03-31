@@ -708,11 +708,23 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                     for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                         {
 
+                                            tmp_json_value[0] = '\0';
+
                                             Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
 
                                             if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
+
+                                                    /* Make sure we have a "good" value to copy */
+
+                                                    if ( tmp_json_value[0] != '\0' )
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
+                                                        }
+                                                    else
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
+                                                        }
 
                                                     ip_src = SaganProcSyslog_LOCAL->src_ip;
                                                     IP2Bit(ip_src, ip_src_bits);
@@ -721,7 +733,17 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp_json_value, MAXIP);
+
+                                                    /* Make sure we have a "good" value to copy */
+
+                                                    if ( tmp_json_value[0] != '\0' )
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp_json_value, MAXIP);
+                                                        }
+                                                    else
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+                                                        }
 
                                                     ip_dst = SaganProcSyslog_LOCAL->dst_ip;
                                                     IP2Bit(ip_dst, ip_dst_bits);

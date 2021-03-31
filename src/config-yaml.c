@@ -662,50 +662,22 @@ void Load_YAML_Config( char *yaml_file )
                                                 }
                                         }
 
-#ifndef HAVE_LIBFASTJSON
-
-                                    /* Added 2021/03/29 - REMOVE later */
-
-                                    else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
-                                        {
-
-                                            Sagan_Log(WARN, "The option 'parse-json-message' and 'parse-json-program' have been depreciated.  Use 'json-parse-data' instead");
-
-                                            if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
-                                                {
-                                                    Sagan_Log(ERROR, "[%s, line %d] sagan:core 'json-parse-data' is disabled because Sagan lacks JSON support. Abort!", __FILE__, __LINE__);
-                                                }
-
-                                        }
-
-                                    else if ( !strcmp(last_pass, "json-parse-data") )
-                                        {
-                                            if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
-                                                {
-
-                                                    Sagan_Log(ERROR, "[%s, line %d] sagan:core 'json-parse-data' is disabled because Sagan lacks JSON support. Abort!", __FILE__, __LINE__);
-                                                }
-
-                                        }
-
-#endif
-
 #ifdef HAVE_LIBFASTJSON
 
-                                    /* Added 2021/03/29 - REMOVE later */
-
-
                                     else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
                                         {
 
-                                            Sagan_Log(WARN, "The option 'parse-json-message' and 'parse-json-program' have been depreciated.  Enabling 'json-parse-data' instead but please fix your Sagan configuratons.");
-
-                                            if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
+                                            if ( !strcasecmp(value, "enabled") || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes") )
                                                 {
+
+                                                    Sagan_Log(WARN, "The keywords '%s' have been depreciated! Use 'json-parse-data' instead.  For now, I'll enable 'json-parse-data' for you.", last_pass);
+
                                                     config->json_parse_data = true;
+
                                                 }
 
                                         }
+
 
                                     else if (!strcmp(last_pass, "json-parse-data"))
                                         {
@@ -715,12 +687,10 @@ void Load_YAML_Config( char *yaml_file )
                                                     config->json_parse_data = true;
                                                 }
                                         }
+
 #endif
 
-
-
 #ifndef HAVE_LIBFASTJSON
-
 
                                     else if (!strcmp(last_pass, "input-type"))
                                         {

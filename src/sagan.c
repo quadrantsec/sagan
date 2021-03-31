@@ -771,9 +771,10 @@ int main(int argc, char **argv)
 
 
 
+    Droppriv();              /* Become the Sagan user */
+
     CheckLockFile();
 
-    Droppriv();              /* Become the Sagan user */
 
     Sagan_Log(NORMAL, "---------------------------------------------------------------------------");
 

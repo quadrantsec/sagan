@@ -193,6 +193,7 @@ void Remove_Lock_File ( void )
 
     if ((stat(config->sagan_lockfile_full, &lckcheck) == 0) && unlink(config->sagan_lockfile_full) != 0 )
         {
-            Sagan_Log(ERROR, "[%s, line %d] Cannot remove lock file (%s - %s)\n", __FILE__, __LINE__, config->sagan_lockfile_full, strerror(errno));
+            //       Sagan_Log(ERROR, "[%s, line %d] Cannot remove lock file (%s - %s)\n", __FILE__, __LINE__, config->sagan_lockfile_full, strerror(errno));
+            fprintf(stderr, "[%s, line %d] Cannot remove lock file (%s - %s)\n", __FILE__, __LINE__, config->sagan_lockfile_full, strerror(errno));
         }
 }

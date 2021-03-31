@@ -106,13 +106,6 @@ AC_ARG_ENABLE(tcmalloc,
   [ TCMALLOC="no" ]
 )
 
-AC_ARG_ENABLE(largejson,
-  [  --enable-largejson      Enable large JSON support for JSON input.],
-  [ LARGEJSON="$enableval"],
-  [ LARGEJSON="no" ]
-)
-
-
 AC_ARG_WITH(esmtp_includes,
         [  --with-esmtp-includes=DIR    libesmtp include directory],
         [with_esmtp_includes="$withval"],[with_esmtp_includes="no"])
@@ -565,11 +558,6 @@ This library can be located at https://github.com/rsyslog/libfastjson. ))
 if test "$TCMALLOC" = "yes"; then
        AC_MSG_RESULT([------- TCMalloc support is enabled -------])
        AC_CHECK_LIB(tcmalloc_minimal,main,,AC_MSG_ERROR(The libtcmalloc_minimal library cannot be found.))
-       fi
-
-if test "$LARGEJSON" = "yes"; then
-       AC_MSG_RESULT([------- Large JSON support enabled -------])
-       AC_DEFINE(WITH_LARGE_JSON, 1, With large JSON)
        fi
 
 if test "$LOGNORM" = "yes"; then

@@ -64,11 +64,12 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
         {
 
 
+
             if ( JSON_LOCAL->json_value[i][0] == '{' || JSON_LOCAL->json_value[i][1] == '{' )
                 {
 
                     json_obj = json_tokener_parse(JSON_LOCAL->json_value[i]);
-
+			
                     if ( json_obj != NULL )
                         {
 
@@ -97,7 +98,7 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
                                     if ( debug->debugjson )
                                         {
 
-                                            Sagan_Log(DEBUG, "[%s, line %d] Key: %s, Value: %s", __FILE__, __LINE__, JSON_LOCAL->json_key[json_count], JSON_LOCAL->json_value[json_count] );
+                                            Sagan_Log(DEBUG, "[%s, line %d] [%d] Key : %s, Value: %s", __FILE__, __LINE__, json_count, JSON_LOCAL->json_key[json_count], JSON_LOCAL->json_value[json_count] );
 
                                         }
 

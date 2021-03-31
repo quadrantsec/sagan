@@ -62,14 +62,7 @@ typedef void json_object;
 
 #define JSON_MAX_OBJECTS        64
 #define JSON_MAX_KEY_SIZE       32
-
-#ifndef WITH_LARGE_JSON
-#define JSON_MAX_VALUE_SIZE	2048
-#endif
-
-#ifdef WITH_LARGE_JSON
-#define JSON_MAX_VALUE_SIZE     MAX_SYSLOGMSG
-#endif
+#define JSON_MAX_VALUE_SIZE     MAX_SYSLOGMSG	/* The full JSON will be in the first JSON slot! */
 
 
 #define DEFAULT_JSON_INPUT_MAP          "/usr/local/etc/sagan-rules/json-input.map"
