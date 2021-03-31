@@ -1922,10 +1922,19 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].meta_content_case[meta_content_count-1] = 1;
                         }
 
+
+#ifdef HAVE_LIBFASTJSON
+
                     /* JSON "mapping" */
 
                     if (!strcmp(rulesplit, "json_map"))
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_map' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
 
                             if ( json_map_count > MAX_JSON_MAP )
                                 {
@@ -2058,8 +2067,13 @@ void Load_Rules( const char *ruleset )
 
                     /* "json_content" works like "content" but on JSON key/values */
 
-                    if (!strcmp(rulesplit, "json_content"))
+                    if (!strcmp(rulesplit, "json_content") )
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_content' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
 
                             if ( json_content_count > MAX_JSON_CONTENT )
                                 {
@@ -2106,6 +2120,13 @@ void Load_Rules( const char *ruleset )
 
                     if (!strcmp(rulesplit, "json_nocase"))
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_nocase' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_content_case[json_content_count-1] = 1;
                         }
@@ -2116,6 +2137,12 @@ void Load_Rules( const char *ruleset )
 
                     if ( !strcmp(rulesplit, "json_strstr") || !strcmp(rulesplit, "json_contains") )
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_contains' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_content_strstr[json_content_count-1] = 1;
                         }
@@ -2126,6 +2153,12 @@ void Load_Rules( const char *ruleset )
 
                     if (!strcmp(rulesplit, "json_meta_strstr") || !strcmp(rulesplit, "json_meta_contains") )
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_meta_contains' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_meta_strstr[json_meta_content_count-1] = 1;
                         }
@@ -2134,6 +2167,11 @@ void Load_Rules( const char *ruleset )
 
                     if (!strcmp(rulesplit, "json_pcre"))
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_pcre' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
 
                             if ( json_pcre_count > MAX_JSON_PCRE )
                                 {
@@ -2267,9 +2305,13 @@ void Load_Rules( const char *ruleset )
 
                         }
 
-
                     if (!strcmp(rulesplit, "json_meta_content"))
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_meta_content' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
 
                             if ( json_meta_content_count > MAX_JSON_META_CONTENT )
                                 {
@@ -2335,9 +2377,17 @@ void Load_Rules( const char *ruleset )
 
                     if (!strcmp(rulesplit, "json_meta_nocase"))
                         {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_meta_nocase' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_meta_content_case[json_meta_content_count-1] = true;
                         }
+
+#endif
 
                     /* Rule revision */
 

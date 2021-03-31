@@ -132,9 +132,9 @@ void Statistics( void )
 
 #if defined(HAVE_LIBFASTJSON)
 
-            if ( config->parse_json_program == true || config->parse_json_message == true )
+            if ( config->json_parse_data == true )
                 {
-                    Sagan_Log(NORMAL, "           JSON Program/Message       : %" PRIu64 " (%.3f%%)", counters->json_mp_count, CalcPct( counters->json_mp_count, counters->events_received) );
+                    Sagan_Log(NORMAL, "           JSON detected in logs      : %" PRIu64 " (%.3f%%)", counters->json_mp_count, CalcPct( counters->json_mp_count, counters->events_received) );
 
                 }
 
@@ -198,9 +198,9 @@ void Statistics( void )
 
 #if defined(HAVE_LIBFASTJSON)
 
-            if ( config->parse_json_program == true || config->parse_json_message == true )
+            if ( config->json_parse_data == true )
                 {
-                    Sagan_Log(NORMAL, "           JSON Program/Messages      : %" PRIu64 " (%.3f%%)", counters->malformed_json_mp_count, CalcPct(counters->malformed_json_mp_count, counters->events_received) );
+                    Sagan_Log(NORMAL, "           JSON detected in logs      : %" PRIu64 " (%.3f%%)", counters->malformed_json_mp_count, CalcPct(counters->malformed_json_mp_count, counters->events_received) );
 
                 }
 

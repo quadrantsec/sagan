@@ -198,8 +198,6 @@ void Load_YAML_Config( char *yaml_file )
             strlcpy(config->json_input_map_file, DEFAULT_JSON_INPUT_MAP, sizeof(config->json_input_map_file));
             strlcpy(config->json_input_software, "NONE SET", sizeof(config->json_input_software));
 
-            config->parse_json_message = false;
-            config->parse_json_program = false;
             config->json_parse_data = false;
 
 #endif
@@ -671,7 +669,7 @@ void Load_YAML_Config( char *yaml_file )
                                     else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
                                         {
 
-                                            Sagan_Log(WARN, "The option 'parse-json-message' and 'parse-json-program' have been depreciated.  Use 'json-parsedata' instead");
+                                            Sagan_Log(WARN, "The option 'parse-json-message' and 'parse-json-program' have been depreciated.  Use 'json-parse-data' instead");
 
                                             if ( !strcasecmp(value, "enabled" ) || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes" ) )
                                                 {

@@ -111,7 +111,7 @@ void Processor ( void )
 
 #if defined(HAVE_LIBFASTJSON)
 
-    if ( config->input_type == INPUT_JSON || config->parse_json_message == true || config->parse_json_program == true )
+    if ( config->input_type == INPUT_JSON || config->json_parse_data == true )
         {
 
             JSON_LOCAL = malloc(sizeof(struct _Sagan_JSON));
@@ -169,15 +169,18 @@ void Processor ( void )
                 }
 
 
-	    /* Processes local buffer */
+            /* Processes local buffer */
 
             for (i=0; i < config->max_batch; i++)
                 {
-		 
-	  	    /* Reset json_count to 0 from previous value.  This is for input or JSON
-		     * detected within the log */
 
-    		    JSON_LOCAL->json_count = 0; 
+                    /* Reset json_count to 0 from previous value.  This is for input or JSON
+                     * detected within the log */
+
+                    if ( config->json_parse_data || config->input_type == INPUT_JSON )
+                        {
+                            JSON_LOCAL->json_count = 0;
+                        }
 
                     if ( config->input_type == INPUT_PIPE )
                         {

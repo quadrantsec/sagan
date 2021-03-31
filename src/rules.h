@@ -112,7 +112,7 @@ struct _Rule_Struct
     pcre *re_pcre[MAX_PCRE];
     pcre_extra *pcre_extra[MAX_PCRE];
 
-    uint8_t json_map_type[MAX_JSON_MAP];
+    uint8_t       json_map_type[MAX_JSON_MAP];
     char          json_map_key[MAX_JSON_MAP][JSON_MAX_KEY_SIZE];
     uint8_t	  json_map_count;
 
@@ -291,7 +291,6 @@ struct _Rule_Struct
     bool meta_content_case[MAX_META_CONTENT];
     bool meta_content_not[MAX_META_CONTENT];
 
-    //char meta_content[MAX_META_CONTENT][CONFBUF];
     char meta_content_help[MAX_META_CONTENT][CONFBUF];
 
     bool json_content_not[MAX_JSON_CONTENT];
@@ -306,15 +305,12 @@ struct _Rule_Struct
     int  json_pcre_count;
     char json_pcre_key[MAX_JSON_PCRE][128];
 
-
     bool json_meta_content_case[MAX_JSON_META_CONTENT];
     bool json_meta_content_not[MAX_JSON_META_CONTENT];
     bool json_meta_strstr[MAX_JSON_META_CONTENT];
     char json_meta_content_key[MAX_JSON_META_CONTENT][128];
     int  json_meta_content_count;
     unsigned char json_meta_content_converted_count;
-
-
 
     bool alert_time_flag;
     unsigned char alert_days;
