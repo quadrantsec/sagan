@@ -1245,9 +1245,9 @@ int main(int argc, char **argv)
                                     if ( ignore_flag == false )
                                         {
 
-                                            /* Copy data to _LOCAL array */
+                                            /* Copy data to _LOCAL array - Need safe copy! Don't use memcpy() */
 
-                                            memcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
+                                            strlcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
 
                                             batch_count++;
                                         }
