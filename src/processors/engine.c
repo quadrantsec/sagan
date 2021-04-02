@@ -321,8 +321,9 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
             /* Check the "message" for possible JSON.  Keep in mind,  it could have been appended
              * from above! */
 
-            if ( SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
-                    SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
+            if ( SaganProcSyslog_LOCAL->syslog_message[0] == '{' ||
+                    SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
+                        SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
                 {
 
                     if ( debug->debugjson )
@@ -678,7 +679,6 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
-
                                     if ( validate_flag == true )
                                         {
                                             flag = Event_ID( b, SaganProcSyslog_LOCAL );
