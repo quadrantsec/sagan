@@ -1,7 +1,7 @@
 Rule syntax
 ===========
 
-Sagan rule syntax is very similar to that of `Suricata <https://suricata-ids.org`>_ or `Snort <https://snort.org>`_ .  This is was intentionally done to maintain compatibility with rule management software like ``oinkmaster``
+Sagan rule syntax is very similar to that of `Suricata <https://suricata-ids.org>`_ or `Snort <https://snort.org>`_ .  This is was intentionally done to maintain compatibility with rule management software like ``oinkmaster``
 and ``pulledpork`` and allows Sagan to correlate log events with your Snort/Suricata IDS/IPS system.
 
 This also means that if you are already familiar with signature writing in Suricata and Snort,  you already 
