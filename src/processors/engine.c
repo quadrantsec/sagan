@@ -321,8 +321,9 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
             /* Check the "message" for possible JSON.  Keep in mind,  it could have been appended
              * from above! */
 
-            if ( SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
-                    SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
+            if ( SaganProcSyslog_LOCAL->syslog_message[0] == '{' ||
+                    SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
+                        SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
                 {
 
                     if ( debug->debugjson )
@@ -456,6 +457,153 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
             if ( rulestruct[b].type == NORMAL_RULE || ( rulestruct[b].type == DYNAMIC_RULE && dynamic_rule_flag == true ) )
                 {
+ 
+                   /* If we have JSON maps, apply them! */
+
+                     if ( rulestruct[b].json_map_count > 0 )
+                        {
+
+#ifdef HAVE_LIBFASTJSON
+
+                            for ( i = 0; i < rulestruct[b].json_map_count; i++ )
+                                {
+
+                                    tmp_json_value[0] = '\0';
+
+                                    Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
+
+                                    if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
+                                        {
+
+                                            /* Make sure we have a "good" value to copy */
+
+                                            if ( tmp_json_value[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
+                                                }
+                                            else
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
+                                                }
+
+                                            ip_src = SaganProcSyslog_LOCAL->src_ip;
+                                            IP2Bit(ip_src, ip_src_bits);
+                                            ip_src_flag = true;
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
+                                        {
+
+                                            /* Make sure we have a "good" value to copy */
+
+                                            if ( tmp_json_value[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp_json_value, MAXIP);
+                                                }
+                                            else
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+                                                }
+
+                                            ip_dst = SaganProcSyslog_LOCAL->dst_ip;
+                                            IP2Bit(ip_dst, ip_dst_bits);
+                                            ip_dst_flag = true;
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_PORT )
+                                        {
+                                            ip_srcport_u32 = atoi( tmp_json_value );
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_PORT )
+                                        {
+                                            ip_dstport_u32 = atoi( tmp_json_value );
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_USERNAME )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->username, tmp_json_value, MAX_USERNAME_SIZE);
+                                            normalize_username = SaganProcSyslog_LOCAL->username;
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MESSAGE )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, MAX_SYSLOGMSG);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROGRAM )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->syslog_program, tmp_json_value, MAX_SYSLOG_PROGRAM);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_EVENT_ID )
+                                        {
+                                            strlcpy( SaganProcSyslog_LOCAL->event_id, tmp_json_value, sizeof( SaganProcSyslog_LOCAL->event_id) );
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FLOW_ID )
+                                        {
+                                            SaganProcSyslog_LOCAL->flow_id = atol( tmp_json_value );
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MD5 )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->md5, tmp_json_value, MD5_HASH_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA1 )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->sha1, tmp_json_value, SHA1_HASH_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA256 )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->sha256, tmp_json_value, SHA256_HASH_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FILENAME )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_FILENAME_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_HOSTNAME )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_HOSTNAME_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_URL )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MAX_URL_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_JA3 )
+                                        {
+                                            strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MD5_HASH_SIZE);
+                                        }
+
+                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROTO )
+                                        {
+
+                                            if ( !Sagan_stristr(tmp_json_value, "tcp", true))
+                                                {
+                                                    SaganProcSyslog_LOCAL->proto = 6;
+                                                }
+
+                                            else if ( !Sagan_stristr(tmp_json_value, "udp", true))
+                                                {
+                                                    SaganProcSyslog_LOCAL->proto = 17;
+                                                }
+
+                                            else if ( !Sagan_stristr(tmp_json_value, "icmp", true))
+                                                {
+                                                    SaganProcSyslog_LOCAL->proto = 1;
+                                                }
+
+                                        }
+                                }
+#endif
+
+                        }
 
                     pre_match = false;
 
@@ -676,9 +824,146 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
 #endif
 
+#ifdef HAVE_LIBLOGNORM
+                            /*  Normalize before event_id processing */
+                            if ( flag == true )
+                                {
+                                    if ( liblognorm_status == false && rulestruct[b].normalize == true )
+                                        {
+                                            /* Set that normalization has been tried work isn't repeated */
+
+                                            liblognorm_status = -1;
+
+                                            Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, &SaganNormalizeLiblognorm);
+
+                                            strlcpy(json_normalize, SaganNormalizeLiblognorm.json_normalize, sizeof(json_normalize));
+
+                                            if ( SaganNormalizeLiblognorm.ip_src[0] != '0'  ||
+                                                    SaganNormalizeLiblognorm.ip_dst[0] != '0'  ||
+                                                    SaganNormalizeLiblognorm.src_port != 0  ||
+                                                    SaganNormalizeLiblognorm.dst_port != 0  ||
+                                                    SaganNormalizeLiblognorm.hash_sha1[0] != '\0'  ||
+                                                    SaganNormalizeLiblognorm.hash_sha256[0] != '\0'  ||
+                                                    SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
+
+                                                {
+                                                    liblognorm_status = true;
+                                                }
+
+                                            /* These are _only_ set here */
+
+                                            if ( SaganNormalizeLiblognorm.username[0] != '\0' )
+                                                {
+                                                    liblognorm_status = true;
+                                                    normalize_username = SaganNormalizeLiblognorm.username;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.http_uri[0] != '\0' )
+                                                {
+                                                    liblognorm_status = true;
+                                                    normalize_http_uri = SaganNormalizeLiblognorm.http_uri;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.filename[0] != '\0' )
+                                                {
+                                                    liblognorm_status = true;
+                                                    normalize_filename = SaganNormalizeLiblognorm.filename;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.ja3[0] != '\0' )
+                                                {
+                                                    liblognorm_status = true;
+                                                    normalize_ja3 = SaganNormalizeLiblognorm.ja3;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.event_id[0] != '\0' )
+                                                {
+                                                    liblognorm_status = true;
+                                                    strlcpy(SaganProcSyslog_LOCAL->event_id, SaganNormalizeLiblognorm.event_id, sizeof(SaganProcSyslog_LOCAL->event_id));
+                                                }
+
+                                        }
+
+                                    if ( liblognorm_status == true && rulestruct[b].normalize == true )
+                                        {
+                                            if ( SaganNormalizeLiblognorm.ip_src[0] != '0')
+                                                {
+                                                    ip_src_flag = true;
+                                                    ip_src = SaganNormalizeLiblognorm.ip_src;
+
+                                                    if ( !strcmp(ip_src, "127.0.0.1") ||
+                                                            !strcmp(ip_src, "::1" ) ||
+                                                            !strcmp(ip_src, "::ffff:127.0.0.1" ) )
+                                                        {
+
+                                                            ip_src = SaganProcSyslog_LOCAL->syslog_host;
+                                                            ip_src_flag = false;
+                                                        }
+
+                                                    else
+                                                        {
+
+                                                            IP2Bit(ip_src, ip_src_bits);
+                                                        }
+
+
+                                                }
+
+
+                                            if ( SaganNormalizeLiblognorm.ip_dst[0] != '0' )
+                                                {
+                                                    ip_dst_flag = true;
+                                                    ip_dst = SaganNormalizeLiblognorm.ip_dst;
+
+                                                    if ( !strcmp(ip_dst, "127.0.0.1") ||
+                                                            !strcmp(ip_dst, "::1" ) ||
+                                                            !strcmp(ip_dst, "::ffff:127.0.0.1" ) )
+
+                                                        {
+                                                            ip_dst = SaganProcSyslog_LOCAL->syslog_host;
+                                                            ip_dst_flag = false;
+                                                        }
+
+                                                    else
+                                                        {
+                                                            IP2Bit(ip_dst, ip_dst_bits);
+                                                        }
+
+
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.src_port != 0 )
+                                                {
+                                                    ip_srcport_u32 = SaganNormalizeLiblognorm.src_port;
+                                                }
+
+
+                                            if ( SaganNormalizeLiblognorm.dst_port != 0 )
+                                                {
+                                                    ip_dstport_u32 = SaganNormalizeLiblognorm.dst_port;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
+                                                {
+                                                    md5_hash = SaganNormalizeLiblognorm.hash_md5;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.hash_sha1[0] != '\0' )
+                                                {
+                                                    sha1_hash = SaganNormalizeLiblognorm.hash_sha1;
+                                                }
+
+                                            if ( SaganNormalizeLiblognorm.hash_sha256[0] != '\0' )
+                                                {
+                                                    sha256_hash = SaganNormalizeLiblognorm.hash_sha256;
+                                                }
+
+                                        }
+                                }
+#endif
+
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
-
                                     if ( validate_flag == true )
                                         {
                                             flag = Event_ID( b, SaganProcSyslog_LOCAL );
@@ -697,289 +982,6 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                     if ( pre_match == false && flag == true )
                         {
-
-                            /* If we have JSON maps, apply them! */
-
-                            if ( rulestruct[b].json_map_count > 0 )
-                                {
-
-#ifdef HAVE_LIBFASTJSON
-
-                                    for ( i = 0; i < rulestruct[b].json_map_count; i++ )
-                                        {
-
-                                            tmp_json_value[0] = '\0';
-
-                                            Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
-
-                                            if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
-                                                {
-
-                                                    /* Make sure we have a "good" value to copy */
-
-                                                    if ( tmp_json_value[0] != '\0' )
-                                                        {
-                                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
-                                                        }
-                                                    else
-                                                        {
-                                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
-                                                        }
-
-                                                    ip_src = SaganProcSyslog_LOCAL->src_ip;
-                                                    IP2Bit(ip_src, ip_src_bits);
-                                                    ip_src_flag = true;
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
-                                                {
-
-                                                    /* Make sure we have a "good" value to copy */
-
-                                                    if ( tmp_json_value[0] != '\0' )
-                                                        {
-                                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp_json_value, MAXIP);
-                                                        }
-                                                    else
-                                                        {
-                                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
-                                                        }
-
-                                                    ip_dst = SaganProcSyslog_LOCAL->dst_ip;
-                                                    IP2Bit(ip_dst, ip_dst_bits);
-                                                    ip_dst_flag = true;
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_PORT )
-                                                {
-                                                    ip_srcport_u32 = atoi( tmp_json_value );
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_PORT )
-                                                {
-                                                    ip_dstport_u32 = atoi( tmp_json_value );
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_USERNAME )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->username, tmp_json_value, MAX_USERNAME_SIZE);
-                                                    normalize_username = SaganProcSyslog_LOCAL->username;
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MESSAGE )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, MAX_SYSLOGMSG);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROGRAM )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->syslog_program, tmp_json_value, MAX_SYSLOG_PROGRAM);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_EVENT_ID )
-                                                {
-                                                    strlcpy( SaganProcSyslog_LOCAL->event_id, tmp_json_value, sizeof( SaganProcSyslog_LOCAL->event_id) );
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FLOW_ID )
-                                                {
-                                                    SaganProcSyslog_LOCAL->flow_id = atol( tmp_json_value );
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MD5 )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->md5, tmp_json_value, MD5_HASH_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA1 )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->sha1, tmp_json_value, SHA1_HASH_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA256 )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->sha256, tmp_json_value, SHA256_HASH_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FILENAME )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_FILENAME_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_HOSTNAME )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_HOSTNAME_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_URL )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MAX_URL_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_JA3 )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MD5_HASH_SIZE);
-                                                }
-
-                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROTO )
-                                                {
-
-                                                    if ( !Sagan_stristr(tmp_json_value, "tcp", true))
-                                                        {
-                                                            SaganProcSyslog_LOCAL->proto = 6;
-                                                        }
-
-                                                    else if ( !Sagan_stristr(tmp_json_value, "udp", true))
-                                                        {
-                                                            SaganProcSyslog_LOCAL->proto = 17;
-                                                        }
-
-                                                    else if ( !Sagan_stristr(tmp_json_value, "icmp", true))
-                                                        {
-                                                            SaganProcSyslog_LOCAL->proto = 1;
-                                                        }
-
-                                                }
-                                        }
-#endif
-
-                                }
-
-#ifdef HAVE_LIBLOGNORM
-                            if ( liblognorm_status == false && rulestruct[b].normalize == true )
-                                {
-                                    /* Set that normalization has been tried work isn't repeated */
-
-                                    liblognorm_status = -1;
-
-                                    Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, &SaganNormalizeLiblognorm);
-
-                                    strlcpy(json_normalize, SaganNormalizeLiblognorm.json_normalize, sizeof(json_normalize));
-
-                                    if ( SaganNormalizeLiblognorm.ip_src[0] != '0'  ||
-                                            SaganNormalizeLiblognorm.ip_dst[0] != '0'  ||
-                                            SaganNormalizeLiblognorm.src_port != 0  ||
-                                            SaganNormalizeLiblognorm.dst_port != 0  ||
-                                            SaganNormalizeLiblognorm.hash_sha1[0] != '\0'  ||
-                                            SaganNormalizeLiblognorm.hash_sha256[0] != '\0'  ||
-                                            SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
-
-                                        {
-                                            liblognorm_status = true;
-                                        }
-
-                                    /* These are _only_ set here */
-
-                                    if ( SaganNormalizeLiblognorm.username[0] != '\0' )
-                                        {
-                                            liblognorm_status = true;
-                                            normalize_username = SaganNormalizeLiblognorm.username;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.http_uri[0] != '\0' )
-                                        {
-                                            liblognorm_status = true;
-                                            normalize_http_uri = SaganNormalizeLiblognorm.http_uri;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.filename[0] != '\0' )
-                                        {
-                                            liblognorm_status = true;
-                                            normalize_filename = SaganNormalizeLiblognorm.filename;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.ja3[0] != '\0' )
-                                        {
-                                            liblognorm_status = true;
-                                            normalize_ja3 = SaganNormalizeLiblognorm.ja3;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.event_id[0] != '\0' )
-                                        {
-                                            liblognorm_status = true;
-                                            strlcpy(SaganProcSyslog_LOCAL->event_id, SaganNormalizeLiblognorm.event_id, sizeof(SaganProcSyslog_LOCAL->event_id));
-                                        }
-
-                                }
-
-                            if ( liblognorm_status == true && rulestruct[b].normalize == true )
-                                {
-                                    if ( SaganNormalizeLiblognorm.ip_src[0] != '0')
-                                        {
-                                            ip_src_flag = true;
-                                            ip_src = SaganNormalizeLiblognorm.ip_src;
-
-                                            if ( !strcmp(ip_src, "127.0.0.1") ||
-                                                    !strcmp(ip_src, "::1" ) ||
-                                                    !strcmp(ip_src, "::ffff:127.0.0.1" ) )
-                                                {
-
-                                                    ip_src = SaganProcSyslog_LOCAL->syslog_host;
-                                                    ip_src_flag = false;
-                                                }
-
-                                            else
-                                                {
-
-                                                    IP2Bit(ip_src, ip_src_bits);
-                                                }
-
-
-                                        }
-
-
-                                    if ( SaganNormalizeLiblognorm.ip_dst[0] != '0' )
-                                        {
-                                            ip_dst_flag = true;
-                                            ip_dst = SaganNormalizeLiblognorm.ip_dst;
-
-                                            if ( !strcmp(ip_dst, "127.0.0.1") ||
-                                                    !strcmp(ip_dst, "::1" ) ||
-                                                    !strcmp(ip_dst, "::ffff:127.0.0.1" ) )
-
-                                                {
-                                                    ip_dst = SaganProcSyslog_LOCAL->syslog_host;
-                                                    ip_dst_flag = false;
-                                                }
-
-                                            else
-                                                {
-                                                    IP2Bit(ip_dst, ip_dst_bits);
-                                                }
-
-
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.src_port != 0 )
-                                        {
-                                            ip_srcport_u32 = SaganNormalizeLiblognorm.src_port;
-                                        }
-
-
-                                    if ( SaganNormalizeLiblognorm.dst_port != 0 )
-                                        {
-                                            ip_dstport_u32 = SaganNormalizeLiblognorm.dst_port;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
-                                        {
-                                            md5_hash = SaganNormalizeLiblognorm.hash_md5;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.hash_sha1[0] != '\0' )
-                                        {
-                                            sha1_hash = SaganNormalizeLiblognorm.hash_sha1;
-                                        }
-
-                                    if ( SaganNormalizeLiblognorm.hash_sha256[0] != '\0' )
-                                        {
-                                            sha256_hash = SaganNormalizeLiblognorm.hash_sha256;
-                                        }
-
-                                }
-#endif
-
-
                             /* Normalization should always over ride parse_src_ip/parse_dst_ip/parse_port,
                              * _unless_ liblognorm fails and both are in a rule or liblognorm failed to get src or dst */
 
