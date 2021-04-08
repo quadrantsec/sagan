@@ -24,6 +24,9 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"             /* From autoconf */
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>

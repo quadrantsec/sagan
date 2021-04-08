@@ -22,13 +22,13 @@
    if a search will be done via strcmp/strcasecmp or Sagan_strstr/Sagan_stristr.
    This works with the "json_strstr", "json_meta_strstr" or lack of (strcmp).  */
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"             /* From autoconf */
 #endif
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
 
 #include "sagan.h"
 #include "sagan-defs.h"
