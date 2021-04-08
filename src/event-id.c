@@ -40,6 +40,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"             /* From autoconf */
+#endif
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -50,11 +54,6 @@
 #include "event-id.h"
 
 #include "parsers/parsers.h"
-
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"             /* From autoconf */
-#endif
 
 extern struct _SaganCounters *counters;
 extern struct _Rule_Struct *rulestruct;
