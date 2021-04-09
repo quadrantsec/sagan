@@ -60,7 +60,7 @@ typedef void json_object;
 
 /* This is used in JSON message/program parsing */
 
-#define JSON_MAX_OBJECTS        100
+#define JSON_MAX_OBJECTS        128
 #define JSON_MAX_KEY_SIZE       32
 #define JSON_MAX_VALUE_SIZE     MAX_SYSLOGMSG	/* The full JSON will be in the first JSON slot! */
 
