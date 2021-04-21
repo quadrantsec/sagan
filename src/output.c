@@ -69,6 +69,8 @@ void Output( _Sagan_Event *Event )
     pthread_mutex_lock(&SaganOutputNonThreadMutex);
     nonthread_alert_lock = true;
 
+    counters->alert_total++; 	/* If alert file isn't enabled, we still want to collect the stats */
+
     if ( config->alert_flag && rulestruct[Event->found].xbit_noalert == false )
         {
             Alert_File(Event);

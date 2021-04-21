@@ -58,8 +58,6 @@ void Alert_File( _Sagan_Event *Event )
 
     CreateTimeString(&Event->event_time, timebuf, sizeof(timebuf), 1);
 
-    __atomic_add_fetch(&counters->alert_total, 1, __ATOMIC_SEQ_CST);
-
     if (( sagan_alert_stream = fopen( config->sagan_alert_filepath, "a" )) == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Cannot open %s (%s). Abort", __FILE__, __LINE__, config->sagan_alert_filepath, strerror(errno));
