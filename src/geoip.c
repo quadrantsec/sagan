@@ -149,7 +149,10 @@ int GeoIP2_Lookup_Country( char *ipaddr, int rule_position, struct _GeoIP *GeoIP
     if (res != MMDB_SUCCESS)
         {
 
-            Sagan_Log(WARN, "Country code MMDB_get_value failure (%s) for %s.", MMDB_strerror(res), ipaddr);
+            if ( debug->debuggeoip2 )
+                {
+                    Sagan_Log(WARN, "Country code MMDB_get_value failure (%s) for %s.", MMDB_strerror(res), ipaddr);
+                }
 
             __atomic_add_fetch(&counters->geoip2_error, 1, __ATOMIC_SEQ_CST);
 

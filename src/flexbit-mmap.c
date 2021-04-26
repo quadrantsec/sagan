@@ -40,6 +40,7 @@
 #include "ipc.h"
 #include "flexbit-mmap.h"
 #include "rules.h"
+#include "lockfile.h"
 #include "sagan-config.h"
 #include "parsers/parsers.h"
 
@@ -1491,6 +1492,12 @@ void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_por
 
                     if ( Clean_IPC_Object(FLEXBIT) == 0 )
                         {
+
+                            if ( counters_ipc->flexbit_count >= config->max_flexbits )
+                                {
+                                    Remove_Lock_File();
+                                    Sagan_Log(ERROR, "Storage for flexbits has been exhausted.  The current limit it for mmap-ipc -> flexbit is %d.  This needs to be increased and for the memory map (mmap) files be removed.  With that,  I have to abort processing data.  Sorry", config->max_flexbits );
+                                }
 
                             File_Lock(config->shm_flexbit);
                             pthread_mutex_lock(&Flexbit_Mutex);
