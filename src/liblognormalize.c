@@ -68,7 +68,7 @@ extern struct _SaganCounters *counters;
 
 void Liblognorm_Close( void )
 {
-	free(SaganNormalizeLiblognorm);	
+    free(SaganNormalizeLiblognorm);
 //	(void)ln_exitCtx(ctx);			/* Seems to cause faults */
 }
 
@@ -160,8 +160,8 @@ void Normalize_Liblognorm(char *syslog_msg, struct _SaganNormalizeLiblognorm *Sa
 
     if (json == NULL)
         {
-	    json_object_put(json);
-	    json_object_put(string_obj);
+            json_object_put(json);
+            json_object_put(string_obj);
             return;
         }
 

@@ -55,7 +55,7 @@
 
 #include "processors/client-stats.h"
 
-bool death; 
+bool death;
 
 uint64_t old_epoch = 0;
 
@@ -182,10 +182,10 @@ void Client_Stats_Handler( void )
             sleep(config->client_stats_time);
         }
 
-    	/* Got "exit" (death) event */
+    /* Got "exit" (death) event */
 
-    	free(Client_Stats);
-	pthread_exit(NULL);
+    free(Client_Stats);
+    pthread_exit(NULL);
 
 }
 

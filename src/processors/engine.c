@@ -323,7 +323,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
             if ( SaganProcSyslog_LOCAL->syslog_message[0] == '{' ||
                     SaganProcSyslog_LOCAL->syslog_message[1] == '{' ||
-                        SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
+                    SaganProcSyslog_LOCAL->syslog_message[2] == '{'  )
                 {
 
                     if ( debug->debugjson )
@@ -457,10 +457,10 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
             if ( rulestruct[b].type == NORMAL_RULE || ( rulestruct[b].type == DYNAMIC_RULE && dynamic_rule_flag == true ) )
                 {
- 
-                   /* If we have JSON maps, apply them! */
 
-                     if ( rulestruct[b].json_map_count > 0 )
+                    /* If we have JSON maps, apply them! */
+
+                    if ( rulestruct[b].json_map_count > 0 )
                         {
 
 #ifdef HAVE_LIBFASTJSON

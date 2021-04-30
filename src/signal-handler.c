@@ -200,14 +200,14 @@ void Sig_Handler( void )
 
 #ifdef HAVE_LIBLOGNORM
 
-		    Liblognorm_Close();
+                    Liblognorm_Close();
 
 #endif
 
 #ifdef HAVE_LIBFASTJSON
-		    free( Syslog_JSON_Map );
-		    free( JSON_Message_Map );
-#endif 
+                    free( Syslog_JSON_Map );
+                    free( JSON_Message_Map );
+#endif
 
                     /* IPC Shared Memory */
 

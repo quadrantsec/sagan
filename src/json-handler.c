@@ -285,9 +285,6 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     json_object *jsignature_alert = json_object_new_int64( Event->sid );
     json_object_object_add(jobj_alert,"signature_id", jsignature_alert);
 
-    json_object *jsignature_copy = json_object_new_string( rulestruct[Event->found].signature_copy );
-    json_object_object_add(jobj_alert,"signature_triggered", jsignature_copy);
-
     json_object *jrev_alert = json_object_new_int64( Event->rev );
     json_object_object_add(jobj_alert,"rev", jrev_alert);
 
@@ -299,6 +296,10 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     json_object *jseverity_alert = json_object_new_int( Event->pri );
     json_object_object_add(jobj_alert,"severity", jseverity_alert);
+
+    json_object *jsignature_copy = json_object_new_string( rulestruct[Event->found].signature_copy );
+    json_object_object_add(jobj_alert,"rule", jsignature_copy);
+
 
     /* libfastjson doesn't support JSON_C_TO_STRING_NOSLASHESCAPE :( */
 

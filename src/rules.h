@@ -103,7 +103,7 @@ typedef struct _Rule_Struct _Rule_Struct;
 struct _Rule_Struct
 {
 
-    char signature_copy[RULEBUF*2];
+    char signature_copy[RULEBUF];
 
     char s_msg[MAX_SAGAN_MSG];
 

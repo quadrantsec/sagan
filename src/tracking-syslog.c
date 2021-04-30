@@ -132,7 +132,7 @@ void RuleTracking_Syslog( void )
 
         }
 
-        pthread_exit(NULL);
+    pthread_exit(NULL);
 
 }
 
