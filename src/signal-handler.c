@@ -83,6 +83,11 @@ extern struct _Sagan_GeoIP_Skip *GeoIP_Skip;
 extern struct _Sagan_Bluedot_Skip *Bluedot_Skip;
 #endif
 
+#ifdef HAVE_LIBFASTJSON
+extern struct _Syslog_JSON_Map *Syslog_JSON_Map;
+extern struct _JSON_Message_Map *JSON_Message_Map;
+#endif
+
 #define MAX_DEATH_TIME 15
 
 extern struct _SaganCounters *counters;
@@ -192,6 +197,17 @@ void Sig_Handler( void )
                     MMDB_close(&config->geoip2);
 
 #endif
+
+#ifdef HAVE_LIBLOGNORM
+
+		    Liblognorm_Close();
+
+#endif
+
+#ifdef HAVE_LIBFASTJSON
+		    free( Syslog_JSON_Map );
+		    free( JSON_Message_Map );
+#endif 
 
                     /* IPC Shared Memory */
 

@@ -52,6 +52,7 @@ extern struct _SaganConfig *config;
 extern struct _SaganCounters *counters;
 extern struct _Sagan_Ruleset_Track *Ruleset_Track;
 
+bool death;
 
 void RuleTracking_Syslog( void )
 {
@@ -63,13 +64,10 @@ void RuleTracking_Syslog( void )
     int i = 0;
     bool flag = 0;
 
-
     time_t t;
     char timet[20];
     struct tm *now;
     int seconds = 0;
-
-
 
     int uptime_days;
     int uptime_abovedays;
@@ -78,7 +76,7 @@ void RuleTracking_Syslog( void )
     int uptime_minutes;
     int uptime_seconds;
 
-    while(1)
+    while(death == false)
         {
 
             sleep(config->rule_tracking_time);
@@ -133,6 +131,8 @@ void RuleTracking_Syslog( void )
             closelog();
 
         }
+
+        pthread_exit(NULL);
 
 }
 

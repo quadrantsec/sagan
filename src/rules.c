@@ -3775,5 +3775,12 @@ void Load_Rules( const char *ruleset )
 
         } /* end of while loop */
 
+#ifdef HAVE_LIBFASTJSON
+
+    json_object_put(metadata_jobj);
+
+#endif
+
+
     fclose(rulesfile);
 }

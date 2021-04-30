@@ -47,6 +47,8 @@ extern struct _SaganDebug *debug;
 
 int redis_msgslot = 0;
 
+bool death;
+
 pthread_cond_t SaganRedisDoWork=PTHREAD_COND_INITIALIZER;
 pthread_mutex_t SaganRedisWorkMutex=PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t RedisReaderMutex=PTHREAD_MUTEX_INITIALIZER;
@@ -246,7 +248,7 @@ void Redis_Writer ( void )
 
     /* Redis "threaded" operations */
 
-    for (;;)
+    while ( death == false )
         {
 
             pthread_mutex_lock(&SaganRedisWorkMutex);
@@ -323,6 +325,9 @@ void Redis_Writer ( void )
 
                 }
         }
+
+    free(Sagan_Redis_Write);
+
 }
 
 /*****************************************************************************

@@ -93,7 +93,9 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
                     /* Rule was already loaded.  Release mutex and continue as normal */
 
                     reload_rules = false;
+		    free(GeoIP);
                     pthread_mutex_unlock(&SaganRulesLoadedMutex);
+
                     return(0);
                 }
         }
@@ -104,6 +106,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
     if ( rules_loaded == NULL )
         {
+	    free(GeoIP);
             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rules_loaded. Abort!", __FILE__, __LINE__);
         }
 
@@ -195,6 +198,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
         }
 
+    free(GeoIP);
     return(0);
 
 }

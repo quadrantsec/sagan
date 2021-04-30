@@ -826,6 +826,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
 #ifdef HAVE_LIBLOGNORM
                             /*  Normalize before event_id processing */
+
                             if ( flag == true )
                                 {
                                     if ( liblognorm_status == false && rulestruct[b].normalize == true )

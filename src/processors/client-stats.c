@@ -55,6 +55,8 @@
 
 #include "processors/client-stats.h"
 
+bool death; 
+
 uint64_t old_epoch = 0;
 
 extern struct _SaganConfig *config;
@@ -129,7 +131,7 @@ void Client_Stats_Handler( void )
 
     sleep(config->client_stats_time);
 
-    while(1)
+    while(death == false)
         {
 
             if ( debug->debugclient_stats )
@@ -180,7 +182,10 @@ void Client_Stats_Handler( void )
             sleep(config->client_stats_time);
         }
 
+    	/* Got "exit" (death) event */
 
+    	free(Client_Stats);
+	pthread_exit(NULL);
 
 }
 

@@ -127,9 +127,10 @@ extern struct _Sagan_Ignorelist *SaganIgnorelist;
 
 struct _Sagan_Pass_Syslog *SaganPassSyslog = NULL;
 
-
 int proc_msgslot = 0;
 int proc_running = 0;
+
+bool death=false;
 
 
 pthread_cond_t SaganProcDoWork=PTHREAD_COND_INITIALIZER;
@@ -1114,7 +1115,7 @@ int main(int argc, char **argv)
 
 
 
-    while(true)
+    while(death == false)
         {
 
             FILE *fd;

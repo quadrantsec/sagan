@@ -69,7 +69,8 @@ bool dynamic_rule_flag = NORMAL_RULE;
 uint32_t dynamic_line_count = 0;
 
 
-bool death=false;
+//bool death=false;
+bool death;
 
 extern pthread_cond_t SaganProcDoWork;
 extern pthread_mutex_t SaganProcWorkMutex;
@@ -228,7 +229,6 @@ void Processor ( void )
                             dynamic_rule_flag = NORMAL_RULE;
                         }
 
-
                     if ( config->client_stats_flag )
                         {
 
@@ -248,6 +248,9 @@ void Processor ( void )
         } /*  for (;;) */
 
     /* Exit thread on shutdown. */
+
+    free( SaganProcSyslog_LOCAL );
+    free( SaganPassSyslog_LOCAL );
 
     __atomic_sub_fetch(&config->max_processor_threads, 1, __ATOMIC_SEQ_CST);
 

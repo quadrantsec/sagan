@@ -60,6 +60,17 @@ static ln_ctx ctx;
 
 extern struct _SaganCounters *counters;
 
+/************************************************************************
+ * Liblognorm_Close
+ *
+ * Used to shutdown liblognorm
+ ************************************************************************/
+
+void Liblognorm_Close( void )
+{
+	free(SaganNormalizeLiblognorm);	
+//	(void)ln_exitCtx(ctx);			/* Seems to cause faults */
+}
 
 /************************************************************************
  * Liblognorm_Load
@@ -98,7 +109,7 @@ void Liblognorm_Load(const char *infile)
 }
 
 /***********************************************************************
- * sagan_normalize_liblognom
+ * Normalize_Liblognorm
  *
  * Locates interesting log data via Rainer's liblognorm library
  ***********************************************************************/
@@ -149,6 +160,8 @@ void Normalize_Liblognorm(char *syslog_msg, struct _SaganNormalizeLiblognorm *Sa
 
     if (json == NULL)
         {
+	    json_object_put(json);
+	    json_object_put(string_obj);
             return;
         }
 
@@ -349,6 +362,7 @@ void Normalize_Liblognorm(char *syslog_msg, struct _SaganNormalizeLiblognorm *Sa
 
 
     json_object_put(json);
+    json_object_put(string_obj);
 }
 
 #endif
