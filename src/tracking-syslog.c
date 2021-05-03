@@ -97,6 +97,8 @@ void RuleTracking_Syslog( void )
 
             syslog(LOG_INFO, "---[Sagan]----------------------------");
             syslog(LOG_INFO, "Uptime: %d days, %d hours, %d minutes, %d seconds.", uptime_days, uptime_hours, uptime_minutes, uptime_seconds);
+            syslog(LOG_INFO, "Name/Cluster: %s:%s", config->sagan_sensor_name, config->sagan_cluster_name);
+            syslog(LOG_INFO, "Configuration file: %s", config->sagan_config);
 
             for ( i = 0; i < counters->ruleset_track_count; i++ )
                 {
