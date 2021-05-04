@@ -107,19 +107,19 @@ uint32_t Xbit_Return_Tracking_Hash ( int rule_position, int xbit_position, char 
 /* Xbit_Condition - This handles xbit conditions like "isset", "issnotset". */
 /****************************************************************************/
 
-bool Xbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char)
+bool Xbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
 #ifdef HAVE_LIBHIREDIS
 
     if ( config->redis_flag && config->xbit_storage == XBIT_STORAGE_REDIS )
         {
-            return(Xbit_Condition_Redis(rule_position, ip_src_char, ip_dst_char));
+            return( Xbit_Condition_Redis(rule_position, ip_src_char, ip_dst_char, SaganProcSyslog_LOCAL) );
         }
 
 #endif
 
-    return(Xbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char));
+    return( Xbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, SaganProcSyslog_LOCAL) );
 
 }
 

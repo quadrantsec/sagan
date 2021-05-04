@@ -365,11 +365,11 @@ void Redis_Reader ( char *redis_command, char *str, size_t size )
 
                     if ( reply->elements == 0 )
                         {
-                            snprintf(str, sizeof(size), reply->str);
+                            snprintf(str, size, reply->str);
                         }
                     else
                         {
-                            snprintf(str, sizeof(size), reply->element[0]->str);
+                            snprintf(str, size, reply->element[0]->str);
                         }
 
                     /* Got good response, free here.  If we don't get a good response

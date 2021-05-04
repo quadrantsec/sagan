@@ -108,7 +108,7 @@ int GeoIP2_Lookup_Country( char *ipaddr, int rule_position, struct _GeoIP *GeoIP
 
     IP2Bit(ipaddr, ip_convert);
 
-    if ( is_notroutable(ip_convert) || !strcmp( ipaddr, "0.0.0.0" ) )
+    if ( is_notroutable(ip_convert) || ipaddr[0] == '0' )
         {
             if (debug->debuggeoip2)
                 {

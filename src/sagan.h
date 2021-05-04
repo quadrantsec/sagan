@@ -312,7 +312,7 @@ struct _SaganCounters
     uint64_t redis_writer_threads_drop;
 #endif
 
-#if defined(HAVE_LIBFASTJSON)
+#ifdef HAVE_LIBFASTJSON
 
     int json_message_map;
 
@@ -403,6 +403,10 @@ struct _Sagan_Proc_Syslog
     char ja3[MD5_HASH_SIZE+1];
     char username[MAX_USERNAME_SIZE+1];
 
+#ifdef HAVE_LIBFASTJSON
+    char correlation_json[MAX_SYSLOGMSG];
+#endif
+
 };
 
 /* Don't #ifdef,  because we still need placeholders even when
@@ -426,7 +430,7 @@ struct _Sagan_Pass_Syslog
 };
 
 
-#if defined(HAVE_LIBFASTJSON)
+#ifdef HAVE_LIBFASTJSON
 
 typedef struct _Syslog_JSON_Map _Syslog_JSON_Map;
 struct _Syslog_JSON_Map
@@ -588,6 +592,13 @@ struct _Sagan_Event
     char *json_normalize;
 
 #endif
+
+#ifdef HAVE_LIBFASTJSON
+
+    char *correlation_json;
+
+#endif
+
 
 };
 

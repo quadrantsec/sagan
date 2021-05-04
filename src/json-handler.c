@@ -57,8 +57,8 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     struct json_object *jobj;
     struct json_object *jobj_alert;
 
-    char *proto = NULL;
-    char *action = NULL;
+    char *proto = "UNKNOWN";
+    char *action = "allowed";
 
     char timebuf[64];
     char classbuf[64];
@@ -85,18 +85,9 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
             proto = "ICMP";
         }
 
-    else if ( Event->ip_proto != 1 || Event->ip_proto != 6 || Event->ip_proto != 17 )
-        {
-            proto = "UNKNOWN";
-        }
-
     if ( Event->drop == true )
         {
             action = "blocked";
-        }
-    else
-        {
-            action = "allowed";
         }
 
     CreateIsoTimeString(&Event->event_time, timebuf, sizeof(timebuf));
@@ -321,6 +312,19 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
 #endif
 
+#ifdef HAVE_LIBFASTJSON
+
+    /* If this is a "correlated" event,  dump the data into the eve */
+
+    if ( Event->correlation_json[0] != '\0' )
+        {
+            snprintf(tmp_data, sizeof(tmp_data), ", \"correlation\": %s", Event->correlation_json);
+            strlcat(str, tmp_data, size);
+        }
+
+#endif
+
+
     if ( rulestruct[Event->found].metadata_json[0] != '\0' )
         {
 
@@ -344,6 +348,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
         {
             Sagan_Log(DEBUG, "[%s, line %d] Format_JSON_Alert_EVE Output: %s", __FILE__, __LINE__, str);
         }
+
 
 }
 

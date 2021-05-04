@@ -69,6 +69,11 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
     char tmp_ip[MAXIP] = { 0 };
     char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
 
+    unsigned long b64_len = strlen(SaganProcSyslog_LOCAL->syslog_message) * 2;
+    uint8_t b64_target[b64_len];
+
+    char *proto = "UNKNOWN";
+
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
 
@@ -93,8 +98,18 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
                             json_object *jexpire = json_object_new_int(rulestruct[rule_position].xbit_expire[r]);
                             json_object_object_add(jobj,"expire", jexpire);
 
-                            json_object *jsrc_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
-                            json_object_object_add(jobj,"src-ip", jsrc_ip);
+                            json_object *jsource_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
+                            json_object_object_add(jobj,"syslog_source", jsource_ip);
+
+
+                            json_object *jsrc_ip = json_object_new_string(ip_src_char);
+                            json_object_object_add(jobj,"src_ip", jsrc_ip );
+
+                            json_object *jdest_ip = json_object_new_string(ip_dst_char);
+                            json_object_object_add(jobj,"dest_ip", jdest_ip );
+
+                            json_object *jusername = json_object_new_string(SaganProcSyslog_LOCAL->username);
+                            json_object_object_add(jobj,"username", jusername );
 
                             json_object *jpriority = json_object_new_string(SaganProcSyslog_LOCAL->syslog_priority);
                             json_object_object_add(jobj,"priority", jpriority);
@@ -105,7 +120,6 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
                             json_object *jlevel = json_object_new_string(SaganProcSyslog_LOCAL->syslog_level);
                             json_object_object_add(jobj,"level", jlevel);
 
-                            json_object *jprogram = json_object_new_string(SaganProcSyslog_LOCAL->syslog_program);
                             json_object *jtag = json_object_new_string(SaganProcSyslog_LOCAL->syslog_tag);
                             json_object_object_add(jobj,"tag", jtag);
 
@@ -115,10 +129,27 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
                             json_object *jtime = json_object_new_string(SaganProcSyslog_LOCAL->syslog_time);
                             json_object_object_add(jobj,"time", jtime);
 
+                            json_object *jprogram = json_object_new_string(SaganProcSyslog_LOCAL->syslog_program);
                             json_object_object_add(jobj,"program", jprogram);
 
-                            json_object *jmessage = json_object_new_string(SaganProcSyslog_LOCAL->syslog_message);
-                            json_object_object_add(jobj,"message", jmessage);
+                            json_object *jmessage;
+
+                            if ( config->eve_alerts_base64 == true )
+                                {
+
+                                    Base64Encode( (const unsigned char*)SaganProcSyslog_LOCAL->syslog_message, strlen(SaganProcSyslog_LOCAL->syslog_message), b64_target, &b64_len);
+
+                                    jmessage = json_object_new_string( (const char *)b64_target );
+
+                                }
+                            else
+                                {
+
+                                    jmessage = json_object_new_string(SaganProcSyslog_LOCAL->syslog_message);
+                                }
+
+
+                            json_object_object_add(jobj,"payload", jmessage);
 
                             json_object *jsignature = json_object_new_string(rulestruct[rule_position].s_msg);
                             json_object_object_add(jobj,"signature", jsignature);
@@ -129,8 +160,38 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
                             json_object *jrev = json_object_new_int(rulestruct[rule_position].s_rev);
                             json_object_object_add(jobj,"rev", jrev);
 
+                            json_object *jtype = json_object_new_string("xbit");
+                            json_object_object_add(jobj,"type", jtype);
+
+                            json_object *jstorage = json_object_new_string("redis");
+                            json_object_object_add(jobj,"storage", jstorage);
+
+                            json_object *jsignature_copy = json_object_new_string( rulestruct[rule_position].signature_copy );
+                            json_object_object_add(jobj,"rule", jsignature_copy);
+
+
+                            if ( SaganProcSyslog_LOCAL->proto == 17 )
+                                {
+                                    proto = "UDP";
+                                }
+
+                            else if ( SaganProcSyslog_LOCAL->proto == 6 )
+                                {
+                                    proto = "TCP";
+                                }
+
+                            else if ( SaganProcSyslog_LOCAL->proto == 1 )
+                                {
+                                    proto = "ICMP";
+                                }
+
+                            json_object *jproto = json_object_new_string( proto );
+                            json_object_object_add(jobj,"proto", jproto);
+
                             snprintf(tmp_data, sizeof(tmp_data), "%s", json_object_to_json_string(jobj));
                             tmp_data[sizeof(tmp_data) - 1] = '\0';
+
+                            json_object_put(jobj);
 
                             /* Send to redis */
 
@@ -194,13 +255,14 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
 /* Xbit_Condition_Redis - Tests for Redis xbit (isset/isnotset) */
 /****************************************************************/
 
-bool Xbit_Condition_Redis(int rule_position, char *ip_src_char, char *ip_dst_char )
+bool Xbit_Condition_Redis( int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     int r;
     char redis_command[64] = { 0 };
-    char redis_results[32] = { 0 };
+    char redis_results[MAX_SYSLOGMSG] = { 0 };
     char tmp_ip[MAXIP] = { 0 };
+
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
@@ -210,7 +272,7 @@ bool Xbit_Condition_Redis(int rule_position, char *ip_src_char, char *ip_dst_cha
             snprintf(redis_command, sizeof(redis_command),
                      "GET %s:%s:%s:%s", REDIS_PREFIX, config->sagan_cluster_name, rulestruct[rule_position].xbit_name[r], tmp_ip);
 
-            Redis_Reader ( (char *)redis_command, redis_results, sizeof(redis_results) );
+            Redis_Reader ( redis_command, redis_results, MAX_SYSLOGMSG );
 
             if ( redis_results[0] == '\0' && rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
                 {
@@ -240,6 +302,8 @@ bool Xbit_Condition_Redis(int rule_position, char *ip_src_char, char *ip_dst_cha
         {
             Sagan_Log(DEBUG, "[%s, line %d] Rule matches all xbit conditions. Returning true.", __FILE__, __LINE__);
         }
+
+    strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
 
     return(true);
 

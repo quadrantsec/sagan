@@ -1033,6 +1033,10 @@ int main(int argc, char **argv)
                 {
                     Sagan_Log(NORMAL, "Got 'reader' PONG from Redis at %s:%d.", config->redis_server, config->redis_port);
                 }
+            else
+                {
+                    Sagan_Log(ERROR, "Failed to get PONG.  Got \"%s\" instead. Abort!", redis_reply);
+                }
 
             Sagan_Log(NORMAL, "");
 

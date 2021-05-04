@@ -287,12 +287,6 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
     if ( config->json_parse_data == true )
         {
 
-            SaganProcSyslog_LOCAL->src_ip[0] = '\0';
-            SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
-            SaganProcSyslog_LOCAL->src_port = 0;
-            SaganProcSyslog_LOCAL->dst_port = 0;
-            SaganProcSyslog_LOCAL->proto = 0;
-
             /* If we detect JSON in the "program" field,  append the program with the
             * message */
 
@@ -1242,7 +1236,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                             if ( rulestruct[b].xbit_flag && ( rulestruct[b].xbit_isset_count || rulestruct[b].xbit_isnotset_count ) )
                                 {
-                                    SaganRouting->xbit_return = Xbit_Condition(b, ip_src, ip_dst);
+                                    SaganRouting->xbit_return = Xbit_Condition(b, ip_src, ip_dst, SaganProcSyslog_LOCAL);
                                 }
 
                             /****************************************************************************
