@@ -18,7 +18,7 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-bool Flexbit_Condition_MMAP ( int, char *, char *, int, int, char * );
+bool Flexbit_Condition_MMAP ( int, char *, char *, int, int, char *, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
 void Flexbit_Cleanup_MMAP( void );
 void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username, char *syslog_message );
 bool Flexbit_Count_MMAP( int rule_position, char *ip_src, char *ip_dst );

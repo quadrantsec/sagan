@@ -1248,7 +1248,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                     if ( rulestruct[b].flexbit_condition_count )
                                         {
-                                            SaganRouting->flexbit_return = Flexbit_Condition(b, ip_src, ip_dst, ip_srcport_u32, ip_dstport_u32, normalize_username);
+                                            SaganRouting->flexbit_return = Flexbit_Condition(b, ip_src, ip_dst, ip_srcport_u32, ip_dstport_u32, normalize_username, SaganProcSyslog_LOCAL);
                                         }
 
                                     if ( rulestruct[b].flexbit_count_flag )

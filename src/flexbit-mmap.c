@@ -59,7 +59,7 @@ extern struct _Sagan_IPC_Flexbit *flexbit_ipc;
  * rule condition is tested here and returned.
  *****************************************************************************/
 
-bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username )
+bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     time_t t;
@@ -73,7 +73,9 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
     bool flexbit_match = 0;
 
     /* Flexbit do need a non-null username, otherwise a segmentation fault occurs */
+
     char flexbit_username[MAX_USERNAME_SIZE] = {0};
+
     if ( username != NULL )
         {
             memcpy(flexbit_username, username, sizeof(flexbit_username));
@@ -684,6 +686,119 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
                     Sagan_Log(DEBUG, "[%s, line %d] Got %d flexbits & needed %d. Got corrent number of flexbits, return true!", __FILE__, __LINE__, flexbit_total_match, rulestruct[rule_position].flexbit_condition_count );
                 }
 
+#ifdef HAVE_LIBFASTJSON
+
+	struct json_object *jobj;
+	char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
+
+        unsigned long b64_len = strlen(SaganProcSyslog_LOCAL->syslog_message) * 2;
+        uint8_t b64_target[b64_len];
+
+	char *proto = "UNKNOWN";
+
+	jobj = json_object_new_object();
+
+	json_object *jsensor = json_object_new_string(config->sagan_sensor_name);
+	json_object_object_add(jobj,"sensor", jsensor);
+
+/*
+        json_object *jexpire = json_object_new_int(rulestruct[rule_position].xbit_expire[r]);
+        json_object_object_add(jobj,"expire", jexpire);
+*/
+
+	json_object *jsource_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
+	json_object_object_add(jobj,"syslog_source", jsource_ip);
+
+	json_object *jsrc_ip = json_object_new_string(ip_src);
+	json_object_object_add(jobj,"src_ip", jsrc_ip );
+
+        json_object *jdest_ip = json_object_new_string(ip_dst);
+        json_object_object_add(jobj,"dest_ip", jdest_ip );
+
+//        json_object *jusername = json_object_new_string(username);
+//        json_object_object_add(jobj,"username", jusername );
+
+        json_object *jpriority = json_object_new_string(SaganProcSyslog_LOCAL->syslog_priority);
+        json_object_object_add(jobj,"priority", jpriority);
+
+        json_object *jfacility = json_object_new_string(SaganProcSyslog_LOCAL->syslog_facility);
+        json_object_object_add(jobj,"facility", jfacility);
+
+        json_object *jlevel = json_object_new_string(SaganProcSyslog_LOCAL->syslog_level);
+        json_object_object_add(jobj,"level", jlevel);
+
+        json_object *jtag = json_object_new_string(SaganProcSyslog_LOCAL->syslog_tag);
+        json_object_object_add(jobj,"tag", jtag);
+
+        json_object *jdate = json_object_new_string(SaganProcSyslog_LOCAL->syslog_date);
+        json_object_object_add(jobj,"date", jdate);
+ 
+        json_object *jtime = json_object_new_string(SaganProcSyslog_LOCAL->syslog_time);
+        json_object_object_add(jobj,"time", jtime);
+
+        json_object *jprogram = json_object_new_string(SaganProcSyslog_LOCAL->syslog_program);
+        json_object_object_add(jobj,"program", jprogram);
+
+	json_object *jmessage;
+
+            if ( config->eve_alerts_base64 == true )
+                {
+                    Base64Encode( (const unsigned char*)SaganProcSyslog_LOCAL->syslog_message, strlen(SaganProcSyslog_LOCAL->syslog_message), b64_target, &b64_len);
+
+                    jmessage = json_object_new_string( (const char *)b64_target );
+                }
+            else
+                {
+                    jmessage = json_object_new_string(SaganProcSyslog_LOCAL->syslog_message);
+                }
+
+            json_object_object_add(jobj,"payload", jmessage);
+
+            json_object *jsignature = json_object_new_string(rulestruct[rule_position].s_msg);
+            json_object_object_add(jobj,"signature", jsignature);
+
+            json_object *jrev = json_object_new_int(rulestruct[rule_position].s_rev);
+            json_object_object_add(jobj,"rev", jrev);
+
+            json_object *jtype = json_object_new_string("xbit");
+            json_object_object_add(jobj,"type", jtype);
+
+            json_object *jstorage = json_object_new_string("mmap");
+            json_object_object_add(jobj,"storage", jstorage);
+
+            json_object *jsignature_copy = json_object_new_string( rulestruct[rule_position].signature_copy );
+            json_object_object_add(jobj,"rule", jsignature_copy);
+
+            if ( SaganProcSyslog_LOCAL->proto == 17 )
+                {
+                    proto = "UDP";
+                }
+
+            else if ( SaganProcSyslog_LOCAL->proto == 6 )
+                {   
+                    proto = "TCP";
+                }
+
+            else if ( SaganProcSyslog_LOCAL->proto == 1 )
+                {
+                    proto = "ICMP";
+                }
+
+            json_object *jproto = json_object_new_string( proto );
+            json_object_object_add(jobj,"proto", jproto);
+
+            snprintf(tmp_data, sizeof(tmp_data), "%s", json_object_to_json_string(jobj));
+            tmp_data[sizeof(tmp_data) - 1] = '\0';
+
+            strlcpy( SaganProcSyslog_LOCAL->correlation_json, tmp_data, MAX_SYSLOGMSG);
+
+            json_object_put(jobj);
+
+	    printf("%s\n",  SaganProcSyslog_LOCAL->correlation_json );
+
+#endif
+
+
             return(true);
 
         }
@@ -1226,7 +1341,7 @@ void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_por
                                     if ( debug->debugflexbit)
                                         {
 
-                                            Sagan_Log(DEBUG,"[%s, line %d] [%d] Updated via \"set\" for flexbit \"%s\". Nex expire time is %d (%d) [ %s:%d -> %s:%d ]", __FILE__, __LINE__, a, rulestruct[rule_position].flexbit_name[i], flexbit_ipc[i].flexbit_expire, rulestruct[rule_position].flexbit_timeout[i], flexbit_ipc[a].ip_src, flexbit_ipc[a].src_port, flexbit_ipc[a].ip_dst, flexbit_ipc[a].dst_port);
+                                            Sagan_Log(DEBUG,"[%s, line %d] [%d] Updated via \"set\" for flexbit \"%s\". Next expire time is %d (%d) [ %s:%d -> %s:%d ]", __FILE__, __LINE__, a, rulestruct[rule_position].flexbit_name[i], flexbit_ipc[i].flexbit_expire, rulestruct[rule_position].flexbit_timeout[i], flexbit_ipc[a].ip_src, flexbit_ipc[a].src_port, flexbit_ipc[a].ip_dst, flexbit_ipc[a].dst_port);
 
                                         }
 

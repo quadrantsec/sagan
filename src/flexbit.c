@@ -42,9 +42,9 @@
 
 extern struct _SaganConfig *config;
 
-bool Flexbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char, int src_port, int dst_port, char *username )
+bool Flexbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
-    return(Flexbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, username));
+    return(Flexbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, username, SaganProcSyslog_LOCAL));
 }
 
 
