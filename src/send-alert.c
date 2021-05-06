@@ -45,8 +45,9 @@ extern struct _SaganConfig *config;
 
 /* ALL this needs to go away. It's UgLy */
 
-void Send_Alert ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normalize, _Sagan_Processor_Info *processor_info, char *ip_src, char *ip_dst, char *normalize_http_uri, char *normalize_http_hostname, int proto, uint64_t sid, int src_port, int dst_port, int pos, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
+void Send_Alert ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normalize, _Sagan_Processor_Info *processor_info, int proto, uint64_t sid, int src_port, int dst_port, int pos, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
 {
+
 
     char tmp[64] = { 0 };
 
@@ -84,16 +85,16 @@ void Send_Alert ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normaliz
     SaganProcessorEvent->tag             =       processor_info->processor_tag;
     SaganProcessorEvent->rev             =       processor_info->processor_rev;
 
-    SaganProcessorEvent->ip_src          =       ip_src;
-    SaganProcessorEvent->ip_dst          =       ip_dst;
+    SaganProcessorEvent->ip_src          =       SaganProcSyslog_LOCAL->src_ip;
+    SaganProcessorEvent->ip_dst          =       SaganProcSyslog_LOCAL->dst_ip;
 
     SaganProcessorEvent->dst_port        =       dst_port;
     SaganProcessorEvent->src_port        =       src_port;
 
     SaganProcessorEvent->found           =       pos;
 
-    SaganProcessorEvent->normalize_http_uri	=	normalize_http_uri;
-    SaganProcessorEvent->normalize_http_hostname=	normalize_http_hostname;
+    SaganProcessorEvent->normalize_http_uri	=	SaganProcSyslog_LOCAL->url;
+    SaganProcessorEvent->normalize_http_hostname=	SaganProcSyslog_LOCAL->hostname;
 
     SaganProcessorEvent->sid             =       sid;
 

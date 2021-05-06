@@ -189,18 +189,18 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
     char *ptmp = NULL;
     char *tok2 = NULL;
 
-    char parse_ip_src[MAXIP] = { 0 };
-    char parse_ip_dst[MAXIP] = { 0 };
-    char parse_md5_hash[MD5_HASH_SIZE+1] = { 0 };
-    char parse_sha1_hash[SHA1_HASH_SIZE+1] = { 0 };
-    char parse_sha256_hash[SHA256_HASH_SIZE+1] = { 0 };
+    //char parse_ip_src[MAXIP] = { 0 };
+    //char parse_ip_dst[MAXIP] = { 0 };
+//    char parse_md5_hash[MD5_HASH_SIZE+1] = { 0 };
+//    char parse_sha1_hash[SHA1_HASH_SIZE+1] = { 0 };
+//    char parse_sha256_hash[SHA256_HASH_SIZE+1] = { 0 };
 
-    bool ip_src_flag = false;
+    bool ip_src_is_valid = false;
 
     uint32_t ip_srcport_u32;
     unsigned char ip_src_bits[MAXIPBIT] = { 0 };
 
-    bool ip_dst_flag = false;
+    bool ip_dst_is_valid = false;
 
     uint32_t ip_dstport_u32 = 0;
     unsigned char ip_dst_bits[MAXIPBIT] = { 0 };
@@ -222,12 +222,12 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
     unsigned char proto = 0;
     int lookup_cache_size = 0;
 
-    char *ip_src = NULL;
-    char *ip_dst = NULL;
+//    char *ip_src = NULL;
+//    char *ip_dst = NULL;
 
-    char *md5_hash = NULL;
-    char *sha1_hash = NULL;
-    char *sha256_hash = NULL;
+//    char *md5_hash = NULL;
+//    char *sha1_hash = NULL;
+//    char *sha256_hash = NULL;
 
     char json_normalize[JSON_MAX_SIZE] = { 0 };
 
@@ -236,11 +236,11 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
 #ifdef HAVE_LIBFASTJSON
 
-    char *normalize_username = NULL;
-    char *normalize_filename = NULL;
-    char *normalize_http_uri = NULL;
-    char *normalize_http_hostname = NULL;
-    char *normalize_ja3 = NULL;
+//    char *normalize_username = NULL;
+//    char *normalize_filename = NULL;
+//    char *normalize_http_uri = NULL;
+//    char *normalize_http_hostname = NULL;
+//    char *normalize_ja3 = NULL;
 
 #endif
 
@@ -343,21 +343,21 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
     for(b=0; b < counters->rulecount; b++)
         {
 
-            ip_src_flag = false;
-            ip_dst_flag = false;
+            ip_src_is_valid = false;
+            ip_dst_is_valid = false;
 
-            parse_ip_src[0] = '\0';
-            parse_ip_dst[0] = '\0';
-            parse_md5_hash[0] = '\0';
-            parse_sha1_hash[0] = '\0';
-            parse_sha256_hash[0] = '\0';
+            //parse_ip_src[0] = '\0';
+            //parse_ip_dst[0] = '\0';
+            //parse_md5_hash[0] = '\0';
+//            parse_sha1_hash[0] = '\0';
+//            parse_sha256_hash[0] = '\0';
 
-            ip_src = parse_ip_src;
-            ip_dst = parse_ip_dst;
+           // ip_src = parse_ip_src;
+//            ip_dst = parse_ip_dst;
 
-            md5_hash = parse_md5_hash;
-            sha1_hash = parse_sha1_hash;
-            sha256_hash = parse_sha256_hash;
+//            md5_hash = parse_md5_hash;
+//            sha1_hash = parse_sha1_hash;
+//            sha256_hash = parse_sha256_hash;
 
             ip_dstport_u32 = 0;
             ip_srcport_u32 = 0;
@@ -373,17 +373,17 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
             if ( SaganProcSyslog_LOCAL->src_ip[0] != '\0' )
                 {
-                    ip_src = SaganProcSyslog_LOCAL->src_ip;
-                    IP2Bit(ip_src, ip_src_bits);
-                    ip_src_flag = true;
+                    //ip_src = SaganProcSyslog_LOCAL->src_ip;
+                    IP2Bit(SaganProcSyslog_LOCAL->src_ip, ip_src_bits);
+                    ip_src_is_valid = true;
                 }
 
             if ( SaganProcSyslog_LOCAL->dst_ip[0] != '\0' )
                 {
 
-                    ip_dst = SaganProcSyslog_LOCAL->dst_ip;
-                    IP2Bit(ip_dst, ip_dst_bits);
-                    ip_dst_flag = true;
+                    //ip_dst = SaganProcSyslog_LOCAL->dst_ip;
+                    IP2Bit(SaganProcSyslog_LOCAL->dst_ip, ip_dst_bits);
+                    ip_dst_is_valid = true;
                 }
 
             if ( SaganProcSyslog_LOCAL->src_port != 0 )
@@ -401,10 +401,12 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                     proto = SaganProcSyslog_LOCAL->proto;
                 }
 
+/*
             if ( SaganProcSyslog_LOCAL->md5[0] != '\0' )
                 {
                     md5_hash = SaganProcSyslog_LOCAL->md5;
                 }
+
 
             if ( SaganProcSyslog_LOCAL->sha1[0] != '\0' )
                 {
@@ -415,29 +417,37 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                 {
                     sha256_hash = SaganProcSyslog_LOCAL->sha256;
                 }
+		*/
 
+/*
             if ( SaganProcSyslog_LOCAL->filename[0] != '\0' )
                 {
                     normalize_filename = SaganProcSyslog_LOCAL->filename;
                 }
+		*/
 
             if ( SaganProcSyslog_LOCAL->hostname[0] != '\0' )
                 {
                     char tmp_normalize_http_uri[MAX_HOSTNAME_SIZE + MAX_URL_SIZE + 1] = { 0 };
                     snprintf(tmp_normalize_http_uri, sizeof(tmp_normalize_http_uri), "%s%s", SaganProcSyslog_LOCAL->hostname, SaganProcSyslog_LOCAL->url);
-                    normalize_http_uri = tmp_normalize_http_uri;
+                    //normalize_http_uri = tmp_normalize_http_uri;
+		    strlcpy(SaganProcSyslog_LOCAL->url, tmp_normalize_http_uri, MAX_URL_SIZE);
                 }
 
+/*
             if ( SaganProcSyslog_LOCAL->ja3[0] != '\0' )
                 {
                     normalize_ja3 = SaganProcSyslog_LOCAL->ja3;
                 }
+		*/
 
 
+/*
             if ( SaganProcSyslog_LOCAL->username[0] != '\0' )
                 {
                     normalize_username = SaganProcSyslog_LOCAL->username;
                 }
+		*/
 
 
 #endif
@@ -480,9 +490,9 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                                     strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
                                                 }
 
-                                            ip_src = SaganProcSyslog_LOCAL->src_ip;
-                                            IP2Bit(ip_src, ip_src_bits);
-                                            ip_src_flag = true;
+                                            //ip_src = SaganProcSyslog_LOCAL->src_ip;
+                                            IP2Bit(SaganProcSyslog_LOCAL->src_ip, ip_src_bits);
+                                            ip_src_is_valid = true;
                                         }
 
                                     else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
@@ -499,9 +509,9 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                                     strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
                                                 }
 
-                                            ip_dst = SaganProcSyslog_LOCAL->dst_ip;
-                                            IP2Bit(ip_dst, ip_dst_bits);
-                                            ip_dst_flag = true;
+                                            //ip_dst = SaganProcSyslog_LOCAL->dst_ip;
+                                            IP2Bit(SaganProcSyslog_LOCAL->dst_ip, ip_dst_bits);
+                                            ip_dst_is_valid = true;
                                         }
 
                                     else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_PORT )
@@ -517,7 +527,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                     else if ( rulestruct[b].json_map_type[i] == JSON_MAP_USERNAME )
                                         {
                                             strlcpy(SaganProcSyslog_LOCAL->username, tmp_json_value, MAX_USERNAME_SIZE);
-                                            normalize_username = SaganProcSyslog_LOCAL->username;
+                                            //normalize_username = SaganProcSyslog_LOCAL->username;
                                         }
 
                                     else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MESSAGE )
@@ -850,25 +860,29 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                             if ( SaganNormalizeLiblognorm.username[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    normalize_username = SaganNormalizeLiblognorm.username;
+						    strlcpy(SaganProcSyslog_LOCAL->username, SaganNormalizeLiblognorm.username, MAX_USERNAME_SIZE);
+//                                                    normalize_username = SaganNormalizeLiblognorm.username;
                                                 }
 
                                             if ( SaganNormalizeLiblognorm.http_uri[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    normalize_http_uri = SaganNormalizeLiblognorm.http_uri;
+                                                    //normalize_http_uri = SaganNormalizeLiblognorm.http_uri;
+						    strlcpy(SaganProcSyslog_LOCAL->url, SaganNormalizeLiblognorm.http_uri, MAX_URL_SIZE);
                                                 }
 
                                             if ( SaganNormalizeLiblognorm.filename[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    normalize_filename = SaganNormalizeLiblognorm.filename;
+                                                    //normalize_filename = SaganNormalizeLiblognorm.filename;
+						    strlcpy(SaganProcSyslog_LOCAL->filename, SaganNormalizeLiblognorm.filename, MAX_FILENAME_SIZE);
                                                 }
 
                                             if ( SaganNormalizeLiblognorm.ja3[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    normalize_ja3 = SaganNormalizeLiblognorm.ja3;
+                                                    //normalize_ja3 = SaganNormalizeLiblognorm.ja3;
+						    strlcpy(SaganProcSyslog_LOCAL->ja3, SaganNormalizeLiblognorm.ja3, MD5_HASH_SIZE);
                                                 }
 
                                             if ( SaganNormalizeLiblognorm.event_id[0] != '\0' )
@@ -883,22 +897,24 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                         {
                                             if ( SaganNormalizeLiblognorm.ip_src[0] != '0')
                                                 {
-                                                    ip_src_flag = true;
-                                                    ip_src = SaganNormalizeLiblognorm.ip_src;
+                                                    ip_src_is_valid = true;
+                                                    //ip_src = SaganNormalizeLiblognorm.ip_src;
+						    strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganNormalizeLiblognorm.ip_src, MAXIP);
 
-                                                    if ( !strcmp(ip_src, "127.0.0.1") ||
-                                                            !strcmp(ip_src, "::1" ) ||
-                                                            !strcmp(ip_src, "::ffff:127.0.0.1" ) )
+                                                    if ( !strcmp(SaganProcSyslog_LOCAL->src_ip, "127.0.0.1") ||
+                                                            !strcmp(SaganProcSyslog_LOCAL->src_ip, "::1" ) ||
+                                                            !strcmp(SaganProcSyslog_LOCAL->src_ip, "::ffff:127.0.0.1" ) )
                                                         {
 
-                                                            ip_src = SaganProcSyslog_LOCAL->syslog_host;
-                                                            ip_src_flag = false;
+//                                                            ip_src = SaganProcSyslog_LOCAL->syslog_host;
+							    strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                                            ip_src_is_valid = false;
                                                         }
 
                                                     else
                                                         {
 
-                                                            IP2Bit(ip_src, ip_src_bits);
+                                                            IP2Bit(SaganProcSyslog_LOCAL->syslog_host, ip_src_bits);
                                                         }
 
 
@@ -907,21 +923,23 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             if ( SaganNormalizeLiblognorm.ip_dst[0] != '0' )
                                                 {
-                                                    ip_dst_flag = true;
-                                                    ip_dst = SaganNormalizeLiblognorm.ip_dst;
+                                                    ip_dst_is_valid = true;
+                                                    //ip_dst = SaganNormalizeLiblognorm.ip_dst;
+						    strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganNormalizeLiblognorm.ip_dst, MAXIP);
 
-                                                    if ( !strcmp(ip_dst, "127.0.0.1") ||
-                                                            !strcmp(ip_dst, "::1" ) ||
-                                                            !strcmp(ip_dst, "::ffff:127.0.0.1" ) )
+                                                    if ( !strcmp(SaganProcSyslog_LOCAL->dst_ip, "127.0.0.1") ||
+                                                            !strcmp(SaganProcSyslog_LOCAL->dst_ip, "::1" ) ||
+                                                            !strcmp(SaganProcSyslog_LOCAL->dst_ip, "::ffff:127.0.0.1" ) )
 
                                                         {
-                                                            ip_dst = SaganProcSyslog_LOCAL->syslog_host;
-                                                            ip_dst_flag = false;
+                                                            //ip_dst = SaganProcSyslog_LOCAL->syslog_host;
+							    strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                                            ip_dst_is_valid = false;
                                                         }
 
                                                     else
                                                         {
-                                                            IP2Bit(ip_dst, ip_dst_bits);
+                                                            IP2Bit(SaganProcSyslog_LOCAL->dst_ip, ip_dst_bits);
                                                         }
 
 
@@ -940,17 +958,20 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             if ( SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
                                                 {
-                                                    md5_hash = SaganNormalizeLiblognorm.hash_md5;
+						      strlcpy(SaganProcSyslog_LOCAL->md5, SaganNormalizeLiblognorm.hash_md5, MD5_HASH_SIZE);
+//                                                    md5_hash = SaganNormalizeLiblognorm.hash_md5;
                                                 }
 
                                             if ( SaganNormalizeLiblognorm.hash_sha1[0] != '\0' )
                                                 {
-                                                    sha1_hash = SaganNormalizeLiblognorm.hash_sha1;
+//                                                    sha1_hash = SaganNormalizeLiblognorm.hash_sha1;
+						      strlcpy(SaganProcSyslog_LOCAL->sha1, SaganNormalizeLiblognorm.hash_sha1, SHA1_HASH_SIZE);
                                                 }
 
                                             if ( SaganNormalizeLiblognorm.hash_sha256[0] != '\0' )
                                                 {
-                                                    sha256_hash = SaganNormalizeLiblognorm.hash_sha256;
+                                                    //sha256_hash = SaganNormalizeLiblognorm.hash_sha256;
+						    strlcpy(SaganProcSyslog_LOCAL->sha256, SaganNormalizeLiblognorm.hash_sha256, SHA256_HASH_SIZE);
                                                 }
 
                                         }
@@ -983,21 +1004,24 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                             /* parse_src_ip: {position} - Parse_IP build a cache table for IPs, ports, etc.  This way,
                             we only parse the syslog string one time regardless of the rule options! */
 
-                            if ( rulestruct[b].s_find_src_ip == true ||
-                                    rulestruct[b].s_find_src_ip == true ||
-                                    rulestruct[b].blacklist_ipaddr_all == true ||
-                                    rulestruct[b].s_find_proto == true ||
-#ifdef WITH_BLUEDOT
-                                    rulestruct[b].bluedot_ipaddr_type == 4 ||
-#endif
-                                    rulestruct[b].brointel_ipaddr_all == true )
+                            if ( ( rulestruct[b].s_find_src_ip == true && ip_src_is_valid == false ) || 
+			         ( rulestruct[b].s_find_dst_ip == true && ip_dst_is_valid == false ) )
+//                                    rulestruct[b].s_find_src_ip == true ||
+//                                    rulestruct[b].blacklist_ipaddr_all == true ||
+//                                    rulestruct[b].s_find_proto == true ||
+//#ifdef WITH_BLUEDOT
+//                                    rulestruct[b].bluedot_ipaddr_type == 4 ||
+//#endif
+//                                    rulestruct[b].brointel_ipaddr_all == true )
                                 {
 
                                     lookup_cache_size = Parse_IP(SaganProcSyslog_LOCAL->syslog_message, lookup_cache );
 
                                 }
 
-                            if ( ip_src_flag == false && rulestruct[b].s_find_src_ip == true )
+			    /* THIS PROBABLY NEEDS TO BE REWORKED ?!? */
+
+                            if ( ip_src_is_valid == false && rulestruct[b].s_find_src_ip == true )
                                 {
 
 
@@ -1005,23 +1029,24 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                         {
 
 
-                                            memcpy(parse_ip_src, lookup_cache[rulestruct[b].s_find_src_pos-1].ip, MAXIP );
+                                            memcpy(SaganProcSyslog_LOCAL->src_ip, lookup_cache[rulestruct[b].s_find_src_pos-1].ip, MAXIP );
                                             memcpy(ip_src_bits, lookup_cache[rulestruct[b].s_find_src_pos-1].ip_bits, MAXIPBIT);
 
-                                            ip_src = parse_ip_src;
+//                                            ip_src = parse_ip_src;
 
-                                            if ( !strcmp(ip_src, "127.0.0.1") ||
-                                                    !strcmp(ip_src, "::1" ) ||
-                                                    !strcmp(ip_src, "::ffff:127.0.0.1" ) )
+                                            if ( !strcmp(SaganProcSyslog_LOCAL->src_ip, "127.0.0.1") ||
+                                                    !strcmp(SaganProcSyslog_LOCAL->src_ip, "::1" ) ||
+                                                    !strcmp(SaganProcSyslog_LOCAL->src_ip, "::ffff:127.0.0.1" ) )
                                                 {
 
-                                                    ip_src = SaganProcSyslog_LOCAL->syslog_host;
-                                                    ip_src_flag = false;
+//                                                    ip_src = SaganProcSyslog_LOCAL->syslog_host;
+						    strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                                    ip_src_is_valid = false;
                                                 }
 
                                             ip_srcport_u32 = lookup_cache[rulestruct[b].s_find_src_pos-1].port;
                                             proto = lookup_cache[0].proto;
-                                            ip_src_flag = true;
+                                            ip_src_is_valid = true;
 
                                         }
 
@@ -1030,52 +1055,66 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                             /* parse_dst_ip: {position} */
 
-                            if ( ip_dst_flag == false && rulestruct[b].s_find_dst_ip == true )
+                            if ( ip_dst_is_valid == false && rulestruct[b].s_find_dst_ip == true )
                                 {
 
                                     if ( lookup_cache[rulestruct[b].s_find_dst_pos-1].status == true )
                                         {
 
-                                            memcpy(parse_ip_dst, lookup_cache[rulestruct[b].s_find_dst_pos-1].ip, MAXIP );
+                                            memcpy(SaganProcSyslog_LOCAL->dst_ip, lookup_cache[rulestruct[b].s_find_dst_pos-1].ip, MAXIP );
                                             memcpy(ip_dst_bits, lookup_cache[rulestruct[b].s_find_dst_pos-1].ip_bits, MAXIPBIT);
-                                            ip_dst = parse_ip_dst;
+ //                                           ip_dst = parse_ip_dst;
 
-                                            if ( !strcmp(ip_dst, "127.0.0.1") ||
-                                                    !strcmp(ip_dst, "::1" ) ||
-                                                    !strcmp(ip_dst, "::ffff:127.0.0.1" ))
+                                            if ( !strcmp(SaganProcSyslog_LOCAL->dst_ip, "127.0.0.1") ||
+                                                    !strcmp(SaganProcSyslog_LOCAL->dst_ip, "::1" ) ||
+                                                    !strcmp(SaganProcSyslog_LOCAL->dst_ip, "::ffff:127.0.0.1" ))
                                                 {
 
-                                                    ip_dst = SaganProcSyslog_LOCAL->syslog_host;
-                                                    ip_dst_flag = false;
+//                                                    ip_dst = SaganProcSyslog_LOCAL->syslog_host;
+						    strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                                    ip_dst_is_valid = false;
 
                                                 }
 
                                             ip_dstport_u32 = lookup_cache[rulestruct[b].s_find_dst_pos-1].port;
                                             proto = lookup_cache[0].proto;
-                                            ip_dst_flag = true;
+                                            ip_dst_is_valid = true;
 
                                         }
 
                                 }
 
+
+                            /* If we never manage to get IP addresses,  set them to defaults */
+
+                            if ( SaganProcSyslog_LOCAL->src_ip[0] == '\0' )
+                                {
+                                memcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
+                                }
+
+                            if ( SaganProcSyslog_LOCAL->dst_ip[0] == '\0' )
+                                {
+                                memcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+                                }
+
                             /* parse_hash: md5 */
 
-                            if ( parse_md5_hash[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )
+                            if ( SaganProcSyslog_LOCAL->md5[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )
                                 {
-                                    Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_MD5, parse_md5_hash, sizeof(parse_md5_hash));
-                                    md5_hash = parse_md5_hash;
+                                    Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_MD5, SaganProcSyslog_LOCAL->md5, MD5_HASH_SIZE );
+//                                    md5_hash = parse_md5_hash;
                                 }
 
-                            else if ( parse_sha1_hash[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA1 )
+                            else if ( SaganProcSyslog_LOCAL->sha1[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA1 )
                                 {
-                                    Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA1, parse_sha256_hash, sizeof(parse_sha1_hash));
-                                    sha1_hash = parse_sha1_hash;
+                                    Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA1, SaganProcSyslog_LOCAL->sha1, SHA1_HASH_SIZE );
+//                                    sha1_hash = parse_sha1_hash;
                                 }
 
-                            else if ( parse_sha256_hash[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA256 )
+                            else if ( SaganProcSyslog_LOCAL->sha256[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA256 )
                                 {
-                                    Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA256, parse_sha256_hash, sizeof(parse_sha256_hash));
-                                    sha256_hash = parse_sha256_hash;
+                                    Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA256, SaganProcSyslog_LOCAL->sha256, SHA256_HASH_SIZE );
+//                                    sha256_hash = parse_sha256_hash;
                                 }
 
                             /* If the rule calls for proto searching,  we do it now */
@@ -1088,49 +1127,61 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                             /* If proto is not searched or has failed,  default to whatever the rule told us to use */
 
-                            if ( ip_src_flag == false )
+/*
+                            if ( ip_src_is_valid == false )
                                 {
 
                                     /* We don't want 127.0.0.1,  so if the source is that, we change it to config->sagan_host */
-
-                                    if (!strcmp(SaganProcSyslog_LOCAL->syslog_host, "127.0.0.1") ||
-                                            !strcmp(SaganProcSyslog_LOCAL->syslog_host, "::1" ) ||
-                                            !strcmp(SaganProcSyslog_LOCAL->syslog_host, "::ffff:127.0.0.1" ) )
+/*
+                                    if (!strcmp(SaganProcSyslog_LOCAL->src_ip, "127.0.0.1") ||
+                                            !strcmp(SaganProcSyslog_LOCAL->src_ip, "::1" ) ||
+                                            !strcmp(SaganProcSyslog_LOCAL->src_ip, "::ffff:127.0.0.1" ) )
 
                                         {
-                                            ip_src = config->sagan_host;
+                                            //ip_src = config->sagan_host;
+					    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
                                         }
                                     else
                                         {
 
-                                            ip_src = SaganProcSyslog_LOCAL->syslog_host;
+//                                            ip_src = SaganProcSyslog_LOCAL->syslog_host;
+					      strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
                                         }
 
-                                    IP2Bit(ip_src, ip_src_bits);
+                                    IP2Bit(SaganProcSyslog_LOCAL->src_ip, ip_src_bits);
 
                                 }
 
-                            if ( ip_dst_flag == false )
+				printf("COPY |%s|%s|\n", SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
+
+                            if ( ip_dst_is_valid == false )
                                 {
 
                                     /* We don't want 127.0.0.1,  so if the source is that, we
                                     change it to config->sagan_host */
-
-                                    if (!strcmp(SaganProcSyslog_LOCAL->syslog_host, "127.0.0.1") ||
-                                            !strcmp(SaganProcSyslog_LOCAL->syslog_host, "::1" ) ||
-                                            !strcmp(SaganProcSyslog_LOCAL->syslog_host, "::ffff:127.0.0.1" ) )
+/*
+                                    if (!strcmp(SaganProcSyslog_LOCAL->dst_ip, "127.0.0.1") ||
+                                            !strcmp(SaganProcSyslog_LOCAL->dst_ip, "::1" ) ||
+                                            !strcmp(SaganProcSyslog_LOCAL->dst_ip, "::ffff:127.0.0.1" ) )
                                         {
-                                            ip_dst = config->sagan_host;
+                                            //ip_dst = config->sagan_host;
+					    strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
                                         }
                                     else
                                         {
 
-                                            ip_dst = SaganProcSyslog_LOCAL->syslog_host;
+//                                            ip_dst = SaganProcSyslog_LOCAL->syslog_host;
+					     strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
 
                                         }
 
-                                    IP2Bit(ip_dst, ip_dst_bits);
+                                    IP2Bit(SaganProcSyslog_LOCAL->dst_ip, ip_dst_bits);
                                 }
+				*/
+
+
+//				printf("COPY |%s|%s|\n", SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
+
 
                             /* No source port was normalized, Use the rules default */
 
@@ -1236,7 +1287,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                             if ( rulestruct[b].xbit_flag && ( rulestruct[b].xbit_isset_count || rulestruct[b].xbit_isnotset_count ) )
                                 {
-                                    SaganRouting->xbit_return = Xbit_Condition(b, ip_src, ip_dst, SaganProcSyslog_LOCAL);
+                                    SaganRouting->xbit_return = Xbit_Condition(b, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL);
                                 }
 
                             /****************************************************************************
@@ -1248,12 +1299,12 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                     if ( rulestruct[b].flexbit_condition_count )
                                         {
-                                            SaganRouting->flexbit_return = Flexbit_Condition(b, ip_src, ip_dst, ip_srcport_u32, ip_dstport_u32, normalize_username, SaganProcSyslog_LOCAL);
+                                            SaganRouting->flexbit_return = Flexbit_Condition(b, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, ip_srcport_u32, ip_dstport_u32, SaganProcSyslog_LOCAL->username, SaganProcSyslog_LOCAL);
                                         }
 
                                     if ( rulestruct[b].flexbit_count_flag )
                                         {
-                                            SaganRouting->flexbit_count_return = Flexbit_Count(b, ip_src, ip_dst);
+                                            SaganRouting->flexbit_count_return = Flexbit_Count(b, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
                                         }
 
                                 }
@@ -1272,30 +1323,30 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                             if ( rulestruct[b].geoip2_flag && config->have_geoip2 == true )
                                 {
 
-                                    /* Set geoip2_return to GEOIP_SKIP in case ip_src_flag
-                                       or ip_dst_flag is false! This way it will short
+                                    /* Set geoip2_return to GEOIP_SKIP in case ip_src_is_valid
+                                       or ip_dst_is_valid is false! This way it will short
                                        circuit past the rest of the GeoIP logic. */
 
                                     geoip2_return = GEOIP_SKIP;
                                     SaganRouting->geoip2_isset = false;
 
-                                    if ( ip_src_flag == true && rulestruct[b].geoip2_src_or_dst == 1 )
+                                    if ( ip_src_is_valid == true && rulestruct[b].geoip2_src_or_dst == 1 )
                                         {
-                                            geoip2_return = GeoIP2_Lookup_Country(ip_src, b, GeoIP_SRC );
+                                            geoip2_return = GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );
                                             if ( config->geoip2_lookup_all_alerts == true )
                                                 {
-                                                    (void)GeoIP2_Lookup_Country(ip_dst, b, GeoIP_DEST );
+                                                    (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
                                                 }
 
                                         }
 
-                                    else if ( ip_dst_flag == true && rulestruct[b].geoip2_src_or_dst == 2 )
+                                    else if ( ip_dst_is_valid == true && rulestruct[b].geoip2_src_or_dst == 2 )
                                         {
-                                            geoip2_return = GeoIP2_Lookup_Country(ip_dst, b, GeoIP_DEST );
+                                            geoip2_return = GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
 
                                             if ( config->geoip2_lookup_all_alerts == true )
                                                 {
-                                                    (void)GeoIP2_Lookup_Country(ip_src, b, GeoIP_SRC );
+                                                    (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );
                                                 }
 
                                         }
@@ -1352,8 +1403,8 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                     if ( config->geoip2_lookup_all_alerts == true && config->have_geoip2 == true )
                                         {
 
-                                            (void)GeoIP2_Lookup_Country(ip_src, b, GeoIP_SRC );
-                                            (void)GeoIP2_Lookup_Country(ip_dst, b, GeoIP_DEST );
+                                            (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );
+                                            (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
 
                                         }
 
@@ -1385,12 +1436,12 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                     SaganRouting->blacklist_results = false;
 
-                                    if ( rulestruct[b].blacklist_ipaddr_src && ip_src_flag )
+                                    if ( rulestruct[b].blacklist_ipaddr_src && ip_src_is_valid == true )
                                         {
                                             SaganRouting->blacklist_results = Sagan_Blacklist_IPADDR( ip_src_bits );
                                         }
 
-                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_dst && ip_dst_flag )
+                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_dst && ip_dst_is_valid == true )
                                         {
                                             SaganRouting->blacklist_results = Sagan_Blacklist_IPADDR( ip_dst_bits );
                                         }
@@ -1400,7 +1451,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                             SaganRouting->blacklist_results = Sagan_Blacklist_IPADDR_All(SaganProcSyslog_LOCAL->syslog_message, lookup_cache, lookup_cache_size);
                                         }
 
-                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_both && ip_src_flag && ip_dst_flag )
+                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_both && ip_src_is_valid == true && ip_dst_is_valid == true )
                                         {
                                             if ( Sagan_Blacklist_IPADDR( ip_src_bits ) || Sagan_Blacklist_IPADDR( ip_dst_bits ) )
                                                 {
@@ -1422,28 +1473,28 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             /* 1 == src,  2 == dst,  3 == both,  4 == all */
 
-                                            if ( rulestruct[b].bluedot_ipaddr_type == 1 && ip_src_flag )
+                                            if ( rulestruct[b].bluedot_ipaddr_type == 1 && ip_src_is_valid == true )
                                                 {
-                                                    bluedot_results = Sagan_Bluedot_Lookup(ip_src, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
+                                                    bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->src_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_ip_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_IP);
                                                 }
 
-                                            if ( rulestruct[b].bluedot_ipaddr_type == 2 && ip_dst_flag )
+                                            if ( rulestruct[b].bluedot_ipaddr_type == 2 && ip_dst_is_valid == true )
                                                 {
-                                                    bluedot_results = Sagan_Bluedot_Lookup(ip_dst, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
+                                                    bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->dst_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_ip_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_IP);
                                                 }
 
-                                            if ( rulestruct[b].bluedot_ipaddr_type == 3 && ip_src_flag && ip_dst_flag )
+                                            if ( rulestruct[b].bluedot_ipaddr_type == 3 && ip_src_is_valid == true && ip_dst_is_valid == true )
                                                 {
 
-                                                    bluedot_results = Sagan_Bluedot_Lookup(ip_src, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
+                                                    bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->src_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_ip_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_IP);
                                                     /* If the source isn't found,  then check the dst */
 
                                                     if ( SaganRouting->bluedot_ip_flag == 0 )
                                                         {
-                                                            bluedot_results = Sagan_Bluedot_Lookup(ip_dst, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
+                                                            bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->dst_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
                                                             SaganRouting->bluedot_ip_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_IP);
                                                         }
 
@@ -1465,52 +1516,52 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                         {
 
 
-                                            if ( md5_hash[0] != '\0')
+                                            if ( SaganProcSyslog_LOCAL->md5[0] != '\0')
                                                 {
 
-                                                    bluedot_results = Sagan_Bluedot_Lookup( md5_hash, BLUEDOT_LOOKUP_HASH, b, bluedot_json, sizeof(bluedot_json));
+                                                    bluedot_results = Sagan_Bluedot_Lookup( SaganProcSyslog_LOCAL->md5, BLUEDOT_LOOKUP_HASH, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_hash_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_HASH);
 
                                                 }
 
-                                            if ( sha256_hash[0] != '\0' )
+                                            if ( SaganProcSyslog_LOCAL->sha1[0] != '\0' )
                                                 {
 
-                                                    bluedot_results = Sagan_Bluedot_Lookup( sha256_hash, BLUEDOT_LOOKUP_HASH, b, bluedot_json, sizeof(bluedot_json));
+                                                    bluedot_results = Sagan_Bluedot_Lookup( SaganProcSyslog_LOCAL->sha1, BLUEDOT_LOOKUP_HASH, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_hash_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_HASH );
 
                                                 }
 
-                                            if ( sha256_hash[0] != '\0')
+                                            if ( SaganProcSyslog_LOCAL->sha256[0] != '\0')
                                                 {
 
-                                                    bluedot_results = Sagan_Bluedot_Lookup( sha256_hash, BLUEDOT_LOOKUP_HASH, b, bluedot_json, sizeof(bluedot_json));
+                                                    bluedot_results = Sagan_Bluedot_Lookup( SaganProcSyslog_LOCAL->sha256, BLUEDOT_LOOKUP_HASH, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_hash_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_HASH);
 
                                                 }
 
                                         }
 
-                                    if ( rulestruct[b].bluedot_url && normalize_http_uri != NULL )
+                                    if ( rulestruct[b].bluedot_url && SaganProcSyslog_LOCAL->url[0] != '\0' )
                                         {
 
-                                            bluedot_results = Sagan_Bluedot_Lookup( normalize_http_uri, BLUEDOT_LOOKUP_URL, b, bluedot_json, sizeof(bluedot_json));
+                                            bluedot_results = Sagan_Bluedot_Lookup( SaganProcSyslog_LOCAL->url, BLUEDOT_LOOKUP_URL, b, bluedot_json, sizeof(bluedot_json));
                                             SaganRouting->bluedot_url_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_URL);
 
                                         }
 
-                                    if ( rulestruct[b].bluedot_filename && normalize_filename != NULL )
+                                    if ( rulestruct[b].bluedot_filename && SaganProcSyslog_LOCAL->filename[0] != '\0' )
                                         {
 
-                                            bluedot_results = Sagan_Bluedot_Lookup( normalize_filename, BLUEDOT_LOOKUP_FILENAME, b, bluedot_json, sizeof(bluedot_json));
+                                            bluedot_results = Sagan_Bluedot_Lookup( SaganProcSyslog_LOCAL->filename, BLUEDOT_LOOKUP_FILENAME, b, bluedot_json, sizeof(bluedot_json));
                                             SaganRouting->bluedot_filename_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_FILENAME);
 
                                         }
 
-                                    if ( rulestruct[b].bluedot_ja3 && normalize_ja3 != NULL )
+                                    if ( rulestruct[b].bluedot_ja3 && SaganProcSyslog_LOCAL->ja3[0] != '\0' )
                                         {
 
-                                            bluedot_results = Sagan_Bluedot_Lookup( normalize_ja3, BLUEDOT_LOOKUP_JA3, b, bluedot_json, sizeof(bluedot_json));
+                                            bluedot_results = Sagan_Bluedot_Lookup( SaganProcSyslog_LOCAL->ja3, BLUEDOT_LOOKUP_JA3, b, bluedot_json, sizeof(bluedot_json));
                                             SaganRouting->bluedot_ja3_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_JA3);
 
                                         }
@@ -1536,14 +1587,14 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                     SaganRouting->brointel_results = false;
 
-                                    if ( rulestruct[b].brointel_ipaddr_src && ip_src_flag )
+                                    if ( rulestruct[b].brointel_ipaddr_src && ip_src_is_valid == true )
                                         {
-                                            SaganRouting->brointel_results = Sagan_BroIntel_IPADDR( ip_src_bits, ip_src );
+                                            SaganRouting->brointel_results = Sagan_BroIntel_IPADDR( ip_src_bits, SaganProcSyslog_LOCAL->src_ip );
                                         }
 
-                                    if ( SaganRouting->brointel_results == false && rulestruct[b].brointel_ipaddr_dst && ip_dst_flag )
+                                    if ( SaganRouting->brointel_results == false && rulestruct[b].brointel_ipaddr_dst && ip_dst_is_valid == true )
                                         {
-                                            SaganRouting->brointel_results = Sagan_BroIntel_IPADDR( ip_dst_bits, ip_dst );
+                                            SaganRouting->brointel_results = Sagan_BroIntel_IPADDR( ip_dst_bits, SaganProcSyslog_LOCAL->dst_ip );
                                         }
 
                                     if ( SaganRouting->brointel_results == false && rulestruct[b].brointel_ipaddr_all )
@@ -1551,9 +1602,9 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                             SaganRouting->brointel_results = Sagan_BroIntel_IPADDR_All ( SaganProcSyslog_LOCAL->syslog_message, lookup_cache, MAX_PARSE_IP);
                                         }
 
-                                    if ( SaganRouting->brointel_results == false && rulestruct[b].brointel_ipaddr_both && ip_src_flag && ip_dst_flag )
+                                    if ( SaganRouting->brointel_results == false && rulestruct[b].brointel_ipaddr_both && ip_src_is_valid == true && ip_dst_is_valid == true )
                                         {
-                                            if ( Sagan_BroIntel_IPADDR( ip_src_bits, ip_src ) || Sagan_BroIntel_IPADDR( ip_dst_bits, ip_dst ) )
+                                            if ( Sagan_BroIntel_IPADDR( ip_src_bits, SaganProcSyslog_LOCAL->src_ip ) || Sagan_BroIntel_IPADDR( ip_dst_bits, SaganProcSyslog_LOCAL->dst_ip ) )
                                                 {
                                                     SaganRouting->brointel_results = true;
                                                 }
@@ -1613,7 +1664,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                     if ( rulestruct[b].after2 == true )
                                         {
-                                            after_log_flag = After2 (b, ip_src, ip_srcport_u32, ip_dst, ip_dstport_u32, normalize_username, SaganProcSyslog_LOCAL->syslog_message );
+                                            after_log_flag = After2 (b, SaganProcSyslog_LOCAL->src_ip, ip_srcport_u32, SaganProcSyslog_LOCAL->dst_ip, ip_dstport_u32, SaganProcSyslog_LOCAL->username, SaganProcSyslog_LOCAL->syslog_message );
                                         }
 
                                     /* Threshold */
@@ -1622,7 +1673,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                     if ( rulestruct[b].threshold2_type != 0 && after_log_flag == false )
                                         {
-                                            thresh_log_flag = Threshold2 (b, ip_src, ip_srcport_u32, ip_dst, ip_dstport_u32, normalize_username, SaganProcSyslog_LOCAL->syslog_message );
+                                            thresh_log_flag = Threshold2 (b, SaganProcSyslog_LOCAL->src_ip, ip_srcport_u32, SaganProcSyslog_LOCAL->dst_ip, ip_dstport_u32, SaganProcSyslog_LOCAL->username, SaganProcSyslog_LOCAL->syslog_message );
                                         }
 
 
@@ -1653,14 +1704,14 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             if ( rulestruct[b].xbit_flag && ( rulestruct[b].xbit_set_count || rulestruct[b].xbit_unset_count ) )
                                                 {
-                                                    Xbit_Set(b, ip_src, ip_dst, SaganProcSyslog_LOCAL);
+                                                    Xbit_Set(b, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL);
                                                 }
 
                                             /* Check to "set" a flexbit */
 
                                             if ( rulestruct[b].flexbit_flag && rulestruct[b].flexbit_set_count )
                                                 {
-                                                    Flexbit_Set(b, ip_src, ip_dst, ip_srcport_u32, ip_dstport_u32, normalize_username, SaganProcSyslog_LOCAL);
+                                                    Flexbit_Set(b, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, ip_srcport_u32, ip_dstport_u32, SaganProcSyslog_LOCAL->username, SaganProcSyslog_LOCAL);
                                                 }
 
                                             threadid++;
@@ -1689,10 +1740,6 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                                             Send_Alert(SaganProcSyslog_LOCAL,
                                                                        json_normalize,
                                                                        processor_info_engine,
-                                                                       ip_src,
-                                                                       ip_dst,
-                                                                       normalize_http_uri,
-                                                                       normalize_http_hostname,
                                                                        proto,
                                                                        rulestruct[b].s_sid,
                                                                        ip_srcport_u32,
@@ -1708,7 +1755,7 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                                         {
 
                                                             Sagan_Dynamic_Rules(SaganProcSyslog_LOCAL, b, processor_info_engine,
-                                                                                ip_src, ip_dst);
+                                                                                SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
 
                                                         }
 
