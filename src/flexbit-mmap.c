@@ -42,6 +42,7 @@
 #include "rules.h"
 #include "lockfile.h"
 #include "sagan-config.h"
+#include "util-base64.h"
 #include "parsers/parsers.h"
 
 extern struct _SaganCounters *counters;
@@ -59,7 +60,7 @@ extern struct _Sagan_IPC_Flexbit *flexbit_ipc;
  * rule condition is tested here and returned.
  *****************************************************************************/
 
-bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     time_t t;
@@ -74,12 +75,14 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
 
     /* Flexbit do need a non-null username, otherwise a segmentation fault occurs */
 
-    char flexbit_username[MAX_USERNAME_SIZE] = {0};
+//    char flexbit_username[MAX_USERNAME_SIZE] = {0};
 
+    /*
     if ( username != NULL )
         {
             memcpy(flexbit_username, username, sizeof(flexbit_username));
         }
+    */
 
     t = time(NULL);
     now=localtime(&t);
@@ -331,12 +334,12 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
                                     /* direction: username */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 13 &&
-                                              !memcmp(flexbit_ipc[a].username, flexbit_username, sizeof(flexbit_ipc[a].username)))
+                                              !memcmp(flexbit_ipc[a].username, SaganProcSyslog_LOCAL->username, sizeof(flexbit_ipc[a].username)))
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"username\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, flexbit_username);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"username\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->username);
                                                 }
 
                                             flexbit_total_match++;
@@ -648,13 +651,13 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 13 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].username, flexbit_username, sizeof(flexbit_ipc[a].username)) )
+                                            if ( !memcmp(flexbit_ipc[a].username, SaganProcSyslog_LOCAL->username, sizeof(flexbit_ipc[a].username)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"username\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, flexbit_username);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"username\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->username);
 
                                                                 }
 
@@ -688,58 +691,58 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
 
 #ifdef HAVE_LIBFASTJSON
 
-	struct json_object *jobj;
-	char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
+            struct json_object *jobj;
+            char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
 
-        unsigned long b64_len = strlen(SaganProcSyslog_LOCAL->syslog_message) * 2;
-        uint8_t b64_target[b64_len];
+            unsigned long b64_len = strlen(SaganProcSyslog_LOCAL->syslog_message) * 2;
+            uint8_t b64_target[b64_len];
 
-	char *proto = "UNKNOWN";
+            char *proto = "UNKNOWN";
 
-	jobj = json_object_new_object();
+            jobj = json_object_new_object();
 
-	json_object *jsensor = json_object_new_string(config->sagan_sensor_name);
-	json_object_object_add(jobj,"sensor", jsensor);
+            json_object *jsensor = json_object_new_string(config->sagan_sensor_name);
+            json_object_object_add(jobj,"sensor", jsensor);
 
-/*
-        json_object *jexpire = json_object_new_int(rulestruct[rule_position].xbit_expire[r]);
-        json_object_object_add(jobj,"expire", jexpire);
-*/
+            /*
+                    json_object *jexpire = json_object_new_int(rulestruct[rule_position].xbit_expire[r]);
+                    json_object_object_add(jobj,"expire", jexpire);
+            */
 
-	json_object *jsource_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
-	json_object_object_add(jobj,"syslog_source", jsource_ip);
+            json_object *jsource_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
+            json_object_object_add(jobj,"syslog_source", jsource_ip);
 
-	json_object *jsrc_ip = json_object_new_string(ip_src);
-	json_object_object_add(jobj,"src_ip", jsrc_ip );
+            json_object *jsrc_ip = json_object_new_string(ip_src);
+            json_object_object_add(jobj,"src_ip", jsrc_ip );
 
-        json_object *jdest_ip = json_object_new_string(ip_dst);
-        json_object_object_add(jobj,"dest_ip", jdest_ip );
+            json_object *jdest_ip = json_object_new_string(ip_dst);
+            json_object_object_add(jobj,"dest_ip", jdest_ip );
 
 //        json_object *jusername = json_object_new_string(username);
 //        json_object_object_add(jobj,"username", jusername );
 
-        json_object *jpriority = json_object_new_string(SaganProcSyslog_LOCAL->syslog_priority);
-        json_object_object_add(jobj,"priority", jpriority);
+            json_object *jpriority = json_object_new_string(SaganProcSyslog_LOCAL->syslog_priority);
+            json_object_object_add(jobj,"priority", jpriority);
 
-        json_object *jfacility = json_object_new_string(SaganProcSyslog_LOCAL->syslog_facility);
-        json_object_object_add(jobj,"facility", jfacility);
+            json_object *jfacility = json_object_new_string(SaganProcSyslog_LOCAL->syslog_facility);
+            json_object_object_add(jobj,"facility", jfacility);
 
-        json_object *jlevel = json_object_new_string(SaganProcSyslog_LOCAL->syslog_level);
-        json_object_object_add(jobj,"level", jlevel);
+            json_object *jlevel = json_object_new_string(SaganProcSyslog_LOCAL->syslog_level);
+            json_object_object_add(jobj,"level", jlevel);
 
-        json_object *jtag = json_object_new_string(SaganProcSyslog_LOCAL->syslog_tag);
-        json_object_object_add(jobj,"tag", jtag);
+            json_object *jtag = json_object_new_string(SaganProcSyslog_LOCAL->syslog_tag);
+            json_object_object_add(jobj,"tag", jtag);
 
-        json_object *jdate = json_object_new_string(SaganProcSyslog_LOCAL->syslog_date);
-        json_object_object_add(jobj,"date", jdate);
- 
-        json_object *jtime = json_object_new_string(SaganProcSyslog_LOCAL->syslog_time);
-        json_object_object_add(jobj,"time", jtime);
+            json_object *jdate = json_object_new_string(SaganProcSyslog_LOCAL->syslog_date);
+            json_object_object_add(jobj,"date", jdate);
 
-        json_object *jprogram = json_object_new_string(SaganProcSyslog_LOCAL->syslog_program);
-        json_object_object_add(jobj,"program", jprogram);
+            json_object *jtime = json_object_new_string(SaganProcSyslog_LOCAL->syslog_time);
+            json_object_object_add(jobj,"time", jtime);
 
-	json_object *jmessage;
+            json_object *jprogram = json_object_new_string(SaganProcSyslog_LOCAL->syslog_program);
+            json_object_object_add(jobj,"program", jprogram);
+
+            json_object *jmessage;
 
             if ( config->eve_alerts_base64 == true )
                 {
@@ -775,7 +778,7 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
                 }
 
             else if ( SaganProcSyslog_LOCAL->proto == 6 )
-                {   
+                {
                     proto = "TCP";
                 }
 
@@ -794,7 +797,7 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
 
             json_object_put(jobj);
 
-	    printf("%s\n",  SaganProcSyslog_LOCAL->correlation_json );
+            printf("%s\n",  SaganProcSyslog_LOCAL->correlation_json );
 
 #endif
 
@@ -825,7 +828,7 @@ bool Flexbit_Condition_MMAP(int rule_position, char *ip_src, char *ip_dst, int s
  * distributed attacks.
  *****************************************************************************/
 
-bool Flexbit_Count_MMAP( int rule_position, char *ip_src, char *ip_dst )
+bool Flexbit_Count_MMAP( int rule_position, const char *ip_src, const char *ip_dst )
 {
 
     uint32_t a = 0;
@@ -899,7 +902,7 @@ bool Flexbit_Count_MMAP( int rule_position, char *ip_src, char *ip_dst )
  * "unset" happen here.
  *****************************************************************************/
 
-void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username, char *syslog_message )
+void Flexbit_Set_MMAP(int rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, const char *username, const char *syslog_message )
 {
 
     int i = 0;
@@ -913,7 +916,9 @@ void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_por
     bool flexbit_unset_match = 0;
 
     /* Flexbit do need a non-null username, otherwise a segmentation fault occurs */
+
     char flexbit_username[MAX_USERNAME_SIZE] = {0};
+
     if ( username != NULL )
         {
             memcpy(flexbit_username, username, sizeof(flexbit_username));

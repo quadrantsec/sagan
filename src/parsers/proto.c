@@ -85,7 +85,7 @@ int Parse_Proto( char *msg )
 int Parse_Proto_Program( char *program )
 {
 
-    int i;
+    uint_fast16_t i;
 
     for (i = 0; i < counters->mapcount_program; i++)
         {

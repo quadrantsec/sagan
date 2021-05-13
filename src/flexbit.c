@@ -42,25 +42,25 @@
 
 extern struct _SaganConfig *config;
 
-bool Flexbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Flexbit_Condition(int rule_position, const char *ip_src_char, const char *ip_dst_char, int src_port, int dst_port, const char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
-    return(Flexbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, username, SaganProcSyslog_LOCAL));
+    return(Flexbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, SaganProcSyslog_LOCAL));
 }
 
 
-bool Flexbit_Count( int rule_position, char *ip_src_char, char *ip_dst_char )
+bool Flexbit_Count( int rule_position, const char *ip_src_char, const char *ip_dst_char )
 {
     return(Flexbit_Count_MMAP(rule_position, ip_src_char, ip_dst_char));
 }
 
-void Flexbit_Set(int rule_position, char *ip_src_char, char *ip_dst_char, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+void Flexbit_Set(int rule_position, const char *ip_src_char, const char *ip_dst_char, int src_port, int dst_port, const char *username, const char *syslog_message )
 {
-    Flexbit_Set_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, username, SaganProcSyslog_LOCAL->syslog_message );
+    Flexbit_Set_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, username, syslog_message );
 
 }
 
 
-int Flexbit_Type ( char *type, int linecount, const char *ruleset )
+int Flexbit_Type ( const char *type, int linecount, const char *ruleset )
 {
 
     if (!strcmp(type, "none"))

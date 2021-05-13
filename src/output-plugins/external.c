@@ -66,15 +66,14 @@ void External_Thread ( _Sagan_Event *Event, char *execute_script )
 
     int in[2];
     int out[2];
-    int n;
-    int pid;
+    uint_fast32_t n;
+    uint_fast32_t pid;
     char buf[MAX_SYSLOGMSG];
     char tmpref[256];
     char timebuf[64] = { 0 };
 
     char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
     char data[MAX_SYSLOGMSG*3] = { 0 };
-
 
     char *drop=NULL;
     char *proto=NULL;
@@ -86,7 +85,7 @@ void External_Thread ( _Sagan_Event *Event, char *execute_script )
             Sagan_Log(WARN, "[%s, line %d] In External_Thread()", __FILE__, __LINE__);
         }
 
-    Reference_Lookup( Event->found, 1, tmpref, sizeof(tmpref));
+    Reference_Lookup( Event->rule_position, 1, tmpref, sizeof(tmpref));
     CreateTimeString(&Event->event_time, timebuf, sizeof(timebuf), 1);
 
     if ( Event->drop == 1 )

@@ -27,28 +27,29 @@
 *
 */
 
-
-#define PROCESSOR_NAME "Track_Clients"
-#define PROCESSOR_FACILITY "daemon"
-#define PROCESSOR_PRIORITY "warning"
-#define PROCESSOR_PRI 1
-#define PROCESSOR_CLASS "None"
-#define PROCESSOR_REV 1
-#define PROCESSOR_TAG NULL
-#define PROCESSOR_GENERATOR_ID 100
-
-void Track_Clients_Thread_Init ( void );
 void Track_Clients_Thread ( void );
 
-#include "../sagan-defs.h"
+#include "sagan-defs.h"
 
 typedef struct _Sagan_Track_Clients_IPC _Sagan_Track_Clients_IPC;
 struct _Sagan_Track_Clients_IPC
 {
     unsigned char  hostbits[MAXIPBIT];
-    long     utime;
-    int	     expire;
+    uint_fast64_t     utime;
+    uint_fast32_t     expire;
     bool    status;
 };
 
-void Track_Clients ( char *host );
+typedef struct _Track_Clients_Networks _Track_Clients_Networks;
+struct _Track_Clients_Networks
+{
+
+    struct
+    {
+        unsigned char ipbits[MAXIPBIT];
+        unsigned char maskbits[MAXIPBIT];
+    } range;
+
+};
+
+void Track_Clients ( const char *host );

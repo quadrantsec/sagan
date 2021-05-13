@@ -111,6 +111,7 @@ const char *Bit2IP(unsigned char *ipbits, char *str, size_t size);
 bool 	Validate_HEX (const char *string);
 void	Content_Pipe( const char *in_string, int linecount, const char *ruleset, char *str, size_t size );
 bool    is_notroutable ( unsigned char * );
+bool	is_notlocalhost ( unsigned char * );
 bool    is_inrange ( unsigned char *, unsigned char *, int );
 void    Replace_Sagan( const char *in_str, char *replace, char *str, size_t size);
 bool	Wildcard( char *first, char *second );
@@ -122,7 +123,7 @@ bool	Is_IP (const char *ipaddr, int ver );
 bool	File_Lock ( int fd );
 bool    File_Unlock ( int fd );
 bool	Check_Content_Not( const char *s );
-uint32_t Djb2_Hash(const char *str);
+uint_fast32_t Djb2_Hash(const char *str);
 bool    Starts_With(const char *str, const char *prefix);
 bool	Is_IP_Range (char *str);
 bool    ValidateMessage( const char *message );
@@ -160,15 +161,15 @@ struct _Sagan_IPC_Counters
 
     double version;
 
-    int  flexbit_count;
-    int	 xbit_count;
+    uint_fast32_t flexbit_count;
+    uint_fast32_t xbit_count;
 
-    int  thresh2_count;
-    int  after2_count;
+    uint_fast32_t thresh2_count;
+    uint_fast32_t after2_count;
 
-    int	 track_client_count;
-    int  track_clients_client_count;
-    int  track_clients_down;
+    uint_fast32_t track_client_count;
+    uint_fast32_t track_clients_client_count;
+    uint_fast32_t track_clients_down;
 
 };
 
@@ -176,150 +177,145 @@ typedef struct _SaganCounters _SaganCounters;
 struct _SaganCounters
 {
 
-    uint64_t threshold_total;
-    uint64_t after_total;
-    uint64_t events_received;
-    uint64_t events_processed;
-    uint64_t saganfound;
-    uint64_t sagan_output_drop;
-    uint64_t sagan_processor_drop;
-    uint64_t sagan_log_drop;
-    uint64_t dns_cache_count;
-    uint64_t dns_miss_count;
-    uint64_t ignore_count;
-    uint64_t blacklist_count;
-    uint64_t bytes_total;
-    uint64_t max_bytes_length;
-    uint64_t bytes_ignored;
-    uint64_t null_message;
+    uint_fast64_t threshold_total;
+    uint_fast64_t after_total;
+    uint_fast64_t events_received;
+    uint_fast64_t events_processed;
+    uint_fast64_t saganfound;
+    uint_fast64_t sagan_output_drop;
+    uint_fast64_t sagan_processor_drop;
+    uint_fast64_t sagan_log_drop;
+    uint_fast64_t dns_cache_count;
+    uint_fast64_t dns_miss_count;
+    uint_fast64_t ignore_count;
+    uint_fast64_t blacklist_count;
+    uint_fast64_t bytes_total;
+    uint_fast64_t max_bytes_length;
+    uint_fast64_t bytes_ignored;
+    uint_fast64_t null_message;
 
-    uint64_t alert_total;
+    uint_fast64_t alert_total;
 
-    uint64_t malformed_host;
-    uint64_t malformed_facility;
-    uint64_t malformed_priority;
-    uint64_t malformed_level;
-    uint64_t malformed_tag;
-    uint64_t malformed_date;
-    uint64_t malformed_time;
-    uint64_t malformed_program;
-    uint64_t malformed_message;
+    uint_fast64_t malformed_host;
+    uint_fast64_t malformed_facility;
+    uint_fast64_t malformed_priority;
+    uint_fast64_t malformed_level;
+    uint_fast64_t malformed_tag;
+    uint_fast64_t malformed_date;
+    uint_fast64_t malformed_time;
+    uint_fast64_t malformed_program;
+    uint_fast64_t malformed_message;
 
-    uint64_t worker_thread_exhaustion;
-    uint32_t max_threads_used;
+    uint_fast64_t worker_thread_exhaustion;
+    uint_fast16_t max_threads_used;
 
-    int	     ruleset_track_count;
+    uint_fast32_t ruleset_track_count;
 
-    uint64_t blacklist_hit_count;
-    uint64_t blacklist_lookup_count;
+    uint_fast64_t blacklist_hit_count;
+    uint_fast64_t blacklist_lookup_count;
 
-    uint32_t client_stats_count;
+    uint_fast32_t client_stats_count;
 
-    int	     flexbit_total_counter;
-    int	     xbit_total_counter;
+    uint_fast32_t	     flexbit_total_counter;
+    uint_fast32_t	     xbit_total_counter;
+    uint_fast32_t 	     var_count;
+    uint_fast32_t     	     dynamic_rule_count;
+    uint_fast16_t	     classcount;
+    uint_fast32_t  	     rulecount;
+    uint_fast16_t	     refcount;
+    uint_fast32_t	     ruletotal;
+    uint_fast16_t	     genmapcount;
 
-    int      var_count;
+    uint_fast16_t      mapcount_message;
+    uint_fast16_t      mapcount_program;
 
-    int	     dynamic_rule_count;
+    uint_fast32_t     droplist_count;
 
-    int	     classcount;
-    int      rulecount;
-    int	     refcount;
-    int      ruletotal;
+    uint_fast32_t      brointel_addr_count;
+    uint_fast32_t      brointel_domain_count;
+    uint_fast32_t      brointel_file_hash_count;
+    uint_fast32_t      brointel_url_count;
+    uint_fast32_t      brointel_software_count;
+    uint_fast32_t      brointel_email_count;
+    uint_fast32_t      brointel_user_name_count;
+    uint_fast32_t      brointel_file_name_count;
+    uint_fast32_t      brointel_cert_hash_count;
+    uint_fast32_t      brointel_dups;
 
-    int      genmapcount;
+    uint_fast32_t	      rules_loaded_count;
 
-    int      mapcount_message;
-    int      mapcount_program;
-
-    int	     droplist_count;
-
-    int      brointel_addr_count;
-    int      brointel_domain_count;
-    int      brointel_file_hash_count;
-    int      brointel_url_count;
-    int      brointel_software_count;
-    int      brointel_email_count;
-    int      brointel_user_name_count;
-    int      brointel_file_name_count;
-    int      brointel_cert_hash_count;
-    int      brointel_dups;
-
-    int	      rules_loaded_count;
-
-    uint64_t follow_flow_total;	 /* This will only be needed if follow_flow is an option */
-    uint64_t follow_flow_drop;   /* Amount of flows that did not match and were dropped */
+    uint_fast64_t follow_flow_total;	 /* This will only be needed if follow_flow is an option */
+    uint_fast64_t follow_flow_drop;   /* Amount of flows that did not match and were dropped */
 
 #ifdef HAVE_LIBMAXMINDDB
-    uint64_t geoip2_hit;				/* GeoIP hit count */
-    uint64_t geoip2_lookup;				/* Total lookups */
-    uint64_t geoip2_error;				/* Lookup Errors */
-    int	     geoip_skip_count;
+    uint_fast64_t geoip2_hit;				/* GeoIP hit count */
+    uint_fast64_t geoip2_lookup;				/* Total lookups */
+    uint_fast64_t geoip2_error;				/* Lookup Errors */
+    uint_fast64_t geoip_skip_count;
 #endif
 
 #ifdef WITH_BLUEDOT
-    uint64_t bluedot_ip_cache_count;                      /* Bluedot cache processor */
-    uint64_t bluedot_ip_cache_hit;                        /* Bluedot hit's from Cache */
-    uint64_t bluedot_ip_positive_hit;
-    uint64_t bluedot_ip_total;
+    uint_fast64_t bluedot_ip_cache_count;                      /* Bluedot cache processor */
+    uint_fast64_t bluedot_ip_cache_hit;                        /* Bluedot hit's from Cache */
+    uint_fast64_t bluedot_ip_positive_hit;
+    uint_fast64_t bluedot_ip_total;
 
-    int      bluedot_skip_count;
+    uint_fast64_t  bluedot_skip_count;
 
-    int bluedot_ip_queue_current;
-    int bluedot_hash_queue_current;
-    int bluedot_url_queue_current;
-    int bluedot_filename_queue_current;
-    int bluedot_ja3_queue_current;
+    uint_fast16_t bluedot_ip_queue_current;
+    uint_fast16_t bluedot_hash_queue_current;
+    uint_fast16_t bluedot_url_queue_current;
+    uint_fast16_t bluedot_filename_queue_current;
+    uint_fast16_t bluedot_ja3_queue_current;
 
-    uint64_t bluedot_mdate;					   /* Hits , but where over a modification date */
-    uint64_t bluedot_cdate;            	                   /* Hits , but where over a creation date */
-    uint64_t bluedot_mdate_cache;                                 /* Hits from cache , but where over a modification date */
-    uint64_t bluedot_cdate_cache;      			   /* Hits from cache , but where over a create date */
-    uint64_t bluedot_error_count;
+    uint_fast64_t bluedot_mdate;					   /* Hits , but where over a modification date */
+    uint_fast64_t bluedot_cdate;            	                   /* Hits , but where over a creation date */
+    uint_fast64_t bluedot_mdate_cache;                                 /* Hits from cache , but where over a modification date */
+    uint_fast64_t bluedot_cdate_cache;      			   /* Hits from cache , but where over a create date */
+    uint_fast64_t bluedot_error_count;
 
-    uint64_t bluedot_hash_cache_count;
-    uint64_t bluedot_hash_cache_hit;
-    uint64_t bluedot_hash_positive_hit;
-    uint64_t bluedot_hash_total;
+    uint_fast64_t bluedot_hash_cache_count;
+    uint_fast64_t bluedot_hash_cache_hit;
+    uint_fast64_t bluedot_hash_positive_hit;
+    uint_fast64_t bluedot_hash_total;
 
-    uint64_t bluedot_url_cache_count;
-    uint64_t bluedot_url_cache_hit;
-    uint64_t bluedot_url_positive_hit;
-    uint64_t bluedot_url_total;
+    uint_fast64_t bluedot_url_cache_count;
+    uint_fast64_t bluedot_url_cache_hit;
+    uint_fast64_t bluedot_url_positive_hit;
+    uint_fast64_t bluedot_url_total;
 
-    uint64_t bluedot_filename_cache_count;
-    uint64_t bluedot_filename_cache_hit;
-    uint64_t bluedot_filename_positive_hit;
-    uint64_t bluedot_filename_total;
+    uint_fast64_t bluedot_filename_cache_count;
+    uint_fast64_t bluedot_filename_cache_hit;
+    uint_fast64_t bluedot_filename_positive_hit;
+    uint_fast64_t bluedot_filename_total;
 
-    uint64_t bluedot_ja3_cache_count;
-    uint64_t bluedot_ja3_cache_hit;
-    uint64_t bluedot_ja3_positive_hit;
-    uint64_t bluedot_ja3_total;
+    uint_fast64_t bluedot_ja3_cache_count;
+    uint_fast64_t bluedot_ja3_cache_hit;
+    uint_fast64_t bluedot_ja3_positive_hit;
+    uint_fast64_t bluedot_ja3_total;
 
-
-    int bluedot_cat_count;
+    uint_fast16_t bluedot_cat_count;
 
 #endif
 
 
 #ifdef HAVE_LIBESMTP
-    uint64_t esmtp_count_success;
-    uint64_t esmtp_count_failed;
+    uint_fast64_t esmtp_count_success;
+    uint_fast64_t esmtp_count_failed;
 #endif
 
 #ifdef HAVE_LIBHIREDIS
-    uint64_t redis_writer_threads_drop;
+    uint_fast64_t redis_writer_threads_drop;
 #endif
 
 #ifdef HAVE_LIBFASTJSON
 
-    int json_message_map;
+//    int json_message_map;
 
-    uint64_t malformed_json_input_count;
+    uint_fast64_t malformed_json_input_count;
 
-    uint64_t json_mp_count;
-    uint64_t malformed_json_mp_count;
+    uint_fast64_t json_mp_count;
+    uint_fast64_t malformed_json_mp_count;
 
 #endif
 
@@ -387,11 +383,11 @@ struct _Sagan_Proc_Syslog
     char src_ip[MAXIP];
     char dst_ip[MAXIP];
 
-    uint32_t src_port;
-    uint32_t dst_port;
-    unsigned char proto;
+    uint_fast16_t src_port;
+    uint_fast16_t dst_port;
+    uint_fast8_t proto;
 
-    uint64_t flow_id;
+    uint_fast64_t flow_id;
 
     char event_id[32];
     char md5[MD5_HASH_SIZE];
@@ -416,7 +412,7 @@ typedef struct _Sagan_JSON _Sagan_JSON;
 struct _Sagan_JSON
 {
 
-    uint16_t json_count;
+    uint_fast16_t json_count;
     char json_key[JSON_MAX_OBJECTS][JSON_MAX_KEY_SIZE];
     char json_value[JSON_MAX_OBJECTS][JSON_MAX_VALUE_SIZE];
 
@@ -437,78 +433,78 @@ struct _Syslog_JSON_Map
 {
 
     char syslog_map_host[JSON_INPUT_S_SOURCE_MAX_COUNT][JSON_INPUT_S_SOURCE_MAX_SIZE];
-    unsigned char syslog_map_host_count;
+    uint_fast8_t syslog_map_host_count;
 
     char syslog_map_facility[JSON_INPUT_FACILITY_MAX_COUNT][JSON_INPUT_FACILITY_MAX_SIZE];
-    unsigned char syslog_map_facility_count;
+    uint_fast8_t syslog_map_facility_count;
 
     char syslog_map_level[JSON_INPUT_LEVEL_MAX_COUNT][JSON_INPUT_LEVEL_MAX_SIZE];
-    unsigned char syslog_map_level_count;
+    uint_fast8_t syslog_map_level_count;
 
     char syslog_map_priority[JSON_INPUT_PRIORITY_MAX_COUNT][JSON_INPUT_PRIORITY_MAX_SIZE];
-    unsigned char syslog_map_priority_count;
+    uint_fast8_t syslog_map_priority_count;
 
     char syslog_map_tag[JSON_INPUT_TAG_MAX_COUNT][JSON_INPUT_TAG_MAX_SIZE];
-    unsigned char syslog_map_tag_count;
+    uint_fast8_t syslog_map_tag_count;
 
     char syslog_map_program[JSON_INPUT_PROGRAM_MAX_COUNT][JSON_INPUT_PROGRAM_MAX_SIZE];
-    unsigned char syslog_map_program_count;
+    uint_fast8_t syslog_map_program_count;
 
     char syslog_map_message[JSON_INPUT_MESSAGE_MAX_COUNT][JSON_INPUT_MESSAGE_MAX_SIZE];
-    unsigned char syslog_map_message_count;
+    uint_fast8_t syslog_map_message_count;
 
     char syslog_map_time[JSON_INPUT_TIME_MAX_COUNT][JSON_INPUT_TIME_MAX_SIZE];
-    unsigned char syslog_map_time_count;
+    uint_fast8_t syslog_map_time_count;
 
     char syslog_map_date[JSON_INPUT_DATE_MAX_COUNT][JSON_INPUT_DATE_MAX_SIZE];
-    unsigned char syslog_map_date_count;
+    uint_fast8_t syslog_map_date_count;
 
     /* non-syslog maps */
 
     char username[JSON_INPUT_USERNAME_MAX_COUNT][JSON_INPUT_USERNAME_MAX_SIZE];
-    unsigned char username_count;
+    uint_fast8_t username_count;
 
     char src_ip[JSON_INPUT_SRCIP_MAX_COUNT][JSON_INPUT_SRCIP_MAX_SIZE];
-    unsigned char src_ip_count;
+    uint_fast8_t src_ip_count;
 
     char dst_ip[JSON_INPUT_DSTIP_MAX_COUNT][JSON_INPUT_DSTIP_MAX_SIZE];
-    unsigned char dst_ip_count;
+    uint_fast8_t dst_ip_count;
 
     char src_port[JSON_INPUT_SRCPORT_MAX_COUNT][JSON_INPUT_SRCPORT_MAX_SIZE];
-    unsigned char src_port_count;
+    uint_fast8_t src_port_count;
 
     char dst_port[JSON_INPUT_DSTPORT_MAX_COUNT][JSON_INPUT_DSTPORT_MAX_SIZE];
-    unsigned char dst_port_count;
+    uint_fast8_t dst_port_count;
 
     char md5[JSON_INPUT_MD5_MAX_COUNT][JSON_INPUT_MD5_MAX_SIZE];
-    unsigned char md5_count;
+    uint_fast8_t md5_count;
 
     char sha1[JSON_INPUT_SHA1_MAX_COUNT][JSON_INPUT_SHA1_MAX_SIZE];
-    unsigned char sha1_count;
+    uint_fast8_t sha1_count;
 
     char sha256[JSON_INPUT_SHA256_MAX_COUNT][JSON_INPUT_SHA256_MAX_SIZE];
-    unsigned char sha256_count;
+    uint_fast8_t sha256_count;
 
     char filename[JSON_INPUT_FILENAME_MAX_COUNT][JSON_INPUT_FILENAME_MAX_SIZE];
-    unsigned char filename_count;
+    uint_fast8_t filename_count;
 
     char hostname[JSON_INPUT_HOSTNAME_MAX_COUNT][JSON_INPUT_HOSTNAME_MAX_SIZE];
-    unsigned char hostname_count;
+    uint_fast8_t hostname_count;
 
     char url[JSON_INPUT_URL_MAX_COUNT][JSON_INPUT_URL_MAX_SIZE];
-    unsigned char url_count;
+    uint_fast8_t url_count;
 
     char ja3[JSON_INPUT_JA3_MAX_COUNT][JSON_INPUT_JA3_MAX_SIZE];
-    unsigned char ja3_count;
+    uint_fast8_t ja3_count;
 
     char flow_id[JSON_INPUT_FLOW_ID_MAX_COUNT][JSON_INPUT_FLOW_ID_MAX_SIZE];
-    unsigned char flow_id_count;
+    uint_fast8_t flow_id_count;
 
     char event_id[JSON_INPUT_EVENT_ID_MAX_COUNT][JSON_INPUT_EVENT_ID_MAX_SIZE];
-    unsigned char event_id_count;
+    uint_fast8_t event_id_count;
 
     char proto[JSON_INPUT_PROTO_MAX_COUNT][JSON_INPUT_PROTO_MAX_SIZE];
-    unsigned char proto_count;
+    uint_fast8_t proto_count;
 
 };
 
@@ -520,12 +516,12 @@ struct _Sagan_Event
 
     char *ip_src;
     char *ip_dst;
-    int   dst_port;
-    int   src_port;
+    uint_fast16_t dst_port;
+    uint_fast16_t src_port;
 
     struct timeval event_time;
 
-    int  found;
+    uint_fast32_t rule_position;
 
     char *fpri;             /* *priority */
 
@@ -548,22 +544,22 @@ struct _Sagan_Event
     char *message;
 
     char *bluedot_json;
-    unsigned char bluedot_results;
+    uint_fast8_t bluedot_results;
 
-    uint64_t sid;
-    uint32_t rev;
+    uint_fast64_t sid;
+    uint_fast32_t rev;
 
     char *class;
     int pri;
-    int ip_proto;
+    uint_fast8_t ip_proto;
 
     char *normalize_http_uri;
     char *normalize_http_hostname;
 
-    unsigned long generatorid;
-    unsigned long alertid;
+    uint_fast64_t generatorid;
+    uint_fast64_t alertid;
 
-    uint64_t flow_id;
+    uint_fast64_t flow_id;
     char md5[MD5_HASH_SIZE+1];
     char sha1[SHA1_HASH_SIZE+1];
     char sha256[SHA256_HASH_SIZE+1];
@@ -606,7 +602,7 @@ typedef struct _Threshold2_IPC _Threshold2_IPC;
 struct _Threshold2_IPC
 {
 
-    uint32_t hash;
+    uint_fast32_t hash;
 
     bool threshold2_method_src;
     bool threshold2_method_dst;
@@ -617,16 +613,16 @@ struct _Threshold2_IPC
     char ip_src[MAXIP];
     char ip_dst[MAXIP];
 
-    int  src_port;
-    int  dst_port;
+    uint_fast16_t src_port;
+    uint_fast16_t dst_port;
     char username[MAX_USERNAME_SIZE];
 
-    uint64_t count;
-    uint64_t target_count;
+    uint_fast64_t count;
+    uint_fast64_t target_count;
 
-    uint64_t utime;
-    uint64_t sid;
-    int expire;
+    uint_fast64_t utime;
+    uint_fast64_t sid;
+    uint_fast32_t expire;
     char syslog_message[MAX_SYSLOGMSG];
     char signature_msg[MAX_SAGAN_MSG];
 };
@@ -636,7 +632,7 @@ typedef struct _After2_IPC _After2_IPC;
 struct _After2_IPC
 {
 
-    uint32_t hash;
+    uint_fast32_t hash;
 
     bool after2_method_src;
     bool after2_method_dst;
@@ -647,18 +643,18 @@ struct _After2_IPC
     char ip_src[MAXIP];
     char ip_dst[MAXIP];
 
-    int  src_port;
-    int  dst_port;
+    uint_fast16_t src_port;
+    uint_fast16_t dst_port;
     char username[MAX_USERNAME_SIZE];
 
-    uint64_t count;
-    uint64_t target_count;
+    uint_fast64_t count;
+    uint_fast64_t target_count;
 
-    uint64_t utime;
-    uint64_t sid;
-    uint32_t rev;
+    uint_fast64_t utime;
+    uint_fast64_t sid;
+    uint_fast32_t rev;
 
-    int expire;
+    uint_fast32_t expire;
     char syslog_message[MAX_SYSLOGMSG];
     char signature_msg[MAX_SAGAN_MSG];
 };
@@ -670,6 +666,7 @@ struct _SaganVar
     char var_value[MAX_VAR_VALUE_SIZE];
 };
 
+/*
 typedef struct _Sagan_Processor_Info _Sagan_Processor_Info;
 struct _Sagan_Processor_Info
 {
@@ -677,12 +674,13 @@ struct _Sagan_Processor_Info
     char *processor_name;
     char *processor_facility;
     char *processor_priority;		/* Syslog priority */
-    int32_t  processor_pri;		/* Sagan priority */
-    char *processor_class;
-    char *processor_tag;
-    int32_t processor_rev;
-    int32_t   processor_generator_id;
+//  int32_t  processor_pri;		/* Sagan priority */
+/*   char *processor_class;
+   char *processor_tag;
+   int32_t processor_rev;
+   int32_t processor_generator_id;
 };
+*/
 
 /* IP Lookup cache */
 
@@ -691,15 +689,15 @@ struct _Sagan_Lookup_Cache_Entry
 {
     char ip[MAXIP];
     unsigned char ip_bits[MAXIPBIT];
-    int  port;
-    unsigned char proto;
+    uint_fast16_t port;
+    uint_fast8_t proto;
     bool status;
 };
 
 typedef struct _Sagan_Lookup_Cache_Entry _Sagan_Lookup_Cache_Other;
 struct _Sagan_Lookup_Cache_Other
 {
-    int proto;
+    uint_fast8_t proto;
 };
 
 /* Function that require the above arrays */

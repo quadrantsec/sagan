@@ -53,7 +53,7 @@
 #include "lockfile.h"
 #include "signal-handler.h"
 #include "stats.h"
-#include "gen-msg.h"
+//#include "gen-msg.h"
 #include "classifications.h"
 
 #include "rules.h"
@@ -96,7 +96,7 @@ extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
 extern struct _Rules_Loaded *rules_loaded;
 extern struct _Class_Struct *classstruct;
-extern struct _Sagan_Processor_Generator *generator;
+//extern struct _Sagan_Processor_Generator *generator;
 extern struct _Sagan_Blacklist *SaganBlacklist;
 struct _Sagan_Track_Clients *SaganTrackClients;
 extern struct _SaganVar *var;
@@ -318,7 +318,7 @@ void Sig_Handler( void )
                     memset(rules_loaded, 0, sizeof(_Rules_Loaded));
                     memset(rulestruct, 0, sizeof(_Rule_Struct));
                     memset(classstruct, 0, sizeof(_Class_Struct));
-                    memset(generator, 0, sizeof(_Sagan_Processor_Generator));
+//                    memset(generator, 0, sizeof(_Sagan_Processor_Generator));
                     memset(var, 0, sizeof(_SaganVar));
 
                     /**********************************/

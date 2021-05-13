@@ -18,18 +18,20 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-bool Flexbit_Condition_MMAP ( int, char *, char *, int, int, char *, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+//bool Flexbit_Condition_MMAP ( int, char *, char *, int, int, char *, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+
 void Flexbit_Cleanup_MMAP( void );
-void Flexbit_Set_MMAP(int rule_position, char *ip_src, char *ip_dst, int src_port, int dst_port, char *username, char *syslog_message );
-bool Flexbit_Count_MMAP( int rule_position, char *ip_src, char *ip_dst );
+void Flexbit_Set_MMAP(int rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, const char *username, const char *syslog_message );
+bool Flexbit_Count_MMAP( int rule_position, const char *ip_src, const char *ip_dst );
 
 typedef struct _Sagan_Flexbit_Track _Sagan_Flexbit_Track;
 struct _Sagan_Flexbit_Track
 {
     char	flexbit_name[64];
-    int		flexbit_timeout;
-    int		flexbit_srcport;
-    int		flexbit_dstport;
+    uint_fast32_t	flexbit_timeout;
+    uint_fast16_t	flexbit_srcport;
+    uint_fast16_t	flexbit_dstport;
 };
 
 typedef struct _Sagan_IPC_Flexbit _Sagan_IPC_Flexbit;
@@ -42,11 +44,11 @@ struct _Sagan_IPC_Flexbit
     int src_port;
     int dst_port;
     char username[64];
-    uint64_t flexbit_date;
-    uint64_t flexbit_expire;
-    int expire;
+    uint_fast64_t flexbit_date;
+    uint_fast64_t flexbit_expire;
+    uint_fast32_t expire;
     char syslog_message[MAX_SYSLOGMSG];
-    uint64_t sid;
+    uint_fast64_t sid;
     char signature_msg[MAX_SAGAN_MSG];
 
 };

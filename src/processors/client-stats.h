@@ -28,10 +28,10 @@ void Client_Stats_Close( void );
 typedef struct _Client_Stats_Struct _Client_Stats_Struct;
 struct _Client_Stats_Struct
 {
-    uint32_t hash;
+    uint_fast32_t hash;
     char ip[64];
-    uint64_t epoch;
-    uint64_t old_epoch;
+    uint_fast64_t epoch;
+    uint_fast64_t old_epoch;
     char program[MAX_SYSLOG_PROGRAM];
     char message[MAX_SYSLOGMSG];
 };

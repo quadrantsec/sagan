@@ -25,7 +25,7 @@ struct _Class_Struct
 {
     char s_shortname[512];
     char s_desc[512];
-    int  s_priority;
+    uint_fast8_t s_priority;
 };
 
 

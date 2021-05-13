@@ -288,7 +288,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     json_object *jseverity_alert = json_object_new_int( Event->pri );
     json_object_object_add(jobj_alert,"severity", jseverity_alert);
 
-    json_object *jsignature_copy = json_object_new_string( rulestruct[Event->found].signature_copy );
+    json_object *jsignature_copy = json_object_new_string( rulestruct[Event->rule_position].signature_copy );
     json_object_object_add(jobj_alert,"rule", jsignature_copy);
 
 
@@ -325,11 +325,11 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 #endif
 
 
-    if ( rulestruct[Event->found].metadata_json[0] != '\0' )
+    if ( rulestruct[Event->rule_position].metadata_json[0] != '\0' )
         {
 
             str[ strlen(str) - 2 ] = '\0';
-            snprintf(tmp_data, sizeof(tmp_data), ", \"metadata\": %s }",  rulestruct[Event->found].metadata_json);
+            snprintf(tmp_data, sizeof(tmp_data), ", \"metadata\": %s }",  rulestruct[Event->rule_position].metadata_json);
             strlcat(str, tmp_data, size);
 
         }

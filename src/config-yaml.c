@@ -44,7 +44,7 @@
 #include "sagan-config.h"
 #include "classifications.h"
 #include "input-json-map.h"
-#include "gen-msg.h"
+//#include "gen-msg.h"
 #include "protocol-map.h"
 #include "references.h"
 #include "parsers/parsers.h"
@@ -220,6 +220,7 @@ void Load_YAML_Config( char *yaml_file )
             config->sagan_port = 514;
             config->input_type = INPUT_PIPE;
             config->chown_fifo = true;
+            config->sagan_log_syslog = true;
 
             /* Defaults for Parse_IP(); */
 
@@ -662,6 +663,16 @@ void Load_YAML_Config( char *yaml_file )
                                                 }
                                         }
 
+                                    else if (!strcmp(last_pass, "syslog"))
+                                        {
+
+                                            if (!strcasecmp(value, "disabled") || !strcasecmp(value, "false" ) || !strcasecmp(value, "no") )
+                                                {
+                                                    config->sagan_log_syslog = false;
+                                                }
+                                        }
+
+
 #ifdef HAVE_LIBFASTJSON
 
                                     else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
@@ -838,14 +849,6 @@ void Load_YAML_Config( char *yaml_file )
 
                                             Var_To_Value(value, tmp, sizeof(tmp));
                                             Load_Reference(tmp);
-
-                                        }
-
-                                    else if (!strcmp(last_pass, "gen-msg-map"))
-                                        {
-
-                                            Var_To_Value(value, tmp, sizeof(tmp));
-                                            Load_Gen_Map(tmp);
 
                                         }
 

@@ -18,4 +18,7 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *, int, _Sagan_Processor_Info *, char *, char * );
+//#define DYNAMIC_GENERATOR_ID 1
+
+int Sagan_Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_position, char *ip_src, char *ip_dst );
+

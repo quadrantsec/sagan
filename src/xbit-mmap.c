@@ -40,6 +40,7 @@
 #include "rules.h"
 #include "sagan-config.h"
 #include "util-time.h"
+#include "util-base64.h"
 
 
 extern struct _SaganCounters *counters;
@@ -56,7 +57,7 @@ pthread_mutex_t Xbit_Mutex=PTHREAD_MUTEX_INITIALIZER;
 /* Xbit_Set_MMAP - Used to "set", "unset" a xbit */
 /*************************************************/
 
-void Xbit_Set_MMAP(int rule_position, char *ip_src_char, char *ip_dst_char, char *syslog_message )
+void Xbit_Set_MMAP(int rule_position, const char *ip_src_char, const char *ip_dst_char, const char *syslog_message )
 {
 
     int r = 0;
@@ -177,7 +178,7 @@ void Xbit_Set_MMAP(int rule_position, char *ip_src_char, char *ip_dst_char, char
 /* Xbit_Condition_MMAP - Handles logic for isset/isnotset */
 /**********************************************************/
 
-bool Xbit_Condition_MMAP( int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Xbit_Condition_MMAP( int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     int r = 0;
@@ -195,7 +196,7 @@ bool Xbit_Condition_MMAP( int rule_position, char *ip_src_char, char *ip_dst_cha
             if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
                 {
 
-                    hash = Xbit_Return_Tracking_Hash( rule_position, r, ip_src_char, ip_dst_char );
+                    hash = Xbit_Return_Tracking_Hash( rule_position, r, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip );
 
                     for ( x = 0; x < counters_ipc->xbit_count; x++ )
                         {
@@ -225,7 +226,7 @@ bool Xbit_Condition_MMAP( int rule_position, char *ip_src_char, char *ip_dst_cha
             else if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISNOTSET )
                 {
 
-                    hash = Xbit_Return_Tracking_Hash( rule_position, r, ip_src_char, ip_dst_char );
+                    hash = Xbit_Return_Tracking_Hash( rule_position, r, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip );
 
                     for ( x = 0; x < counters_ipc->xbit_count; x++ )
                         {
@@ -295,10 +296,10 @@ bool Xbit_Condition_MMAP( int rule_position, char *ip_src_char, char *ip_dst_cha
             json_object *jsource_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
             json_object_object_add(jobj,"syslog_source", jsource_ip);
 
-            json_object *jsrc_ip = json_object_new_string(ip_src_char);
+            json_object *jsrc_ip = json_object_new_string(SaganProcSyslog_LOCAL->src_ip);
             json_object_object_add(jobj,"src_ip", jsrc_ip );
 
-            json_object *jdest_ip = json_object_new_string(ip_dst_char);
+            json_object *jdest_ip = json_object_new_string(SaganProcSyslog_LOCAL->dst_ip);
             json_object_object_add(jobj,"dest_ip", jdest_ip );
 
             json_object *jusername = json_object_new_string(SaganProcSyslog_LOCAL->username);

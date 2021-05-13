@@ -23,9 +23,9 @@
 typedef struct _Sagan_Protocol_Map_Program _Sagan_Protocol_Map_Program;
 struct _Sagan_Protocol_Map_Program
 {
-    int type;
-    int proto;
-    int nocase;
+//    int type;
+    uint_fast8_t proto;
+    bool nocase;
     char program[64];
 };
 
@@ -34,9 +34,9 @@ struct _Sagan_Protocol_Map_Program
 typedef struct _Sagan_Protocol_Map_Message _Sagan_Protocol_Map_Message;
 struct _Sagan_Protocol_Map_Message
 {
-    int type;
-    int proto;
-    int nocase;
+//   int type;
+    uint_fast8_t proto;
+    bool nocase;
     char search[512];
 };
 

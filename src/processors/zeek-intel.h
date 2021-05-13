@@ -30,6 +30,7 @@
 #include "config.h"             /* From autoconf */
 #endif
 
+/*
 #define BROINTEL_PROCESSOR_NAME "Sagan_BroIntel"
 #define BROINTEL_PROCESSOR_FACILITY "daemon"
 #define BROINTEL_PROCESSOR_PRIORITY "warning"
@@ -38,7 +39,7 @@
 #define BROINTEL_PROCESSOR_REV 1
 #define BROINTEL_PROCESSOR_TAG NULL
 #define BROINTEL_PROCESSOR_GENERATOR_ID 1003
-
+*/
 
 typedef struct _Sagan_BroIntel_Intel_Addr _Sagan_BroIntel_Intel_Addr;
 struct _Sagan_BroIntel_Intel_Addr

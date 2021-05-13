@@ -21,7 +21,7 @@
 typedef struct _Sagan_Routing _Sagan_Routing;
 struct _Sagan_Routing
 {
-    int  position;
+    uint_fast32_t position;
     bool check_flow_return;
     bool flexbit_count_return;
     bool flexbit_return;

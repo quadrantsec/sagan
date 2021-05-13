@@ -31,7 +31,7 @@ typedef struct _GeoIP _GeoIP;
 struct _GeoIP
 {
 
-    unsigned char results;
+    uint_fast8_t results;
 
     char city[32];
     char country[32];

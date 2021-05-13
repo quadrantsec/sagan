@@ -20,20 +20,20 @@
 */
 
 
-void Xbit_Set_MMAP(int rule_position, char *ip_src_char, char *ip_dst_char, char *syslog_message );
-bool Xbit_Condition_MMAP( int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+void Xbit_Set_MMAP(int rule_position, const char *ip_src_char, const char *ip_dst_char, const char *syslog_message );
+bool Xbit_Condition_MMAP( int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
 void Clean_Xbit_MMAP(void);
 
 typedef struct _Sagan_IPC_Xbit _Sagan_IPC_Xbit;
 struct _Sagan_IPC_Xbit
 {
     char xbit_name[64];
-    uint32_t xbit_hash;
-    uint32_t xbit_name_hash;
-    uint64_t xbit_expire;
-    int expire;
+    uint_fast32_t xbit_hash;
+    uint_fast32_t xbit_name_hash;
+    uint_fast64_t xbit_expire;
+    uint_fast32_t expire;
     char syslog_message[MAX_SYSLOGMSG];
-    uint64_t sid;
+    uint_fast64_t sid;
     char signature_msg[MAX_SAGAN_MSG];
 
 };

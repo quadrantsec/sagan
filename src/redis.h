@@ -33,7 +33,7 @@ struct _Sagan_Redis_Write
     char command[16];
     char key[128];
     char value[MAX_SYSLOGMSG*2];
-    int expire;
+    uint_fast32_t expire;
 };
 
 #endif

@@ -37,15 +37,20 @@
 
 #include "send-alert.h"
 #include "output.h"
-#include "gen-msg.h"
+//#include "gen-msg.h"
+#include "rules.h"
+
+#include "routing.h"
 
 #include "processors/engine.h"
 
 extern struct _SaganConfig *config;
+extern struct _Rule_Struct *rulestruct;
+
 
 /* ALL this needs to go away. It's UgLy */
 
-void Send_Alert ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normalize, _Sagan_Processor_Info *processor_info, int proto, uint64_t sid, int src_port, int dst_port, int pos, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
+void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normalize, int rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
 {
 
 
@@ -61,51 +66,64 @@ void Send_Alert ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normaliz
 
     memset(SaganProcessorEvent, 0, sizeof(_Sagan_Event));
 
-    if ( processor_info->processor_generator_id != SAGAN_PROCESSOR_GENERATOR_ID )
-        {
+//    if ( GENERATOR_ID != ENGINE_GENERATOR_ID )
+//	    {
+//		    Generator_Lookup(GENERATOR_ID, sid, tmp, sizeof(tmp));
+//		    SaganProcessorEvent->f_msg           =       tmp;
 
-            Generator_Lookup(processor_info->processor_generator_id, sid, tmp, sizeof(tmp));
-            SaganProcessorEvent->f_msg           =       tmp;
+//	    } else {
 
-        }
-    else
-        {
+    SaganProcessorEvent->f_msg           =       rulestruct[rule_position].s_msg;
 
-            SaganProcessorEvent->f_msg           =       processor_info->processor_name;
-        }
+//	    }
+
+
+//    if ( processor_info->processor_generator_id != SAGAN_PROCESSOR_GENERATOR_ID )
+//        {
+
+//            Generator_Lookup(processor_info->processor_generator_id, sid, tmp, sizeof(tmp));
+//            SaganProcessorEvent->f_msg           =       tmp;
+
+//        }
+//    else
+//        {
+
+//            SaganProcessorEvent->f_msg           =       rulestruct[rule_position].s_msg;
+//       }
 
     SaganProcessorEvent->message         =       SaganProcSyslog_LOCAL->syslog_message;
     SaganProcessorEvent->program	 = 	 SaganProcSyslog_LOCAL->syslog_program;
     SaganProcessorEvent->level           =       SaganProcSyslog_LOCAL->syslog_level;
 
-    SaganProcessorEvent->facility        =       processor_info->processor_facility;
-    SaganProcessorEvent->priority        =       processor_info->processor_priority;	/* Syslog priority */
-    SaganProcessorEvent->pri             =       processor_info->processor_pri;		/* Sagan priority */
-    SaganProcessorEvent->class           =       processor_info->processor_class;
-    SaganProcessorEvent->tag             =       processor_info->processor_tag;
-    SaganProcessorEvent->rev             =       processor_info->processor_rev;
+    SaganProcessorEvent->facility        =       SaganProcSyslog_LOCAL->syslog_facility;
+
+    SaganProcessorEvent->priority        =       SaganProcSyslog_LOCAL->syslog_level;	/* Syslog priority */
+    SaganProcessorEvent->pri             =       rulestruct[rule_position].s_pri;		/* Sagan priority */
+    SaganProcessorEvent->class           =       rulestruct[rule_position].s_classtype;
+    SaganProcessorEvent->tag             =       SaganProcSyslog_LOCAL->syslog_tag;
+    SaganProcessorEvent->rev             =       rulestruct[rule_position].s_rev;
 
     SaganProcessorEvent->ip_src          =       SaganProcSyslog_LOCAL->src_ip;
     SaganProcessorEvent->ip_dst          =       SaganProcSyslog_LOCAL->dst_ip;
 
-    SaganProcessorEvent->dst_port        =       dst_port;
-    SaganProcessorEvent->src_port        =       src_port;
+    SaganProcessorEvent->dst_port        =       SaganProcSyslog_LOCAL->dst_port;
+    SaganProcessorEvent->src_port        =       SaganProcSyslog_LOCAL->src_port;
 
-    SaganProcessorEvent->found           =       pos;
+    SaganProcessorEvent->rule_position   =       rule_position;
 
     SaganProcessorEvent->normalize_http_uri	=	SaganProcSyslog_LOCAL->url;
     SaganProcessorEvent->normalize_http_hostname=	SaganProcSyslog_LOCAL->hostname;
 
-    SaganProcessorEvent->sid             =       sid;
+    SaganProcessorEvent->sid             =       rulestruct[rule_position].s_sid;
 
     SaganProcessorEvent->host		 = 	 SaganProcSyslog_LOCAL->syslog_host;
     SaganProcessorEvent->time            =       SaganProcSyslog_LOCAL->syslog_time;
     SaganProcessorEvent->date            =       SaganProcSyslog_LOCAL->syslog_date;
-    SaganProcessorEvent->ip_proto        =       proto;
+    SaganProcessorEvent->ip_proto        =       SaganProcSyslog_LOCAL->proto;
 
     SaganProcessorEvent->event_time	 =       tp;
 
-    SaganProcessorEvent->generatorid     =       processor_info->processor_generator_id;
+    SaganProcessorEvent->generatorid     =       1;
 
     SaganProcessorEvent->json_normalize     =    json_normalize;
     SaganProcessorEvent->bluedot_json       =    bluedot_json;
@@ -119,8 +137,8 @@ void Send_Alert ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normaliz
     SaganProcessorEvent->city_src	    =	 GeoIP_SRC->city;
     SaganProcessorEvent->city_dst	    =    GeoIP_DEST->city;
 
-    SaganProcessorEvent->subdivision_src	    =	 GeoIP_SRC->subdivision;
-    SaganProcessorEvent->subdivision_dst	    =    GeoIP_DEST->subdivision;
+    SaganProcessorEvent->subdivision_src    =	 GeoIP_SRC->subdivision;
+    SaganProcessorEvent->subdivision_dst    =    GeoIP_DEST->subdivision;
 
     SaganProcessorEvent->postal_src	    =	 GeoIP_SRC->postal;
     SaganProcessorEvent->postal_dst	    =    GeoIP_DEST->postal;

@@ -62,7 +62,7 @@
 extern struct _SaganConfig *config;
 extern struct _SaganCounters *counters;
 struct _SaganVar *var;
-struct _Sagan_Processor_Generator *generator;
+//struct _Sagan_Processor_Generator *generator;
 
 bool daemonize;
 bool quiet;
@@ -247,6 +247,13 @@ void Sagan_Log (int type, const char *format,... )
 
     File_Unlock( config->sagan_log_stream_int );
 
+    if ( config->sagan_log_syslog == true )
+        {
+            openlog("sagan", LOG_PID, LOG_DAEMON);
+            syslog(LOG_INFO, "[%s] %s", chr, buf);
+            closelog();
+        }
+
     if ( config->daemonize == 0 && config->quiet == 0 )
         {
             printf("[%s] %s\n", chr, buf);
@@ -261,7 +268,7 @@ void Sagan_Log (int type, const char *format,... )
 
 bool Mask2Bit(int mask, unsigned char *out)
 {
-    int i;
+    uint_fast32_t i;
     bool ret = false;
 
     if (mask < 1 || mask > 128)
@@ -368,7 +375,7 @@ bool Is_Numeric (const char *str)
 void Between_Quotes( const char *in_str, char *str, size_t size)
 {
     bool flag = false;
-    int i = 0;
+    uint_fast32_t i = 0;
 
     char tmp1[2] = { 0 };
     char tmp2[1024] = { 0 };
@@ -509,7 +516,8 @@ void Replace_String(const char *in_str, char *orig, char *rep, char *str, size_t
 
 bool is_inrange ( unsigned char *ip, unsigned char *tests, int count)
 {
-    int i,j,k;
+//    int i,j,k;
+    uint_fast32_t i,j,k;
     bool inrange = false;
     for (i=0; i<count*MAXIPBIT*2; i+=MAXIPBIT*2)
         {
@@ -711,7 +719,6 @@ void Var_To_Value(const char *in_str, char *str, size_t size)
 
             while (ptmp != NULL )
                 {
-
                     Replace_String(ptmp, var[i].var_name, var[i].var_value, tmp2, sizeof(tmp2));
                     snprintf(tmp3, sizeof(tmp3), "%s ", tmp2);
                     strlcat(tmp_result, tmp3, sizeof(tmp_result));
@@ -759,8 +766,8 @@ bool Validate_HEX (const char *string)
 int Check_Var(const char *string)
 {
 
-    int i;
-    int flag = 0;
+    uint_fast32_t i;
+    bool flag = 0;
 
     for (i=0; i<counters->var_count; i++)
         {
@@ -786,7 +793,7 @@ int Check_Var(const char *string)
 void Content_Pipe( const char *in_string, int linecount, const char *ruleset, char *str, size_t size )
 {
 
-    int pipe_flag = 0;
+    bool pipe_flag = 0;
 
     /* Set to RULEBUF.  Some meta_content strings can be rather large! */
 
@@ -795,8 +802,8 @@ void Content_Pipe( const char *in_string, int linecount, const char *ruleset, ch
 
     char final_content_tmp[RULEBUF] = { 0 };
     char tmp2[RULEBUF];
-    int i;
-    int x;
+    uint_fast32_t i;
+    uint_fast32_t x;
     char tmp[2];
 
     strlcpy(tmp2, in_string, sizeof(tmp2));
@@ -869,7 +876,7 @@ void Replace_Sagan( const char *in_str, char *replace, char *str, size_t size)
     char tmp[2] = { 0 };
     char new_string[CONFBUF] = { 0 };
 
-    uint16_t i = 0;
+    uint_fast16_t i = 0;
 
 //    strlcpy(string, string_in, sizeof(string));
 
@@ -965,6 +972,7 @@ void CloseStream( FILE *stream, int *fd )
  * since it is used before Sagan_Log() is initalized
  ***************************************************************************/
 
+/*
 FILE *OpenStream( char *path, int *fd, unsigned long pw_uid, unsigned long pw_gid )
 {
     FILE *ret = NULL;
@@ -989,11 +997,11 @@ FILE *OpenStream( char *path, int *fd, unsigned long pw_uid, unsigned long pw_gi
         }
 
     /* TODO: Add cases here for UDP and TCP */
-
+/*
     if (Starts_With(path, "unix://"))
         {
             /* Create socket from which to write. Currently only stream mode is supported */
-
+/*
             *fd = socket(AF_UNIX, SOCK_STREAM, 0);
 
             if (*fd < 0)
@@ -1003,12 +1011,12 @@ FILE *OpenStream( char *path, int *fd, unsigned long pw_uid, unsigned long pw_gi
                 }
 
             /* Create name. */
-
+/*
             name.sun_family = AF_UNIX;
             strncpy(name.sun_path, _path, sizeof(name.sun_path)-1);
 
             /* Bind the UNIX domain address to the created socket */
-
+/*
             if (connect(*fd, (struct sockaddr *) &name, sizeof(struct sockaddr_un)))
                 {
                     fprintf(stderr, "[E] [%s, line %d] Could not init unix socket. Failed to connect to socket %s - %s!\n", __FILE__, __LINE__, _path, strerror(errno));
@@ -1027,7 +1035,7 @@ FILE *OpenStream( char *path, int *fd, unsigned long pw_uid, unsigned long pw_gi
         }
 
     /* Chown the log files in case we get a SIGHUP or whatnot later (due to Sagan_Chroot()) */
-
+/*
     if ( chown(_path, pw_uid,pw_gid) < 0 )
         {
             fprintf(stderr, "[%s, line %d] Cannot change ownership of %s to username \"%s\" - %s\n", __FILE__, __LINE__, _path, config->sagan_runas, strerror(errno));
@@ -1042,6 +1050,7 @@ FILE *OpenStream( char *path, int *fd, unsigned long pw_uid, unsigned long pw_gi
 
     return ret;
 }
+*/
 
 /****************************************************************************
  * Set_Pipe_Size - Changes the capacity of the pipe/FIFO.
@@ -1053,7 +1062,7 @@ void Set_Pipe_Size ( FILE *fd )
 {
 
     int fd_int;
-    int current_fifo_size;
+    uint_fast32_t current_fifo_size;
     int fd_results;
 
 
@@ -1146,9 +1155,9 @@ bool File_Unlock( int fd )
 const char *Bit2IP(unsigned char *ipbits, char *str, size_t size)
 {
 
-    int i;
+    uint_fast32_t i;
     int ss_family = AF_INET;
-    static __thread char retbuf[MAXIP];
+    static __thread char retbuf[MAXIP] = { 0 };
     memset(retbuf,0,sizeof(retbuf));
 
     const char *ret = NULL;
@@ -1220,7 +1229,7 @@ bool Starts_With(const char *str, const char *prefix)
 void Strip_Chars(const char *string, const char *chars, char *str)
 {
 
-    int i = 0;
+    uint_fast32_t i = 0;
 
     for ( i = 0; i<strlen(string); i++)
         {
@@ -1245,8 +1254,8 @@ bool Is_IP (const char *ipaddr, int ver )
 
     struct sockaddr_in sa;
     bool ret = false;
-    char ip[MAXIP];
-    strlcpy(ip, ipaddr, sizeof(ip));
+//    char ip[MAXIP];
+//    strlcpy(ip, ipaddr, sizeof(ip));
 
     /* We don't use getaddrinfo().  Here's why:
      * See https://blog.powerdns.com/2014/05/21/a-surprising-discovery-on-converting-ipv6-addresses-we-no-longer-prefer-getaddrinfo/
@@ -1254,11 +1263,11 @@ bool Is_IP (const char *ipaddr, int ver )
 
     if ( (ver = 4 ) )
         {
-            ret = inet_pton(AF_INET, ip,  &(sa.sin_addr));
+            ret = inet_pton(AF_INET, ipaddr,  &(sa.sin_addr));
         }
     else
         {
-            ret = inet_pton(AF_INET6, ip,  &(sa.sin_addr));
+            ret = inet_pton(AF_INET6, ipaddr,  &(sa.sin_addr));
         }
 
     return(ret);
@@ -1364,7 +1373,7 @@ bool Check_Content_Not( const char *s )
 {
 
     char rule_tmp[RULEBUF] = { 0 };
-    int i;
+    uint_fast32_t i;
 
     strlcpy(rule_tmp, s, sizeof(rule_tmp));
 
@@ -1398,11 +1407,11 @@ bool Check_Content_Not( const char *s )
  * Bernstein.  See http://www.cse.yorku.ca/~oz/hash.html.
  ***************************************************************************/
 
-uint32_t Djb2_Hash(const char *str)
+uint_fast32_t Djb2_Hash(const char *str)
 {
 
-    uint32_t hash = 5381;
-    int32_t c;
+    uint_fast32_t hash = 5381;
+    int_fast32_t c;
 
     while ( (c = *str++ ) )
         hash = ((hash << 5) + hash) + c;
@@ -1427,6 +1436,50 @@ bool ValidateMessage( const char *message )
         }
 
     return(true);
+
+}
+
+/****************************************************************************/
+/* is_notlocalhost                                                          */
+/*                                                                          */
+/* Checks to see if an ip address is loopback	                            */
+/****************************************************************************/
+
+
+bool is_notlocalhost ( unsigned char *ip )
+{
+
+    static unsigned char tests[][32] =
+    {
+
+        // IPv6  LocalHost - ::1/128
+        {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+        },
+
+        // IPv4 localhost - 127.0.0.0/8
+        {
+            0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        },
+
+        // IPv4-mapped localhost - ::ffff:127.0.0.0/104
+        {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0xFF, 0xFF, 0x7F, 0x00, 0x00, 0x00,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00
+        }
+
+
+    };
+
+    return is_inrange(ip, (unsigned char *)tests, sizeof(tests)/(sizeof(char[32])));
 
 }
 

@@ -95,7 +95,7 @@ int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cac
 
     struct sockaddr_in sa;
 
-    int current_position = 0;
+    uint_fast32_t current_position = 0;
 
     char mod_string[MAX_SYSLOGMSG] = { 0 };
 
@@ -112,18 +112,18 @@ int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cac
     char *ip_2 = NULL;
 
     char port_test[6] = { 0 };
-    int  port_test_int = 0;
+    uint_fast16_t  port_test_int = 0;
 
     bool valid = false ;
 
-    int i=0;
-    int b=0;
+    uint_fast32_t i=0;
+    uint_fast32_t b=0;
 
-    int num_colons = 0;
-    int num_dots = 0;
-    int num_hashes = 0;
+    uint_fast16_t num_colons = 0;
+    uint_fast16_t num_dots = 0;
+    uint_fast16_t num_hashes = 0;
 
-    int port = config->sagan_port;
+    uint_fast16_t port = config->sagan_port;
 
     for (i=0; i<strlen(syslog_message); i++)
         {

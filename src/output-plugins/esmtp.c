@@ -63,7 +63,7 @@ int ESMTP_Thread ( _Sagan_Event *Event )
     char tmpb[MAX_EMAILSIZE];
     int r = 0;
 
-    Reference_Lookup( Event->found, 0, tmpref, sizeof(tmpref));
+    Reference_Lookup( Event->rule_position, 0, tmpref, sizeof(tmpref));
     CreateTimeString(&Event->event_time, timebuf, sizeof(timebuf), 1);
 
     if ((r = snprintf(tmpa, sizeof(tmpa),
@@ -80,7 +80,7 @@ int ESMTP_Thread ( _Sagan_Event *Event )
                       "%s %s %s:%d [%s] -> %s:%d [%s] %s %s %s\n"
                       "Syslog message: %s\r\n%s\n\r",
                       config->sagan_esmtp_from,
-                      rulestruct[Event->found].email,
+                      rulestruct[Event->rule_position].email,
                       config->sagan_email_subject,
                       Event->f_msg,
                       Event->generatorid,
@@ -159,7 +159,7 @@ int ESMTP_Thread ( _Sagan_Event *Event )
             __atomic_add_fetch(&counters->esmtp_count_failed, 1, __ATOMIC_SEQ_CST);
             goto failure;
         }
-    if((recipient = smtp_add_recipient (message, rulestruct[Event->found].email)) == NULL)
+    if((recipient = smtp_add_recipient (message, rulestruct[Event->rule_position].email)) == NULL)
         {
             Sagan_Log(WARN, "[%s, line %d] Cannot add recipient.",  __FILE__, __LINE__);
             __atomic_add_fetch(&counters->esmtp_count_failed, 1, __ATOMIC_SEQ_CST);

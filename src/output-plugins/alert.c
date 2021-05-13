@@ -74,10 +74,10 @@ void Alert_File( _Sagan_Event *Event )
     fprintf(sagan_alert_stream, "%s %s %s:%d [%s] -> %s:%d [%s] %s %s %s\n", Event->date, Event->time, Event->ip_src, Event->src_port, Event->country_src,  Event->ip_dst, Event->dst_port, Event->country_dst, Event->facility, Event->priority, Event->program);
     fprintf(sagan_alert_stream, "Message: %s\n", Event->message);
 
-    if ( Event->found != 0 )
+    if ( Event->rule_position != 0 )
         {
 
-            Reference_Lookup( Event->found, 0, tmpref, sizeof(tmpref) );
+            Reference_Lookup( Event->rule_position, 0, tmpref, sizeof(tmpref) );
 
             if (strcmp(tmpref, "" ))
                 {

@@ -47,7 +47,7 @@ void Parse_Hash(char *syslog_message, int type, char *str, size_t size)
     char *tok=NULL;
     char tmp[SHA256_HASH_SIZE+1];
 
-    int i;
+    uint_fast32_t i;
 
     /* Remove anything we dont want */
 

@@ -41,8 +41,8 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
 
     struct json_object *json_obj = NULL;
 
-    uint16_t i;
-    uint16_t json_count = 1;
+    uint_fast16_t i;
+    uint_fast16_t json_count = 1;
 
     struct json_object_iterator it;
     struct json_object_iterator itEnd;

@@ -41,6 +41,7 @@
 #include "rules.h"
 #include "redis.h"
 #include "sagan-config.h"
+#include "util-base64.h"
 
 #define 	REDIS_PREFIX	"sagan"
 
@@ -60,7 +61,7 @@ int redis_msgslot;
 /* Xbit_Set_Redis - set/unset xbit in Redis (threaded) */
 /*******************************************************/
 
-void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+void Xbit_Set_Redis(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     struct json_object *jobj;
@@ -80,7 +81,7 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
             if ( rulestruct[rule_position].xbit_type[r] == XBIT_SET )
                 {
 
-                    Xbit_Return_Tracking_IP( rule_position, r, ip_src_char, ip_dst_char, tmp_ip, sizeof(tmp_ip));
+                    Xbit_Return_Tracking_IP( rule_position, r, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, tmp_ip, sizeof(tmp_ip));
 
                     if ( debug->debugxbit )
                         {
@@ -102,10 +103,10 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
                             json_object_object_add(jobj,"syslog_source", jsource_ip);
 
 
-                            json_object *jsrc_ip = json_object_new_string(ip_src_char);
+                            json_object *jsrc_ip = json_object_new_string(SaganProcSyslog_LOCAL->src_ip);
                             json_object_object_add(jobj,"src_ip", jsrc_ip );
 
-                            json_object *jdest_ip = json_object_new_string(ip_dst_char);
+                            json_object *jdest_ip = json_object_new_string(SaganProcSyslog_LOCAL->dst_ip);
                             json_object_object_add(jobj,"dest_ip", jdest_ip );
 
                             json_object *jusername = json_object_new_string(SaganProcSyslog_LOCAL->username);
@@ -220,7 +221,7 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
             else if ( rulestruct[rule_position].xbit_type[r] == XBIT_UNSET )
                 {
 
-                    Xbit_Return_Tracking_IP( rule_position, r, ip_src_char, ip_dst_char, tmp_ip, sizeof(tmp_ip));
+                    Xbit_Return_Tracking_IP( rule_position, r, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, tmp_ip, sizeof(tmp_ip));
 
                     if ( debug->debugxbit )
                         {
@@ -255,7 +256,7 @@ void Xbit_Set_Redis(int rule_position, char *ip_src_char, char *ip_dst_char, _Sa
 /* Xbit_Condition_Redis - Tests for Redis xbit (isset/isnotset) */
 /****************************************************************/
 
-bool Xbit_Condition_Redis( int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Xbit_Condition_Redis( int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     int r;
@@ -267,7 +268,7 @@ bool Xbit_Condition_Redis( int rule_position, char *ip_src_char, char *ip_dst_ch
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
 
-            Xbit_Return_Tracking_IP( rule_position, r, ip_src_char, ip_dst_char, tmp_ip, sizeof(tmp_ip));
+            Xbit_Return_Tracking_IP( rule_position, r, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip, tmp_ip, sizeof(tmp_ip));
 
             snprintf(redis_command, sizeof(redis_command),
                      "GET %s:%s:%s:%s", REDIS_PREFIX, config->sagan_cluster_name, rulestruct[rule_position].xbit_name[r], tmp_ip);
@@ -314,7 +315,7 @@ bool Xbit_Condition_Redis( int rule_position, char *ip_src_char, char *ip_dst_ch
  * Actual IP addresses so that it's easier to "see" in Redis.
  ******************************************************************************************/
 
-void Xbit_Return_Tracking_IP ( int rule_position, int xbit_position, char *ip_src_char, char *ip_dst_char, char *str, size_t size )
+void Xbit_Return_Tracking_IP ( int rule_position, int xbit_position, const char *ip_src_char, const char *ip_dst_char, char *str, size_t size )
 {
 
     /* These 1,2,3 values should really be defined */

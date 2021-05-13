@@ -68,6 +68,7 @@
 #include "stats.h"
 #include "ipc.h"
 #include "tracking-syslog.h"
+#include "geoip.h"
 #include "parsers/parsers.h"
 
 #include "input-pipe.h"
@@ -84,6 +85,7 @@
 #include "plog.h"
 #endif
 
+#include "routing.h"
 #include "processors/engine.h"
 #include "rules.h"
 #include "processors/blacklist.h"
@@ -127,8 +129,8 @@ extern struct _Sagan_Ignorelist *SaganIgnorelist;
 
 struct _Sagan_Pass_Syslog *SaganPassSyslog = NULL;
 
-int proc_msgslot = 0;
-int proc_running = 0;
+uint_fast16_t proc_msgslot = 0;
+uint_fast16_t proc_running = 0;
 
 bool death=false;
 
@@ -248,14 +250,16 @@ int main(int argc, char **argv)
     signed char c;
     int rc=0;
 
-    int i;
+    uint16_t i = 0;
+    uint32_t k = 0;
 
     time_t t;
     struct tm *run;
 
     bool debugflag = false;
 
-    int batch_count = 0;
+//    uint16_t batch_count = 0;
+    uint_fast16_t batch_count = 0;
 
     /* Allocate memory for global struct _SaganDebug */
 
@@ -860,8 +864,6 @@ int main(int argc, char **argv)
     if ( config->sagan_track_clients_flag )
         {
 
-            Track_Clients_Thread_Init();
-
             /* We run a thread for client_tracker_report */
 
             rc = pthread_create( &ct_report_thread, NULL, (void *)Track_Clients_Thread, NULL );
@@ -1119,7 +1121,7 @@ int main(int argc, char **argv)
 
 
 
-    while(death == false)
+    while( death == false )
         {
 
             FILE *fd;
@@ -1211,7 +1213,7 @@ int main(int argc, char **argv)
 
                                     /* We're not threads here so no reason to lock */
 
-                                    uint32_t bytes_total = strlen( syslogstring );
+                                    uint_fast32_t bytes_total = strlen( syslogstring );
 
                                     counters->bytes_total = counters->bytes_total + bytes_total;
 
@@ -1227,10 +1229,10 @@ int main(int argc, char **argv)
 
                                             ignore_flag = false;
 
-                                            for (i = 0; i < counters->droplist_count; i++)
+                                            for (k = 0; k < counters->droplist_count; k++)
                                                 {
 
-                                                    if (Sagan_strstr(syslogstring, SaganIgnorelist[i].ignore_string))
+                                                    if (Sagan_strstr(syslogstring, SaganIgnorelist[k].ignore_string))
                                                         {
 
                                                             counters->bytes_ignored = counters->bytes_ignored + strlen( syslogstring );
@@ -1241,7 +1243,6 @@ int main(int argc, char **argv)
 
                                                         }
                                                 }
-
 
                                         }
 
@@ -1261,7 +1262,6 @@ int main(int argc, char **argv)
 
                             /* Do we have enough threads? */
 
-
                             if ( proc_msgslot < config->max_processor_threads )
                                 {
 
@@ -1279,6 +1279,7 @@ int main(int argc, char **argv)
                                             for ( i = 0; i < config->max_batch; i++)
                                                 {
                                                     strlcpy(SaganPassSyslog[proc_msgslot].syslog[i], SaganPassSyslog_LOCAL[proc_msgslot].syslog[i], sizeof(SaganPassSyslog[proc_msgslot].syslog[i]));
+
                                                 }
 
                                             counters->events_processed = counters->events_processed + config->max_batch;

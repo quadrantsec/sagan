@@ -60,7 +60,7 @@ int Sagan_Bluedot_Clean_Queue ( char *, unsigned char );
 typedef struct _Sagan_Bluedot_Cat_List _Sagan_Bluedot_Cat_List;
 struct _Sagan_Bluedot_Cat_List
 {
-    int		cat_number;
+    uint_fast8_t	cat_number;
     char	cat[50];
 };
 
@@ -69,47 +69,47 @@ typedef struct _Sagan_Bluedot_IP_Cache _Sagan_Bluedot_IP_Cache;
 struct _Sagan_Bluedot_IP_Cache
 {
     unsigned char ip[MAXIPBIT];
-    uint64_t mdate_utime;
-    uint64_t cdate_utime;
-    uint64_t cache_utime;
+    uint_fast64_t mdate_utime;
+    uint_fast64_t cdate_utime;
+    uint_fast64_t cache_utime;
     char bluedot_json[BLUEDOT_JSON_SIZE];
-    int	alertid;
+    uint_fast32_t alertid;
 };
 
 typedef struct _Sagan_Bluedot_Hash_Cache _Sagan_Bluedot_Hash_Cache;
 struct _Sagan_Bluedot_Hash_Cache
 {
     char hash[SHA256_HASH_SIZE+1];
-    uint64_t cache_utime;
+    uint_fast64_t cache_utime;
     char bluedot_json[BLUEDOT_JSON_SIZE];
-    int alertid;
+    uint_fast32_t alertid;
 };
 
 typedef struct _Sagan_Bluedot_URL_Cache _Sagan_Bluedot_URL_Cache;
 struct _Sagan_Bluedot_URL_Cache
 {
     char url[8192];
-    uint64_t cache_utime;
+    uint_fast64_t cache_utime;
     char bluedot_json[BLUEDOT_JSON_SIZE];
-    int alertid;
+    uint_fast32_t alertid;
 };
 
 typedef struct _Sagan_Bluedot_Filename_Cache _Sagan_Bluedot_Filename_Cache;
 struct _Sagan_Bluedot_Filename_Cache
 {
     char filename[256];
-    uint64_t cache_utime;
+    uint_fast64_t cache_utime;
     char bluedot_json[BLUEDOT_JSON_SIZE];
-    int alertid;
+    uint_fast32_t alertid;
 };
 
 typedef struct _Sagan_Bluedot_JA3_Cache _Sagan_Bluedot_JA3_Cache;
 struct _Sagan_Bluedot_JA3_Cache
 {
     char ja3[MD5_HASH_SIZE+1];
-    uint64_t cache_utime;
+    uint_fast64_t cache_utime;
     char bluedot_json[BLUEDOT_JSON_SIZE];
-    int alertid;
+    uint_fast32_t alertid;
 };
 
 

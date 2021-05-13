@@ -531,6 +531,7 @@ void IPC_Init(void)
             if ((config->shm_xbit = open(tmp_object_check, (O_CREAT | O_EXCL | O_RDWR), (S_IREAD | S_IWRITE))) > 0 )
                 {
                     Sagan_Log(NORMAL, "+ Xbit shared object (new).");
+                    counters_ipc->xbit_count = 0;
                     new_object=1;
                 }
 
@@ -576,6 +577,7 @@ void IPC_Init(void)
     if ((config->shm_flexbit = open(tmp_object_check, (O_CREAT | O_EXCL | O_RDWR), (S_IREAD | S_IWRITE))) > 0 )
         {
             Sagan_Log(NORMAL, "+ Flexbit shared object (new).");
+            counters_ipc->flexbit_count=0;
             new_object=1;
         }
 
@@ -612,6 +614,7 @@ void IPC_Init(void)
     if ((config->shm_thresh2 = open(tmp_object_check, (O_CREAT | O_EXCL | O_RDWR), (S_IREAD | S_IWRITE))) > 0 )
         {
             Sagan_Log(NORMAL, "+ Threshold shared object (new).");
+            counters_ipc->thresh2_count=0;
             new_object=1;
         }
 
@@ -651,6 +654,7 @@ void IPC_Init(void)
     if ((config->shm_after2 = open(tmp_object_check, (O_CREAT | O_EXCL | O_RDWR), (S_IREAD | S_IWRITE))) > 0 )
         {
             Sagan_Log(NORMAL, "+ After shared object (new).");
+            counters_ipc->after2_count=0;
             new_object=1;
         }
 
@@ -691,6 +695,8 @@ void IPC_Init(void)
             if ((config->shm_track_clients = open(tmp_object_check, (O_CREAT | O_EXCL | O_RDWR), (S_IREAD | S_IWRITE))) > 0 )
                 {
                     Sagan_Log(NORMAL, "+ Sagan_track_clients shared object (new).");
+                    counters_ipc->track_clients_client_count = 0;
+                    counters_ipc->track_clients_down = 0;
                     new_object=1;
 
                 }
@@ -719,5 +725,6 @@ void IPC_Init(void)
             new_object = 0;
 
         }
+
 
 }

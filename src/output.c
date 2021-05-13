@@ -32,6 +32,7 @@
 #include <pthread.h>
 
 #include "sagan.h"
+#include "geoip.h"
 #include "output.h"
 #include "rules.h"
 #include "sagan-config.h"
@@ -71,7 +72,7 @@ void Output( _Sagan_Event *Event )
 
     counters->alert_total++; 	/* If alert file isn't enabled, we still want to collect the stats */
 
-    if ( config->alert_flag && rulestruct[Event->found].xbit_noalert == false )
+    if ( config->alert_flag && rulestruct[Event->rule_position].xbit_noalert == false )
         {
             Alert_File(Event);
         }
@@ -79,7 +80,7 @@ void Output( _Sagan_Event *Event )
     if ( config->eve_flag && config->eve_alerts )
         {
 
-            if ( rulestruct[Event->found].xbit_noeve == false && rulestruct[Event->found].flexbit_noeve == false )
+            if ( rulestruct[Event->rule_position].xbit_noeve == false && rulestruct[Event->rule_position].flexbit_noeve == false )
                 {
                     Alert_JSON(Event);
                 }
@@ -114,7 +115,7 @@ void Output( _Sagan_Event *Event )
 
 #ifdef HAVE_LIBESMTP
 
-    if ( config->sagan_esmtp_flag && rulestruct[Event->found].email_flag )
+    if ( config->sagan_esmtp_flag && rulestruct[Event->rule_position].email_flag )
         {
             ESMTP_Thread( Event );
         }
@@ -125,9 +126,9 @@ void Output( _Sagan_Event *Event )
     /* External program via rule                                                */
     /****************************************************************************/
 
-    if (  rulestruct[Event->found].external_flag )
+    if (  rulestruct[Event->rule_position].external_flag )
         {
-            External_Thread( Event, rulestruct[Event->found].external_program );
+            External_Thread( Event, rulestruct[Event->rule_position].external_program );
         }
 }
 

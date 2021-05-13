@@ -52,20 +52,20 @@ extern struct _SaganConfig *config;
 /* Xbit_Set - "set", "unset" and "toggle" and xbit */
 /***************************************************/
 
-void Xbit_Set(int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+void Xbit_Set(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
 #ifdef HAVE_LIBHIREDIS
 
     if ( config->redis_flag && config->xbit_storage == XBIT_STORAGE_REDIS )
         {
-            Xbit_Set_Redis(rule_position, ip_src_char, ip_dst_char, SaganProcSyslog_LOCAL );
+            Xbit_Set_Redis(rule_position, SaganProcSyslog_LOCAL );
             return;
         }
 
 #endif
 
-    Xbit_Set_MMAP(rule_position, ip_src_char, ip_dst_char, SaganProcSyslog_LOCAL->syslog_message );
+    Xbit_Set_MMAP(rule_position, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip,  SaganProcSyslog_LOCAL->syslog_message );
 
 }
 
@@ -74,7 +74,7 @@ void Xbit_Set(int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Pr
 /* determine the direction an xbit and returns a hash for association            */
 /*********************************************************************************/
 
-uint32_t Xbit_Return_Tracking_Hash ( int rule_position, int xbit_position, char *ip_src_char, char *ip_dst_char )
+uint32_t Xbit_Return_Tracking_Hash ( int rule_position, int xbit_position, const char *ip_src_char, const char *ip_dst_char )
 {
 
     char hash_pair[MAXIP*2] = { 0 };
@@ -107,19 +107,19 @@ uint32_t Xbit_Return_Tracking_Hash ( int rule_position, int xbit_position, char 
 /* Xbit_Condition - This handles xbit conditions like "isset", "issnotset". */
 /****************************************************************************/
 
-bool Xbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Xbit_Condition(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
 #ifdef HAVE_LIBHIREDIS
 
     if ( config->redis_flag && config->xbit_storage == XBIT_STORAGE_REDIS )
         {
-            return( Xbit_Condition_Redis(rule_position, ip_src_char, ip_dst_char, SaganProcSyslog_LOCAL) );
+            return( Xbit_Condition_Redis(rule_position, SaganProcSyslog_LOCAL) );
         }
 
 #endif
 
-    return( Xbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, SaganProcSyslog_LOCAL) );
+    return( Xbit_Condition_MMAP(rule_position, SaganProcSyslog_LOCAL) );
 
 }
 

@@ -18,10 +18,11 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-int  Flexbit_Type ( char *, int, const char *);
+//int  Flexbit_Type ( char *, int, const char *);
+int Flexbit_Type ( const char *type, int linecount, const char *ruleset );
 
-bool Flexbit_Count( int rule_position, char *ip_src_char, char *ip_dst_char );
-bool Flexbit_Condition(int rule_position, char *ip_src_char, char *ip_dst_char, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
-void Flexbit_Set(int rule_position, char *ip_src_char, char *ip_dst_char, int src_port, int dst_port, char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+bool Flexbit_Count( int rule_position, const char *ip_src_char, const char *ip_dst_char );
+bool Flexbit_Condition(int rule_position, const char *ip_src_char, const char *ip_dst_char, int src_port, int dst_port, const char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+void Flexbit_Set(int rule_position, const char *ip_src_char, const char *ip_dst_char, int src_port, int dst_port, const char *username, const char *syslog_message );
 
 

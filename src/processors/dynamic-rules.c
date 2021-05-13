@@ -48,7 +48,7 @@
 
 extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
-struct _Rules_Loaded *rules_loaded;
+struct _Rules_Loaded *rules_loaded;				// <- why can't this be extern struct? !?!?
 extern struct _SaganCounters *counters;
 
 bool reload_rules;
@@ -56,7 +56,7 @@ bool reload_rules;
 pthread_mutex_t SaganRulesLoadedMutex=PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t CounterDynamicGenericMutex=PTHREAD_MUTEX_INITIALIZER;
 
-int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_position, _Sagan_Processor_Info *processor_info_engine, char *ip_src, char *ip_dst )
+int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_position, char *ip_src, char *ip_dst )
 {
 
     int i;
@@ -64,17 +64,18 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
     struct timeval  tp;
 
     /* GeoIP struct for Send_Alert */
+    /*
+        struct _GeoIP *GeoIP = NULL;
+        GeoIP = malloc(sizeof(struct _GeoIP));
 
-    struct _GeoIP *GeoIP = NULL;
-    GeoIP = malloc(sizeof(struct _GeoIP));
+        if ( GeoIP == NULL )
+            {
+                Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
+            }
 
-    if ( GeoIP == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
-        }
-
-    memset(GeoIP, 0, sizeof(_GeoIP));
-    memcpy(GeoIP->country, "NONE", 4);
+        memset(GeoIP, 0, sizeof(_GeoIP));
+        memcpy(GeoIP->country, "NONE", 4);
+        */
 
     /* We don't want the array to be altered while we are working with it */
 
@@ -93,7 +94,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
                     /* Rule was already loaded.  Release mutex and continue as normal */
 
                     reload_rules = false;
-                    free(GeoIP);
+//                    free(GeoIP);
                     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
                     return(0);
@@ -106,7 +107,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
     if ( rules_loaded == NULL )
         {
-            free(GeoIP);
+//            free(GeoIP);
             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rules_loaded. Abort!", __FILE__, __LINE__);
         }
 
@@ -137,12 +138,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        "null",
-                       processor_info_engine,
-                       config->sagan_proto,
-                       rulestruct[rule_position].s_sid,
-                       config->sagan_port,
-                       config->sagan_port,
-                       rule_position, tp, NULL, 0, GeoIP, GeoIP );
+                       rule_position, tp, NULL, 0, NULL, NULL );
 
             /* Lock rules so other threads don't try to use it while we alter/load new rules */
 
@@ -181,16 +177,11 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        "null",
-                       processor_info_engine,
-                       config->sagan_proto,
-                       rulestruct[rule_position].s_sid,
-                       config->sagan_port,
-                       config->sagan_port,
-                       rule_position, tp, NULL, 0, GeoIP, GeoIP );
+                       rule_position, tp, NULL, 0, NULL, NULL );
 
         }
 
-    free(GeoIP);
+//    free(GeoIP);
     return(0);
 
 }

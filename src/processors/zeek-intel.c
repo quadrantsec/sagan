@@ -54,7 +54,7 @@ extern struct _SaganConfig *config;
 extern struct _SaganCounters *counters;
 extern struct _SaganDebug *debug;
 
-struct _Sagan_Processor_Info *processor_info_brointel = NULL;
+//struct _Sagan_Processor_Info *processor_info_brointel = NULL;
 
 struct _Sagan_BroIntel_Intel_Addr *Sagan_BroIntel_Intel_Addr;
 struct _Sagan_BroIntel_Intel_Domain *Sagan_BroIntel_Intel_Domain;

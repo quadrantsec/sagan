@@ -43,6 +43,8 @@
 #include "ignore-list.h"
 #include "sagan-config.h"
 #include "input-pipe.h"
+#include "geoip.h"
+#include "routing.h"
 #include "parsers/parsers.h"
 
 #ifdef HAVE_LIBFASTJSON
@@ -62,11 +64,11 @@ extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
 
 
-extern int proc_msgslot; 		/* Comes from sagan.c */
-extern int proc_running;   	        /* Comes from sagan.c */
+extern uint_fast16_t proc_msgslot; 		/* Comes from sagan.c */
+extern uint_fast16_t proc_running;  	        /* Comes from sagan.c */
 
 bool dynamic_rule_flag = NORMAL_RULE;
-uint32_t dynamic_line_count = 0;
+uint_fast32_t dynamic_line_count = 0;
 
 
 //bool death=false;
@@ -107,7 +109,6 @@ void Processor ( void )
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
-
     struct _Sagan_JSON *JSON_LOCAL = NULL;
 
 #if defined(HAVE_LIBFASTJSON)
@@ -127,7 +128,35 @@ void Processor ( void )
 
 #endif
 
-    int i;
+    struct _GeoIP *GeoIP_SRC = NULL;
+    GeoIP_SRC = malloc(sizeof(struct _GeoIP));
+
+    if ( GeoIP_SRC == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (SRC). Abort!", __FILE__, __LINE__);
+        }
+
+    struct _GeoIP *GeoIP_DEST = NULL;
+    GeoIP_DEST = malloc(sizeof(struct _GeoIP));
+
+    if ( GeoIP_DEST == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
+        }
+
+
+//    memset(GeoIP_SRC, 0, sizeof(_GeoIP));
+
+    struct _Sagan_Routing *SaganRouting = NULL;
+    SaganRouting = malloc(sizeof(struct _Sagan_Routing));
+
+    if ( SaganRouting == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
+        }
+
+
+    uint_fast8_t i;
 
     while(death == false)
         {
@@ -220,7 +249,13 @@ void Processor ( void )
                                 }
                         }
 
-                    (void)Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, dynamic_rule_flag );
+                    memset(GeoIP_SRC, 0, sizeof(_GeoIP));
+                    memset(GeoIP_DEST, 0, sizeof(_GeoIP));
+                    memset(SaganRouting, 0, sizeof(_Sagan_Routing));
+
+                    SaganRouting->check_flow_return = true;
+
+                    Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, GeoIP_SRC, GeoIP_DEST, SaganRouting, dynamic_rule_flag );
 
                     /* If this is a dynamic run,  reset back to normal */
 
@@ -251,6 +286,13 @@ void Processor ( void )
 
     free( SaganProcSyslog_LOCAL );
     free( SaganPassSyslog_LOCAL );
+    free( SaganRouting );
+    free( GeoIP_SRC );
+    free( GeoIP_DEST );
+
+#if defined(HAVE_LIBFASTJSON)
+    free(JSON_LOCAL);
+#endif
 
     __atomic_sub_fetch(&config->max_processor_threads, 1, __ATOMIC_SEQ_CST);
 

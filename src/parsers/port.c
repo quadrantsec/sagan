@@ -56,7 +56,7 @@ extern struct _SaganConfig *config;
 int Parse_Src_Port (char *msg)
 {
 
-    int port;
+    uint_fast32_t port;
 
     char *portstring=NULL;
     char *saveptr1=NULL;
@@ -65,9 +65,9 @@ int Parse_Src_Port (char *msg)
     char *token=NULL;
     char *tmpport=NULL;
 
-    int i;
+    uint_fast32_t i;
     struct sockaddr_in sa;
-    int result;
+    bool result;
 
     port = config->sagan_port;
 

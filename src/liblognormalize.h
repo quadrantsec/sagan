@@ -50,8 +50,8 @@ typedef struct _SaganNormalizeLiblognorm
     char src_host[MAXHOST];
     char dst_host[MAXHOST];
 
-    int  src_port;
-    int  dst_port;
+    uint_fast16_t src_port;
+    uint_fast16_t dst_port;
 
     char username[MAX_USERNAME_SIZE];
     char filename[MAX_FILENAME_SIZE];
