@@ -69,7 +69,7 @@ int Check_Time(int rule_number)
     char hour_tmp[3];
     char minute_tmp[3];
 
-    int	 current_time;
+    uint_fast64_t current_time;
 
     /* Get current utime / and day of the week */
 

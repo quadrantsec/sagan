@@ -65,13 +65,13 @@ void Alert_File( _Sagan_Event *Event )
 
     sagan_alert_stream_int = fileno( sagan_alert_stream );
 
-
     File_Lock( sagan_alert_stream_int );
 
     fprintf(sagan_alert_stream, "\n[**] [%lu:%" PRIu64 ":%d] %s [**]\n", Event->generatorid, Event->sid, Event->rev, Event->f_msg);
     fprintf(sagan_alert_stream, "[Classification: %s] [Priority: %d] [%s]\n", Event->class, Event->pri, Event->host );
     fprintf(sagan_alert_stream, "[Alert Time: %s]\n", timebuf);
-    fprintf(sagan_alert_stream, "%s %s %s:%d [%s] -> %s:%d [%s] %s %s %s\n", Event->date, Event->time, Event->ip_src, Event->src_port, Event->country_src,  Event->ip_dst, Event->dst_port, Event->country_dst, Event->facility, Event->priority, Event->program);
+    fprintf(sagan_alert_stream, "%s %s %s:%d [%s] -> %s:%d [%s] %s %s %s\n", Event->date, Event->time, Event->ip_src, Event->src_port,   Event->country_src,  Event->ip_dst, Event->dst_port, Event->country_dst, Event->facility, Event->priority, Event->program);
+
     fprintf(sagan_alert_stream, "Message: %s\n", Event->message);
 
     if ( Event->rule_position != 0 )

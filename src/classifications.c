@@ -40,7 +40,6 @@
 
 #include "sagan.h"
 #include "sagan-defs.h"
-//#include "gen-msg.h"
 #include "classifications.h"
 
 extern struct _SaganCounters *counters;

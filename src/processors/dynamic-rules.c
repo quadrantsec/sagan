@@ -64,7 +64,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
     struct timeval  tp;
 
     /* GeoIP struct for Send_Alert */
-    /*
+
         struct _GeoIP *GeoIP = NULL;
         GeoIP = malloc(sizeof(struct _GeoIP));
 
@@ -75,7 +75,6 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
         memset(GeoIP, 0, sizeof(_GeoIP));
         memcpy(GeoIP->country, "NONE", 4);
-        */
 
     /* We don't want the array to be altered while we are working with it */
 
@@ -94,7 +93,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
                     /* Rule was already loaded.  Release mutex and continue as normal */
 
                     reload_rules = false;
-//                    free(GeoIP);
+                    free(GeoIP);
                     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
                     return(0);
@@ -107,7 +106,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
     if ( rules_loaded == NULL )
         {
-//            free(GeoIP);
+            free(GeoIP);
             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rules_loaded. Abort!", __FILE__, __LINE__);
         }
 
@@ -138,7 +137,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        "null",
-                       rule_position, tp, NULL, 0, NULL, NULL );
+                       rule_position, tp, NULL, 0, GeoIP, GeoIP );
 
             /* Lock rules so other threads don't try to use it while we alter/load new rules */
 
@@ -177,11 +176,11 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        "null",
-                       rule_position, tp, NULL, 0, NULL, NULL );
+                       rule_position, tp, NULL, 0, GeoIP, GeoIP );
 
         }
 
-//    free(GeoIP);
+    free(GeoIP);
     return(0);
 
 }

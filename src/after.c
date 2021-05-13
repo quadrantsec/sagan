@@ -55,7 +55,7 @@ bool After2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_dst, 
     struct tm *now;
     char  timet[20] = { 0 };
 
-    int i;
+    uint32_t i;
 
     uint64_t after_oldtime;
     uint64_t current_time;
