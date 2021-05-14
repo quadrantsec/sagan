@@ -176,7 +176,7 @@ void Track_Clients ( const char *host )
                     File_Unlock(config->shm_track_clients);
                     pthread_mutex_unlock(&IPCTrackClients);
 
-                    Sagan_Log(WARN, "[%s, line %d] Client tracking has reached it's max! (%d).  Increase 'track_clients' in your configuration!", __FILE__, __LINE__, config->max_track_clients);
+                    Sagan_Log(WARN, "[%s, line %d] TRACK_CLIENT_ERROR - Client tracking has reached it's max! (%d).  Increase 'track_clients' in your configuration!", __FILE__, __LINE__, config->max_track_clients);
 
                 }
 
@@ -255,7 +255,7 @@ void Track_Clients_Thread ( void )
 
                                     tmp_ip = Bit2IP(SaganTrackClients_ipc[i].hostbits, NULL, 0);
 
-                                    Sagan_Log(WARN, "The IP address %s was previously not sending logs. The system appears to be sending logs again at %s", tmp_ip, ctime(&SaganTrackClients_ipc[i].utime) );
+                                    Sagan_Log(WARN, "TRACK-CLIENT-LOGS - The IP address %s was previously not sending logs. The system is now sending logs again at %s", tmp_ip, ctime(&SaganTrackClients_ipc[i].utime) );
 
                                     gettimeofday(&tp, 0);
 
@@ -291,7 +291,7 @@ void Track_Clients_Thread ( void )
 
                                     tmp_ip = Bit2IP(SaganTrackClients_ipc[i].hostbits, NULL, 0);
 
-                                    Sagan_Log(WARN, "Logs have not been received from IP address %s in over %d minutes.  The last log received from this host was at %s.", tmp_ip, config->pp_sagan_track_clients, ctime(&SaganTrackClients_ipc[i].utime) );
+                                    Sagan_Log(WARN, "TRACK-CLIENT-NOLOGS - Logs have not been received from IP address %s in over %d minutes.  The last log received from this host was at %s.", tmp_ip, config->pp_sagan_track_clients, ctime(&SaganTrackClients_ipc[i].utime) );
 
                                     gettimeofday(&tp, 0);
 
