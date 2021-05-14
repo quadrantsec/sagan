@@ -52,10 +52,12 @@
 
 #include "processors/blacklist.h"
 #include "processors/zeek-intel.h"
+#include "processors/track-clients.h"
 
 #ifdef HAVE_LIBYAML
 #include <yaml.h>
 #endif
+
 
 #ifdef WITH_BLUEDOT
 #include "processors/bluedot.h"
@@ -87,6 +89,7 @@ extern struct _SaganVar *var;
 extern struct _SaganCounters *counters;
 extern struct _Rules_Loaded *rules_loaded;
 extern struct _Rule_Struct *rulestruct;
+extern struct _Track_Clients_Networks *Track_Clients_Networks;
 
 #ifndef HAVE_LIBYAML
 ** You must of LIBYAML installed! **
@@ -106,16 +109,14 @@ void Load_YAML_Config( char *yaml_file )
 
     bool done = 0;
 
-    int check = 0;
+    uint32_t check = 0;
 
     unsigned char type = 0;
     int sub_type = 0;
     unsigned char toggle = 0;
 
     char *tok = NULL;
-
     char tmp[CONFBUF] = { 0 };
-
     char last_pass[128] = { 0 };
 
 #ifdef HAVE_LIBMAXMINDDB
@@ -146,6 +147,18 @@ void Load_YAML_Config( char *yaml_file )
     int  bluedot_mask = 0;
 
 #endif
+
+    /* Tracking clients by "network" */
+
+    char *track_clients_ptr = NULL;
+    char *track_clients_tok = NULL;
+
+    unsigned char track_clients_ipbits[MAXIPBIT] = { 0 };
+    unsigned char track_clients_maskbits[MAXIPBIT]= { 0 };
+
+    char *track_clients_iprange = NULL;
+    char *track_clients_tmpmask = NULL;
+    int  track_clients_mask = 0;
 
     char *lf1 = NULL;
     char *lf2 = NULL;
@@ -461,7 +474,7 @@ void Load_YAML_Config( char *yaml_file )
                                                     char *filename = NULL;
                                                     char tmpbuf[CONFBUF] = { 0 };
                                                     FILE *varfile;
-                                                    bool check = 0;
+                                                    bool check_var = 0;
 
                                                     filename = strtok_r(NULL, ":", &tok);
 
@@ -498,10 +511,10 @@ void Load_YAML_Config( char *yaml_file )
                                                                     Sagan_Log(DEBUG, "[%s, line %d] Variable from file \"%s\" var \"%s\" loaded: \"%s\"", __FILE__, __LINE__, filename, var[counters->var_count].var_name, tmpbuf);
                                                                 }
 
-                                                            if ( check == 0 )
+                                                            if ( check_var == 0 )
                                                                 {
 
-                                                                    check = 1;
+                                                                    check_var = 1;
 
                                                                 }
 
@@ -1424,6 +1437,64 @@ void Load_YAML_Config( char *yaml_file )
                                                 }
 
                                         }
+
+                                    else if ( !strcmp(last_pass, "networks") && config->sagan_track_clients_flag == true )
+                                        {
+
+                                            Var_To_Value(value, tmp, sizeof(tmp));
+                                            Remove_Spaces(tmp);
+
+                                            track_clients_ptr = strtok_r(tmp, ",", &tok);
+
+                                            while ( track_clients_ptr != NULL )
+                                                {
+
+                                                    track_clients_iprange = strtok_r(track_clients_ptr, "/", &track_clients_tok);
+
+                                                    if ( track_clients_iprange == NULL )
+                                                        {
+                                                            Sagan_Log(ERROR, "[%s, line %d] processor: 'track-clients' - 'networks' is invalid. Abort.", __FILE__, __LINE__);
+                                                        }
+
+                                                    if (!IP2Bit(track_clients_iprange, track_clients_ipbits))
+                                                        {
+                                                            Sagan_Log(ERROR, "[%s, line %d] processor: 'track-clients' - 'address' is invalid. Abort", __FILE__, __LINE__);
+                                                        }
+
+                                                    track_clients_tmpmask = strtok_r(NULL, "/", &track_clients_tok);
+
+                                                    if ( track_clients_tmpmask == NULL )
+                                                        {
+                                                            track_clients_mask = 32;
+                                                        }
+
+                                                    Track_Clients_Networks = (_Track_Clients_Networks *) realloc(Track_Clients_Networks, (counters->track_clients_count+1) * sizeof(_Track_Clients_Networks));
+
+                                                    if ( Track_Clients_Networks == NULL )
+                                                        {
+                                                            Sagan_Log(ERROR, "[%s, line %d] processor: 'track-clients' - Failed to reallocate memory for _Track_Clients_Networks Abort!", __FILE__, __LINE__);
+                                                        }
+
+                                                    memset(&Track_Clients_Networks[counters->track_clients_count], 0, sizeof(_Track_Clients_Networks));
+
+                                                    track_clients_mask = atoi(track_clients_tmpmask);
+
+                                                    if ( track_clients_mask == 0 || !Mask2Bit(track_clients_mask, track_clients_maskbits))
+                                                        {
+                                                            Sagan_Log(ERROR, "[%s, line %d] processor: 'track-clients' - Invalid mask for 'networks'. Abort", __FILE__, __LINE__);
+                                                        }
+
+                                                    memcpy(Track_Clients_Networks[counters->track_clients_count].range.ipbits, track_clients_ipbits, sizeof(track_clients_ipbits));
+                                                    memcpy(Track_Clients_Networks[counters->track_clients_count].range.maskbits, track_clients_maskbits, sizeof(track_clients_maskbits));
+
+                                                    __atomic_add_fetch(&counters->track_clients_count, 1, __ATOMIC_SEQ_CST);
+
+                                                    track_clients_ptr = strtok_r(NULL, ",", &tok);
+
+                                                }
+
+                                        }
+
                                 }
 
                             else if ( sub_type == YAML_PROCESSORS_CLIENT_STATS )

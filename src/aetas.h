@@ -18,6 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-int Check_Time(int);
-int Check_Day(unsigned char, int);
+int Check_Time(uint32_t rule_number);
+int Check_Day(unsigned char day, uint8_t day_current);
 

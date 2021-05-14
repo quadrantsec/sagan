@@ -54,8 +54,7 @@
 
 #include "processors/track-clients.h"
 
-pthread_mutex_t IPCTrackClientCounter=PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t IPCTrackClientsStatus=PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t IPCTrackClients=PTHREAD_MUTEX_INITIALIZER;
 
 struct _Sagan_Processor_Info *processor_info_track_client = NULL;
 struct _Sagan_Proc_Syslog *SaganProcSyslog;
@@ -63,6 +62,10 @@ extern struct _Sagan_Track_Clients_IPC *SaganTrackClients_ipc;
 extern struct _Sagan_IPC_Counters *counters_ipc;
 
 extern struct _SaganConfig *config;
+extern struct _Track_Clients_Networks *Track_Clients_Networks;
+extern struct _SaganCounters *counters;
+extern struct _SaganDebug *debug;
+
 
 bool death;
 
@@ -85,59 +88,97 @@ void Track_Clients ( const char *host )
     now=localtime(&t);
     strftime(utime_tmp, sizeof(utime_tmp), "%s",  now);
     utime_u64 = atol(utime_tmp);
-    int expired_time = config->pp_sagan_track_clients * 60;
+
+    uint32_t expired_time = config->pp_sagan_track_clients * 60;
+
+    bool network_results = false;
 
     IP2Bit( (char*)host, hostbits);
 
-    /********************************************/
-    /** Record update tracking if record exsist */
-    /********************************************/
+    /* Search array and see if the host is within our range of "networks".  This will
+       be skipped if no "networks" are specified. */
 
-    pthread_mutex_lock(&IPCTrackClientCounter);
-    File_Lock(config->shm_track_clients);
-
-    for (i=0; i<counters_ipc->track_clients_client_count; i++)
+    for ( i = 0; i < counters->track_clients_count; i++ )
         {
-            if ( !memcmp(SaganTrackClients_ipc[i].hostbits, hostbits, MAXIPBIT ) )
+
+            if ( is_inrange(hostbits, (unsigned char *)&Track_Clients_Networks[i].range, 1) )
                 {
-
-                    SaganTrackClients_ipc[i].utime = utime_u64;
-                    SaganTrackClients_ipc[i].expire = expired_time;
-
-                    File_Unlock(config->shm_track_clients);
-                    pthread_mutex_unlock(&IPCTrackClientCounter);
-
-                    return;
+                    network_results = true;
+                    continue;
                 }
         }
 
-    if ( counters_ipc->track_clients_client_count < config->max_track_clients )
+    /* If no "networks" have been specified,  everything is fair game */
+
+    if ( counters->track_clients_count == 0 )
         {
-
-            memcpy(SaganTrackClients_ipc[counters_ipc->track_clients_client_count].hostbits, hostbits, sizeof(hostbits));
-            SaganTrackClients_ipc[counters_ipc->track_clients_client_count].utime = utime_u64;
-            SaganTrackClients_ipc[counters_ipc->track_clients_client_count].status = 0;
-            SaganTrackClients_ipc[counters_ipc->track_clients_client_count].expire = expired_time;
-
-            File_Lock(config->shm_counters);
-
-            counters_ipc->track_clients_client_count++;
-
-            File_Unlock(config->shm_counters);
-            File_Unlock(config->shm_track_clients);
-
-            pthread_mutex_unlock(&IPCTrackClientCounter);
-
-            return;
-
+            network_results = true;
         }
-    else
+
+    if ( network_results == true )
         {
 
-            File_Unlock(config->shm_track_clients);
-            pthread_mutex_unlock(&IPCTrackClientCounter);
+            /********************************************/
+            /** Record update tracking if record exsist */
+            /********************************************/
 
-            Sagan_Log(WARN, "[%s, line %d] Client tracking has reached it's max! (%d).  Increase 'track_clients' in your configuration!", __FILE__, __LINE__, config->max_track_clients);
+            pthread_mutex_lock(&IPCTrackClients);
+            File_Lock(config->shm_track_clients);
+
+            for (i=0; i<counters_ipc->track_clients_client_count; i++)
+                {
+                    if ( !memcmp(SaganTrackClients_ipc[i].hostbits, hostbits, MAXIPBIT ) )
+                        {
+
+                            if ( debug->debugtrack_clients == true )
+                                {
+                                    Sagan_Log(DEBUG, "[%s, line %d] Already have %s.  Updating status.",  __FILE__, __LINE__, host);
+                                }
+
+                            SaganTrackClients_ipc[i].utime = utime_u64;
+                            SaganTrackClients_ipc[i].expire = expired_time;
+
+                            File_Unlock(config->shm_track_clients);
+                            pthread_mutex_unlock(&IPCTrackClients);
+
+                            return;
+                        }
+                }
+
+            if ( counters_ipc->track_clients_client_count < config->max_track_clients )
+                {
+
+                    if ( debug->debugtrack_clients == true )
+                        {
+                            Sagan_Log(DEBUG, "[%s, line %d] Adding new IP %s to be monitored.",  __FILE__, __LINE__, host);
+                        }
+
+                    memcpy(SaganTrackClients_ipc[counters_ipc->track_clients_client_count].hostbits, hostbits, sizeof(hostbits));
+                    SaganTrackClients_ipc[counters_ipc->track_clients_client_count].utime = utime_u64;
+                    SaganTrackClients_ipc[counters_ipc->track_clients_client_count].status = 0;
+                    SaganTrackClients_ipc[counters_ipc->track_clients_client_count].expire = expired_time;
+
+                    File_Lock(config->shm_counters);
+
+                    counters_ipc->track_clients_client_count++;
+
+                    File_Unlock(config->shm_counters);
+                    File_Unlock(config->shm_track_clients);
+
+                    pthread_mutex_unlock(&IPCTrackClients);
+
+                    return;
+
+                }
+            else
+                {
+
+                    File_Unlock(config->shm_track_clients);
+                    pthread_mutex_unlock(&IPCTrackClients);
+
+                    Sagan_Log(WARN, "[%s, line %d] Client tracking has reached it's max! (%d).  Increase 'track_clients' in your configuration!", __FILE__, __LINE__, config->max_track_clients);
+
+                }
 
         }
 
@@ -195,7 +236,7 @@ void Track_Clients_Thread ( void )
 
                                     /* Update status and seen time */
 
-                                    pthread_mutex_lock(&IPCTrackClientsStatus);
+                                    pthread_mutex_lock(&IPCTrackClients);
                                     File_Lock(config->shm_track_clients);
 
                                     SaganTrackClients_ipc[i].status = 0;
@@ -209,7 +250,7 @@ void Track_Clients_Thread ( void )
                                     File_Unlock(config->shm_counters);
                                     File_Unlock(config->shm_track_clients);
 
-                                    pthread_mutex_unlock(&IPCTrackClientsStatus);
+                                    pthread_mutex_unlock(&IPCTrackClients);
 
 
                                     tmp_ip = Bit2IP(SaganTrackClients_ipc[i].hostbits, NULL, 0);
@@ -231,7 +272,7 @@ void Track_Clients_Thread ( void )
 
                                     /* Update status and utime */
 
-                                    pthread_mutex_lock(&IPCTrackClientsStatus);
+                                    pthread_mutex_lock(&IPCTrackClients);
 
                                     File_Lock(config->shm_track_clients);
 
@@ -246,7 +287,7 @@ void Track_Clients_Thread ( void )
                                     File_Unlock(config->shm_counters);
                                     File_Unlock(config->shm_track_clients);
 
-                                    pthread_mutex_unlock(&IPCTrackClientsStatus);
+                                    pthread_mutex_unlock(&IPCTrackClients);
 
                                     tmp_ip = Bit2IP(SaganTrackClients_ipc[i].hostbits, NULL, 0);
 

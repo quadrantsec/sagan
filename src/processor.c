@@ -271,7 +271,7 @@ void Processor ( void )
 
                         }
 
-                    if ( config->sagan_track_clients_flag )
+                    if ( config->sagan_track_clients_flag && SaganProcSyslog_LOCAL->syslog_host[0] != '\0' )
                         {
                             Track_Clients( SaganProcSyslog_LOCAL->syslog_host );
                         }

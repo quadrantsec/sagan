@@ -247,6 +247,8 @@ struct _SaganCounters
     uint_fast64_t follow_flow_total;	 /* This will only be needed if follow_flow is an option */
     uint_fast64_t follow_flow_drop;   /* Amount of flows that did not match and were dropped */
 
+    uint_fast64_t track_clients_count;
+
 #ifdef HAVE_LIBMAXMINDDB
     uint_fast64_t geoip2_hit;				/* GeoIP hit count */
     uint_fast64_t geoip2_lookup;				/* Total lookups */
@@ -340,6 +342,7 @@ struct _SaganDebug
     bool debugjson;
     bool debugparse_ip;
     bool debugclient_stats;
+    bool debugtrack_clients;
 
 #ifdef HAVE_LIBMAXMINDDB
     bool debuggeoip2;

@@ -57,7 +57,7 @@ void Load_Classifications( const char *ruleset )
     char *tmptoken=NULL;
     char *laststring=NULL;
     char tmpbuf2[5];
-    int  linecount=0;
+    uint32_t linecount=0;
 
     __atomic_store_n (&counters->classcount, 0, __ATOMIC_SEQ_CST);
 

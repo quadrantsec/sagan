@@ -106,6 +106,7 @@ struct _SaganCounters *counters = NULL;
 struct _SaganConfig *config = NULL;
 struct _SaganDebug *debug = NULL;
 struct _SaganDNSCache *dnscache = NULL;
+struct _Track_Clients_Networks *Track_Clients_Networks = NULL;
 
 
 #ifdef HAVE_LIBFASTJSON
@@ -435,7 +436,7 @@ int main(int argc, char **argv)
                             debugflag = true;
                         }
 
-                    if (Sagan_strstr(optarg, "brointel"))
+                    if (Sagan_strstr(optarg, "zeekintel"))
                         {
                             debug->debugbrointel = true;
                             debugflag = true;
@@ -458,6 +459,13 @@ int main(int argc, char **argv)
                             debug->debugclient_stats = true;
                             debugflag = true;
                         }
+
+                    if (Sagan_strstr(optarg, "track-clients"))
+                        {
+                            debug->debugtrack_clients = true;
+                            debugflag = true;
+                        }
+
 
 #ifdef HAVE_LIBMAXMINDDB
 

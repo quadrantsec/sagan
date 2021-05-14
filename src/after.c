@@ -48,7 +48,7 @@ extern struct _SaganConfig *config;
 
 extern struct _Sagan_IPC_Counters *counters_ipc;
 
-bool After2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_dst,  uint32_t dst_port, char *username, char *syslog_message )
+bool After2 ( uint32_t rule_position, char *ip_src, uint16_t src_port, char *ip_dst,  uint16_t dst_port, char *username, char *syslog_message )
 {
 
     time_t t;
