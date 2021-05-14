@@ -260,11 +260,6 @@ struct _Rule_Struct
 #define THRESHOLD_LIMIT 1
 #define THRESHOLD_SUPPRESS 2
 
-//    uint8_t threshold_type;               /* 1 = limit,  2 = suppress */
-//    uint8_t threshold_method;             /* 1 ==  src,  2 == dst,  3 == username, 4 == srcport, 5 == dstport */
-//    int threshold_count;
-//    uint32_t threshold_seconds;
-
     uint_fast8_t threshold2_type;               /* 1 = limit,  2 = threshold */
     uint_fast8_t threshold2_method;             /* 1 ==  src,  2 == dst,  3 == username, 4 == srcport, 5 == dstport */
     uint_fast32_t threshold2_count;
@@ -318,9 +313,6 @@ struct _Rule_Struct
 
     uint_fast32_t	 aetas_start;
     uint_fast32_t     aetas_end;
-
-//    int  alert_end_hour;
-//    int  alert_end_minute;
 
     bool external_flag;
     char  external_program[MAXPATH];

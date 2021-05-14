@@ -44,7 +44,7 @@ extern struct _SaganConfig *config;
 
 bool Flexbit_Condition(int rule_position, const char *ip_src_char, const char *ip_dst_char, int src_port, int dst_port, const char *username, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
-    return(Flexbit_Condition_MMAP(rule_position, ip_src_char, ip_dst_char, src_port, dst_port, SaganProcSyslog_LOCAL));
+    return(Flexbit_Condition_MMAP(rule_position, SaganProcSyslog_LOCAL));
 }
 
 
@@ -60,7 +60,7 @@ void Flexbit_Set(int rule_position, const char *ip_src_char, const char *ip_dst_
 }
 
 
-int Flexbit_Type ( const char *type, int linecount, const char *ruleset )
+uint_fast8_t Flexbit_Type ( const char *type, uint_fast32_t linecount, const char *ruleset )
 {
 
     if (!strcmp(type, "none"))

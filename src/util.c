@@ -62,7 +62,6 @@
 extern struct _SaganConfig *config;
 extern struct _SaganCounters *counters;
 struct _SaganVar *var;
-//struct _Sagan_Processor_Generator *generator;
 
 bool daemonize;
 bool quiet;
@@ -209,7 +208,7 @@ void To_LowerC(char *const s)
  * Generic "sagan.log" style logging and screen output.
  *******************************************************/
 
-void Sagan_Log (int type, const char *format,... )
+void Sagan_Log (uint_fast8_t type, const char *format,... )
 {
 
     char buf[5128] = { 0 };
@@ -246,6 +245,8 @@ void Sagan_Log (int type, const char *format,... )
     fflush(config->sagan_log_stream);
 
     File_Unlock( config->sagan_log_stream_int );
+
+    /* Log all console output to syslog */
 
     if ( config->sagan_log_syslog == true )
         {
@@ -288,7 +289,7 @@ bool Mask2Bit(int mask, unsigned char *out)
 
 /* Converts IP address.  We assume that out is at least 16 bytes.  */
 
-bool IP2Bit(char *ipaddr, unsigned char *out)
+bool IP2Bit(const char *ipaddr, unsigned char *out)
 {
 
     bool ret = false;
@@ -439,7 +440,7 @@ double CalcPct(uint64_t cnt, uint64_t total)
  * based on Beej's showip.c
  ********************************************************************/
 
-int DNS_Lookup( char *host, char *str, size_t size )
+int DNS_Lookup( const char *host, char *str, size_t size )
 {
 
     char ipstr[INET6_ADDRSTRLEN] = { 0 };
@@ -516,7 +517,7 @@ void Replace_String(const char *in_str, char *orig, char *rep, char *str, size_t
 
 bool is_inrange ( unsigned char *ip, unsigned char *tests, int count)
 {
-//    int i,j,k;
+
     uint_fast32_t i,j,k;
     bool inrange = false;
     for (i=0; i<count*MAXIPBIT*2; i+=MAXIPBIT*2)
@@ -708,7 +709,7 @@ void Var_To_Value(const char *in_str, char *str, size_t size)
     char tmp_result[MAX_VAR_VALUE_SIZE] = { 0 };
     char tmp[MAX_VAR_VALUE_SIZE] = { 0 };
 
-    int i=0;
+    uint32_t i=0;
 
     snprintf(tmp, sizeof(tmp), "%s", in_str);		/* Segfault with strlcpy */
 
@@ -878,8 +879,6 @@ void Replace_Sagan( const char *in_str, char *replace, char *str, size_t size)
 
     uint_fast16_t i = 0;
 
-//    strlcpy(string, string_in, sizeof(string));
-
     for (i = 0; i < strlen(in_str); i++)
         {
 
@@ -966,92 +965,6 @@ void CloseStream( FILE *stream, int *fd )
         }
 }
 
-
-/****************************************************************************
- * OpenStream - Used to open streams.  This function does NOT use Sagan_Log()
- * since it is used before Sagan_Log() is initalized
- ***************************************************************************/
-
-/*
-FILE *OpenStream( char *path, int *fd, unsigned long pw_uid, unsigned long pw_gid )
-{
-    FILE *ret = NULL;
-    char *_path = NULL;
-    struct sockaddr_un name = {0};
-
-    if ( fd == NULL || path == NULL )
-        {
-            fprintf(stderr, "[E] [%s, line %d] Invalid (null) argument(s) passed to OpenStream!\n", __FILE__, __LINE__);
-            exit(-1);
-        }
-
-    _path = strstr(path, "://");
-
-    if ( _path == NULL )
-        {
-            _path = path;
-        }
-    else
-        {
-            _path += 3;
-        }
-
-    /* TODO: Add cases here for UDP and TCP */
-/*
-    if (Starts_With(path, "unix://"))
-        {
-            /* Create socket from which to write. Currently only stream mode is supported */
-/*
-            *fd = socket(AF_UNIX, SOCK_STREAM, 0);
-
-            if (*fd < 0)
-                {
-                    fprintf(stderr, "[E] [%s, line %d] Could not init unix socket. Failed to open socket at %s - %s!\n", __FILE__, __LINE__, _path, strerror(errno));
-                    exit(-1);
-                }
-
-            /* Create name. */
-/*
-            name.sun_family = AF_UNIX;
-            strncpy(name.sun_path, _path, sizeof(name.sun_path)-1);
-
-            /* Bind the UNIX domain address to the created socket */
-/*
-            if (connect(*fd, (struct sockaddr *) &name, sizeof(struct sockaddr_un)))
-                {
-                    fprintf(stderr, "[E] [%s, line %d] Could not init unix socket. Failed to connect to socket %s - %s!\n", __FILE__, __LINE__, _path, strerror(errno));
-                    exit(-1);
-                }
-            else
-                {
-                    //Sagan_Log(NORMAL, "[%s, line %d] Connected to unix socket: %s: %d", __FILE__, __LINE__, name.sun_path, *fd);
-                    ret = fdopen(*fd, "a");
-                }
-        }
-    else
-        {
-            *fd = -1;
-            ret = fopen(_path, "a");
-        }
-
-    /* Chown the log files in case we get a SIGHUP or whatnot later (due to Sagan_Chroot()) */
-/*
-    if ( chown(_path, pw_uid,pw_gid) < 0 )
-        {
-            fprintf(stderr, "[%s, line %d] Cannot change ownership of %s to username \"%s\" - %s\n", __FILE__, __LINE__, _path, config->sagan_runas, strerror(errno));
-            exit(-1);
-        }
-
-    if ( ret == NULL && *fd >= 0 )
-        {
-            close(*fd);
-            *fd = -1;
-        }
-
-    return ret;
-}
-*/
-
 /****************************************************************************
  * Set_Pipe_Size - Changes the capacity of the pipe/FIFO.
  ****************************************************************************/
@@ -1064,7 +977,6 @@ void Set_Pipe_Size ( FILE *fd )
     int fd_int;
     uint_fast32_t current_fifo_size;
     int fd_results;
-
 
     if ( config->sagan_fifo_size != 0 )
         {
@@ -1179,6 +1091,7 @@ const char *Bit2IP(unsigned char *ipbits, char *str, size_t size)
 /* Convert an IP or IP/CIDR into 128bit IP and 128bit mask.             */
 /* Return if masked.  Assume that out is at least 32 bytes              */
 /************************************************************************/
+
 int Netaddr_To_Range( char *ipstr, unsigned char *out )
 {
 
@@ -1254,8 +1167,6 @@ bool Is_IP (const char *ipaddr, int ver )
 
     struct sockaddr_in sa;
     bool ret = false;
-//    char ip[MAXIP];
-//    strlcpy(ip, ipaddr, sizeof(ip));
 
     /* We don't use getaddrinfo().  Here's why:
      * See https://blog.powerdns.com/2014/05/21/a-surprising-discovery-on-converting-ipv6-addresses-we-no-longer-prefer-getaddrinfo/
@@ -1302,7 +1213,6 @@ bool Is_IP_Range (char *str)
 
             if ( strchr(str, '/') )
                 {
-                    //ip = strtok_r(str, "/", &tmp);
                     (void)strtok_r(str, "/", &tmp);
                     prefix = atoi(strtok_r(NULL, "/", &tmp));
                     if(prefix < 1 || prefix > 128 )
@@ -1358,10 +1268,10 @@ int PageSupportsRWX(void)
  * EVE
  ***************************************************************************/
 
-int64_t FlowGetId( struct timeval tp )
+int_fast64_t FlowGetId( struct timeval tp )
 {
-    return (int64_t)(tp.tv_sec & 0x0000FFFF) << 16 |
-           (int64_t)(tp.tv_usec & 0x0000FFFF);
+    return (int_fast64_t)(tp.tv_sec & 0x0000FFFF) << 16 |
+           (int_fast64_t)(tp.tv_usec & 0x0000FFFF);
 }
 
 /***************************************************************************
@@ -1444,7 +1354,6 @@ bool ValidateMessage( const char *message )
 /*                                                                          */
 /* Checks to see if an ip address is loopback	                            */
 /****************************************************************************/
-
 
 bool is_notlocalhost ( unsigned char *ip )
 {

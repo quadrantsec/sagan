@@ -68,10 +68,8 @@ extern uint_fast16_t proc_msgslot; 		/* Comes from sagan.c */
 extern uint_fast16_t proc_running;  	        /* Comes from sagan.c */
 
 bool dynamic_rule_flag = NORMAL_RULE;
-uint_fast32_t dynamic_line_count = 0;
+uint_fast16_t dynamic_line_count = 0;
 
-
-//bool death=false;
 bool death;
 
 extern pthread_cond_t SaganProcDoWork;
@@ -144,9 +142,6 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
         }
 
-
-//    memset(GeoIP_SRC, 0, sizeof(_GeoIP));
-
     struct _Sagan_Routing *SaganRouting = NULL;
     SaganRouting = malloc(sizeof(struct _Sagan_Routing));
 
@@ -154,7 +149,6 @@ void Processor ( void )
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
         }
-
 
     uint_fast8_t i;
 

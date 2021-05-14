@@ -50,7 +50,7 @@ void Load_Ignore_List ( void )
 
     FILE *droplist;
 
-    char droplistbuf[1024] = { 0 };
+    char droplistbuf[IGNORE_SIZE] = { 0 };
 
     if (( droplist = fopen(config->sagan_droplistfile, "r" )) == NULL )
         {
@@ -58,7 +58,7 @@ void Load_Ignore_List ( void )
             config->sagan_droplist_flag=0;
         }
 
-    while(fgets(droplistbuf, 1024, droplist) != NULL)
+    while(fgets(droplistbuf, IGNORE_SIZE, droplist) != NULL)
         {
 
             /* Skip comments and blank linkes */

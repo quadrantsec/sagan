@@ -90,7 +90,7 @@ void Open_GeoIP2_Database( void )
  * it is in/out of HOME_COUNTRY
  ****************************************************************************/
 
-int GeoIP2_Lookup_Country( char *ipaddr, int rule_position, struct _GeoIP *GeoIP )
+int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, struct _GeoIP *GeoIP )
 {
 
     int gai_error;
@@ -104,9 +104,9 @@ int GeoIP2_Lookup_Country( char *ipaddr, int rule_position, struct _GeoIP *GeoIP
 
     unsigned char ip_convert[MAXIPBIT] = { 0 };
 
-    int i = 0;
+    uint_fast16_t i = 0;
 
-    IP2Bit(ipaddr, ip_convert);
+    IP2Bit( (char*)ipaddr, ip_convert);
 
     if ( is_notroutable(ip_convert) || ipaddr[0] == '0' )
         {

@@ -96,10 +96,10 @@ extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
 extern struct _Rules_Loaded *rules_loaded;
 extern struct _Class_Struct *classstruct;
-//extern struct _Sagan_Processor_Generator *generator;
 extern struct _Sagan_Blacklist *SaganBlacklist;
-struct _Sagan_Track_Clients *SaganTrackClients;
 extern struct _SaganVar *var;
+extern struct _Sagan_Track_Clients *SaganTrackClients;
+
 
 extern struct _Sagan_Ignorelist *SaganIgnorelist;
 
@@ -134,7 +134,7 @@ void Sig_Handler( void )
     bool orig_stats_json_value = false;
     bool orig_client_stats_value = false;
 
-    unsigned char max_death_time = 0;
+    uint_fast8_t max_death_time = 0;
 
 #ifdef HAVE_LIBPCAP
     bool orig_plog_value = 0;

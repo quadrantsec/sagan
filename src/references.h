@@ -29,4 +29,4 @@ struct _Ref_Struct
 
 
 void Load_Reference ( const char * );
-void Reference_Lookup( int, int, char *str, size_t size );
+void Reference_Lookup( uint_fast32_t rulemem, bool type, char *str, size_t size );

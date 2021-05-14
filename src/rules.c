@@ -113,12 +113,12 @@ void Load_Rules( const char *ruleset )
     int erroffset;
 
     FILE *rulesfile;
-    char ruleset_fullname[MAXPATH];
+    char ruleset_fullname[MAXPATH] = { 0 };
 
     char *rulestring;
     char *netstring;
 
-    char nettmp[64];
+    char nettmp[64] = { 0 };
 
     char *tokenrule;
     char *tokennet;
@@ -143,9 +143,9 @@ void Load_Rules( const char *ruleset )
     char *after_value2;
     char *after_value3;
 
-    char tmp_help[CONFBUF];
-    char tok_help[64];
-    char tok_help2[64];
+    char tmp_help[CONFBUF] = { 0 };
+    char tok_help[64] = { 0 };
+    char tok_help2[64] = { 0 };
 
     char netstr[RULEBUF] = { 0 };
     char rulestr[RULEBUF] = { 0 };
@@ -171,45 +171,46 @@ void Load_Rules( const char *ruleset )
     char alert_tmp_hour[3] = { 0 };
     char alert_time_all[5] = { 0 } ;
 
-    int linecount=0;
-    int netcount=0;
-    int ref_count=0;
+    uint32_t linecount=0;
+    uint8_t netcount=0;
+    uint8_t ref_count=0;
 
-    int content_count=0;
-    int json_content_count=0;
+    uint8_t content_count=0;
+    uint8_t json_content_count=0;
 
-    uint8_t json_map_count=0;
+    uint16_t json_map_count=0;
+    uint8_t meta_content_count=0;
 
-    int meta_content_count=0;
-    int meta_content_converted_count=0;
-    int json_meta_content_converted_count=0;
-    int json_pcre_count=0;
-    int json_meta_content_count=0;
-    int pcre_count=0;
-    int event_id_count;
+    uint8_t meta_content_converted_count=0;
+    uint8_t json_meta_content_converted_count=0;
+    uint8_t json_pcre_count=0;
+    uint8_t json_meta_content_count=0;
+    uint8_t pcre_count=0;
+    uint8_t event_id_count;
 
-    int flexbit_count;
-    int xbit_count;
+    uint8_t flexbit_count;
+    uint8_t xbit_count;
 
-    int flow_1_count=0;
-    int flow_2_count=0;
-    int port_1_count=0;
-    int port_2_count=0;
+    uint32_t flow_1_count=0;
+    uint32_t flow_2_count=0;
+    uint32_t port_1_count=0;
+    uint32_t port_2_count=0;
 
     bool pcreflag = false;
 
     int pcreoptions=0;
 
-    int i=0;
-    int d;
+    uint32_t i=0;
+    uint8_t d=0;
 
     int rc=0;
 
-    int forward=0;
-    int reverse=0;
+    uint32_t forward=0;
+    uint32_t reverse=0;
 
     int is_masked = 0;
-    int ruleset_track_id = 0;
+
+    uint32_t ruleset_track_id = 0;
 
 #ifdef HAVE_LIBFASTJSON
 

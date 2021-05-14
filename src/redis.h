@@ -25,7 +25,7 @@
 void Redis_Reader_Connect ( void );
 void Redis_Writer (void);
 void Redis_Writer_Init (void);
-void Redis_Reader ( char *redis_command, char *str, size_t size );
+void Redis_Reader ( const char *redis_command, char *str, size_t size );
 
 typedef struct _Sagan_Redis_Write _Sagan_Redis_Write;
 struct _Sagan_Redis_Write

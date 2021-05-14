@@ -23,7 +23,7 @@ void CreateTimeString (const struct timeval *, char *, size_t, bool );
 void CreateIsoTimeString (const struct timeval *, char *, size_t );
 void Return_Date( uint32_t, char *str, size_t size );
 void Return_Time( uint32_t, char *str, size_t size );
-void u32_Time_To_Human ( uint32_t, char *str, size_t size );
+void u32_Time_To_Human ( uint_fast64_t utime, char *str, size_t size );
 uint64_t Return_Epoch( void );
 
 

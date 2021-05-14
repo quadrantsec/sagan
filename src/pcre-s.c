@@ -36,12 +36,12 @@
 extern struct _Rule_Struct *rulestruct;
 
 
-bool PcreS ( int rule_position, const char *syslog_message )
+bool PcreS ( uint_fast32_t rule_position, const char *syslog_message )
 {
 
 
-    int z = 0;
-    int match = 0;
+    uint_fast8_t z = 0;
+    uint_fast8_t match = 0;
     int rc = 0;
     int ovector[PCRE_OVECCOUNT];
 

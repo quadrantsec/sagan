@@ -54,28 +54,30 @@ extern int proc_running; 	/* Count of executing threads */
 void Statistics( void )
 {
 
-    char timet[20];
+    char timet[20] =  { 0 };
 
     time_t t;
     struct tm *now;
     int seconds = 0;
     unsigned long total=0;
-    int i;
+    uint16_t i;
     bool flag;
 
-    int uptime_days;
-    int uptime_abovedays;
-    int uptime_hours;
-    int uptime_abovehours;
-    int uptime_minutes;
-    int uptime_seconds;
+    uint16_t uptime_days;
+    uint16_t uptime_abovedays;
+    uint8_t uptime_hours;
+    uint8_t uptime_abovehours;
+    uint8_t uptime_minutes;
+    uint8_t uptime_seconds;
 
 #ifdef WITH_BLUEDOT
-    unsigned long bluedot_ip_total=0;
-    unsigned long bluedot_hash_total=0;
-    unsigned long bluedot_url_total=0;
-    unsigned long bluedot_filename_total=0;
-    unsigned long bluedot_ja3_total=0;
+
+    uint64_t bluedot_ip_total=0;
+    uint64_t bluedot_hash_total=0;
+    uint64_t bluedot_url_total=0;
+    uint64_t bluedot_filename_total=0;
+    uint64_t bluedot_ja3_total=0;
+
 #endif
 
 

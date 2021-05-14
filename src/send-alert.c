@@ -47,9 +47,6 @@
 extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
 
-
-/* ALL this needs to go away. It's UgLy */
-
 void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normalize, int rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
 {
 
@@ -66,30 +63,7 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_n
 
     memset(SaganProcessorEvent, 0, sizeof(_Sagan_Event));
 
-//    if ( GENERATOR_ID != ENGINE_GENERATOR_ID )
-//	    {
-//		    Generator_Lookup(GENERATOR_ID, sid, tmp, sizeof(tmp));
-//		    SaganProcessorEvent->f_msg           =       tmp;
-
-//	    } else {
-
     SaganProcessorEvent->f_msg           =       rulestruct[rule_position].s_msg;
-
-//	    }
-
-
-//    if ( processor_info->processor_generator_id != SAGAN_PROCESSOR_GENERATOR_ID )
-//        {
-
-//            Generator_Lookup(processor_info->processor_generator_id, sid, tmp, sizeof(tmp));
-//            SaganProcessorEvent->f_msg           =       tmp;
-
-//        }
-//    else
-//        {
-
-//            SaganProcessorEvent->f_msg           =       rulestruct[rule_position].s_msg;
-//       }
 
     SaganProcessorEvent->message         =       SaganProcSyslog_LOCAL->syslog_message;
     SaganProcessorEvent->program	 = 	 SaganProcSyslog_LOCAL->syslog_program;

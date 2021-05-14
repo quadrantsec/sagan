@@ -76,7 +76,7 @@ extern struct _SaganDebug *debug;
  * any stale IPC entries.
  *****************************************************************************/
 
-bool Clean_IPC_Object( int type )
+bool Clean_IPC_Object( uint_fast8_t type )
 {
 
     if ( type == AFTER2 && config->max_after2 < counters_ipc->after2_count )
@@ -85,10 +85,10 @@ bool Clean_IPC_Object( int type )
             time_t t;
             struct tm *now;
 
-            int i;
-            int utime = 0;
-            int new_count = 0;
-            int old_count = 0;
+            uint_fast32_t i;
+            uint_fast64_t utime = 0;
+            uint_fast32_t new_count = 0;
+            uint_fast32_t old_count = 0;
 
             char timet[20];
 

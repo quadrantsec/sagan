@@ -45,7 +45,7 @@
 
 extern struct _Rule_Struct *rulestruct;
 
-int Check_Time(uint32_t rule_number)
+bool Check_Time(uint32_t rule_number)
 {
 
     char ct[64] = { 0 };
@@ -147,7 +147,7 @@ int Check_Time(uint32_t rule_number)
 /* Check_Day - Returns days if found in the "day" bitmask             */
 /****************************************************************************/
 
-int Check_Day(unsigned char day, uint8_t day_current)
+bool Check_Day(unsigned char day, uint8_t day_current)
 {
 
     if ( day_current == 0 )

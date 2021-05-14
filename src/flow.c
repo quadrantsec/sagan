@@ -45,14 +45,14 @@ extern struct _Rule_Struct *rulestruct;
 /* 3 = match ip     */ /************************/ /*****************/
 /********************/ /************************/ /*****************/
 
-bool Check_Flow( int b, int ip_proto, unsigned char *ip_src_bits, int normalize_src_port, unsigned char *ip_dst_bits, int normalize_dst_port)
+bool Check_Flow( uint_fast32_t b, uint_fast8_t ip_proto, unsigned char *ip_src_bits, uint_fast16_t normalize_src_port, unsigned char *ip_dst_bits, uint_fast16_t normalize_dst_port)
 {
 
     unsigned char *src;
     unsigned char *dst;
 
-    int port_src;
-    int port_dst;
+    uint_fast16_t port_src;
+    uint_fast16_t port_dst;
 
     unsigned char *ip_src;
     unsigned char *ip_dst;
@@ -80,51 +80,51 @@ bool Check_Flow( int b, int ip_proto, unsigned char *ip_src_bits, int normalize_
 
     /*proto*/
 
-    int c1=0;
+    uint_fast8_t c1=0;
 
     /*flow 1*/
 
-    int w=0;
-    int a1=0;
-    int eq1=0;
-    int ne1=0;
-    int eq1_val=0;
-    int ne1_val=0;
-    int f1;
+    uint_fast32_t w=0;
+    bool a1=0;
+    uint_fast32_t eq1=0;
+    uint_fast32_t ne1=0;
+    uint_fast32_t eq1_val=0;
+    uint_fast32_t ne1_val=0;
+    uint_fast8_t f1;
 
     /*port 1*/
 
-    int b1=0;
-    int u=0;
-    int eq3=0;
-    int ne3=0;
-    int eq3_val=0;
-    int ne3_val=0;
-    int g1;
+    bool b1=0;
+    uint_fast32_t u=0;
+    uint_fast32_t eq3=0;
+    uint_fast32_t ne3=0;
+    uint_fast32_t eq3_val=0;
+    uint_fast32_t ne3_val=0;
+    uint_fast8_t g1;
 
 
     /*flow 2*/
 
-    int z=0;
-    int a2=0;
-    int eq2=0;
-    int ne2=0;
-    int eq2_val=0;
-    int ne2_val=0;
-    int f2;
+    uint_fast32_t z=0;
+    bool a2=0;
+    uint_fast32_t eq2=0;
+    uint_fast32_t ne2=0;
+    uint_fast32_t eq2_val=0;
+    uint_fast32_t ne2_val=0;
+    uint_fast8_t f2;
 
     /*port 2*/
 
-    int b2=0;
-    int v=0;
-    int eq4=0;
-    int ne4=0;
-    int eq4_val=0;
-    int ne4_val=0;
-    int g2;
+    bool b2=0;
+    uint_fast32_t v=0;
+    uint_fast32_t eq4=0;
+    uint_fast32_t ne4=0;
+    uint_fast32_t eq4_val=0;
+    uint_fast32_t ne4_val=0;
+    uint_fast8_t g2;
 
-    int i;
-    int failed=0;
+    uint_fast32_t i;
+    uint_fast32_t failed=0;
 
     /*Begin ip_proto*/
 

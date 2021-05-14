@@ -107,6 +107,8 @@ struct _SaganConfig *config = NULL;
 struct _SaganDebug *debug = NULL;
 struct _SaganDNSCache *dnscache = NULL;
 struct _Track_Clients_Networks *Track_Clients_Networks = NULL;
+struct _Sagan_Track_Clients *SaganTrackClients;
+
 
 
 #ifdef HAVE_LIBFASTJSON
@@ -189,8 +191,10 @@ int main(int argc, char **argv)
     /****************************************************************************/
 
 #ifdef HAVE_LIBHIREDIS
-    char redis_reply[5];
-    char redis_command[300];
+
+    char redis_reply[5] = { 0 }; 
+    char redis_command[8] = { 0 };
+ 
 #endif
 
     /****************************************************************************/
@@ -251,15 +255,14 @@ int main(int argc, char **argv)
     signed char c;
     int rc=0;
 
-    uint16_t i = 0;
-    uint32_t k = 0;
+    uint_fast16_t i = 0;
+    uint_fast32_t k = 0;
 
     time_t t;
     struct tm *run;
 
     bool debugflag = false;
 
-//    uint16_t batch_count = 0;
     uint_fast16_t batch_count = 0;
 
     /* Allocate memory for global struct _SaganDebug */
@@ -872,7 +875,7 @@ int main(int argc, char **argv)
     if ( config->sagan_track_clients_flag )
         {
 
-            /* We run a thread for client_tracker_report */
+            /* We run a thread for tracking syslog hosts */
 
             rc = pthread_create( &ct_report_thread, NULL, (void *)Track_Clients_Thread, NULL );
 

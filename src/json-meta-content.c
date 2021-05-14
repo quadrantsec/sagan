@@ -41,14 +41,14 @@
 
 extern struct _Rule_Struct *rulestruct;
 
-bool JSON_Meta_Content(int rule_position, _Sagan_JSON *JSON_LOCAL)
+bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 {
 
-    int i=0;
-    int a=0;
+    uint_fast16_t i=0;
+    uint_fast16_t a=0;
 
-    int rc=0;
-    int match = 0;
+    bool rc=0;
+    uint_fast16_t match = 0;
 
     for (i=0; i < rulestruct[rule_position].json_meta_content_count; i++)
         {
@@ -92,10 +92,10 @@ bool JSON_Meta_Content(int rule_position, _Sagan_JSON *JSON_LOCAL)
 /* a "json_meta_content" hit.                                                  */
 /*******************************************************************************/
 
-bool JSON_Meta_Content_Search(int rule_position, const char *json_string, int i )
+bool JSON_Meta_Content_Search(uint_fast32_t rule_position, const char *json_string, uint_fast16_t i )
 {
 
-    int z = 0;
+    uint_fast16_t z = 0;
 
     if ( rulestruct[rule_position].json_meta_content_not[i] == false )
         {

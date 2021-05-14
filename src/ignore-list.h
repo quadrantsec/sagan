@@ -18,10 +18,12 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
+#define IGNORE_SIZE 	256
+
 typedef struct _Sagan_Ignorelist _Sagan_Ignorelist;
 struct _Sagan_Ignorelist
 {
-    char ignore_string[256];
+    char ignore_string[IGNORE_SIZE];
 };
 
 

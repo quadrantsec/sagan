@@ -45,7 +45,7 @@
 extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
 
-int redis_msgslot = 0;
+uint_fast16_t redis_msgslot = 0;
 
 bool death;
 
@@ -242,7 +242,7 @@ void Redis_Writer ( void )
     char command[16] = { 0 };
     char key[128] = { 0 };
     char value[MAX_SYSLOGMSG*2];
-    int expire = 0;
+    uint_fast32_t expire = 0;
 
     Redis_Writer_Connect();
 
@@ -336,7 +336,7 @@ void Redis_Writer ( void )
  * returns more than one result.
  *****************************************************************************/
 
-void Redis_Reader ( char *redis_command, char *str, size_t size )
+void Redis_Reader ( const char *redis_command, char *str, size_t size )
 {
 
     redisReply *reply;

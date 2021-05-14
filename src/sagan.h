@@ -101,18 +101,18 @@ void	Between_Quotes( const char *in_str, char *str, size_t size);
 double	CalcPct(uint64_t cnt, uint64_t total);
 void	Replace_String(const char *in_str, char *orig, char *rep, char *str, size_t size);
 uint64_t Value_To_Seconds(char *type, uint64_t number);
-void	Sagan_Log( int, const char *, ... );
+void    Sagan_Log (uint_fast8_t type, const char *format,... );
 void	Droppriv( void );
-int	DNS_Lookup( char *host, char *str, size_t size );
+int     DNS_Lookup( const char *host, char *str, size_t size );
 void	Var_To_Value(const char *in_str, char *str, size_t size);
-bool	IP2Bit(char *ipaddr, unsigned char *out);
+bool	IP2Bit(const char *ipaddr, unsigned char *out);
 bool	Mask2Bit(int mask, unsigned char *out);
 const char *Bit2IP(unsigned char *ipbits, char *str, size_t size);
 bool 	Validate_HEX (const char *string);
 void	Content_Pipe( const char *in_string, int linecount, const char *ruleset, char *str, size_t size );
-bool    is_notroutable ( unsigned char * );
-bool	is_notlocalhost ( unsigned char * );
-bool    is_inrange ( unsigned char *, unsigned char *, int );
+bool    is_notroutable ( unsigned char *ip );
+bool    is_notlocalhost ( unsigned char *ip );
+bool    is_inrange ( unsigned char *ip, unsigned char *tests, int count);
 void    Replace_Sagan( const char *in_str, char *replace, char *str, size_t size);
 bool	Wildcard( char *first, char *second );
 void	Open_Log_File( bool state, int type );
@@ -122,7 +122,7 @@ void	Strip_Chars(const char *string, const char *chars, char *str);
 bool	Is_IP (const char *ipaddr, int ver );
 bool	File_Lock ( int fd );
 bool    File_Unlock ( int fd );
-bool	Check_Content_Not( const char *s );
+bool    Check_Content_Not( const char *s );
 uint_fast32_t Djb2_Hash(const char *str);
 bool    Starts_With(const char *str, const char *prefix);
 bool	Is_IP_Range (char *str);
@@ -705,5 +705,5 @@ struct _Sagan_Lookup_Cache_Other
 
 /* Function that require the above arrays */
 
-int64_t	  FlowGetId(struct timeval tp);
+int_fast64_t FlowGetId( struct timeval tp );
 

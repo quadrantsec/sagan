@@ -51,7 +51,7 @@ extern struct _SaganConfig *config;
 /* Threshold2          */
 /***********************/
 
-bool Threshold2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_dst,  uint32_t dst_port, char *username, char *syslog_message )
+bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, char *ip_dst,  uint16_t dst_port, char *username, char *syslog_message )
 {
 
     time_t t;
@@ -60,10 +60,10 @@ bool Threshold2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_d
 
     bool thresh_log_flag = false;
 
-    uint64_t thresh_oldtime = 0;
-    uint64_t current_time = 0;
+    uint_fast64_t thresh_oldtime = 0;
+    uint_fast64_t current_time = 0;
 
-    int i;
+    uint_fast32_t i;
 
     t = time(NULL);
     now=localtime(&t);
@@ -72,13 +72,13 @@ bool Threshold2 ( int rule_position, char *ip_src, uint32_t src_port, char *ip_d
     char src_tmp[MAXIP] = { 0 };
     char dst_tmp[MAXIP] = { 0 };
     char username_tmp[MAX_USERNAME_SIZE] = { 0 };
-    uint32_t dst_port_tmp = 0;
-    uint32_t src_port_tmp = 0;
+    uint_fast32_t dst_port_tmp = 0;
+    uint_fast32_t src_port_tmp = 0;
 
     char hash_string[MAXIP + MAXIP + MAX_USERNAME_SIZE + 10] = { 0 };
     char debug_string[64] = { 0 };
 
-    uint32_t hash;
+    uint_fast32_t hash;
 
     current_time = atoi(timet);
 

@@ -38,11 +38,11 @@
 extern struct _Rule_Struct *rulestruct;
 
 
-bool Content ( int rule_position, const char *syslog_message )
+bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 {
 
-    int z = 0;
-    int alter_num = 0;
+    uint_fast8_t z = 0;
+    uint_fast32_t alter_num = 0;
     char alter_content[MAX_SYSLOGMSG] = { 0 };
 
     /* Content: OFFSET */

@@ -60,7 +60,7 @@ extern struct _Sagan_IPC_Flexbit *flexbit_ipc;
  * rule condition is tested here and returned.
  *****************************************************************************/
 
-bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     time_t t;
@@ -117,7 +117,7 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: by_src - most common check */
 
                                     if ( rulestruct[rule_position].flexbit_direction[i] == 2 &&
-                                            !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) )
+                                            !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) )
 
                                         {
 
@@ -148,14 +148,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: both */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 1 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) )
 
                                         {
 
                                             if ( debug->debugflexbit )
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"both\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src, ip_dst);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"both\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -165,13 +165,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: by_dst */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 3 &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) )
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"by_dst\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"by_dst\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -181,13 +181,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: reverse */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 4 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) )
 
                                         {
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"reverse\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst, ip_src);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"reverse\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->src_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -197,13 +197,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: src_xbitdst */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 5 &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) )
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"src_xbitdst\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"src_xbitdst\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -213,13 +213,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: dst_xbitsrc */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 6 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"dst_xbitsrc\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"dst_xbitsrc\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -229,16 +229,16 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: both_p */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 7 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                              flexbit_ipc[a].src_port == src_port &&
-                                              flexbit_ipc[a].dst_port == dst_port )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                              flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->src_port &&
+                                              flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->dst_port )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"both_p\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src, ip_dst);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"both_p\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -248,14 +248,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: by_src_p */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 8 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) &&
-                                              flexbit_ipc[a].src_port == src_port )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                              flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->src_port )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"by_src_p\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"by_src_p\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -265,14 +265,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: by_dst_p */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 9 &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst))  &&
-                                              flexbit_ipc[a].dst_port == dst_port )
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst))  &&
+                                              flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->dst_port )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"by_dst_p\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"by_dst_p\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -282,16 +282,16 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: reverse_p */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 10 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                              flexbit_ipc[a].src_port == dst_port &&
-                                              flexbit_ipc[a].dst_port == src_port )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                              flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->dst_port &&
+                                              flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->src_port )
 
 
                                         {
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"reverse_p\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst, ip_src);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"reverse_p\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->src_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -301,14 +301,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: src_xbitdst_p */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 11 &&
-                                              !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                              flexbit_ipc[a].dst_port == src_port )
+                                              !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                              flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->src_port )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"src_xbitdst_p\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"src_xbitdst_p\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -318,14 +318,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     /* direction: dst_xbitsrc_p */
 
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 12 &&
-                                              !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) &&
-                                              flexbit_ipc[a].src_port == dst_port )
+                                              !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                              flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->dst_port )
 
                                         {
 
                                             if ( debug->debugflexbit)
                                                 {
-                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"dst_xbitsrc_p\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isset\" flexbit \"%s\" (direction: \"dst_xbitsrc_p\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
                                                 }
 
                                             flexbit_total_match++;
@@ -394,14 +394,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     if ( rulestruct[rule_position].flexbit_direction[i] == 1 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) &&
-                                                    !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                                    !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_src\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src, ip_dst);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_src\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
 
                                                                 }
 
@@ -415,13 +415,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     if ( rulestruct[rule_position].flexbit_direction[i] == 2 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_src\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_src\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip);
 
                                                                 }
 
@@ -435,13 +435,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 3 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) )
+                                            if ( !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_dst\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_dst\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
 
                                                                 }
 
@@ -455,14 +455,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 4 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) &&
-                                                    !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                                    !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"reverse\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst, ip_src);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"reverse\"). (%s -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->src_ip);
 
                                                                 }
 
@@ -476,13 +476,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 5 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) )
+                                            if ( !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst\"). (any -> %s)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
 
                                                                 }
 
@@ -496,13 +496,13 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 6 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
 
                                                                 }
 
@@ -516,17 +516,17 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 7 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) &&
-                                                    !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                                    flexbit_ipc[a].src_port == src_port &&
-                                                    flexbit_ipc[a].dst_port == dst_port )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                                    !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                                    flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->src_port &&
+                                                    flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->dst_port )
 
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst\"). (%s -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip);
 
                                                                 }
 
@@ -540,15 +540,15 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 8 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_src, sizeof(flexbit_ipc[a].ip_src)) &&
-                                                    flexbit_ipc[a].src_port == src_port )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                                    flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->src_port )
 
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_src_p\"). (%s:%d -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src, src_port);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_src_p\"). (%s:%d -> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->src_port);
 
                                                                 }
 
@@ -562,15 +562,15 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 9 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_dst, ip_dst, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                                    flexbit_ipc[a].dst_port == dst_port )
+                                            if ( !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                                    flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->dst_port )
 
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_dst_p\"). (any -> %s:%d)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst, dst_port);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"by_dst_p\"). (any -> %s:%d)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->dst_port);
 
                                                                 }
 
@@ -584,16 +584,16 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 10 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) &&
-                                                    !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                                    flexbit_ipc[a].src_port == dst_port &&
-                                                    flexbit_ipc[a].dst_port == src_port)
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                                    !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                                    flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->dst_port &&
+                                                    flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->src_port)
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"reverse_p\"). (%s:%d -> %s:%d)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src, dst_port, ip_dst, src_port);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"reverse_p\"). (%s:%d -> %s:%d)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_port, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->src_port);
 
                                                                 }
 
@@ -607,15 +607,15 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                     else if ( rulestruct[rule_position].flexbit_direction[i] == 11 )
                                         {
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_dst, ip_src, sizeof(flexbit_ipc[a].ip_dst)) &&
-                                                    flexbit_ipc[a].dst_port == src_port )
+                                            if ( !memcmp(flexbit_ipc[a].ip_dst, SaganProcSyslog_LOCAL->src_ip, sizeof(flexbit_ipc[a].ip_dst)) &&
+                                                    flexbit_ipc[a].dst_port == SaganProcSyslog_LOCAL->src_port )
 
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst_p\"). (any -> %s:%d)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_src, src_port);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"src_xbitdst_p\"). (any -> %s:%d)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->src_port);
 
                                                                 }
 
@@ -630,14 +630,14 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
                                         {
 
 
-                                            if ( !memcmp(flexbit_ipc[a].ip_src, ip_dst, sizeof(flexbit_ipc[a].ip_src)) &&
-                                                    flexbit_ipc[a].src_port == dst_port )
+                                            if ( !memcmp(flexbit_ipc[a].ip_src, SaganProcSyslog_LOCAL->dst_ip, sizeof(flexbit_ipc[a].ip_src)) &&
+                                                    flexbit_ipc[a].src_port == SaganProcSyslog_LOCAL->dst_port )
                                                 {
                                                     if ( flexbit_ipc[a].flexbit_state == true )
                                                         {
                                                             if ( debug->debugflexbit )
                                                                 {
-                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"dst_xbitsrc_p\"). (%s:%d-> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, ip_dst, dst_port);
+                                                                    Sagan_Log(DEBUG, "[%s, line %d] \"isnotset\" flexbit \"%s\" true (direction: \"dst_xbitsrc_p\"). (%s:%d-> any)", __FILE__, __LINE__, flexbit_ipc[a].flexbit_name, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->dst_port);
 
                                                                 }
 
@@ -712,10 +712,10 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
             json_object *jsource_ip = json_object_new_string(SaganProcSyslog_LOCAL->syslog_host);
             json_object_object_add(jobj,"syslog_source", jsource_ip);
 
-            json_object *jsrc_ip = json_object_new_string(ip_src);
+            json_object *jsrc_ip = json_object_new_string(SaganProcSyslog_LOCAL->src_ip);
             json_object_object_add(jobj,"src_ip", jsrc_ip );
 
-            json_object *jdest_ip = json_object_new_string(ip_dst);
+            json_object *jdest_ip = json_object_new_string(SaganProcSyslog_LOCAL->dst_ip);
             json_object_object_add(jobj,"dest_ip", jdest_ip );
 
 //        json_object *jusername = json_object_new_string(username);
@@ -828,7 +828,7 @@ bool Flexbit_Condition_MMAP(int rule_position, const char *ip_src, const char *i
  * distributed attacks.
  *****************************************************************************/
 
-bool Flexbit_Count_MMAP( int rule_position, const char *ip_src, const char *ip_dst )
+bool Flexbit_Count_MMAP( uint_fast32_t rule_position, const char *ip_src, const char *ip_dst )
 {
 
     uint32_t a = 0;
@@ -902,11 +902,11 @@ bool Flexbit_Count_MMAP( int rule_position, const char *ip_src, const char *ip_d
  * "unset" happen here.
  *****************************************************************************/
 
-void Flexbit_Set_MMAP(int rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, const char *username, const char *syslog_message )
+void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const char *ip_dst, int src_port, int dst_port, const char *username, const char *syslog_message )
 {
 
-    int i = 0;
-    int a = 0;
+    uint_fast32_t i = 0;
+    uint_fast32_t a = 0;
 
     time_t t;
     struct tm *now;
@@ -1669,7 +1669,7 @@ void Flexbit_Set_MMAP(int rule_position, const char *ip_src, const char *ip_dst,
 void Flexbit_Cleanup_MMAP(void)
 {
 
-    int i = 0;
+    uint_fast32_t i = 0;
 
     time_t t;
     struct tm *now;

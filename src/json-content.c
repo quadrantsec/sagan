@@ -41,11 +41,11 @@
 
 extern struct _Rule_Struct *rulestruct;
 
-bool JSON_Content(int rule_position, _Sagan_JSON *JSON_LOCAL)
+bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 {
 
-    int i = 0;
-    int a = 0;
+    uint_fast16_t i = 0;
+    uint_fast16_t a = 0;
 
     bool key_search = false;
 

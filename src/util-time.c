@@ -162,7 +162,7 @@ void Return_Time( uint32_t utime, char *str, size_t size )
  * "readable" format.
  ****************************************************************************/
 
-void u32_Time_To_Human ( uint32_t utime, char *str, size_t size )
+void u32_Time_To_Human ( uint_fast64_t utime, char *str, size_t size )
 {
 
     struct tm tm;

@@ -18,7 +18,7 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-bool Meta_Content(int rule_position, const char *syslog_message);
-bool Meta_Content_Search(char *syslog_msg, int rule_position, int meta_content_count);
+bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message);
+bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fast8_t meta_content_count);
 
 

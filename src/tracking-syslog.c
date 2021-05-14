@@ -39,7 +39,6 @@
 #include <sys/prctl.h>
 #endif
 
-
 #include "version.h"
 
 #include "sagan.h"
@@ -61,20 +60,20 @@ void RuleTracking_Syslog( void )
     (void)SetThreadName("SaganRuleTrack");
 #endif
 
-    int i = 0;
+    uint_fast16_t i = 0;
     bool flag = 0;
 
     time_t t;
     char timet[20];
     struct tm *now;
-    int seconds = 0;
+    uint32_t seconds = 0;
 
-    int uptime_days;
-    int uptime_abovedays;
-    int uptime_hours;
-    int uptime_abovehours;
-    int uptime_minutes;
-    int uptime_seconds;
+    uint_fast16_t uptime_days;
+    uint_fast16_t uptime_abovedays;
+    uint_fast8_t uptime_hours;
+    uint_fast8_t uptime_abovehours;
+    uint_fast8_t uptime_minutes;
+    uint_fast8_t uptime_seconds;
 
     while(death == false)
         {
@@ -134,6 +133,7 @@ void RuleTracking_Syslog( void )
 
         }
 
+    free( Ruleset_Track );
     pthread_exit(NULL);
 
 }

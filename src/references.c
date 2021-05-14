@@ -58,7 +58,7 @@ void Load_Reference( const char *ruleset )
     char *tmptoken=NULL;
     char *laststring=NULL;
 
-    int linecount=0;
+    uint_fast32_t linecount=0;
 
     counters->refcount = 0;
 
@@ -138,7 +138,7 @@ void Load_Reference( const char *ruleset )
 // 0 == alert
 // 1 == parsable.
 
-void Reference_Lookup( int rulemem, int type, char *str, size_t size )
+void Reference_Lookup( uint_fast32_t rulemem, bool type, char *str, size_t size )
 {
 
     char reftmp[256] = { 0 };

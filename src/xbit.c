@@ -47,12 +47,11 @@
 extern struct _Rule_Struct *rulestruct;
 extern struct _SaganConfig *config;
 
-
 /***************************************************/
 /* Xbit_Set - "set", "unset" and "toggle" and xbit */
 /***************************************************/
 
-void Xbit_Set(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+void Xbit_Set(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
 #ifdef HAVE_LIBHIREDIS
@@ -74,7 +73,7 @@ void Xbit_Set(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCA
 /* determine the direction an xbit and returns a hash for association            */
 /*********************************************************************************/
 
-uint32_t Xbit_Return_Tracking_Hash ( int rule_position, int xbit_position, const char *ip_src_char, const char *ip_dst_char )
+uint_fast32_t Xbit_Return_Tracking_Hash ( uint_fast32_t rule_position, uint_fast8_t xbit_position, const char *ip_src_char, const char *ip_dst_char )
 {
 
     char hash_pair[MAXIP*2] = { 0 };
@@ -107,7 +106,7 @@ uint32_t Xbit_Return_Tracking_Hash ( int rule_position, int xbit_position, const
 /* Xbit_Condition - This handles xbit conditions like "isset", "issnotset". */
 /****************************************************************************/
 
-bool Xbit_Condition(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Xbit_Condition(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
 #ifdef HAVE_LIBHIREDIS
