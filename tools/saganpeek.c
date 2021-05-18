@@ -344,7 +344,7 @@ int main(int argc, char **argv)
 
                                     printf("Type: Threshold [%d].\n", i);
 
-                                    printf("Tracking hash: %u\n", Threshold2_IPC[i].hash);
+                                    printf("Tracking hash: %" PRIuFAST32 "\n", Threshold2_IPC[i].hash);
 
                                     printf("Tracking by:");
 
@@ -382,7 +382,7 @@ int main(int argc, char **argv)
 
                                     if ( Threshold2_IPC[i].threshold2_method_srcport == true )
                                         {
-                                            printf("SRC Port: %d\n", Threshold2_IPC[i].src_port);
+                                            printf("SRC Port: %" PRIuFAST16 "\n", Threshold2_IPC[i].src_port);
                                         }
 
                                     if ( Threshold2_IPC[i].threshold2_method_dst == true )
@@ -392,7 +392,7 @@ int main(int argc, char **argv)
 
                                     if ( Threshold2_IPC[i].threshold2_method_dstport == true )
                                         {
-                                            printf("DST Port: %d\n", Threshold2_IPC[i].dst_port);
+                                            printf("DST Port: %" PRIuFAST16 "\n", Threshold2_IPC[i].dst_port);
                                         }
 
                                     if ( Threshold2_IPC[i].threshold2_method_username == true )
@@ -407,7 +407,7 @@ int main(int argc, char **argv)
                                     printf("Target Count: %" PRIu64 "\n", Threshold2_IPC[i].target_count);
                                     printf("Counter: %" PRIu64 "\n", Threshold2_IPC[i].count);
                                     printf("Time until expire: %" PRIi64 " seconds.\n", Threshold2_IPC[i].expire - thresh_oldtime);
-                                    printf("Expire Time: %d seconds.\n\n", Threshold2_IPC[i].expire);
+                                    printf("Expire Time: %" PRIuFAST32 " seconds.\n\n", Threshold2_IPC[i].expire);
 
                                 }
 
@@ -464,7 +464,7 @@ int main(int argc, char **argv)
 
                                     u32_Time_To_Human(After2_IPC[i].utime, time_buf, sizeof(time_buf));
 
-                                    printf("Tracking hash: %u\n", After2_IPC[i].hash);
+                                    printf("Tracking hash: %" PRIuFAST32 "\n", After2_IPC[i].hash);
 
                                     printf("Tracking by:");
 
@@ -502,7 +502,7 @@ int main(int argc, char **argv)
 
                                     if ( After2_IPC[i].after2_method_srcport == true )
                                         {
-                                            printf("SRC Port: %d\n", After2_IPC[i].src_port);
+                                            printf("SRC Port: %" PRIuFAST16 "\n", After2_IPC[i].src_port);
                                         }
 
                                     if ( After2_IPC[i].after2_method_dst == true )
@@ -512,7 +512,7 @@ int main(int argc, char **argv)
 
                                     if ( After2_IPC[i].after2_method_dstport == true )
                                         {
-                                            printf("DST Port: %d\n", After2_IPC[i].dst_port);
+                                            printf("DST Port: %" PRIuFAST16 "\n", After2_IPC[i].dst_port);
                                         }
 
                                     if ( After2_IPC[i].after2_method_username == true )
@@ -521,13 +521,13 @@ int main(int argc, char **argv)
                                         }
 
 
-                                    printf("Signature: \"%s\" (Signature ID: %" PRIu64 " Revision: %d)\n", After2_IPC[i].signature_msg, After2_IPC[i].sid, After2_IPC[i].rev);
+                                    printf("Signature: \"%s\" (Signature ID: %" PRIuFAST64 " Revision: %" PRIuFAST32 ")\n", After2_IPC[i].signature_msg, After2_IPC[i].sid, After2_IPC[i].rev);
                                     printf("Syslog Message: \"%s\"\n", After2_IPC[i].syslog_message);
                                     printf("Date added/modified: %s\n", time_buf);
                                     printf("Counter: %" PRIu64 "\n", After2_IPC[i].count);
 
                                     printf("Time until expire: %" PRIi64 " seconds.\n", After2_IPC[i].expire - after_oldtime);
-                                    printf("Expire Time: %d seconds.\n\n", After2_IPC[i].expire);
+                                    printf("Expire Time: %" PRIuFAST32 " seconds.\n\n", After2_IPC[i].expire);
 
                                 }
 
@@ -583,7 +583,7 @@ int main(int argc, char **argv)
                                     printf("IP: %s:%d -> %s:%d\n", flexbit_ipc[i].ip_src, flexbit_ipc[i].src_port, flexbit_ipc[i].ip_dst, flexbit_ipc[i].dst_port);
                                     printf("Username: \"%s\"\n", flexbit_ipc[i].username);
                                     printf("Signature: \"%s\" (Signature ID: %" PRIu64 ")\n", flexbit_ipc[i].signature_msg, flexbit_ipc[i].sid);
-                                    printf("Expire Time: %s (%d seconds)\n", time_buf, flexbit_ipc[i].expire);
+                                    printf("Expire Time: %s (%" PRIuFAST32 " seconds)\n", time_buf, flexbit_ipc[i].expire);
                                     printf("Time until expire: %" PRIi64 " seconds.\n", flexbit_oldtime);
                                     printf("Syslog message: \"%s\"\n\n", flexbit_ipc[i].syslog_message );
 
@@ -639,7 +639,7 @@ int main(int argc, char **argv)
                                         {
 
                                             printf("Type: xbit [%d].\n", i);
-                                            printf("Xbit name: \"%s\" (Hash name: %u)\n", xbit_ipc[i].xbit_name, xbit_ipc[i].xbit_name_hash);
+                                            printf("Xbit name: \"%s\" (Hash name: %" PRIuFAST32 ")\n", xbit_ipc[i].xbit_name, xbit_ipc[i].xbit_name_hash);
                                             printf("State: ");
 
                                             if (  xbit_ipc[i].xbit_expire != 0 && xbit_ipc[i].xbit_expire <= current_time )
@@ -651,9 +651,9 @@ int main(int argc, char **argv)
                                                     printf("Inactive\n");
                                                 }
 
-                                            printf("IP Hash: %u\n", xbit_ipc[i].xbit_hash);
+                                            printf("IP Hash: %" PRIuFAST32 "\n", xbit_ipc[i].xbit_hash);
                                             printf("Signature: \"%s\" (Signature ID: %" PRIu64 ")\n", xbit_ipc[i].signature_msg, xbit_ipc[i].sid);
-                                            printf("Expire Time: %d\n", xbit_ipc[i].expire);
+                                            printf("Expire Time: %" PRIuFAST32 "\n", xbit_ipc[i].expire);
                                             printf("Expired at: ");
 
                                             if ( xbit_ipc[i].xbit_expire == 0 )
@@ -711,7 +711,7 @@ int main(int argc, char **argv)
                                     printf("Type: Tracking. [%d]\n", i);
                                     printf("State: %s.\n", 0 == SaganTrackClients_ipc[i].status ? "ACTIVE" : "INACTIVE");
                                     printf("Source tracking: %s\n", ip_src);
-                                    printf("Last seen: %s (%d/%d)\n\n", time_buf, SaganTrackClients_ipc[i].expire, SaganTrackClients_ipc[i].expire / 60);
+                                    printf("Last seen: %s (%" PRIuFAST32" /%" PRIuFAST16 ")\n\n", time_buf, SaganTrackClients_ipc[i].expire, SaganTrackClients_ipc[i].expire / 60);
 
                                 }
                         }

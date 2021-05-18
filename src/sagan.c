@@ -1354,6 +1354,7 @@ int main(int argc, char **argv)
 
         } /* End of while(1) */
 
+return(0);
 } /* End of main */
 
 

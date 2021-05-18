@@ -50,9 +50,6 @@ extern struct _Rule_Struct *rulestruct;
 void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, char *json_normalize, int rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
 {
 
-
-    char tmp[64] = { 0 };
-
     struct _Sagan_Event *SaganProcessorEvent = NULL;
     SaganProcessorEvent = malloc(sizeof(struct _Sagan_Event));
 

@@ -35,7 +35,7 @@ typedef struct _Sagan_Track_Clients_IPC _Sagan_Track_Clients_IPC;
 struct _Sagan_Track_Clients_IPC
 {
     unsigned char  hostbits[MAXIPBIT];
-    uint_fast64_t     utime;
+    long       	   utime;			/* need to be long for ctime() */
     uint_fast32_t     expire;
     bool    status;
 };

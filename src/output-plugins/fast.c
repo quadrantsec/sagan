@@ -62,7 +62,7 @@ void Fast_File( _Sagan_Event *Event )
 
     File_Lock( sagan_fast_stream_int );
 
-    fprintf( sagan_fast_stream, "%s [**] [%lu:%" PRIu64 ":%d] %s [**] [Classification: %s] [Priority: %d] [Program: %s] ", timebuf,
+    fprintf( sagan_fast_stream, "%s [**] [%lu:%" PRIuFAST64 ":%" PRIuFAST32 "] %s [**] [Classification: %s] [Priority: %d] [Program: %s] ", timebuf,
              Event->generatorid, Event->sid, Event->rev, Event->f_msg, Event->class, Event->pri, Event->program);
 
     if ( Event->ip_proto == 1 )
@@ -85,7 +85,7 @@ void Fast_File( _Sagan_Event *Event )
             fprintf(sagan_fast_stream, "{UNKNOWN}");
         }
 
-    fprintf(sagan_fast_stream," %s:%d [%s] -> %s:%d [%s]\n", Event->ip_src, Event->src_port, Event->country_src, Event->ip_dst, Event->dst_port, Event->country_dst);
+    fprintf(sagan_fast_stream," %s:%" PRIuFAST16 " [%s] -> %s:%" PRIuFAST16 " [%s]\n", Event->ip_src, Event->src_port, Event->country_src, Event->ip_dst, Event->dst_port, Event->country_dst);
 
     File_Unlock( sagan_fast_stream_int );
 

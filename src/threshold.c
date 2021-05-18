@@ -72,8 +72,8 @@ bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, 
     char src_tmp[MAXIP] = { 0 };
     char dst_tmp[MAXIP] = { 0 };
     char username_tmp[MAX_USERNAME_SIZE] = { 0 };
-    uint_fast32_t dst_port_tmp = 0;
-    uint_fast32_t src_port_tmp = 0;
+    uint_fast16_t dst_port_tmp = 0;
+    uint_fast16_t src_port_tmp = 0;
 
     char hash_string[MAXIP + MAXIP + MAX_USERNAME_SIZE + 10] = { 0 };
     char debug_string[64] = { 0 };
@@ -109,7 +109,8 @@ bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, 
             dst_port_tmp = dst_port;
         }
 
-    snprintf(hash_string, sizeof(hash_string), "%s|%d|%s|%d|%s", src_tmp, src_port_tmp, dst_tmp, dst_port_tmp, username_tmp);
+    // PRIu64
+    snprintf(hash_string, sizeof(hash_string), "%s|%" PRIuFAST16 "|%s|%" PRIuFAST16 "|%s", src_tmp, src_port_tmp, dst_tmp, dst_port_tmp, username_tmp);
 
     hash = Djb2_Hash( hash_string );
 

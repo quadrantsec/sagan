@@ -669,22 +669,6 @@ struct _SaganVar
     char var_value[MAX_VAR_VALUE_SIZE];
 };
 
-/*
-typedef struct _Sagan_Processor_Info _Sagan_Processor_Info;
-struct _Sagan_Processor_Info
-{
-
-    char *processor_name;
-    char *processor_facility;
-    char *processor_priority;		/* Syslog priority */
-//  int32_t  processor_pri;		/* Sagan priority */
-/*   char *processor_class;
-   char *processor_tag;
-   int32_t processor_rev;
-   int32_t processor_generator_id;
-};
-*/
-
 /* IP Lookup cache */
 
 typedef struct _Sagan_Lookup_Cache_Entry _Sagan_Lookup_Cache_Entry;

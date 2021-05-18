@@ -804,7 +804,7 @@ void Content_Pipe( const char *in_string, int linecount, const char *ruleset, ch
     char final_content_tmp[RULEBUF] = { 0 };
     char tmp2[RULEBUF];
     uint_fast32_t i;
-    uint_fast32_t x;
+    unsigned int x;
     char tmp[2];
 
     strlcpy(tmp2, in_string, sizeof(tmp2));
