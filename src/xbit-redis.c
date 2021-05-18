@@ -61,7 +61,7 @@ int redis_msgslot;
 /* Xbit_Set_Redis - set/unset xbit in Redis (threaded) */
 /*******************************************************/
 
-void Xbit_Set_Redis(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     struct json_object *jobj;
@@ -256,7 +256,7 @@ void Xbit_Set_Redis(int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslo
 /* Xbit_Condition_Redis - Tests for Redis xbit (isset/isnotset) */
 /****************************************************************/
 
-bool Xbit_Condition_Redis( int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
     int r;
@@ -315,7 +315,7 @@ bool Xbit_Condition_Redis( int rule_position, struct _Sagan_Proc_Syslog *SaganPr
  * Actual IP addresses so that it's easier to "see" in Redis.
  ******************************************************************************************/
 
-void Xbit_Return_Tracking_IP ( int rule_position, int xbit_position, const char *ip_src_char, const char *ip_dst_char, char *str, size_t size )
+void Xbit_Return_Tracking_IP ( uint_fast32_t rule_position, uint_fast8_t xbit_position, const char *ip_src_char, const char *ip_dst_char, char *str, size_t size )
 {
 
     /* These 1,2,3 values should really be defined */

@@ -102,7 +102,7 @@ bool Sagan_Check_Routing(  _Sagan_Routing *SaganRouting )
 
     /* Zeek intel */
 
-    if ( rulestruct[SaganRouting->position].brointel_flag == true && SaganRouting->brointel_results == false )
+    if ( rulestruct[SaganRouting->position].zeekintel_flag == true && SaganRouting->zeekintel_results == false )
         {
             return false;
         }

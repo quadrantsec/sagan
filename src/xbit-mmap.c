@@ -57,14 +57,14 @@ pthread_mutex_t Xbit_Mutex=PTHREAD_MUTEX_INITIALIZER;
 /* Xbit_Set_MMAP - Used to "set", "unset" a xbit */
 /*************************************************/
 
-void Xbit_Set_MMAP(int rule_position, const char *ip_src_char, const char *ip_dst_char, const char *syslog_message )
+void Xbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src_char, const char *ip_dst_char, const char *syslog_message )
 {
 
-    int r = 0;
-    int x = 0;
+    uint_fast8_t r = 0;
+    uint_fast32_t x = 0;
 
     bool xbit_match = false;
-    uint32_t hash;
+    uint_fast32_t hash;
 
     if ( Clean_IPC_Object(XBIT) == 0 )
         {
@@ -178,17 +178,17 @@ void Xbit_Set_MMAP(int rule_position, const char *ip_src_char, const char *ip_ds
 /* Xbit_Condition_MMAP - Handles logic for isset/isnotset */
 /**********************************************************/
 
-bool Xbit_Condition_MMAP( int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
+bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
-    int r = 0;
-    int x = 0;
-    int xbit_isset = 0;
-    int xbit_isnotset = 0;
+    uint_fast8_t r = 0;
+    uint_fast32_t x = 0;
+    uint_fast8_t xbit_isset = 0;
+    uint_fast8_t xbit_isnotset = 0;
 
     bool xbit_match = false;
 
-    uint32_t hash;
+    uint_fast32_t hash;
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {

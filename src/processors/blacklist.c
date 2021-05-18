@@ -83,9 +83,9 @@ void Sagan_Blacklist_Load ( void )
     unsigned char ipbits[MAXIPBIT] = { 0 };
     unsigned char maskbits[MAXIPBIT]= { 0 };
 
-    int line_count;
-    int item_count;
-    int i;
+    uint_fast32_t line_count;
+    uint_fast32_t item_count;
+    uint_fast64_t i;
 
     bool found = 0;
 
@@ -244,7 +244,7 @@ void Sagan_Blacklist_Load ( void )
 bool Sagan_Blacklist_IPADDR ( unsigned char *ipaddr )
 {
 
-    int i = 0;
+    uint_fast64_t i = 0;
 
     counters->blacklist_lookup_count++;
 
@@ -269,11 +269,11 @@ bool Sagan_Blacklist_IPADDR ( unsigned char *ipaddr )
  * blacklist IP's in memory!
  ***************************************************************************/
 
-bool Sagan_Blacklist_IPADDR_All ( char *syslog_message, _Sagan_Lookup_Cache_Entry *lookup_cache, int lookup_cache_size )
+bool Sagan_Blacklist_IPADDR_All ( char *syslog_message, _Sagan_Lookup_Cache_Entry *lookup_cache, uint_fast8_t lookup_cache_size )
 {
 
-    int i;
-    int b;
+    uint_fast32_t i;
+    uint_fast32_t b;
 
     for (i = 0; i < lookup_cache_size; i++)
         {

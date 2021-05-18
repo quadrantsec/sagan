@@ -3275,85 +3275,85 @@ void Load_Rules( const char *ruleset )
 
                                     if (!strcmp(tmptoken, "by_src"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_ipaddr_src = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_ipaddr_src = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "by_dst"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_ipaddr_dst = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_ipaddr_dst = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "both"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_ipaddr_both = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_ipaddr_both = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "all"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_ipaddr_all = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_ipaddr_all = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "domain"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_domain = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_domain = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "file_hash"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_file_hash = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_file_hash = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "url"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_url = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_url = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "software"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_software = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_software = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "email"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_email = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_email = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "user_name"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_user_name = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_user_name = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "file_name"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_file_name = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_file_name = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 
                                     if (!strcmp(tmptoken, "cert_hash"))
                                         {
-                                            rulestruct[counters->rulecount].brointel_cert_hash = 1;
-                                            rulestruct[counters->rulecount].brointel_flag = 1;
+                                            rulestruct[counters->rulecount].zeekintel_cert_hash = 1;
+                                            rulestruct[counters->rulecount].zeekintel_flag = 1;
                                             found = 1;
                                         }
 

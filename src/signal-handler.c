@@ -103,15 +103,15 @@ extern struct _Sagan_Track_Clients *SaganTrackClients;
 
 extern struct _Sagan_Ignorelist *SaganIgnorelist;
 
-extern struct _Sagan_BroIntel_Intel_Addr *Sagan_BroIntel_Intel_Addr;
-extern struct _Sagan_BroIntel_Intel_Domain *Sagan_BroIntel_Intel_Domain;
-extern struct _Sagan_BroIntel_Intel_File_Hash *Sagan_BroIntel_Intel_File_Hash;
-extern struct _Sagan_BroIntel_Intel_URL *Sagan_BroIntel_Intel_URL;
-extern struct _Sagan_BroIntel_Intel_Software *Sagan_BroIntel_Intel_Software;
-extern struct _Sagan_BroIntel_Intel_Email *Sagan_BroIntel_Intel_Email;
-extern struct _Sagan_BroIntel_Intel_User_Name *Sagan_BroIntel_Intel_User_Name;
-extern struct _Sagan_BroIntel_Intel_File_Name *Sagan_BroIntel_Intel_File_Name;
-extern struct _Sagan_BroIntel_Intel_Cert_Hash *Sagan_BroIntel_Intel_Cert_Hash;
+extern struct _ZeekIntel_Intel_Addr *ZeekIntel_Intel_Addr;
+extern struct _ZeekIntel_Intel_Domain *ZeekIntel_Intel_Domain;
+extern struct _ZeekIntel_Intel_File_Hash *ZeekIntel_Intel_File_Hash;
+extern struct _ZeekIntel_Intel_URL *ZeekIntel_Intel_URL;
+extern struct _ZeekIntel_Intel_Software *ZeekIntel_Intel_Software;
+extern struct _ZeekIntel_Intel_Email *ZeekIntel_Intel_Email;
+extern struct _ZeekIntel_Intel_User_Name *ZeekIntel_Intel_User_Name;
+extern struct _ZeekIntel_Intel_File_Name *ZeekIntel_Intel_File_Name;
+extern struct _ZeekIntel_Intel_Cert_Hash *ZeekIntel_Intel_Cert_Hash;
 
 pthread_mutex_t SaganReloadMutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t SaganReloadCond = PTHREAD_COND_INITIALIZER;
@@ -374,33 +374,33 @@ void Sig_Handler( void )
 
                     config->blacklist_flag = 0;
 
-                    if ( config->brointel_flag )
+                    if ( config->zeekintel_flag )
                         {
-                            free(Sagan_BroIntel_Intel_Addr);
-                            free(Sagan_BroIntel_Intel_Domain);
-                            free(Sagan_BroIntel_Intel_File_Hash);
-                            free(Sagan_BroIntel_Intel_URL);
-                            free(Sagan_BroIntel_Intel_Software);
-                            free(Sagan_BroIntel_Intel_Email);
-                            free(Sagan_BroIntel_Intel_User_Name);
-                            free(Sagan_BroIntel_Intel_File_Name);
-                            free(Sagan_BroIntel_Intel_Cert_Hash);
+                            free(ZeekIntel_Intel_Addr);
+                            free(ZeekIntel_Intel_Domain);
+                            free(ZeekIntel_Intel_File_Hash);
+                            free(ZeekIntel_Intel_URL);
+                            free(ZeekIntel_Intel_Software);
+                            free(ZeekIntel_Intel_Email);
+                            free(ZeekIntel_Intel_User_Name);
+                            free(ZeekIntel_Intel_File_Name);
+                            free(ZeekIntel_Intel_Cert_Hash);
 
-                            __atomic_store_n (&counters->brointel_addr_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_domain_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_file_hash_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_url_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_software_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_email_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_user_name_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_file_name_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_cert_hash_count, 0, __ATOMIC_SEQ_CST);
-                            __atomic_store_n (&counters->brointel_dups, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_addr_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_domain_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_file_hash_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_url_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_software_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_email_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_user_name_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_file_name_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_cert_hash_count, 0, __ATOMIC_SEQ_CST);
+                            __atomic_store_n (&counters->zeekintel_dups, 0, __ATOMIC_SEQ_CST);
 
 
                         }
 
-                    config->brointel_flag = 0;
+                    config->zeekintel_flag = 0;
 
                     if ( config->sagan_track_clients_flag )
                         {
@@ -518,10 +518,9 @@ void Sig_Handler( void )
                             Sagan_Blacklist_Load();
                         }
 
-                    if ( config->brointel_flag )
+                    if ( config->zeekintel_flag )
                         {
-                            Sagan_BroIntel_Init();
-                            Sagan_BroIntel_Load_File();
+                            ZeekIntel_Load_File();
                         }
 
                     if ( config->sagan_track_clients_flag )

@@ -231,16 +231,16 @@ struct _SaganCounters
 
     uint_fast32_t     droplist_count;
 
-    uint_fast32_t      brointel_addr_count;
-    uint_fast32_t      brointel_domain_count;
-    uint_fast32_t      brointel_file_hash_count;
-    uint_fast32_t      brointel_url_count;
-    uint_fast32_t      brointel_software_count;
-    uint_fast32_t      brointel_email_count;
-    uint_fast32_t      brointel_user_name_count;
-    uint_fast32_t      brointel_file_name_count;
-    uint_fast32_t      brointel_cert_hash_count;
-    uint_fast32_t      brointel_dups;
+    uint_fast32_t      zeekintel_addr_count;
+    uint_fast32_t      zeekintel_domain_count;
+    uint_fast32_t      zeekintel_file_hash_count;
+    uint_fast32_t      zeekintel_url_count;
+    uint_fast32_t      zeekintel_software_count;
+    uint_fast32_t      zeekintel_email_count;
+    uint_fast32_t      zeekintel_user_name_count;
+    uint_fast32_t      zeekintel_file_name_count;
+    uint_fast32_t      zeekintel_cert_hash_count;
+    uint_fast32_t      zeekintel_dups;
 
     uint_fast32_t	      rules_loaded_count;
 

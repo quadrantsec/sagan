@@ -20,8 +20,8 @@
 */
 
 
-void Xbit_Set_MMAP(int rule_position, const char *ip_src_char, const char *ip_dst_char, const char *syslog_message );
-bool Xbit_Condition_MMAP( int rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
+void Xbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src_char, const char *ip_dst_char, const char *syslog_message );
+bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
 void Clean_Xbit_MMAP(void);
 
 typedef struct _Sagan_IPC_Xbit _Sagan_IPC_Xbit;

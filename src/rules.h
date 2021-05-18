@@ -319,21 +319,21 @@ struct _Rule_Struct
 
     /* Bro Intel */
 
-    bool brointel_flag;
+    bool zeekintel_flag;
 
-    bool brointel_ipaddr_src;
-    bool brointel_ipaddr_dst;
-    bool brointel_ipaddr_both;
-    bool brointel_ipaddr_all;
+    bool zeekintel_ipaddr_src;
+    bool zeekintel_ipaddr_dst;
+    bool zeekintel_ipaddr_both;
+    bool zeekintel_ipaddr_all;
 
-    bool brointel_domain;
-    bool brointel_file_hash;
-    bool brointel_url;
-    bool brointel_software;
-    bool brointel_email;
-    bool brointel_user_name;
-    bool brointel_file_name;
-    bool brointel_cert_hash;
+    bool zeekintel_domain;
+    bool zeekintel_file_hash;
+    bool zeekintel_url;
+    bool zeekintel_software;
+    bool zeekintel_email;
+    bool zeekintel_user_name;
+    bool zeekintel_file_name;
+    bool zeekintel_cert_hash;
 
     /* Blacklist */
 

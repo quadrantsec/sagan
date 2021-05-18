@@ -236,12 +236,12 @@ struct _SaganConfig
     char         bluedot_auth[64];
     char         bluedot_cat[MAXPATH];
     uint_fast32_t         bluedot_timeout;
-    uint_fast64_t         bluedot_ip_max_cache;
-    uint_fast64_t	 bluedot_hash_max_cache;
-    uint_fast64_t	 bluedot_url_max_cache;
-    uint_fast64_t 	 bluedot_filename_max_cache;
-    uint_fast64_t	 bluedot_ja3_max_cache;
-    uint_fast64_t     bluedot_last_time;                    /* For cache cleaning */
+    uint_fast32_t         bluedot_ip_max_cache;
+    uint_fast32_t	  bluedot_hash_max_cache;
+    uint_fast32_t	  bluedot_url_max_cache;
+    uint_fast32_t 	  bluedot_filename_max_cache;
+    uint_fast32_t	  bluedot_ja3_max_cache;
+    uint_fast32_t         bluedot_last_time;                    /* For cache cleaning */
 
     uint_fast16_t		 bluedot_ip_queue;
     uint_fast16_t		 bluedot_hash_queue;
@@ -252,10 +252,10 @@ struct _SaganConfig
 #endif
 
 
-    /* Bro Intel Framework Support */
+    /* Zeek Intel Framework Support */
 
-    bool	 brointel_flag;
-    char	 brointel_files[2048];
+    bool	 zeekintel_flag;
+    char	 zeekintel_files[2048];
 
     /* For Maxmind GeoIP2 address lookup */
 

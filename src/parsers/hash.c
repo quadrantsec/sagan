@@ -30,7 +30,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-
 #include "sagan.h"
 #include "sagan-defs.h"
 #include "version.h"
@@ -39,7 +38,7 @@
 
 extern struct _SaganConfig *config;
 
-void Parse_Hash(char *syslog_message, int type, char *str, size_t size)
+void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
 {
     char mod_string[MAX_SYSLOGMSG];
 

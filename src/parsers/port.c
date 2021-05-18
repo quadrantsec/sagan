@@ -53,10 +53,10 @@
 
 extern struct _SaganConfig *config;
 
-int Parse_Src_Port (char *msg)
+uint_fast16_t Parse_Src_Port ( const char *msg )
 {
 
-    uint_fast32_t port;
+    uint_fast16_t port;
 
     char *portstring=NULL;
     char *saveptr1=NULL;
@@ -238,17 +238,19 @@ int Parse_Src_Port (char *msg)
     return(port);
 }
 
-int Parse_Dst_Port (char *msg)
+/* Why are there two? */
+
+uint_fast16_t Parse_Dst_Port ( const char *msg ) 
 {
 
-    int port;
+    uint_fast16_t port;
 
     char *portstring=NULL;
     char *saveptr1=NULL;
     char *str=NULL;
     char *token=NULL;
 
-    int i;
+    uint_fast32_t i;
 
     port = config->sagan_port;
 

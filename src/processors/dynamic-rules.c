@@ -48,18 +48,20 @@
 
 extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
-struct _Rules_Loaded *rules_loaded;				// <- why can't this be extern struct? !?!?
 extern struct _SaganCounters *counters;
+
+struct _Rules_Loaded *rules_loaded = NULL;
+
 
 bool reload_rules;
 
 pthread_mutex_t SaganRulesLoadedMutex=PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t CounterDynamicGenericMutex=PTHREAD_MUTEX_INITIALIZER;
 
-int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_position, char *ip_src, char *ip_dst )
+void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast32_t rule_position, const char *ip_src, const char *ip_dst )
 {
 
-    int i;
+    uint_fast32_t i;
 
     struct timeval  tp;
 
@@ -96,7 +98,7 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
                     free(GeoIP);
                     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
-                    return(0);
+                    return;
                 }
         }
 
@@ -181,6 +183,6 @@ int Sagan_Dynamic_Rules ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, int rule_po
         }
 
     free(GeoIP);
-    return(0);
+    return;
 
 }

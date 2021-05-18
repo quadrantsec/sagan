@@ -25,7 +25,7 @@
 *
 */
 
-/* TODO:  needs stats and perfmon! */
+/* TODO:  needs stats */
 
 
 #ifdef HAVE_CONFIG_H
@@ -54,38 +54,27 @@ extern struct _SaganConfig *config;
 extern struct _SaganCounters *counters;
 extern struct _SaganDebug *debug;
 
-//struct _Sagan_Processor_Info *processor_info_brointel = NULL;
-
-struct _Sagan_BroIntel_Intel_Addr *Sagan_BroIntel_Intel_Addr;
-struct _Sagan_BroIntel_Intel_Domain *Sagan_BroIntel_Intel_Domain;
-struct _Sagan_BroIntel_Intel_File_Hash *Sagan_BroIntel_Intel_File_Hash;
-struct _Sagan_BroIntel_Intel_URL *Sagan_BroIntel_Intel_URL;
-struct _Sagan_BroIntel_Intel_Software *Sagan_BroIntel_Intel_Software;
-struct _Sagan_BroIntel_Intel_Email *Sagan_BroIntel_Intel_Email;
-struct _Sagan_BroIntel_Intel_User_Name *Sagan_BroIntel_Intel_User_Name;
-struct _Sagan_BroIntel_Intel_File_Name *Sagan_BroIntel_Intel_File_Name;
-struct _Sagan_BroIntel_Intel_Cert_Hash *Sagan_BroIntel_Intel_Cert_Hash;
+struct _ZeekIntel_Intel_Addr *ZeekIntel_Intel_Addr;
+struct _ZeekIntel_Intel_Domain *ZeekIntel_Intel_Domain;
+struct _ZeekIntel_Intel_File_Hash *ZeekIntel_Intel_File_Hash;
+struct _ZeekIntel_Intel_URL *ZeekIntel_Intel_URL;
+struct _ZeekIntel_Intel_Software *ZeekIntel_Intel_Software;
+struct _ZeekIntel_Intel_Email *ZeekIntel_Intel_Email;
+struct _ZeekIntel_Intel_User_Name *ZeekIntel_Intel_User_Name;
+struct _ZeekIntel_Intel_File_Name *ZeekIntel_Intel_File_Name;
+struct _ZeekIntel_Intel_Cert_Hash *ZeekIntel_Intel_Cert_Hash;
 
 pthread_mutex_t CounterBroIntelGenericMutex=PTHREAD_MUTEX_INITIALIZER;
 
 /*****************************************************************************
- * Sagan_BroIntel_Init - Sets up globals.  Not really used yet.
- *****************************************************************************/
-
-void Sagan_BroIntel_Init(void)
-{
-
-}
-
-/*****************************************************************************
- * Sagan_BroIntel_Load_File - Loads BroIntel data and splits it up
+ * ZeekIntel_Load_File - Loads BroIntel data and splits it up
  * into different arrays.
  * ***************************************************************************/
 
-void Sagan_BroIntel_Load_File ( void )
+void ZeekIntel_Load_File ( void )
 {
 
-    FILE *brointel_file;
+    FILE *zeekintel_file;
 
     char *value;
     char *type;
@@ -97,29 +86,29 @@ void Sagan_BroIntel_Load_File ( void )
     char *tok = NULL; ;
     char *ptmp = NULL;
 
-    int line_count;
-    int i;
+    uint_fast32_t line_count;
+    uint_fast32_t i;
 
     unsigned char bits_ip[MAXIPBIT] = {0};
 
-    char *brointel_filename = NULL;
+    char *zeekintel_filename = NULL;
     char brointelbuf[MAX_BROINTEL_LINE_SIZE] = { 0 };
 
-    __atomic_store_n (&counters->brointel_dups, 0, __ATOMIC_SEQ_CST);
+    __atomic_store_n (&counters->zeekintel_dups, 0, __ATOMIC_SEQ_CST);
 
-    brointel_filename = strtok_r(config->brointel_files, ",", &ptmp);
+    zeekintel_filename = strtok_r(config->zeekintel_files, ",", &ptmp);
 
-    while ( brointel_filename != NULL )
+    while ( zeekintel_filename != NULL )
         {
 
-            Sagan_Log(NORMAL, "Bro Intel Processor Loading File: %s.", brointel_filename);
+            Sagan_Log(NORMAL, "Bro Intel Processor Loading File: %s.", zeekintel_filename);
 
-            if (( brointel_file = fopen(brointel_filename, "r")) == NULL )
+            if (( zeekintel_file = fopen(zeekintel_filename, "r")) == NULL )
                 {
-                    Sagan_Log(ERROR, "[%s, line %d] Could not load Bro Intel file! (%s - %s)", __FILE__, __LINE__, brointel_filename, strerror(errno));
+                    Sagan_Log(ERROR, "[%s, line %d] Could not load Bro Intel file! (%s - %s)", __FILE__, __LINE__, zeekintel_filename, strerror(errno));
                 }
 
-            while(fgets(brointelbuf, MAX_BROINTEL_LINE_SIZE, brointel_file) != NULL)
+            while(fgets(brointelbuf, MAX_BROINTEL_LINE_SIZE, zeekintel_file) != NULL)
                 {
 
                     /* Skip comments and blank linkes */
@@ -140,7 +129,7 @@ void Sagan_BroIntel_Load_File ( void )
 
                             if ( value == NULL || type == NULL || description == NULL )
                                 {
-                                    Sagan_Log(WARN, "[%s, line %d] Got invalid line at %d in %s", __FILE__, __LINE__, line_count, brointel_filename);
+                                    Sagan_Log(WARN, "[%s, line %d] Got invalid line at %d in %s", __FILE__, __LINE__, line_count, zeekintel_filename);
                                 }
 
                             found_flag = 0;
@@ -153,13 +142,13 @@ void Sagan_BroIntel_Load_File ( void )
 
                                     /* Check for duplicates. */
 
-                                    for (i=0; i < counters->brointel_addr_count; i++)
+                                    for (i=0; i < counters->zeekintel_addr_count; i++)
                                         {
 
-                                            if ( !memcmp(Sagan_BroIntel_Intel_Addr[i].bits_ip, bits_ip, MAXIPBIT) )
+                                            if ( !memcmp(ZeekIntel_Intel_Addr[i].bits_ip, bits_ip, MAXIPBIT) )
                                                 {
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::ADDR address %s in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
-                                                    __atomic_add_fetch(& counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::ADDR address %s in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
+                                                    __atomic_add_fetch(& counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -168,18 +157,18 @@ void Sagan_BroIntel_Load_File ( void )
                                     if ( found_flag_array == 0 )
                                         {
 
-                                            Sagan_BroIntel_Intel_Addr = (_Sagan_BroIntel_Intel_Addr *) realloc(Sagan_BroIntel_Intel_Addr, (counters->brointel_addr_count+1) * sizeof(_Sagan_BroIntel_Intel_Addr));
+                                            ZeekIntel_Intel_Addr = (_ZeekIntel_Intel_Addr *) realloc(ZeekIntel_Intel_Addr, (counters->zeekintel_addr_count+1) * sizeof(_ZeekIntel_Intel_Addr));
 
-                                            if ( Sagan_BroIntel_Intel_Addr == NULL )
+                                            if ( ZeekIntel_Intel_Addr == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_Addr. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Addr. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_Addr[counters->brointel_addr_count], 0, sizeof(_Sagan_BroIntel_Intel_Addr));
+                                            memset(&ZeekIntel_Intel_Addr[counters->zeekintel_addr_count], 0, sizeof(_ZeekIntel_Intel_Addr));
 
                                             pthread_mutex_lock(&CounterBroIntelGenericMutex);
-                                            memcpy( Sagan_BroIntel_Intel_Addr[counters->brointel_addr_count].bits_ip, bits_ip, sizeof(bits_ip) );
-                                            counters->brointel_addr_count++;
+                                            memcpy( ZeekIntel_Intel_Addr[counters->zeekintel_addr_count].bits_ip, bits_ip, sizeof(bits_ip) );
+                                            counters->zeekintel_addr_count++;
                                             pthread_mutex_unlock(&CounterBroIntelGenericMutex);
                                         }
 
@@ -193,12 +182,12 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag_array = 0;
 
 
-                                    for (i=0; i < counters-> brointel_domain_count; i++)
+                                    for (i=0; i < counters-> zeekintel_domain_count; i++)
                                         {
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_Domain[i].domain, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_Domain[i].domain, value))
                                                 {
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::DOMAIN '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::DOMAIN '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -206,18 +195,18 @@ void Sagan_BroIntel_Load_File ( void )
 
                                     if ( found_flag_array == 0 )
                                         {
-                                            Sagan_BroIntel_Intel_Domain = (_Sagan_BroIntel_Intel_Domain *) realloc(Sagan_BroIntel_Intel_Domain, (counters->brointel_domain_count+1) * sizeof(_Sagan_BroIntel_Intel_Domain));
+                                            ZeekIntel_Intel_Domain = (_ZeekIntel_Intel_Domain *) realloc(ZeekIntel_Intel_Domain, (counters->zeekintel_domain_count+1) * sizeof(_ZeekIntel_Intel_Domain));
 
-                                            if ( Sagan_BroIntel_Intel_Domain == NULL )
+                                            if ( ZeekIntel_Intel_Domain == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_Domain. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Domain. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_Domain[counters->brointel_domain_count], 0, sizeof(_Sagan_BroIntel_Intel_Domain));
+                                            memset(&ZeekIntel_Intel_Domain[counters->zeekintel_domain_count], 0, sizeof(_ZeekIntel_Intel_Domain));
 
-                                            strlcpy(Sagan_BroIntel_Intel_Domain[counters->brointel_domain_count].domain, value, sizeof(Sagan_BroIntel_Intel_Domain[counters->brointel_domain_count].domain));
+                                            strlcpy(ZeekIntel_Intel_Domain[counters->zeekintel_domain_count].domain, value, sizeof(ZeekIntel_Intel_Domain[counters->zeekintel_domain_count].domain));
 
-                                            __atomic_add_fetch(&counters->brointel_domain_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_domain_count, 1, __ATOMIC_SEQ_CST);
 
 
                                         }
@@ -231,15 +220,15 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag = 1;
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_file_hash_count; i++)
+                                    for (i=0; i < counters->zeekintel_file_hash_count; i++)
                                         {
 
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_File_Hash[i].hash, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_File_Hash[i].hash, value))
                                                 {
 
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::FILE_HASH '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::FILE_HASH '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
 
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -248,17 +237,17 @@ void Sagan_BroIntel_Load_File ( void )
                                     if ( found_flag_array == 0 )
                                         {
 
-                                            Sagan_BroIntel_Intel_File_Hash = (_Sagan_BroIntel_Intel_File_Hash *) realloc(Sagan_BroIntel_Intel_File_Hash, (counters->brointel_file_hash_count+1) * sizeof(_Sagan_BroIntel_Intel_File_Hash));
+                                            ZeekIntel_Intel_File_Hash = (_ZeekIntel_Intel_File_Hash *) realloc(ZeekIntel_Intel_File_Hash, (counters->zeekintel_file_hash_count+1) * sizeof(_ZeekIntel_Intel_File_Hash));
 
-                                            if ( Sagan_BroIntel_Intel_File_Hash == NULL )
+                                            if ( ZeekIntel_Intel_File_Hash == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_File_Hash. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_File_Hash. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_File_Hash[counters->brointel_file_hash_count], 0, sizeof(_Sagan_BroIntel_Intel_File_Hash));
+                                            memset(&ZeekIntel_Intel_File_Hash[counters->zeekintel_file_hash_count], 0, sizeof(_ZeekIntel_Intel_File_Hash));
 
-                                            strlcpy(Sagan_BroIntel_Intel_File_Hash[counters->brointel_file_hash_count].hash, value, sizeof(Sagan_BroIntel_Intel_File_Hash[counters->brointel_file_hash_count].hash));
-                                            counters->brointel_file_hash_count++;
+                                            strlcpy(ZeekIntel_Intel_File_Hash[counters->zeekintel_file_hash_count].hash, value, sizeof(ZeekIntel_Intel_File_Hash[counters->zeekintel_file_hash_count].hash));
+                                            counters->zeekintel_file_hash_count++;
 
                                         }
                                 }
@@ -272,12 +261,12 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag = 1;
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_url_count; i++)
+                                    for (i=0; i < counters->zeekintel_url_count; i++)
                                         {
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_URL[i].url, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_URL[i].url, value))
                                                 {
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::URL '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::URL '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -287,18 +276,18 @@ void Sagan_BroIntel_Load_File ( void )
                                     if ( found_flag_array == 0 )
                                         {
 
-                                            Sagan_BroIntel_Intel_URL = (_Sagan_BroIntel_Intel_URL *) realloc(Sagan_BroIntel_Intel_URL, (counters->brointel_url_count+1) * sizeof(_Sagan_BroIntel_Intel_URL));
+                                            ZeekIntel_Intel_URL = (_ZeekIntel_Intel_URL *) realloc(ZeekIntel_Intel_URL, (counters->zeekintel_url_count+1) * sizeof(_ZeekIntel_Intel_URL));
 
-                                            if ( Sagan_BroIntel_Intel_URL == NULL )
+                                            if ( ZeekIntel_Intel_URL == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_URL. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_URL. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_URL[counters->brointel_url_count], 0, sizeof(_Sagan_BroIntel_Intel_URL));
+                                            memset(&ZeekIntel_Intel_URL[counters->zeekintel_url_count], 0, sizeof(_ZeekIntel_Intel_URL));
 
-                                            strlcpy(Sagan_BroIntel_Intel_URL[counters->brointel_url_count].url, value, sizeof(Sagan_BroIntel_Intel_URL[counters->brointel_url_count].url));
+                                            strlcpy(ZeekIntel_Intel_URL[counters->zeekintel_url_count].url, value, sizeof(ZeekIntel_Intel_URL[counters->zeekintel_url_count].url));
 
-                                            __atomic_add_fetch(&counters->brointel_url_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_url_count, 1, __ATOMIC_SEQ_CST);
 
                                         }
 
@@ -314,14 +303,14 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag = 1;
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_software_count++; i++)
+                                    for (i=0; i < counters->zeekintel_software_count++; i++)
                                         {
 
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_Software[i].software, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_Software[i].software, value))
                                                 {
 
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::SOFTWARE '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::SOFTWARE '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -330,18 +319,18 @@ void Sagan_BroIntel_Load_File ( void )
                                     if ( found_flag_array == 0 )
                                         {
 
-                                            Sagan_BroIntel_Intel_Software = (_Sagan_BroIntel_Intel_Software *) realloc(Sagan_BroIntel_Intel_Software, (counters->brointel_software_count+1) * sizeof(_Sagan_BroIntel_Intel_Software));
+                                            ZeekIntel_Intel_Software = (_ZeekIntel_Intel_Software *) realloc(ZeekIntel_Intel_Software, (counters->zeekintel_software_count+1) * sizeof(_ZeekIntel_Intel_Software));
 
-                                            if ( Sagan_BroIntel_Intel_Software == NULL )
+                                            if ( ZeekIntel_Intel_Software == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_Software. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Software. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_Software[counters->brointel_software_count], 0, sizeof(_Sagan_BroIntel_Intel_Software));
+                                            memset(&ZeekIntel_Intel_Software[counters->zeekintel_software_count], 0, sizeof(_ZeekIntel_Intel_Software));
 
-                                            strlcpy(Sagan_BroIntel_Intel_Software[counters->brointel_software_count].software, value, sizeof(Sagan_BroIntel_Intel_Software[counters->brointel_software_count].software));
+                                            strlcpy(ZeekIntel_Intel_Software[counters->zeekintel_software_count].software, value, sizeof(ZeekIntel_Intel_Software[counters->zeekintel_software_count].software));
 
-                                            __atomic_add_fetch(&counters->brointel_software_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_software_count, 1, __ATOMIC_SEQ_CST);
 
 
                                         }
@@ -354,13 +343,13 @@ void Sagan_BroIntel_Load_File ( void )
 
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_email_count; i++)
+                                    for (i=0; i < counters->zeekintel_email_count; i++)
                                         {
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_Email[i].email, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_Email[i].email, value))
                                                 {
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::EMAIL '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::EMAIL '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
 
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
 
@@ -370,18 +359,18 @@ void Sagan_BroIntel_Load_File ( void )
                                     if ( found_flag_array == 0 )
                                         {
 
-                                            Sagan_BroIntel_Intel_Email = (_Sagan_BroIntel_Intel_Email *) realloc(Sagan_BroIntel_Intel_Email, (counters->brointel_email_count+1) * sizeof(_Sagan_BroIntel_Intel_Email));
+                                            ZeekIntel_Intel_Email = (_ZeekIntel_Intel_Email *) realloc(ZeekIntel_Intel_Email, (counters->zeekintel_email_count+1) * sizeof(_ZeekIntel_Intel_Email));
 
-                                            if ( Sagan_BroIntel_Intel_Email == NULL )
+                                            if ( ZeekIntel_Intel_Email == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_Email. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Email. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_Email[counters->brointel_email_count], 0, sizeof(_Sagan_BroIntel_Intel_Email));
+                                            memset(&ZeekIntel_Intel_Email[counters->zeekintel_email_count], 0, sizeof(_ZeekIntel_Intel_Email));
 
-                                            strlcpy(Sagan_BroIntel_Intel_Email[counters->brointel_email_count].email, value, sizeof(Sagan_BroIntel_Intel_Email[counters->brointel_email_count].email));
+                                            strlcpy(ZeekIntel_Intel_Email[counters->zeekintel_email_count].email, value, sizeof(ZeekIntel_Intel_Email[counters->zeekintel_email_count].email));
 
-                                            __atomic_add_fetch(&counters->brointel_email_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_email_count, 1, __ATOMIC_SEQ_CST);
 
                                             found_flag = 1;
                                         }
@@ -396,13 +385,13 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag = 1;
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_user_name_count; i++)
+                                    for (i=0; i < counters->zeekintel_user_name_count; i++)
                                         {
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_User_Name[i].username, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_User_Name[i].username, value))
                                                 {
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::USER_NAME '%s' in %s on line %.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::USER_NAME '%s' in %s on line %.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
 
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -412,18 +401,18 @@ void Sagan_BroIntel_Load_File ( void )
                                         {
 
 
-                                            Sagan_BroIntel_Intel_User_Name = (_Sagan_BroIntel_Intel_User_Name *) realloc(Sagan_BroIntel_Intel_User_Name, (counters->brointel_user_name_count+1) * sizeof(_Sagan_BroIntel_Intel_User_Name));
+                                            ZeekIntel_Intel_User_Name = (_ZeekIntel_Intel_User_Name *) realloc(ZeekIntel_Intel_User_Name, (counters->zeekintel_user_name_count+1) * sizeof(_ZeekIntel_Intel_User_Name));
 
-                                            if ( Sagan_BroIntel_Intel_User_Name == NULL )
+                                            if ( ZeekIntel_Intel_User_Name == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_User_Name. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_User_Name. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_User_Name[counters->brointel_user_name_count], 0, sizeof(_Sagan_BroIntel_Intel_User_Name));
+                                            memset(&ZeekIntel_Intel_User_Name[counters->zeekintel_user_name_count], 0, sizeof(_ZeekIntel_Intel_User_Name));
 
-                                            strlcpy(Sagan_BroIntel_Intel_User_Name[counters->brointel_user_name_count].username, value, sizeof(Sagan_BroIntel_Intel_User_Name[counters->brointel_user_name_count].username));
+                                            strlcpy(ZeekIntel_Intel_User_Name[counters->zeekintel_user_name_count].username, value, sizeof(ZeekIntel_Intel_User_Name[counters->zeekintel_user_name_count].username));
 
-                                            __atomic_add_fetch(&counters->brointel_user_name_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_user_name_count, 1, __ATOMIC_SEQ_CST);
 
                                         }
                                 }
@@ -436,15 +425,15 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag = 1;
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_file_name_count; i++)
+                                    for (i=0; i < counters->zeekintel_file_name_count; i++)
                                         {
 
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_File_Name[i].file_name, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_File_Name[i].file_name, value))
                                                 {
 
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::FILE_NAME '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::FILE_NAME '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
 
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -454,18 +443,18 @@ void Sagan_BroIntel_Load_File ( void )
                                     if ( found_flag_array == 0 )
                                         {
 
-                                            Sagan_BroIntel_Intel_File_Name = (_Sagan_BroIntel_Intel_File_Name *) realloc(Sagan_BroIntel_Intel_File_Name, (counters->brointel_file_name_count+1) * sizeof(_Sagan_BroIntel_Intel_File_Name));
+                                            ZeekIntel_Intel_File_Name = (_ZeekIntel_Intel_File_Name *) realloc(ZeekIntel_Intel_File_Name, (counters->zeekintel_file_name_count+1) * sizeof(_ZeekIntel_Intel_File_Name));
 
-                                            if ( Sagan_BroIntel_Intel_File_Name == NULL )
+                                            if ( ZeekIntel_Intel_File_Name == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_File_Name. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_File_Name. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_File_Name[counters->brointel_file_name_count], 0, sizeof(_Sagan_BroIntel_Intel_File_Name));
+                                            memset(&ZeekIntel_Intel_File_Name[counters->zeekintel_file_name_count], 0, sizeof(_ZeekIntel_Intel_File_Name));
 
-                                            strlcpy(Sagan_BroIntel_Intel_File_Name[counters->brointel_file_name_count].file_name, value, sizeof(Sagan_BroIntel_Intel_File_Name[counters->brointel_file_name_count].file_name));
+                                            strlcpy(ZeekIntel_Intel_File_Name[counters->zeekintel_file_name_count].file_name, value, sizeof(ZeekIntel_Intel_File_Name[counters->zeekintel_file_name_count].file_name));
 
-                                            __atomic_add_fetch(&counters->brointel_file_name_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_file_name_count, 1, __ATOMIC_SEQ_CST);
 
                                         }
 
@@ -478,12 +467,12 @@ void Sagan_BroIntel_Load_File ( void )
                                     found_flag = 1;
                                     found_flag_array = 0;
 
-                                    for (i=0; i < counters->brointel_cert_hash_count; i++)
+                                    for (i=0; i < counters->zeekintel_cert_hash_count; i++)
                                         {
-                                            if (!strcasecmp(Sagan_BroIntel_Intel_Cert_Hash[i].cert_hash, value))
+                                            if (!strcasecmp(ZeekIntel_Intel_Cert_Hash[i].cert_hash, value))
                                                 {
-                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::CERT_HASH '%s' in %s on line %d.", __FILE__, __LINE__, value, brointel_filename, line_count + 1);
-                                                    __atomic_add_fetch(&counters->brointel_dups, 1, __ATOMIC_SEQ_CST);
+                                                    Sagan_Log(WARN, "[%s, line %d] Got duplicate Intel::CERT_HASH '%s' in %s on line %d.", __FILE__, __LINE__, value, zeekintel_filename, line_count + 1);
+                                                    __atomic_add_fetch(&counters->zeekintel_dups, 1, __ATOMIC_SEQ_CST);
 
                                                     found_flag_array = 1;
                                                 }
@@ -491,18 +480,18 @@ void Sagan_BroIntel_Load_File ( void )
 
                                     if ( found_flag_array == 0 )
                                         {
-                                            Sagan_BroIntel_Intel_Cert_Hash = (_Sagan_BroIntel_Intel_Cert_Hash *) realloc(Sagan_BroIntel_Intel_Cert_Hash, (counters->brointel_cert_hash_count+1) * sizeof(_Sagan_BroIntel_Intel_Cert_Hash));
+                                            ZeekIntel_Intel_Cert_Hash = (_ZeekIntel_Intel_Cert_Hash *) realloc(ZeekIntel_Intel_Cert_Hash, (counters->zeekintel_cert_hash_count+1) * sizeof(_ZeekIntel_Intel_Cert_Hash));
 
-                                            if ( Sagan_BroIntel_Intel_Cert_Hash == NULL )
+                                            if ( ZeekIntel_Intel_Cert_Hash == NULL )
                                                 {
-                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for Sagan_BroIntel_Intel_Cert_Hash. Abort!", __FILE__, __LINE__);
+                                                    Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Cert_Hash. Abort!", __FILE__, __LINE__);
                                                 }
 
-                                            memset(&Sagan_BroIntel_Intel_Cert_Hash[counters->brointel_cert_hash_count], 0, sizeof(_Sagan_BroIntel_Intel_Cert_Hash));
+                                            memset(&ZeekIntel_Intel_Cert_Hash[counters->zeekintel_cert_hash_count], 0, sizeof(_ZeekIntel_Intel_Cert_Hash));
 
-                                            strlcpy(Sagan_BroIntel_Intel_Cert_Hash[counters->brointel_cert_hash_count].cert_hash, value, sizeof(Sagan_BroIntel_Intel_Cert_Hash[counters->brointel_cert_hash_count].cert_hash));
+                                            strlcpy(ZeekIntel_Intel_Cert_Hash[counters->zeekintel_cert_hash_count].cert_hash, value, sizeof(ZeekIntel_Intel_Cert_Hash[counters->zeekintel_cert_hash_count].cert_hash));
 
-                                            __atomic_add_fetch(&counters->brointel_cert_hash_count, 1, __ATOMIC_SEQ_CST);
+                                            __atomic_add_fetch(&counters->zeekintel_cert_hash_count, 1, __ATOMIC_SEQ_CST);
 
                                         }
                                 }
@@ -513,21 +502,21 @@ void Sagan_BroIntel_Load_File ( void )
                     line_count++;
 
                 }
-            fclose(brointel_file);
-            brointel_filename = strtok_r(NULL, ",", &ptmp);
+            fclose(zeekintel_file);
+            zeekintel_filename = strtok_r(NULL, ",", &ptmp);
             line_count = 0;
         }
 
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_IPADDR - Search array for blacklisted IP addresses
+ * ZeekIntel_IPADDR - Search array for blacklisted IP addresses
  *****************************************************************************/
 
-bool Sagan_BroIntel_IPADDR ( unsigned char *ip, char *ipaddr )
+bool ZeekIntel_IPADDR ( unsigned char *ip, const char *ipaddr )
 {
 
-    int i = 0;
+    uint_fast32_t i = 0;
 
     unsigned char ip_convert[MAXIPBIT] = { 0 };
     memset(ip_convert, 0, MAXIPBIT);
@@ -548,10 +537,10 @@ bool Sagan_BroIntel_IPADDR ( unsigned char *ip, char *ipaddr )
 
     /* Search array for for the IP address */
 
-    for ( i = 0; i < counters->brointel_addr_count; i++)
+    for ( i = 0; i < counters->zeekintel_addr_count; i++)
         {
 
-            if ( !memcmp(ip_convert, Sagan_BroIntel_Intel_Addr[i].bits_ip, MAXIPBIT) )
+            if ( !memcmp(ip_convert, ZeekIntel_Intel_Addr[i].bits_ip, MAXIPBIT) )
                 {
                     if ( debug->debugbrointel )
                         {
@@ -568,17 +557,17 @@ bool Sagan_BroIntel_IPADDR ( unsigned char *ip, char *ipaddr )
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_IPADDR_All - Search and tests _all_ IP addresses within
+ * ZeekIntel_IPADDR_All - Search and tests _all_ IP addresses within
  * a syslog_message (reguardless of lognorm/parse ip)!
  *****************************************************************************/
 
-bool Sagan_BroIntel_IPADDR_All ( char *syslog_message, _Sagan_Lookup_Cache_Entry *lookup_cache, size_t cache_size)
+bool ZeekIntel_IPADDR_All ( const char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cache, uint_fast8_t lookup_cache_size )
 {
 
-    int i;
-    int b;
+    uint_fast8_t i;
+    uint_fast32_t b;
 
-    for (i = 0; i < MAX_PARSE_IP; i++)
+    for (i = 0; i < lookup_cache_size; i++)
         {
 
 
@@ -587,10 +576,10 @@ bool Sagan_BroIntel_IPADDR_All ( char *syslog_message, _Sagan_Lookup_Cache_Entry
                     return(false);
                 }
 
-            for ( b = 0; b < counters->brointel_addr_count; b++ )
+            for ( b = 0; b < counters->zeekintel_addr_count; b++ )
                 {
 
-                    if ( !memcmp(Sagan_BroIntel_Intel_Addr[b].bits_ip, lookup_cache[i].ip_bits, sizeof(Sagan_BroIntel_Intel_Addr[b].bits_ip)))
+                    if ( !memcmp(ZeekIntel_Intel_Addr[b].bits_ip, lookup_cache[i].ip_bits, sizeof(ZeekIntel_Intel_Addr[b].bits_ip)))
                         {
                             return(true);
                         }
@@ -601,22 +590,22 @@ bool Sagan_BroIntel_IPADDR_All ( char *syslog_message, _Sagan_Lookup_Cache_Entry
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_DOMAIN - Search DOMAIN array
+ * ZeekIntel_DOMAIN - Search DOMAIN array
  *****************************************************************************/
 
-bool Sagan_BroIntel_DOMAIN ( char *syslog_message )
+bool ZeekIntel_DOMAIN ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_domain_count; i++)
+    for ( i = 0; i < counters->zeekintel_domain_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_Domain[i].domain, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_Domain[i].domain, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found domain %s.", __FILE__, __LINE__, Sagan_BroIntel_Intel_Domain[i].domain);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found domain %s.", __FILE__, __LINE__, ZeekIntel_Intel_Domain[i].domain);
                         }
 
                     return(true);
@@ -629,22 +618,22 @@ bool Sagan_BroIntel_DOMAIN ( char *syslog_message )
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_FILE_HASH - Search FILE_HASH array
+ * ZeekIntel_FILE_HASH - Search FILE_HASH array
  *****************************************************************************/
 
-bool Sagan_BroIntel_FILE_HASH ( char *syslog_message )
+bool ZeekIntel_FILE_HASH ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_file_hash_count; i++)
+    for ( i = 0; i < counters->zeekintel_file_hash_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_File_Hash[i].hash, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_File_Hash[i].hash, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found file hash %s.", __FILE__, __LINE__, Sagan_BroIntel_Intel_File_Hash[i].hash);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found file hash %s.", __FILE__, __LINE__, ZeekIntel_Intel_File_Hash[i].hash);
                         }
 
                     return(true);
@@ -657,22 +646,22 @@ bool Sagan_BroIntel_FILE_HASH ( char *syslog_message )
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_URL - Search URL array
+ * ZeekIntel_URL - Search URL array
  *****************************************************************************/
 
-bool Sagan_BroIntel_URL ( char *syslog_message )
+bool ZeekIntel_URL ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_url_count; i++)
+    for ( i = 0; i < counters->zeekintel_url_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_URL[i].url, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_URL[i].url, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found URL \"%s\".", __FILE__, __LINE__, Sagan_BroIntel_Intel_URL[i].url);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found URL \"%s\".", __FILE__, __LINE__, ZeekIntel_Intel_URL[i].url);
                         }
 
                     return(true);
@@ -684,22 +673,22 @@ bool Sagan_BroIntel_URL ( char *syslog_message )
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_SOFTWARE - Search SOFTWARE array
+ * ZeekIntel_SOFTWARE - Search SOFTWARE array
  ****************************************************************************/
 
-bool Sagan_BroIntel_SOFTWARE ( char *syslog_message )
+bool ZeekIntel_SOFTWARE ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_software_count; i++)
+    for ( i = 0; i < counters->zeekintel_software_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_Software[i].software, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_Software[i].software, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found software \"%s\".", __FILE__, __LINE__, Sagan_BroIntel_Intel_Software[i].software);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found software \"%s\".", __FILE__, __LINE__, ZeekIntel_Intel_Software[i].software);
                         }
 
                     return(true);
@@ -711,22 +700,22 @@ bool Sagan_BroIntel_SOFTWARE ( char *syslog_message )
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_EMAIL - Search EMAIL array
+ * ZeekIntel_EMAIL - Search EMAIL array
  *****************************************************************************/
 
-bool Sagan_BroIntel_EMAIL ( char *syslog_message )
+bool ZeekIntel_EMAIL ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_email_count; i++)
+    for ( i = 0; i < counters->zeekintel_email_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_Email[i].email, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_Email[i].email, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found e-mail address \"%s\".", __FILE__, __LINE__, Sagan_BroIntel_Intel_Email[i].email);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found e-mail address \"%s\".", __FILE__, __LINE__, ZeekIntel_Intel_Email[i].email);
                         }
 
                     return(true);
@@ -738,22 +727,22 @@ bool Sagan_BroIntel_EMAIL ( char *syslog_message )
 }
 
 /*****************************************************************************
- * Sagan_BroIntel_USER_NAME - Search USER_NAME array
+ * ZeekIntel_USER_NAME - Search USER_NAME array
  ****************************************************************************/
 
-bool Sagan_BroIntel_USER_NAME ( char *syslog_message )
+bool ZeekIntel_USER_NAME ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_user_name_count; i++)
+    for ( i = 0; i < counters->zeekintel_user_name_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_User_Name[i].username, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_User_Name[i].username, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found the username \"%s\".", __FILE__, __LINE__, Sagan_BroIntel_Intel_User_Name[i].username);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found the username \"%s\".", __FILE__, __LINE__, ZeekIntel_Intel_User_Name[i].username);
                         }
 
                     return(true);
@@ -765,22 +754,22 @@ bool Sagan_BroIntel_USER_NAME ( char *syslog_message )
 }
 
 /****************************************************************************
- * Sagan_BroIntel_FILE_NAME - Search FILE_NAME array
+ * ZeekIntel_FILE_NAME - Search FILE_NAME array
  ****************************************************************************/
 
-bool Sagan_BroIntel_FILE_NAME ( char *syslog_message )
+bool ZeekIntel_FILE_NAME ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_file_name_count; i++)
+    for ( i = 0; i < counters->zeekintel_file_name_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_File_Name[i].file_name, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_File_Name[i].file_name, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found the file name \"%s\".", __FILE__, __LINE__, Sagan_BroIntel_Intel_File_Name[i].file_name);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found the file name \"%s\".", __FILE__, __LINE__, ZeekIntel_Intel_File_Name[i].file_name);
                         }
 
                     return(true);
@@ -792,22 +781,22 @@ bool Sagan_BroIntel_FILE_NAME ( char *syslog_message )
 }
 
 /***************************************************************************
- * Sagan_BroIntel_CERT_HASH - Search CERT_HASH array
+ * ZeekIntel_CERT_HASH - Search CERT_HASH array
  ***************************************************************************/
 
-bool Sagan_BroIntel_CERT_HASH ( char *syslog_message )
+bool ZeekIntel_CERT_HASH ( const char *syslog_message )
 {
 
-    int i;
+    uint_fast32_t i;
 
-    for ( i = 0; i < counters->brointel_cert_hash_count; i++)
+    for ( i = 0; i < counters->zeekintel_cert_hash_count; i++)
         {
 
-            if ( Sagan_stristr(syslog_message, Sagan_BroIntel_Intel_Cert_Hash[i].cert_hash, false) )
+            if ( Sagan_stristr(syslog_message, ZeekIntel_Intel_Cert_Hash[i].cert_hash, false) )
                 {
                     if ( debug->debugbrointel )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Found the CERT_HASH \"%s\".", __FILE__, __LINE__, Sagan_BroIntel_Intel_Cert_Hash[i].cert_hash);
+                            Sagan_Log(DEBUG, "[%s, line %d] Found the CERT_HASH \"%s\".", __FILE__, __LINE__, ZeekIntel_Intel_Cert_Hash[i].cert_hash);
                         }
 
                     return(true);

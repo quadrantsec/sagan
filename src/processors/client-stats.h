@@ -20,7 +20,7 @@
 
 void Client_Stats_Init( void );
 void Client_Stats_Handler( void );
-void Client_Stats_Add_Update_IP( char *ip, char *program, char *message );
+void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message );
 void Client_Stats_Close( void );
 
 /* Client Stats strucure */

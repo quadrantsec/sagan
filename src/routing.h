@@ -30,7 +30,7 @@ struct _Sagan_Routing
     bool alert_time_trigger;
     bool geoip2_isset;
     bool blacklist_results;
-    bool brointel_results;
+    bool zeekintel_results;
 
 #ifdef WITH_BLUEDOT
 

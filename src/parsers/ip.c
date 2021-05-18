@@ -107,7 +107,6 @@ int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cac
     char *ptr3 = NULL;
     char *ptr4 = NULL;
 
-
     char *ip_1 = NULL;
     char *ip_2 = NULL;
 

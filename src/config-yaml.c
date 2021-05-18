@@ -1903,15 +1903,15 @@ void Load_YAML_Config( char *yaml_file )
 
                                             if ( !strcasecmp(value, "yes") || !strcasecmp(value, "true") )
                                                 {
-                                                    config->brointel_flag = true;
+                                                    config->zeekintel_flag = true;
                                                 }
                                         }
 
-                                    else if (!strcmp(last_pass, "filename") && config->brointel_flag == true )
+                                    else if (!strcmp(last_pass, "filename") && config->zeekintel_flag == true )
                                         {
 
                                             Var_To_Value(value, tmp, sizeof(tmp));
-                                            strlcpy(config->brointel_files, tmp, sizeof(config->brointel_files));
+                                            strlcpy(config->zeekintel_files, tmp, sizeof(config->zeekintel_files));
 
                                         }
 

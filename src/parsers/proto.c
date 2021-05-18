@@ -44,40 +44,6 @@ struct _Sagan_Protocol_Map_Message *map_message;
 struct _Sagan_Protocol_Map_Program *map_program;
 
 /****************************************************************************
- * Parse_Proto - Searches for simple clues from the message about what
- * protocl might have generated this event
- ****************************************************************************/
-
-/* DEPERCIATED:  Parse_IP now handles all of this
-
-int Parse_Proto( char *msg )
-{
-
-    int i;
-
-    for (i = 0; i < counters->mapcount_message; i++)
-        {
-
-            if ( map_message[i].nocase == 1 )
-                {
-                    if (Sagan_stristr(msg, map_message[i].search, true))
-                        {
-                            return(map_message[i].proto);
-                        }
-                }
-            else
-                {
-                    if (Sagan_strstr(msg, map_message[i].search))
-                        {
-                            return(map_message[i].proto);
-                        }
-                }
-        }
-    return(0);
-}
-*/
-
-/****************************************************************************
  * Parse_Proto_Program - Attempts to determine the protocol that generate
  * the event by the program that generate it.
  ****************************************************************************/

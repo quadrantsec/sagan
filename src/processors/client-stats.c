@@ -124,8 +124,7 @@ void Client_Stats_Handler( void )
     struct timeval tp;
     char timebuf[64] = { 0 };
 
-
-    int i=0;
+    uint_fast32_t i=0;
 
     /* Wait some time before dumping stats */
 
@@ -194,12 +193,12 @@ void Client_Stats_Handler( void )
  * array of systems Sagan is keeping track of.
  ****************************************************************************/
 
-void Client_Stats_Add_Update_IP( char *ip, char *program, char *message )
+void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message )
 {
 
-    uint32_t hash = Djb2_Hash( ip );
+    uint_fast32_t hash = Djb2_Hash( ip );
 
-    int i = 0;
+    uint_fast32_t i = 0;
     time_t t;
     struct tm *now;
     uint64_t epoch = 0;
@@ -243,7 +242,6 @@ void Client_Stats_Add_Update_IP( char *ip, char *program, char *message )
                     return;
 
                 }
-
         }
 
     if ( counters->client_stats_count < config->client_stats_max )

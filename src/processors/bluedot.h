@@ -43,18 +43,16 @@
 #define BLUEDOT_LOOKUP_FILENAME 4
 #define BLUEDOT_LOOKUP_JA3 5
 
-int Sagan_Bluedot_Cat_Compare ( unsigned char, int, unsigned char );
-int Sagan_Bluedot ( _Sagan_Proc_Syslog *, int  );
-unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_position, char *bluedot_str, size_t bluedot_size );
-int Sagan_Bluedot_IP_Lookup_All ( char *, int, _Sagan_Lookup_Cache_Entry *, int );
+bool Sagan_Bluedot_Cat_Compare ( uint_fast8_t bluedot_results, int_fast32_t rule_position, uint_fast8_t type );
+uint_fast8_t Sagan_Bluedot_Lookup(const char *data,  uint_fast8_t type, uint_fast32_t rule_position, char *bluedot_str, size_t bluedot_size );
+bool Sagan_Bluedot_IP_Lookup_All ( char *syslog_message, uint_fast32_t rule_position, _Sagan_Lookup_Cache_Entry *lookup_cache, uint_fast8_t lookup_cache_size );
 
 void Sagan_Bluedot_Clean_Cache ( void );
 void Sagan_Bluedot_Init(void);
 void Sagan_Bluedot_Load_Cat(void);
-void Sagan_Verify_Categories( char *, int, const char *, int, unsigned char );
+void Sagan_Verify_Categories( char *categories, uint_fast32_t rule_number, const char *ruleset, uint_fast32_t linecount, uint_fast8_t type );
 void Sagan_Bluedot_Check_Cache_Time (void);
-
-int Sagan_Bluedot_Clean_Queue ( char *, unsigned char );
+void Sagan_Bluedot_Clean_Queue ( const char *data, uint_fast8_t type );
 
 
 typedef struct _Sagan_Bluedot_Cat_List _Sagan_Bluedot_Cat_List;

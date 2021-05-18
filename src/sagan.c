@@ -941,24 +941,23 @@ int main(int argc, char **argv)
 
     /* Sagan Zeek Intel processor *******************************************/
 
-    if ( config->brointel_flag )
+    if ( config->zeekintel_flag )
         {
 
             Sagan_Log(NORMAL, "");
 
-            Sagan_BroIntel_Init();
-            Sagan_BroIntel_Load_File();
+            ZeekIntel_Load_File();
 
-            Sagan_Log(NORMAL, "Bro Intel::ADDR Loaded: %d", counters->brointel_addr_count);
-            Sagan_Log(NORMAL, "Bro Intel::DOMAIN Loaded: %d", counters->brointel_domain_count);
-            Sagan_Log(NORMAL, "Bro Intel::FILE_HASH Loaded: %d", counters->brointel_file_hash_count);
-            Sagan_Log(NORMAL, "Bro Intel::URL Loaded: %d", counters->brointel_url_count);
-            Sagan_Log(NORMAL, "Bro Intel::SOFTWARE Loaded: %d", counters->brointel_software_count);
-            Sagan_Log(NORMAL, "Bro Intel::EMAIL Loaded: %d", counters->brointel_email_count);
-            Sagan_Log(NORMAL, "Bro Intel::USER_NAME Loaded: %d", counters->brointel_user_name_count);
-            Sagan_Log(NORMAL, "Bro Intel::FILE_NAME Loaded: %d", counters->brointel_file_name_count);
-            Sagan_Log(NORMAL, "Bro Intel::CERT_HASH Loaded: %d", counters->brointel_cert_hash_count);
-            Sagan_Log(NORMAL, "Bro Intel Duplicates Detected: %d", counters->brointel_dups);
+            Sagan_Log(NORMAL, "Zeek Intel::ADDR Loaded: %d", counters->zeekintel_addr_count);
+            Sagan_Log(NORMAL, "Zeek Intel::DOMAIN Loaded: %d", counters->zeekintel_domain_count);
+            Sagan_Log(NORMAL, "Zeek Intel::FILE_HASH Loaded: %d", counters->zeekintel_file_hash_count);
+            Sagan_Log(NORMAL, "Zeek Intel::URL Loaded: %d", counters->zeekintel_url_count);
+            Sagan_Log(NORMAL, "Zeek Intel::SOFTWARE Loaded: %d", counters->zeekintel_software_count);
+            Sagan_Log(NORMAL, "Zeek Intel::EMAIL Loaded: %d", counters->zeekintel_email_count);
+            Sagan_Log(NORMAL, "Zeek Intel::USER_NAME Loaded: %d", counters->zeekintel_user_name_count);
+            Sagan_Log(NORMAL, "Zeek Intel::FILE_NAME Loaded: %d", counters->zeekintel_file_name_count);
+            Sagan_Log(NORMAL, "Zeek Intel::CERT_HASH Loaded: %d", counters->zeekintel_cert_hash_count);
+            Sagan_Log(NORMAL, "Zeek Intel Duplicates Detected: %d", counters->zeekintel_dups);
 
         }
 

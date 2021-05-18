@@ -80,7 +80,6 @@ pthread_mutex_t SaganProcBluedotURLWorkMutex=PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t SaganProcBluedotFilenameWorkMutex=PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t SaganProcBluedotJA3WorkMutex=PTHREAD_MUTEX_INITIALIZER;
 
-
 bool bluedot_cache_clean_lock=0;
 bool bluedot_dns_global=0;
 
@@ -265,10 +264,10 @@ void Sagan_Bluedot_Init(void)
  * happens a lot with IP address looks
  ****************************************************************************/
 
-int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
+void Sagan_Bluedot_Clean_Queue ( const char *data, uint_fast8_t type )
 {
 
-    int i=0;
+    uint_fast32_t i=0;
 
     unsigned char ip_convert[MAXIPBIT] = { 0 };
 
@@ -359,7 +358,6 @@ int Sagan_Bluedot_Clean_Queue ( char *data, unsigned char type )
 
         }
 
-    return(true);
 }
 
 /****************************************************************************
@@ -507,19 +505,19 @@ void Sagan_Bluedot_Check_Cache_Time (void)
 void Sagan_Bluedot_Clean_Cache ( void )
 {
 
-    int i;
-    int deleted_count=0;
+    uint_fast32_t i;
+    uint_fast32_t deleted_count=0;
 
-    int new_bluedot_ip_max_cache = 0;
-    int new_bluedot_hash_max_cache = 0;
-    int new_bluedot_url_max_cache = 0;
-    int new_bluedot_filename_max_cache = 0;
-    int new_bluedot_ja3_max_cache = 0;
+    uint_fast32_t new_bluedot_ip_max_cache = 0;
+    uint_fast32_t new_bluedot_hash_max_cache = 0;
+    uint_fast32_t new_bluedot_url_max_cache = 0;
+    uint_fast32_t new_bluedot_filename_max_cache = 0;
+    uint_fast32_t new_bluedot_ja3_max_cache = 0;
 
     char  timet[20] = { 0 };
     time_t t;
     struct tm *now=NULL;
-    uint64_t timeint;
+    uint_fast64_t timeint;
 
     t = time(NULL);
     now=localtime(&t);
@@ -756,7 +754,7 @@ void Sagan_Bluedot_Clean_Cache ( void )
  * 5 == JA3
  */
 
-unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_position, char *bluedot_str, size_t bluedot_size )
+uint_fast8_t Sagan_Bluedot_Lookup(const char *data,  uint_fast8_t type, uint_fast32_t rule_position, char *bluedot_str, size_t bluedot_size )
 {
 
     unsigned char ip_convert[MAXIPBIT] = { 0 };
@@ -781,7 +779,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
     uint64_t mdate_utime_u32 = 0;
 
     signed char bluedot_alertid = 0;		/* -128 to 127 */
-    int i;
+    uint_fast16_t i;
 
     char tmp[64] = { 0 };
 
@@ -793,7 +791,7 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
     now=localtime(&t);
     strftime(timet, sizeof(timet), "%s",  now);
 
-    uint64_t epoch_time = atol(timet);
+    uint_fast64_t epoch_time = atol(timet);
 
     /* Check IP TTL for Bluedot */
 
@@ -1544,10 +1542,10 @@ unsigned char Sagan_Bluedot_Lookup(char *data,  unsigned char type, int rule_pos
  * compares to what the rule is looking for
  ***************************************************************************/
 
-int Sagan_Bluedot_Cat_Compare ( unsigned char bluedot_results, int rule_position, unsigned char type )
+bool Sagan_Bluedot_Cat_Compare ( uint_fast8_t bluedot_results, int_fast32_t rule_position, uint_fast8_t type )
 {
 
-    int i;
+    uint_fast8_t i;
 
     if ( type == BLUEDOT_LOOKUP_IP )
         {
@@ -1641,12 +1639,12 @@ int Sagan_Bluedot_Cat_Compare ( unsigned char bluedot_results, int rule_position
  * message and preforms a Bluedot query.
  ***************************************************************************/
 
-int Sagan_Bluedot_IP_Lookup_All ( char *syslog_message, int rule_position, _Sagan_Lookup_Cache_Entry *lookup_cache, int lookup_cache_size )
+bool Sagan_Bluedot_IP_Lookup_All ( char *syslog_message, uint_fast32_t rule_position, _Sagan_Lookup_Cache_Entry *lookup_cache, uint_fast8_t lookup_cache_size )
 {
 
     int i;
 
-    unsigned char bluedot_results;
+    uint_fast8_t bluedot_results;
     bool bluedot_flag;
 
     char bluedot_json[BLUEDOT_JSON_SIZE] = { 0 };
@@ -1667,14 +1665,14 @@ int Sagan_Bluedot_IP_Lookup_All ( char *syslog_message, int rule_position, _Saga
     return(false);
 }
 
-void Sagan_Verify_Categories( char *categories, int rule_number, const char *ruleset, int linecount, unsigned char type )
+void Sagan_Verify_Categories( char *categories, uint_fast32_t rule_number, const char *ruleset, uint_fast32_t linecount, uint_fast8_t type )
 {
 
-    char tmp2[64];
+    char tmp2[64] = { 0 };
     char *tmptoken;
     char *saveptrrule;
 
-    int i;
+    uint_fast8_t i;
 
     bool found;
 
