@@ -192,9 +192,9 @@ int main(int argc, char **argv)
 
 #ifdef HAVE_LIBHIREDIS
 
-    char redis_reply[5] = { 0 }; 
+    char redis_reply[5] = { 0 };
     char redis_command[8] = { 0 };
- 
+
 #endif
 
     /****************************************************************************/
@@ -1354,7 +1354,7 @@ int main(int argc, char **argv)
 
         } /* End of while(1) */
 
-return(0);
+    return(0);
 } /* End of main */
 
 

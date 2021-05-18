@@ -69,7 +69,7 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
                 {
 
                     json_obj = json_tokener_parse(JSON_LOCAL->json_value[i]);
-			
+
                     if ( json_obj != NULL )
                         {
 
@@ -104,18 +104,18 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
 
                                     json_count++;
 
-			            /* Check to see if we have to many JSON objects to put into 
-				     * memory */
+                                    /* Check to see if we have to many JSON objects to put into
+                                    * memory */
 
                                     if ( json_count == JSON_MAX_OBJECTS )
                                         {
 
-					Sagan_Log(WARN, "Sagan has been compiled to support %d JSON object.  More than %d objects (key/value pairs) were found.  This means that some of the JSON key/values had to be dropped.  Recompile with more JSON_MAX_OBJECTS in the sagan-defs.h to support more objects.  Sagan will process what data it was able to keep.", JSON_MAX_OBJECTS, JSON_MAX_OBJECTS);
+                                            Sagan_Log(WARN, "Sagan has been compiled to support %d JSON object.  More than %d objects (key/value pairs) were found.  This means that some of the JSON key/values had to be dropped.  Recompile with more JSON_MAX_OBJECTS in the sagan-defs.h to support more objects.  Sagan will process what data it was able to keep.", JSON_MAX_OBJECTS, JSON_MAX_OBJECTS);
 
-                                        JSON_LOCAL->json_count = json_count;
+                                            JSON_LOCAL->json_count = json_count;
 
-                                        json_object_put(json_obj);
-                                        return;
+                                            json_object_put(json_obj);
+                                            return;
 
                                         }
 
