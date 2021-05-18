@@ -113,10 +113,10 @@ void Statistics( void )
             Sagan_Log(NORMAL, " \\/)\"(\\/");
             Sagan_Log(NORMAL, "  (_o_)    Received/Processed/Ignored : %" PRIu64 "/%" PRIu64 "/%" PRIu64 " (%.3f%%/%.3f%%)", counters->events_received, counters->events_processed, counters->ignore_count, CalcPct(counters->events_processed, counters->events_received), CalcPct(counters->ignore_count, counters->events_received));
             Sagan_Log(NORMAL, "  /   \\/)  Signatures matched         : %" PRIu64 " (%.3f%%)", counters->saganfound, CalcPct(counters->saganfound, counters->events_received ) );
-            Sagan_Log(NORMAL, "           Bytes Processed            : %" PRIu64 "", counters->bytes_total);
-            Sagan_Log(NORMAL, "           Largest log size (bytes)   : %d bytes", counters->max_bytes_length);
-            Sagan_Log(NORMAL, " (|| ||)   Alerts                     : %" PRIu64 " (%.3f%%)",  counters->alert_total, CalcPct( counters->alert_total, counters->events_received) );
-            Sagan_Log(NORMAL, "  oo-oo    After                      : %" PRIu64 " (%.3f%%)",  counters->after_total, CalcPct( counters->after_total, counters->events_received) );
+            Sagan_Log(NORMAL, " (|| ||)    Bytes Processed            : %" PRIu64 "", counters->bytes_total);
+            Sagan_Log(NORMAL, "  oo-oo     Largest log size (bytes)   : %d bytes", counters->max_bytes_length);
+            Sagan_Log(NORMAL, "           Alerts                     : %" PRIu64 " (%.3f%%)",  counters->alert_total, CalcPct( counters->alert_total, counters->events_received) );
+            Sagan_Log(NORMAL, "           After                      : %" PRIu64 " (%.3f%%)",  counters->after_total, CalcPct( counters->after_total, counters->events_received) );
             Sagan_Log(NORMAL, "           Threshold                  : %" PRIu64 " (%.3f%%)", counters->threshold_total, CalcPct( counters->threshold_total, counters->events_received) );
             Sagan_Log(NORMAL, "           Dropped                    : %" PRIu64 " (%.3f%%)", counters->sagan_processor_drop + counters->sagan_output_drop + counters->sagan_log_drop, CalcPct(counters->sagan_processor_drop + counters->sagan_output_drop + counters->sagan_log_drop, counters->events_received) );
 
