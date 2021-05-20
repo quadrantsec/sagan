@@ -168,7 +168,7 @@ sagan-core:
     # data within the log data.  This replaces the depreciated options 
     # 'parse-json-message' and # 'parse-json-program'.   
 
-    json-parse-data: enabled.
+    json-parse-data: enabled
 
   # This controls how the "parse_src_ip" and "parse_dst_ip" function within a rule. 
    
