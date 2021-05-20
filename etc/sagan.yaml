@@ -22,8 +22,7 @@ vars:
   sagan-groups: 
 
     FIFO: "/var/sagan/fifo/sagan.fifo"
-    #RULE_PATH: "/usr/local/etc/sagan-rules"
-    RULE_PATH: "/home/champ/code/sagan-rules"
+    RULE_PATH: "/usr/local/etc/sagan-rules"
     LOCKFILE: "/var/run/sagan/sagan.pid"
     LOG_PATH: "/var/log/sagan"	
 
