@@ -137,7 +137,7 @@ sagan-core:
     chown-fifo: yes             # Change ownership of FIFO to the "sagan" user.
     xbit-storage: mmap          # "redis" or "mmap"
 
-    max-threads: 1              # Increase this if the system is under heavy load.
+    max-threads: 50             # Increase this if the system is under heavy load.
 
 
     # Sagan can sends logs in "batches" for performance reasons. In most 
