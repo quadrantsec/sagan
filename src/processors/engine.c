@@ -61,6 +61,8 @@
 #include "json-pcre.h"
 #include "json-content.h"
 #include "json-meta-content.h"
+#include "liblognormalize.h"
+
 
 #include "parsers/parsers.h"
 #include "parsers/json.h"
@@ -74,9 +76,9 @@
 #include "processors/bluedot.h"
 #endif
 
-#ifdef HAVE_LIBLOGNORM
-#include "liblognormalize.h"
-#endif
+//#ifdef HAVE_LIBLOGNORM
+//#include "liblognormalize.h"
+//#endif
 
 #include "output-plugins/eve.h"
 
@@ -95,7 +97,7 @@ void Sagan_Engine_Init ( void )
     /* Nothing to do yet */
 }
 
-int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sagan_JSON *JSON_LOCAL,  struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST, struct _Sagan_Routing *SaganRouting, bool dynamic_rule_flag )
+void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sagan_JSON *JSON_LOCAL,  struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST, struct _Sagan_Routing *SaganRouting, struct _SaganNormalizeLiblognorm *SaganNormalizeLiblognorm, bool dynamic_rule_flag )
 {
 
     struct _Sagan_Lookup_Cache_Entry *lookup_cache = NULL;
@@ -162,12 +164,14 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
     json_normalize[0] = '\0';
 
+/*
 #ifdef HAVE_LIBLOGNORM
 
     static __thread struct _SaganNormalizeLiblognorm SaganNormalizeLiblognorm = { 0 };
     memset((char *)&SaganNormalizeLiblognorm, 0, sizeof(struct _SaganNormalizeLiblognorm));
 
 #endif
+*/
 
     /* This needs to be included,  even if liblognorm isn't in use */
 
@@ -663,17 +667,17 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             liblognorm_status = -1;
 
-                                            Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, &SaganNormalizeLiblognorm);
+                                            Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, SaganNormalizeLiblognorm);
 
-                                            strlcpy(json_normalize, SaganNormalizeLiblognorm.json_normalize, sizeof(json_normalize));
+                                            strlcpy(json_normalize, SaganNormalizeLiblognorm->json_normalize, sizeof(json_normalize));
 
-                                            if ( SaganNormalizeLiblognorm.ip_src[0] != '0'  ||
-                                                    SaganNormalizeLiblognorm.ip_dst[0] != '0'  ||
-                                                    SaganNormalizeLiblognorm.src_port != 0  ||
-                                                    SaganNormalizeLiblognorm.dst_port != 0  ||
-                                                    SaganNormalizeLiblognorm.hash_sha1[0] != '\0'  ||
-                                                    SaganNormalizeLiblognorm.hash_sha256[0] != '\0'  ||
-                                                    SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->ip_src[0] != '0'  ||
+                                                    SaganNormalizeLiblognorm->ip_dst[0] != '0'  ||
+                                                    SaganNormalizeLiblognorm->src_port != 0  ||
+                                                    SaganNormalizeLiblognorm->dst_port != 0  ||
+                                                    SaganNormalizeLiblognorm->hash_sha1[0] != '\0'  ||
+                                                    SaganNormalizeLiblognorm->hash_sha256[0] != '\0'  ||
+                                                    SaganNormalizeLiblognorm->hash_md5[0] != '\0' )
 
                                                 {
                                                     liblognorm_status = true;
@@ -681,34 +685,34 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                             /* These are _only_ set here */
 
-                                            if ( SaganNormalizeLiblognorm.username[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->username[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->username, SaganNormalizeLiblognorm.username, MAX_USERNAME_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->username, SaganNormalizeLiblognorm->username, MAX_USERNAME_SIZE);
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.http_uri[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->http_uri[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->url, SaganNormalizeLiblognorm.http_uri, MAX_URL_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->url, SaganNormalizeLiblognorm->http_uri, MAX_URL_SIZE);
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.filename[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->filename[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->filename, SaganNormalizeLiblognorm.filename, MAX_FILENAME_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->filename, SaganNormalizeLiblognorm->filename, MAX_FILENAME_SIZE);
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.ja3[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->ja3[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->ja3, SaganNormalizeLiblognorm.ja3, MD5_HASH_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->ja3, SaganNormalizeLiblognorm->ja3, MD5_HASH_SIZE);
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.event_id[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->event_id[0] != '\0' )
                                                 {
                                                     liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->event_id, SaganNormalizeLiblognorm.event_id, sizeof(SaganProcSyslog_LOCAL->event_id));
+                                                    strlcpy(SaganProcSyslog_LOCAL->event_id, SaganNormalizeLiblognorm->event_id, sizeof(SaganProcSyslog_LOCAL->event_id));
                                                 }
 
                                         }
@@ -716,11 +720,11 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                     if ( liblognorm_status == true && rulestruct[b].normalize == true )
                                         {
 
-                                            if ( SaganNormalizeLiblognorm.ip_src[0] != '0')
+                                            if ( SaganNormalizeLiblognorm->ip_src[0] != '0')
                                                 {
                                                     ip_src_is_valid = true;
                                                     IP2Bit(SaganProcSyslog_LOCAL->src_ip, ip_src_bits);
-                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganNormalizeLiblognorm.ip_src, MAXIP);
+                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganNormalizeLiblognorm->ip_src, MAXIP);
 
                                                     if ( is_notlocalhost( ip_src_bits ) )
                                                         {
@@ -729,10 +733,10 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
                                                 }
 
 
-                                            if ( SaganNormalizeLiblognorm.ip_dst[0] != '0' )
+                                            if ( SaganNormalizeLiblognorm->ip_dst[0] != '0' )
                                                 {
                                                     ip_dst_is_valid = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganNormalizeLiblognorm.ip_dst, MAXIP);
+                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganNormalizeLiblognorm->ip_dst, MAXIP);
                                                     IP2Bit(SaganProcSyslog_LOCAL->dst_ip, ip_dst_bits);
 
                                                     if ( is_notlocalhost( ip_dst_bits ) )
@@ -742,30 +746,30 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.src_port != 0 )
+                                            if ( SaganNormalizeLiblognorm->src_port != 0 )
                                                 {
-                                                    SaganProcSyslog_LOCAL->src_port = SaganNormalizeLiblognorm.src_port;
+                                                    SaganProcSyslog_LOCAL->src_port = SaganNormalizeLiblognorm->src_port;
                                                 }
 
 
-                                            if ( SaganNormalizeLiblognorm.dst_port != 0 )
+                                            if ( SaganNormalizeLiblognorm->dst_port != 0 )
                                                 {
-                                                    SaganProcSyslog_LOCAL->dst_port = SaganNormalizeLiblognorm.dst_port;
+                                                    SaganProcSyslog_LOCAL->dst_port = SaganNormalizeLiblognorm->dst_port;
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.hash_md5[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->hash_md5[0] != '\0' )
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->md5, SaganNormalizeLiblognorm.hash_md5, MD5_HASH_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->md5, SaganNormalizeLiblognorm->hash_md5, MD5_HASH_SIZE);
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.hash_sha1[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->hash_sha1[0] != '\0' )
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->sha1, SaganNormalizeLiblognorm.hash_sha1, SHA1_HASH_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->sha1, SaganNormalizeLiblognorm->hash_sha1, SHA1_HASH_SIZE);
                                                 }
 
-                                            if ( SaganNormalizeLiblognorm.hash_sha256[0] != '\0' )
+                                            if ( SaganNormalizeLiblognorm->hash_sha256[0] != '\0' )
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->sha256, SaganNormalizeLiblognorm.hash_sha256, SHA256_HASH_SIZE);
+                                                    strlcpy(SaganProcSyslog_LOCAL->sha256, SaganNormalizeLiblognorm->hash_sha256, SHA256_HASH_SIZE);
                                                 }
 
                                         }
@@ -1500,5 +1504,5 @@ int Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sag
 
     free(lookup_cache);
 
-    return(0);
+    return;
 }

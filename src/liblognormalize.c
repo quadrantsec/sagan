@@ -46,7 +46,7 @@
 extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
 
-struct _SaganNormalizeLiblognorm *SaganNormalizeLiblognorm = NULL;
+//struct _SaganNormalizeLiblognorm *SaganNormalizeLiblognorm = NULL;
 
 /************************************************************************
  * liblognorm GLOBALS
@@ -68,8 +68,8 @@ extern struct _SaganCounters *counters;
 
 void Liblognorm_Close( void )
 {
-    free(SaganNormalizeLiblognorm);
-//	(void)ln_exitCtx(ctx);			/* Seems to cause faults */
+//    free(SaganNormalizeLiblognorm);
+	(void)ln_exitCtx(ctx);			/* Seems to cause faults */
 }
 
 /************************************************************************
@@ -80,7 +80,7 @@ void Liblognorm_Close( void )
 
 void Liblognorm_Load(const char *infile)
 {
-
+/*
     SaganNormalizeLiblognorm = malloc(sizeof(struct _SaganNormalizeLiblognorm));
 
     if ( SaganNormalizeLiblognorm == NULL )
@@ -89,6 +89,7 @@ void Liblognorm_Load(const char *infile)
         }
 
     memset(SaganNormalizeLiblognorm, 0, sizeof(_SaganNormalizeLiblognorm));
+*/
 
     if((ctx = ln_initCtx()) == NULL)
         {
