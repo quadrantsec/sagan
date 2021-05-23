@@ -63,7 +63,6 @@
 #include "json-meta-content.h"
 #include "liblognormalize.h"
 
-
 #include "parsers/parsers.h"
 #include "parsers/json.h"
 
@@ -75,10 +74,6 @@
 #ifdef WITH_BLUEDOT
 #include "processors/bluedot.h"
 #endif
-
-//#ifdef HAVE_LIBLOGNORM
-//#include "liblognormalize.h"
-//#endif
 
 #include "output-plugins/eve.h"
 
@@ -164,15 +159,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     json_normalize[0] = '\0';
 
-/*
-#ifdef HAVE_LIBLOGNORM
-
-    static __thread struct _SaganNormalizeLiblognorm SaganNormalizeLiblognorm = { 0 };
-    memset((char *)&SaganNormalizeLiblognorm, 0, sizeof(struct _SaganNormalizeLiblognorm));
-
-#endif
-*/
-
     /* This needs to be included,  even if liblognorm isn't in use */
 
     bool liblognorm_status = 0;
@@ -186,7 +172,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     /* If "parse-json-program" is enabled, we'll look for signs in the program
        field for JSON.  If we find it,  we'll append the program and message
        field */
-
 
     if ( config->json_parse_data == true )
         {

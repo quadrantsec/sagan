@@ -18,13 +18,14 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-//#ifdef HAVE_LIBLOGNORM
+#ifdef HAVE_LIBLOGNORM
 
 #include <json.h>
 
 #include "sagan-defs.h"
 
 /* liblognorm struct */
+
 typedef struct liblognorm_struct liblognorm_struct;
 struct liblognorm_struct
 {
@@ -72,7 +73,7 @@ struct _SaganNormalizeLiblognorm
 
 };
 
-//#endif
+#endif
 
 
 void Liblognorm_Load( const char * );
