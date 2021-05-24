@@ -51,7 +51,7 @@ extern struct _SaganConfig *config;
 extern struct _SaganCounters *counters;
 extern struct _Sagan_Ruleset_Track *Ruleset_Track;
 
-bool death;
+extern bool death;
 
 void RuleTracking_Syslog( void )
 {

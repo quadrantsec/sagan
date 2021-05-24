@@ -55,7 +55,7 @@
 
 #include "processors/client-stats.h"
 
-bool death;
+extern bool death;
 
 uint64_t old_epoch = 0;
 

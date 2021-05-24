@@ -66,8 +66,7 @@ extern struct _Track_Clients_Networks *Track_Clients_Networks;
 extern struct _SaganCounters *counters;
 extern struct _SaganDebug *debug;
 
-
-bool death;
+extern bool death;
 
 /****************************************************************************
  * Sagan_Track_Clients - Main routine to "tracks" via IPC/memory IPs that

@@ -74,7 +74,7 @@ extern uint_fast16_t proc_running;  	        /* Comes from sagan.c */
 bool dynamic_rule_flag = NORMAL_RULE;
 uint_fast16_t dynamic_line_count = 0;
 
-bool death;
+extern bool death;
 
 extern pthread_cond_t SaganProcDoWork;
 extern pthread_mutex_t SaganProcWorkMutex;
