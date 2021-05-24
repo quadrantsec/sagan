@@ -18,7 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifdef HAVE_LIBLOGNORM
 
 #include <json.h>
 
@@ -41,9 +40,11 @@ struct liblognorm_toload_struct
 };
 
 
-typedef struct _SaganNormalizeLiblognorm _SaganNormalizeLiblognorm;
-struct _SaganNormalizeLiblognorm
+typedef struct _NormalizeLiblognorm _NormalizeLiblognorm;
+struct _NormalizeLiblognorm
 {
+
+#ifdef HAVE_LIBLOGNORM
 
     bool status;
 
@@ -71,12 +72,13 @@ struct _SaganNormalizeLiblognorm
 
     char json_normalize[JSON_MAX_SIZE];
 
-};
-
 #endif
+
+};
 
 
 void Liblognorm_Load( const char * );
-void Normalize_Liblognorm(char *, struct _SaganNormalizeLiblognorm *);
+void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm);
 void Liblognorm_Close(void);
+
 

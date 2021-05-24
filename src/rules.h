@@ -180,8 +180,8 @@ struct _Rule_Struct
     uint_fast8_t pcre_count;
     uint_fast8_t content_count;
     uint_fast8_t event_id_count;
-    uint_fast8_t meta_content_count;
-    uint_fast8_t meta_content_converted_count;
+    uint_fast32_t meta_content_count;
+    uint_fast16_t meta_content_converted_count;
 
 
     /* Flexbit */
@@ -305,7 +305,7 @@ struct _Rule_Struct
     bool json_meta_strstr[MAX_JSON_META_CONTENT];
     char json_meta_content_key[MAX_JSON_META_CONTENT][128];
     uint_fast32_t  json_meta_content_count;
-    uint_fast8_t json_meta_content_converted_count;
+    uint_fast16_t json_meta_content_converted_count;
 
     bool alert_time_flag;
     uint_fast8_t alert_days;

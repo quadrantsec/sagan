@@ -130,7 +130,6 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
 
             portstring = strtok_r(tmpmsg, " ", &saveptr1);
 
-            //for ( i = 0, str = portstring; ; i++ )
             while ( portstring != NULL )
                 {
 
@@ -160,7 +159,7 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
             portstring = strtok_r(tmpmsg, ":", &saveptr1);
             token = strtok_r(portstring, " ", &saveptr2);
 
-            while ( token != NULL );
+            while ( token != NULL )
             {
 
                 result = Is_IP(token, IPv4);
@@ -204,7 +203,6 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
             portstring = strtok_r(tmpmsg, "#", &saveptr1);
             token = strtok_r(portstring, " ", &saveptr2);
 
-            //for ( i = 0, str = portstring; ; i++ )
             while ( token != NULL )
                 {
 

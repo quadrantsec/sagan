@@ -29,20 +29,19 @@
 
 #include <stdio.h>
 #include <string.h>
+
 #include "sagan.h"
 #include "version.h"
-
-
+#include "liblognorm.h"                                                                                      
 #include "geoip.h"
 
 #include "send-alert.h"
 #include "output.h"
-//#include "gen-msg.h"
 #include "rules.h"
 
 #include "routing.h"
 
-#include "processors/engine.h"
+//#include "processors/engine.h"
 
 extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;

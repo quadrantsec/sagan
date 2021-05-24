@@ -85,6 +85,10 @@
 #include "plog.h"
 #endif
 
+#ifdef HAVE_LIBLOGNORM
+#include "liblognormalize.h"
+#endif
+
 #include "routing.h"
 #include "processors/engine.h"
 #include "rules.h"
@@ -93,10 +97,6 @@
 #include "processors/client-stats.h"
 #include "processors/zeek-intel.h"
 #include "processors/stats-json.h"
-
-#ifdef HAVE_LIBLOGNORM
-#include "liblognormalize.h"
-#endif
 
 #define OVECCOUNT 30
 
@@ -695,8 +695,6 @@ int main(int argc, char **argv)
     pthread_mutex_lock(&SaganRulesLoadedMutex);
     (void)Load_YAML_Config(config->sagan_config);
     pthread_mutex_unlock(&SaganRulesLoadedMutex);
-
-    (void)Sagan_Engine_Init();
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
 
