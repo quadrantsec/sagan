@@ -327,7 +327,7 @@ void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *Normali
             Sagan_Log(DEBUG, "Liblognorm DEBUG output: %d", rc_normalize);
             Sagan_Log(DEBUG, "---------------------------------------------------");
             Sagan_Log(DEBUG, "Status: %s", NormalizeLiblognorm->status == true ? "true":"false");
-            Sagan_Log(DEBUG, "Log message to normalize: |%s|", syslog_msg);
+            Sagan_Log(DEBUG, "Log message to normalize: %s", syslog_msg);
             Sagan_Log(DEBUG, "Parsed: %s", NormalizeLiblognorm->json_normalize);
             Sagan_Log(DEBUG, "Source IP: %s", NormalizeLiblognorm->ip_src);
             Sagan_Log(DEBUG, "Destination IP: %s", NormalizeLiblognorm->ip_dst);

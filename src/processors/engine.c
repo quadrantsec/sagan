@@ -132,7 +132,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     struct timeval tp;
     uint_fast8_t lookup_cache_size = 0;
 
-    char json_normalize[JSON_MAX_SIZE];
+    char json_normalize[JSON_MAX_SIZE] = { 0 }; 
 
     /* These do not need to be reset each time as they are _only_
      * set through normalize */
@@ -149,15 +149,15 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     /* Outside the WITH_BLUEDOT because we use it in passing to Send_Alert() */
 
-    char bluedot_json[BLUEDOT_JSON_SIZE];
+    char bluedot_json[BLUEDOT_JSON_SIZE] = { 0 }; 
 
     /* Set a default for liblognorm JSON.  In case it's not used */
 
-    json_normalize[0] = '\0';
+    //json_normalize[0] = '\0';
 
     /* This needs to be included,  even if liblognorm isn't in use */
 
-    bool liblognorm_status = 0;
+    bool liblognorm_status = false;
 
     /* Get time we received the event */
 
@@ -642,16 +642,18 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             if ( flag == true )
                                 {
+
                                     if ( liblognorm_status == false && rulestruct[b].normalize == true )
                                         {
                                             /* Set that normalization has been tried work isn't repeated */
 
-                                            liblognorm_status = -1;
+                                            //liblognorm_status = -1;
 
                                             Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, NormalizeLiblognorm);
 
-                                            strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, sizeof(json_normalize));
+//                                            strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, sizeof(json_normalize));
 
+					    /*
                                             if ( NormalizeLiblognorm->ip_src[0] != '0'  ||
                                                     NormalizeLiblognorm->ip_dst[0] != '0'  ||
                                                     NormalizeLiblognorm->src_port != 0  ||
@@ -659,9 +661,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                     NormalizeLiblognorm->hash_sha1[0] != '\0'  ||
                                                     NormalizeLiblognorm->hash_sha256[0] != '\0'  ||
                                                     NormalizeLiblognorm->hash_md5[0] != '\0' )
+						*/
 
+					     if ( NormalizeLiblognorm->status == true )
                                                 {
                                                     liblognorm_status = true;
+						    strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, sizeof(json_normalize));
                                                 }
 
                                             /* These are _only_ set here */
