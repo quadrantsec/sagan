@@ -1470,9 +1470,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                         } /* End of pcre/content/etc match */
 
                     pre_match = false;  		      /* Reset match! */
-                    SaganRouting->flexbit_return=false;	      /* Flexbit reset */
-                    SaganRouting->xbit_return=false;            /* xbit reset */
-                    SaganRouting->check_flow_return = true;      /* Rule flow direction reset */
+
+//                    SaganRouting->flexbit_return=false;	      /* Flexbit reset */
+//                    SaganRouting->xbit_return=false;            /* xbit reset */
+//                    SaganRouting->check_flow_return = true;      /* Rule flow direction reset */
+
+		   memset(SaganRouting, 0, sizeof(_Sagan_Routing));
+		   SaganRouting->check_flow_return = true;
+
 
                 } /* If normal or dynamic rule */
 

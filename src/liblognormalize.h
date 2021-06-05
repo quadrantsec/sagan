@@ -68,7 +68,7 @@ struct _NormalizeLiblognorm
     char http_hostname[MAX_HOSTNAME_SIZE];
 
     char ja3[MD5_HASH_SIZE+1];
-    char event_id[32];
+    char event_id[MAX_EVENT_ID];
 
     char json_normalize[JSON_MAX_SIZE];
 

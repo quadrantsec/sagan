@@ -250,9 +250,9 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     if ( config->sagan_log_syslog == true )
         {
-            openlog("sagan", LOG_PID, LOG_DAEMON);
+//            openlog("sagan", LOG_PID, LOG_DAEMON);
             syslog(LOG_INFO, "[%s] %s", chr, buf);
-            closelog();
+//            closelog();
         }
 
     if ( config->daemonize == 0 && config->quiet == 0 )

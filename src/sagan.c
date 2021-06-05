@@ -694,6 +694,12 @@ int main(int argc, char **argv)
 
     pthread_mutex_lock(&SaganRulesLoadedMutex);
     (void)Load_YAML_Config(config->sagan_config);
+
+    if ( config->sagan_log_syslog == true )
+    {
+    openlog("sagan", LOG_PID, LOG_DAEMON);
+    }
+
     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));

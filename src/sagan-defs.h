@@ -180,6 +180,7 @@ typedef void json_object;
 #define MAX_URL_SIZE		8192
 #define MAX_USERNAME_SIZE	64
 #define MAX_HOSTNAME_SIZE	255
+#define MAX_EVENT_ID_SIZE	32
 
 /* Locations of IPC/Share memory "files" */
 
