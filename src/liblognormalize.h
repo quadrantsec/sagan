@@ -77,8 +77,8 @@ struct _NormalizeLiblognorm
 };
 
 
-void Liblognorm_Load( const char * );
-void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm);
+void Liblognorm_Load( const char *infile );
+void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm);
 void Liblognorm_Close(void);
 
 

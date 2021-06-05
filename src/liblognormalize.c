@@ -102,7 +102,7 @@ void Liblognorm_Load(const char *infile)
  * Locates interesting log data via Rainer's liblognorm library
  ***********************************************************************/
 
-void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm)
+void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm)
 {
 
     char buf[MAX_SYSLOGMSG] = { 0 };
@@ -119,9 +119,9 @@ void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *Normali
 //    NormalizeLiblognorm->status = false;
 
     NormalizeLiblognorm->ip_src[0] = '0';
-//    NormalizeLiblognorm->ip_src[1] = '\0';
+    //NormalizeLiblognorm->ip_src[1] = '\0';
     NormalizeLiblognorm->ip_dst[0] = '0';
-//    NormalizeLiblognorm->ip_dst[1] = '\0';
+    //NormalizeLiblognorm->ip_dst[1] = '\0';
 
     /*
     NormalizeLiblognorm->username[0] = '\0';
@@ -145,12 +145,12 @@ void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *Normali
     */
 
 //    snprintf(buf, sizeof(buf),"%s", syslog_msg);
-//    memcpy(buf, syslog_msg, MAX_SYSLOGMSG);
+    strlcpy(buf, syslog_msg, MAX_SYSLOGMSG);
 
     /* int ln_normalize(ln_ctx ctx, const char *str, size_t strLen, struct json_object **json_p); */
 
-//    rc_normalize = ln_normalize(ctx, buf, strlen(buf), &json);
-    rc_normalize = ln_normalize(ctx, syslog_msg, strlen(buf), &json);  
+    rc_normalize = ln_normalize(ctx, buf, strlen(buf), &json);
+//    rc_normalize = ln_normalize(ctx, syslog_msg, strlen(syslog_msg), &json);  
 
     if (json == NULL)
         {
@@ -337,7 +337,7 @@ void Normalize_Liblognorm(char *syslog_msg, struct _NormalizeLiblognorm *Normali
             Sagan_Log(DEBUG, "Liblognorm DEBUG output: %d", rc_normalize);
             Sagan_Log(DEBUG, "---------------------------------------------------");
             Sagan_Log(DEBUG, "Status: %s", NormalizeLiblognorm->status == true ? "true":"false");
-            Sagan_Log(DEBUG, "Log message to normalize: %s", syslog_msg);
+            Sagan_Log(DEBUG, "Log message to normalize: %s", buf);
             Sagan_Log(DEBUG, "Parsed: %s", NormalizeLiblognorm->json_normalize);
             Sagan_Log(DEBUG, "Source IP: %s", NormalizeLiblognorm->ip_src);
             Sagan_Log(DEBUG, "Destination IP: %s", NormalizeLiblognorm->ip_dst);
