@@ -46,7 +46,7 @@ struct _NormalizeLiblognorm
 
 #ifdef HAVE_LIBLOGNORM
 
-    bool status;
+//    bool status;
 
     char ip_src[MAXIP];
     char ip_dst[MAXIP];

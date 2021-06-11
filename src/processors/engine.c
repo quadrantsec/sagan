@@ -654,15 +654,16 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     if ( liblognorm_status == false && rulestruct[b].normalize == true )
                                         {
 
+//					    printf("IN NORMALIZE\n");
                                             Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, NormalizeLiblognorm);
 
                                             /* Successful normalization.  Remember this! */
 
-                                            if ( NormalizeLiblognorm->status == true )
-                                                {
+//                                            if ( NormalizeLiblognorm->status == true )
+ //                                               {
                                                     liblognorm_status = true;
 						    strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, JSON_MAX_SIZE);
-                                                }
+  //                                              }
 
                                         }
 
