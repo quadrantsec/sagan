@@ -661,6 +661,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             if ( NormalizeLiblognorm->status == true )
                                                 {
                                                     liblognorm_status = true;
+						    strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, JSON_MAX_SIZE);
                                                 }
 
                                         }
