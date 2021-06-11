@@ -32,7 +32,7 @@
 
 #include "sagan.h"
 #include "version.h"
-#include "liblognorm.h"                                                                                      
+#include "liblognorm.h"
 #include "geoip.h"
 
 #include "send-alert.h"

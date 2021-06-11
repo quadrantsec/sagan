@@ -696,9 +696,9 @@ int main(int argc, char **argv)
     (void)Load_YAML_Config(config->sagan_config);
 
     if ( config->sagan_log_syslog == true )
-    {
-    openlog("sagan", LOG_PID, LOG_DAEMON);
-    }
+        {
+            openlog("sagan", LOG_PID, LOG_DAEMON);
+        }
 
     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 

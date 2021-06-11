@@ -88,6 +88,9 @@ extern struct _Sagan_IPC_Counters *counters_ipc;
 
 extern bool reload_rules;
 
+pthread_mutex_t NormalizeMutex=PTHREAD_MUTEX_INITIALIZER;
+
+
 void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sagan_JSON *JSON_LOCAL,  struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST, struct _Sagan_Routing *SaganRouting, struct _NormalizeLiblognorm *NormalizeLiblognorm, bool dynamic_rule_flag )
 {
 
@@ -132,7 +135,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     struct timeval tp;
     uint_fast8_t lookup_cache_size = 0;
 
-    char json_normalize[JSON_MAX_SIZE] = { 0 }; 
+    char json_normalize[JSON_MAX_SIZE] = { 0 };
 
     /* These do not need to be reset each time as they are _only_
      * set through normalize */
@@ -149,7 +152,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     /* Outside the WITH_BLUEDOT because we use it in passing to Send_Alert() */
 
-    char bluedot_json[BLUEDOT_JSON_SIZE] = { 0 }; 
+    char bluedot_json[BLUEDOT_JSON_SIZE] = { 0 };
 
     /* Set a default for liblognorm JSON.  In case it's not used */
 
@@ -638,79 +641,46 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 #endif
 
 #ifdef HAVE_LIBLOGNORM
-                            /*  Normalize before event_id processing */
+                            /************************************************************/
+                            /* Liblognorm - Do normalization before event_id processing */
+                            /************************************************************/
 
                             if ( flag == true )
                                 {
 
+                                    /* We only want to run normalization on the log _one_ time.  If
+                                     * multiple sigs want normalization, reuse the normalization data. */
+
                                     if ( liblognorm_status == false && rulestruct[b].normalize == true )
                                         {
-                                            /* Set that normalization has been tried work isn't repeated */
-
-                                            //liblognorm_status = -1;
 
                                             Normalize_Liblognorm(SaganProcSyslog_LOCAL->syslog_message, NormalizeLiblognorm);
 
-//                                            strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, sizeof(json_normalize));
+                                            /* Successful normalization.  Remember this! */
 
-					    /*
-                                            if ( NormalizeLiblognorm->ip_src[0] != '0'  ||
-                                                    NormalizeLiblognorm->ip_dst[0] != '0'  ||
-                                                    NormalizeLiblognorm->src_port != 0  ||
-                                                    NormalizeLiblognorm->dst_port != 0  ||
-                                                    NormalizeLiblognorm->hash_sha1[0] != '\0'  ||
-                                                    NormalizeLiblognorm->hash_sha256[0] != '\0'  ||
-                                                    NormalizeLiblognorm->hash_md5[0] != '\0' )
-						*/
-
-					     if ( NormalizeLiblognorm->status == true )
+                                            if ( NormalizeLiblognorm->status == true )
                                                 {
                                                     liblognorm_status = true;
-						    strlcpy(json_normalize, NormalizeLiblognorm->json_normalize, sizeof(json_normalize));
-                                                }
-
-                                            /* These are _only_ set here */
-
-                                            if ( NormalizeLiblognorm->username[0] != '\0' )
-                                                {
-                                                    liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->username, NormalizeLiblognorm->username, MAX_USERNAME_SIZE);
-                                                }
-
-                                            if ( NormalizeLiblognorm->http_uri[0] != '\0' )
-                                                {
-                                                    liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->url, NormalizeLiblognorm->http_uri, MAX_URL_SIZE);
-                                                }
-
-                                            if ( NormalizeLiblognorm->filename[0] != '\0' )
-                                                {
-                                                    liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->filename, NormalizeLiblognorm->filename, MAX_FILENAME_SIZE);
-                                                }
-
-                                            if ( NormalizeLiblognorm->ja3[0] != '\0' )
-                                                {
-                                                    liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->ja3, NormalizeLiblognorm->ja3, MD5_HASH_SIZE);
-                                                }
-
-                                            if ( NormalizeLiblognorm->event_id[0] != '\0' )
-                                                {
-                                                    liblognorm_status = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->event_id, NormalizeLiblognorm->event_id, sizeof(SaganProcSyslog_LOCAL->event_id));
                                                 }
 
                                         }
 
-                                    if ( liblognorm_status == true && rulestruct[b].normalize == true )
+                                    /* Does the sig want normalization? Did we successfully normalize
+                                     * at some point? */
+
+                                    if ( liblognorm_status == true &&  rulestruct[b].normalize == true )
                                         {
 
-                                            if ( NormalizeLiblognorm->ip_src[0] != '0')
+                                            /* src_ip */
+
+                                            if ( NormalizeLiblognorm->ip_src[0] != '\0')
                                                 {
+
                                                     ip_src_is_valid = true;
                                                     IP2Bit(SaganProcSyslog_LOCAL->src_ip, ip_src_bits);
                                                     strlcpy(SaganProcSyslog_LOCAL->src_ip, NormalizeLiblognorm->ip_src, MAXIP);
+
+                                                    /* If its localhost, etc. throw it out */
 
                                                     if ( is_notlocalhost( ip_src_bits ) )
                                                         {
@@ -718,25 +688,52 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                         }
                                                 }
 
+                                            /* dest_ip */
 
-                                            if ( NormalizeLiblognorm->ip_dst[0] != '0' )
+                                            if ( NormalizeLiblognorm->ip_dst[0] != '\0')
                                                 {
+
                                                     ip_dst_is_valid = true;
-                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, NormalizeLiblognorm->ip_dst, MAXIP);
                                                     IP2Bit(SaganProcSyslog_LOCAL->dst_ip, ip_dst_bits);
+                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, NormalizeLiblognorm->ip_dst, MAXIP);
+
+                                                    /* If its localhost, etc. throw it out */
 
                                                     if ( is_notlocalhost( ip_dst_bits ) )
                                                         {
                                                             ip_dst_is_valid = false;
                                                         }
+                                                }
 
+                                            if ( NormalizeLiblognorm->username[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->username, NormalizeLiblognorm->username, MAX_USERNAME_SIZE);
+                                                }
+
+                                            if ( NormalizeLiblognorm->http_uri[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->url, NormalizeLiblognorm->http_uri, MAX_URL_SIZE);
+                                                }
+
+                                            if ( NormalizeLiblognorm->filename[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->filename, NormalizeLiblognorm->filename, MAX_FILENAME_SIZE);
+                                                }
+
+                                            if ( NormalizeLiblognorm->ja3[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->ja3, NormalizeLiblognorm->ja3, MD5_HASH_SIZE);
+                                                }
+
+                                            if ( NormalizeLiblognorm->event_id[0] != '\0' )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->event_id, NormalizeLiblognorm->event_id, sizeof(SaganProcSyslog_LOCAL->event_id));
                                                 }
 
                                             if ( NormalizeLiblognorm->src_port != 0 )
                                                 {
                                                     SaganProcSyslog_LOCAL->src_port = NormalizeLiblognorm->src_port;
                                                 }
-
 
                                             if ( NormalizeLiblognorm->dst_port != 0 )
                                                 {
@@ -759,8 +756,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                 }
 
                                         }
+
                                 }
+
 #endif
+
+                            /* Event ID */
 
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
@@ -1475,8 +1476,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 //                    SaganRouting->xbit_return=false;            /* xbit reset */
 //                    SaganRouting->check_flow_return = true;      /* Rule flow direction reset */
 
-		   memset(SaganRouting, 0, sizeof(_Sagan_Routing));
-		   SaganRouting->check_flow_return = true;
+                    memset(SaganRouting, 0, sizeof(_Sagan_Routing));
+                    SaganRouting->check_flow_return = true;
 
 
                 } /* If normal or dynamic rule */

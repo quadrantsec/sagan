@@ -66,7 +66,7 @@ extern struct _SaganCounters *counters;
 
 void Liblognorm_Close( void )
 {
-	(void)ln_exitCtx(ctx);			/* Seems to cause faults */
+    (void)ln_exitCtx(ctx);			/* Seems to cause faults */
 }
 
 /************************************************************************
@@ -111,16 +111,16 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
     int rc_normalize = 0;
     const char *tmp = NULL;
 
-    struct json_object *json = NULL;
+    struct json_object *json_norm = NULL;
     struct json_object *string_obj = NULL;
 
     memset(NormalizeLiblognorm, 0, sizeof(_NormalizeLiblognorm));
 
 //    NormalizeLiblognorm->status = false;
 
-    NormalizeLiblognorm->ip_src[0] = '0';
+//    NormalizeLiblognorm->ip_src[0] = '0';
     //NormalizeLiblognorm->ip_src[1] = '\0';
-    NormalizeLiblognorm->ip_dst[0] = '0';
+//    NormalizeLiblognorm->ip_dst[0] = '0';
     //NormalizeLiblognorm->ip_dst[1] = '\0';
 
     /*
@@ -145,58 +145,59 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
     */
 
 //    snprintf(buf, sizeof(buf),"%s", syslog_msg);
-    strlcpy(buf, syslog_msg, MAX_SYSLOGMSG);
+//    strlcpy(buf, syslog_msg, MAX_SYSLOGMSG);
 
     /* int ln_normalize(ln_ctx ctx, const char *str, size_t strLen, struct json_object **json_p); */
 
-    rc_normalize = ln_normalize(ctx, buf, strlen(buf), &json);
-//    rc_normalize = ln_normalize(ctx, syslog_msg, strlen(syslog_msg), &json);  
+    rc_normalize = ln_normalize(ctx, buf, strlen(buf), &json_norm);
+//    rc_normalize = ln_normalize(ctx, syslog_msg, strlen(syslog_msg), &json);
 
-    if (json == NULL)
+    if (json_norm == NULL || rc_normalize != 0 )
         {
-            json_object_put(json);
+            json_object_put(json_norm);
             json_object_put(string_obj);
             return;
         }
 
     /* Get source address information */
 
-    json_object_object_get_ex(json, "src-ip", &string_obj);
+    json_object_object_get_ex(json_norm, "src-ip", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL)
         {
+//	      printf("GOT SOURCE of: %s\n", tmp);
 //            snprintf(NormalizeLiblognorm->ip_src, sizeof(NormalizeLiblognorm->ip_src), "%s", tmp);
-	      strlcpy(NormalizeLiblognorm->ip_src, tmp, MAXIP);
-	      NormalizeLiblognorm->status = true;
+            strlcpy(NormalizeLiblognorm->ip_src, tmp, MAXIP);
+            NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "dst-ip", &string_obj);
+    json_object_object_get_ex(json_norm, "dst-ip", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
         {
-     //       snprintf(NormalizeLiblognorm->ip_dst, sizeof(NormalizeLiblognorm->ip_dst), "%s", tmp);
-	    strlcpy(NormalizeLiblognorm->ip_dst, tmp, MAXIP);
+            //       snprintf(NormalizeLiblognorm->ip_dst, sizeof(NormalizeLiblognorm->ip_dst), "%s", tmp);
+            strlcpy(NormalizeLiblognorm->ip_dst, tmp, MAXIP);
             NormalizeLiblognorm->status = true;
         }
 
     /* Get username information - Will be used in the future */
 
-    json_object_object_get_ex(json, "username", &string_obj);
+    json_object_object_get_ex(json_norm, "username", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
         {
 //            snprintf(NormalizeLiblognorm->username, sizeof(NormalizeLiblognorm->username), "%s", tmp);
-	    strlcpy(NormalizeLiblognorm->username, tmp, MAX_USERNAME_SIZE);
+            strlcpy(NormalizeLiblognorm->username, tmp, MAX_USERNAME_SIZE);
             NormalizeLiblognorm->status = true;
         }
 
 
     /* Do DNS lookup for source hostname */
 
-    json_object_object_get_ex(json, "src-host", &string_obj);
+    json_object_object_get_ex(json_norm, "src-host", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -216,7 +217,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
         }
 
-    json_object_object_get_ex(json, "dst-host", &string_obj);
+    json_object_object_get_ex(json_norm, "dst-host", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -236,7 +237,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     /* Get port information */
 
-    json_object_object_get_ex(json, "src-port", &string_obj);
+    json_object_object_get_ex(json_norm, "src-port", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -245,7 +246,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "dst-port", &string_obj);
+    json_object_object_get_ex(json_norm, "dst-port", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -255,7 +256,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
         }
 
 
-    json_object_object_get_ex(json, "hash-md5", &string_obj);
+    json_object_object_get_ex(json_norm, "hash-md5", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -265,7 +266,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
         }
 
 
-    json_object_object_get_ex(json, "hash-sha1", &string_obj);
+    json_object_object_get_ex(json_norm, "hash-sha1", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -274,7 +275,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "hash-sha256", &string_obj);
+    json_object_object_get_ex(json_norm, "hash-sha256", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -284,7 +285,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
         }
 
 
-    json_object_object_get_ex(json, "http_uri", &string_obj);
+    json_object_object_get_ex(json_norm, "http_uri", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -293,7 +294,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "http_hostname", &string_obj);
+    json_object_object_get_ex(json_norm, "http_hostname", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -302,7 +303,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "filename", &string_obj);
+    json_object_object_get_ex(json_norm, "filename", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -311,7 +312,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "ja3", &string_obj);
+    json_object_object_get_ex(json_norm, "ja3", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -320,7 +321,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    json_object_object_get_ex(json, "event_id", &string_obj);
+    json_object_object_get_ex(json_norm, "event_id", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
@@ -329,13 +330,13 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
             NormalizeLiblognorm->status = true;
         }
 
-    strlcpy(NormalizeLiblognorm->json_normalize, json_object_to_json_string_ext(json, FJSON_TO_STRING_PLAIN), sizeof(NormalizeLiblognorm->json_normalize) );
+    strlcpy(NormalizeLiblognorm->json_normalize, json_object_to_json_string_ext(json_norm, FJSON_TO_STRING_PLAIN), sizeof(NormalizeLiblognorm->json_normalize) );
 
     if ( debug->debugnormalize )
         {
 
-            Sagan_Log(DEBUG, "Liblognorm DEBUG output: %d", rc_normalize);
             Sagan_Log(DEBUG, "---------------------------------------------------");
+            Sagan_Log(DEBUG, "Liblognorm DEBUG output: %d", rc_normalize);
             Sagan_Log(DEBUG, "Status: %s", NormalizeLiblognorm->status == true ? "true":"false");
             Sagan_Log(DEBUG, "Log message to normalize: %s", buf);
             Sagan_Log(DEBUG, "Parsed: %s", NormalizeLiblognorm->json_normalize);
@@ -359,7 +360,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
         }
 
 
-    json_object_put(json);
+    json_object_put(json_norm);
     json_object_put(string_obj);
 }
 

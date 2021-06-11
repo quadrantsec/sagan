@@ -261,25 +261,25 @@ void Processor ( void )
                                 }
                         }
 
-		    /* Zero GeoIP SRC */
+                    /* Zero GeoIP SRC */
 
-		    GeoIP_SRC->city[0] = '\0'; 
-		    GeoIP_SRC->country[0] = '\0';
-		    GeoIP_SRC->subdivision[0] = '\0';
-		    GeoIP_SRC->postal[0] = '\0';
-		    GeoIP_SRC->timezone[0] = '\0';
-		    GeoIP_SRC->latitude[0] = '\0';
-		    GeoIP_SRC->longitude[0] = '\0';
+                    GeoIP_SRC->city[0] = '\0';
+                    GeoIP_SRC->country[0] = '\0';
+                    GeoIP_SRC->subdivision[0] = '\0';
+                    GeoIP_SRC->postal[0] = '\0';
+                    GeoIP_SRC->timezone[0] = '\0';
+                    GeoIP_SRC->latitude[0] = '\0';
+                    GeoIP_SRC->longitude[0] = '\0';
 
-		    /* Zero GeoIP DEST */
+                    /* Zero GeoIP DEST */
 
-		    GeoIP_DEST->city[0] = '\0'; 
-		    GeoIP_DEST->country[0] = '\0';
-		    GeoIP_DEST->subdivision[0] = '\0';
-		    GeoIP_DEST->postal[0] = '\0';
-		    GeoIP_DEST->timezone[0] = '\0';
-		    GeoIP_DEST->latitude[0] = '\0';
-		    GeoIP_DEST->longitude[0] = '\0';
+                    GeoIP_DEST->city[0] = '\0';
+                    GeoIP_DEST->country[0] = '\0';
+                    GeoIP_DEST->subdivision[0] = '\0';
+                    GeoIP_DEST->postal[0] = '\0';
+                    GeoIP_DEST->timezone[0] = '\0';
+                    GeoIP_DEST->latitude[0] = '\0';
+                    GeoIP_DEST->longitude[0] = '\0';
 
 //                    memset(GeoIP_SRC, 0, sizeof(_GeoIP));
 //                    memset(GeoIP_DEST, 0, sizeof(_GeoIP));

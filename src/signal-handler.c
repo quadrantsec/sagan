@@ -277,10 +277,10 @@ void Sig_Handler( void )
                     fclose(config->sagan_log_stream);
                     Remove_Lock_File();
 
-		    if ( config->sagan_log_syslog == true )
-		    {
-		    closelog();
-		    }
+                    if ( config->sagan_log_syslog == true )
+                        {
+                            closelog();
+                        }
 
                     exit(0);
                     break;
