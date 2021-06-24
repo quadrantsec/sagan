@@ -154,6 +154,7 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
         }
 
+    /*
     struct _NormalizeLiblognorm *NormalizeLiblognorm = NULL;
 
 #ifdef HAVE_LIBLOGNORM
@@ -166,6 +167,7 @@ void Processor ( void )
         }
 
 #endif
+*/
 
 
     uint_fast8_t i;
@@ -288,7 +290,7 @@ void Processor ( void )
 
                     SaganRouting->check_flow_return = true;
 
-                    Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, GeoIP_SRC, GeoIP_DEST, SaganRouting, NormalizeLiblognorm, dynamic_rule_flag );
+                    Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, GeoIP_SRC, GeoIP_DEST, SaganRouting, dynamic_rule_flag );
 
                     /* If this is a dynamic run,  reset back to normal */
 
@@ -323,9 +325,9 @@ void Processor ( void )
     free( GeoIP_SRC );
     free( GeoIP_DEST );
 
-#ifdef HAVE_LIBLOGNORM
-    free(NormalizeLiblognorm);
-#endif
+//#ifdef HAVE_LIBLOGNORM
+//    free(NormalizeLiblognorm);
+//#endif
 
 
 #if defined(HAVE_LIBFASTJSON)

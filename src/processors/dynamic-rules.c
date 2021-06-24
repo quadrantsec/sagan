@@ -138,7 +138,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
             /* Process the alert _before_ loading rule set! Otherwise, mem will mismatch */
 
             Send_Alert(SaganProcSyslog_LOCAL,
-                       "null",
+            //           "null",
                        rule_position, tp, NULL, 0, GeoIP, GeoIP );
 
             /* Lock rules so other threads don't try to use it while we alter/load new rules */
@@ -177,7 +177,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
             gettimeofday(&tp, 0);
 
             Send_Alert(SaganProcSyslog_LOCAL,
-                       "null",
+            //           "null",
                        rule_position, tp, NULL, 0, GeoIP, GeoIP );
 
         }

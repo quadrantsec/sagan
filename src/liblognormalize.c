@@ -102,10 +102,10 @@ void Liblognorm_Load(const char *infile)
  * Locates interesting log data via Rainer's liblognorm library
  ***********************************************************************/
 
-void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm)
+
+void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
-//    char buf[MAX_SYSLOGMSG] = { 0 };
     char tmp_host[254] = { 0 };
 
     int rc_normalize = 0;
@@ -114,48 +114,13 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
     struct json_object *json_norm = NULL;
     struct json_object *string_obj = NULL;
 
-    memset(NormalizeLiblognorm, 0, sizeof(_NormalizeLiblognorm));
+      rc_normalize = ln_normalize(ctx, SaganProcSyslog_LOCAL->syslog_message, strlen(SaganProcSyslog_LOCAL->syslog_message), &json_norm);
 
-//    NormalizeLiblognorm->status = false;
+    /* See liblognorm.h for error codes. -1000 == LN_WRONGPARSER, etc */
 
-//    NormalizeLiblognorm->ip_src[0] = '0';
-    //NormalizeLiblognorm->ip_src[1] = '\0';
-//    NormalizeLiblognorm->ip_dst[0] = '0';
-    //NormalizeLiblognorm->ip_dst[1] = '\0';
-
-    /*
-    NormalizeLiblognorm->username[0] = '\0';
-    NormalizeLiblognorm->src_host[0] = '\0';
-    NormalizeLiblognorm->dst_host[0] = '\0';
-
-    NormalizeLiblognorm->hash_sha1[0] = '\0';
-    NormalizeLiblognorm->hash_sha256[0] = '\0';
-    NormalizeLiblognorm->hash_md5[0] = '\0';
-
-    NormalizeLiblognorm->http_uri[0] = '\0';
-    NormalizeLiblognorm->http_hostname[0] = '\0';
-
-    NormalizeLiblognorm->ja3[0] = '\0';
-    NormalizeLiblognorm->event_id[0] = '\0';
-
-    NormalizeLiblognorm->src_port = 0;
-    NormalizeLiblognorm->dst_port = 0;
-
-    NormalizeLiblognorm->json_normalize[0] = '\0';
-    */
-
-//    snprintf(buf, sizeof(buf),"%s", syslog_msg);
-//    strlcpy(buf, syslog_msg, MAX_SYSLOGMSG);
-
-    /* int ln_normalize(ln_ctx ctx, const char *str, size_t strLen, struct json_object **json_p); */
-
-//    rc_normalize = ln_normalize(ctx, buf, strlen(buf), &json_norm);
-    rc_normalize = ln_normalize(ctx, syslog_msg, strlen(syslog_msg), &json_norm);
-
-    if ( json_norm == NULL ) 
+    if ( json_norm == NULL || rc_normalize != 0 ) 
         {
             json_object_put(json_norm);
-            json_object_put(string_obj);
             return;
         }
 
@@ -166,20 +131,44 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL)
         {
-//	      printf("GOT SOURCE of: %s\n", tmp);
-//            snprintf(NormalizeLiblognorm->ip_src, sizeof(NormalizeLiblognorm->ip_src), "%s", tmp);
-            strlcpy(NormalizeLiblognorm->ip_src, tmp, MAXIP);
-//            NormalizeLiblognorm->status = true;
+
+	   if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
+		   {
+		   json_object_put(json_norm);
+		   return;
+		   }
+
+            strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp, MAXIP);
+	    IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);   
+
+	    if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
+	    {
+		    SaganProcSyslog_LOCAL->src_ip[0] = '\0';
+	    }
+
         }
+
 
     json_object_object_get_ex(json_norm, "dst-ip", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
         {
-            //       snprintf(NormalizeLiblognorm->ip_dst, sizeof(NormalizeLiblognorm->ip_dst), "%s", tmp);
-            strlcpy(NormalizeLiblognorm->ip_dst, tmp, MAXIP);
-//            NormalizeLiblognorm->status = true;
+
+	   if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
+		   {
+		   json_object_put(json_norm);
+		   return;
+		   }
+
+            strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp, MAXIP);
+	    IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
+
+            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_dst_bits ) )
+            {                                                                                                
+                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';                                                 
+            } 
+
         }
 
     /* Get username information - Will be used in the future */
@@ -189,21 +178,19 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-//            snprintf(NormalizeLiblognorm->username, sizeof(NormalizeLiblognorm->username), "%s", tmp);
-            strlcpy(NormalizeLiblognorm->username, tmp, MAX_USERNAME_SIZE);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->username, tmp, MAX_USERNAME_SIZE);
         }
 
 
     /* Do DNS lookup for source hostname */
 
+/*
     json_object_object_get_ex(json_norm, "src-host", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
         {
             strlcpy(NormalizeLiblognorm->src_host, tmp, MAXHOST);
-//            NormalizeLiblognorm->status = true;
 
             if ( NormalizeLiblognorm->ip_src[0] == '0' && config->syslog_src_lookup)
                 {
@@ -223,7 +210,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
     if ( tmp != NULL )
         {
             strlcpy(NormalizeLiblognorm->dst_host, tmp, MAXHOST);
-//            NormalizeLiblognorm->status = true;
+            NormalizeLiblognorm->status = true;
 
             if ( NormalizeLiblognorm->ip_dst[0] == '0' && config->syslog_src_lookup)
                 {
@@ -234,6 +221,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
                         }
                 }
         }
+	*/
 
     /* Get port information */
 
@@ -242,8 +230,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            NormalizeLiblognorm->src_port = atoi(tmp);
-//            NormalizeLiblognorm->status = true;
+            SaganProcSyslog_LOCAL->src_port = atoi(tmp);
         }
 
     json_object_object_get_ex(json_norm, "dst-port", &string_obj);
@@ -251,8 +238,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            NormalizeLiblognorm->dst_port = atoi(tmp);
-//            NormalizeLiblognorm->status = true;
+            SaganProcSyslog_LOCAL->dst_port = atoi(tmp);
         }
 
 
@@ -261,8 +247,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->hash_md5, tmp, MD5_HASH_SIZE+1);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->md5, tmp, MD5_HASH_SIZE+1);
         }
 
 
@@ -271,8 +256,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->hash_sha1, tmp, SHA1_HASH_SIZE+1);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->sha1, tmp, SHA1_HASH_SIZE+1);
         }
 
     json_object_object_get_ex(json_norm, "hash-sha256", &string_obj);
@@ -280,18 +264,15 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->hash_sha256, tmp, SHA256_HASH_SIZE+1);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->sha256, tmp, SHA256_HASH_SIZE+1);
         }
-
 
     json_object_object_get_ex(json_norm, "http_uri", &string_obj);
     tmp = json_object_get_string(string_obj);
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->http_uri, tmp, MAX_URL_SIZE);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->url, tmp, MAX_URL_SIZE);
         }
 
     json_object_object_get_ex(json_norm, "http_hostname", &string_obj);
@@ -299,8 +280,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->http_hostname, tmp, MAX_HOSTNAME_SIZE);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->hostname, tmp, MAX_HOSTNAME_SIZE);
         }
 
     json_object_object_get_ex(json_norm, "filename", &string_obj);
@@ -308,8 +288,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->filename, tmp, MAX_FILENAME_SIZE);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->filename, tmp, MAX_FILENAME_SIZE);
         }
 
     json_object_object_get_ex(json_norm, "ja3", &string_obj);
@@ -317,8 +296,7 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->ja3, tmp, MD5_HASH_SIZE+1);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->ja3, tmp, MD5_HASH_SIZE+1);
         }
 
     json_object_object_get_ex(json_norm, "event_id", &string_obj);
@@ -326,42 +304,38 @@ void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *N
 
     if ( tmp != NULL )
         {
-            strlcpy(NormalizeLiblognorm->event_id, tmp, MAX_EVENT_ID_SIZE);
-//            NormalizeLiblognorm->status = true;
+            strlcpy(SaganProcSyslog_LOCAL->event_id, tmp, MAX_EVENT_ID_SIZE);
         }
 
-    strlcpy(NormalizeLiblognorm->json_normalize, json_object_to_json_string_ext(json_norm, FJSON_TO_STRING_PLAIN), sizeof(NormalizeLiblognorm->json_normalize) );
+    strlcpy(SaganProcSyslog_LOCAL->json_normalize, json_object_to_json_string_ext(json_norm, FJSON_TO_STRING_PLAIN), JSON_MAX_SIZE );
 
     if ( debug->debugnormalize )
         {
 
             Sagan_Log(DEBUG, "---------------------------------------------------");
-            Sagan_Log(DEBUG, "Liblognorm DEBUG output: %d", rc_normalize);
-//            Sagan_Log(DEBUG, "Status: %s", NormalizeLiblognorm->status == true ? "true":"false");
-            Sagan_Log(DEBUG, "Log message to normalize: %s", syslog_msg);
-            Sagan_Log(DEBUG, "Parsed: %s", NormalizeLiblognorm->json_normalize);
-            Sagan_Log(DEBUG, "Source IP: %s", NormalizeLiblognorm->ip_src);
-            Sagan_Log(DEBUG, "Destination IP: %s", NormalizeLiblognorm->ip_dst);
-            Sagan_Log(DEBUG, "Source Port: %d", NormalizeLiblognorm->src_port);
-            Sagan_Log(DEBUG, "Destination Port: %d", NormalizeLiblognorm->dst_port);
-            Sagan_Log(DEBUG, "Source Host: %s", NormalizeLiblognorm->src_host);
-            Sagan_Log(DEBUG, "Destination Host: %s", NormalizeLiblognorm->dst_host);
-            Sagan_Log(DEBUG, "Username: %s", NormalizeLiblognorm->username);
-            Sagan_Log(DEBUG, "MD5 Hash: %s", NormalizeLiblognorm->hash_md5);
-            Sagan_Log(DEBUG, "SHA1 Hash: %s", NormalizeLiblognorm->hash_sha1);
-            Sagan_Log(DEBUG, "SHA265 Hash: %s", NormalizeLiblognorm->hash_sha256);
-            Sagan_Log(DEBUG, "HTTP URI: %s", NormalizeLiblognorm->http_uri);
-            Sagan_Log(DEBUG, "HTTP HOSTNAME: %s", NormalizeLiblognorm->http_hostname);
-            Sagan_Log(DEBUG, "Filename: %s", NormalizeLiblognorm->filename);
-            Sagan_Log(DEBUG, "JA3: %s",  NormalizeLiblognorm->ja3);
-            Sagan_Log(DEBUG, "Event ID: %s",  NormalizeLiblognorm->event_id);
+            Sagan_Log(DEBUG, "Log message to normalize: %s", SaganProcSyslog_LOCAL->syslog_message);
+            Sagan_Log(DEBUG, "Parsed: %s", SaganProcSyslog_LOCAL->json_normalize);
+            Sagan_Log(DEBUG, "Source IP: %s", SaganProcSyslog_LOCAL->src_ip);
+            Sagan_Log(DEBUG, "Destination IP: %s", SaganProcSyslog_LOCAL->dst_ip);
+            Sagan_Log(DEBUG, "Source Port: %d", SaganProcSyslog_LOCAL->src_port);
+            Sagan_Log(DEBUG, "Destination Port: %d", SaganProcSyslog_LOCAL->dst_port);
+//            Sagan_Log(DEBUG, "Source Host: %s", NormalizeLiblognorm->src_host);
+//            Sagan_Log(DEBUG, "Destination Host: %s", NormalizeLiblognorm->dst_host);
+            Sagan_Log(DEBUG, "Username: %s", SaganProcSyslog_LOCAL->username);
+            Sagan_Log(DEBUG, "MD5 Hash: %s", SaganProcSyslog_LOCAL->md5);
+            Sagan_Log(DEBUG, "SHA1 Hash: %s", SaganProcSyslog_LOCAL->sha1);
+            Sagan_Log(DEBUG, "SHA265 Hash: %s", SaganProcSyslog_LOCAL->sha256);
+            Sagan_Log(DEBUG, "HTTP URI: %s", SaganProcSyslog_LOCAL->url);
+            Sagan_Log(DEBUG, "HTTP HOSTNAME: %s", SaganProcSyslog_LOCAL->hostname);
+            Sagan_Log(DEBUG, "Filename: %s", SaganProcSyslog_LOCAL->filename);
+            Sagan_Log(DEBUG, "JA3: %s",  SaganProcSyslog_LOCAL->ja3);
+            Sagan_Log(DEBUG, "Event ID: %s",  SaganProcSyslog_LOCAL->event_id);
 
             Sagan_Log(DEBUG, "");
         }
 
 
     json_object_put(json_norm);
-    json_object_put(string_obj);
 }
 
 #endif

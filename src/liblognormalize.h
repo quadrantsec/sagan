@@ -39,7 +39,7 @@ struct liblognorm_toload_struct
     char filepath[MAXPATH];
 };
 
-
+/*
 typedef struct _NormalizeLiblognorm _NormalizeLiblognorm;
 struct _NormalizeLiblognorm
 {
@@ -75,10 +75,12 @@ struct _NormalizeLiblognorm
 #endif
 
 };
+*/
 
 
 void Liblognorm_Load( const char *infile );
-void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm);
+//void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm);
+void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
 void Liblognorm_Close(void);
 
 

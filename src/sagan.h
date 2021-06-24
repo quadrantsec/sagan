@@ -191,6 +191,7 @@ struct _SaganCounters
     uint_fast64_t blacklist_count;
     uint_fast64_t bytes_total;
     uint_fast64_t max_bytes_length;
+    uint_fast64_t max_bytes_over;
     uint_fast64_t bytes_ignored;
     uint_fast64_t null_message;
 
@@ -386,6 +387,9 @@ struct _Sagan_Proc_Syslog
     char src_ip[MAXIP];
     char dst_ip[MAXIP];
 
+    unsigned char ip_src_bits[MAXIPBIT];
+    unsigned char ip_dst_bits[MAXIPBIT];
+
     uint_fast16_t src_port;
     uint_fast16_t dst_port;
     uint_fast8_t proto;
@@ -401,6 +405,8 @@ struct _Sagan_Proc_Syslog
     char url[MAX_URL_SIZE];
     char ja3[MD5_HASH_SIZE];
     char username[MAX_USERNAME_SIZE];
+
+    char json_normalize[JSON_MAX_SIZE];
 
 #ifdef HAVE_LIBFASTJSON
     char correlation_json[MAX_SYSLOGMSG];

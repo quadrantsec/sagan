@@ -211,7 +211,7 @@ void To_LowerC(char *const s)
 void Sagan_Log (uint_fast8_t type, const char *format,... )
 {
 
-    char buf[5128] = { 0 };
+    char buf[MAX_SYSLOGMSG * 2] = { 0 };
     va_list ap;
     va_start(ap, format);
     char *chr="*";
