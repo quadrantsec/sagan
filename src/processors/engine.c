@@ -88,7 +88,7 @@ extern struct _Sagan_IPC_Counters *counters_ipc;
 
 extern bool reload_rules;
 
-void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sagan_JSON *JSON_LOCAL,  struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST, struct _Sagan_Routing *SaganRouting, bool dynamic_rule_flag )
+void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sagan_JSON *JSON_LOCAL,  bool dynamic_rule_flag )
 {
 
     struct _Sagan_Lookup_Cache_Entry *lookup_cache = NULL;
@@ -100,6 +100,33 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
         }
 
     memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
+
+    struct _Sagan_Routing *SaganRouting = NULL;
+    SaganRouting = malloc(sizeof(struct _Sagan_Routing));
+    
+    if ( SaganRouting == NULL )
+        {   
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
+        }
+
+    SaganRouting->check_flow_return = true;
+
+    struct _GeoIP *GeoIP_SRC = NULL;                                                                         
+    GeoIP_SRC = malloc(sizeof(struct _GeoIP));                                                               
+                                                                                                             
+    if ( GeoIP_SRC == NULL )                                                                                 
+        {                                                                                                    
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (SRC). Abort!", __FILE__, __LINE__);                                                                                                     
+        } 
+
+    struct _GeoIP *GeoIP_DEST = NULL;                                                                        
+    GeoIP_DEST = malloc(sizeof(struct _GeoIP));                                                              
+                                                                                                             
+    if ( GeoIP_DEST == NULL )                                                                                
+        {                                                                                                    
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);                                                                                                    
+        }
+
 
     bool after_log_flag = false;
     bool thresh_log_flag = false;
@@ -1382,6 +1409,9 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 #endif
 
     free(lookup_cache);
+    free(SaganRouting);
+    free(GeoIP_SRC);
+    free(GeoIP_DEST);
 
     return;
 }
