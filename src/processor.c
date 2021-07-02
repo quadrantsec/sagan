@@ -130,53 +130,6 @@ void Processor ( void )
 
 #endif
 
-    /*
-    struct _GeoIP *GeoIP_SRC = NULL;
-    GeoIP_SRC = malloc(sizeof(struct _GeoIP));
-
-    if ( GeoIP_SRC == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (SRC). Abort!", __FILE__, __LINE__);
-        }
-
-	*/
-/*
-    struct _GeoIP *GeoIP_DEST = NULL;
-    GeoIP_DEST = malloc(sizeof(struct _GeoIP));
-
-    if ( GeoIP_DEST == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
-        }
-
-	*/
-
-    /*
-    struct _Sagan_Routing *SaganRouting = NULL;
-    SaganRouting = malloc(sizeof(struct _Sagan_Routing));
-
-    if ( SaganRouting == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
-        }
-	*/
-
-    /*
-    struct _NormalizeLiblognorm *NormalizeLiblognorm = NULL;
-
-#ifdef HAVE_LIBLOGNORM
-
-    NormalizeLiblognorm = malloc(sizeof(struct _NormalizeLiblognorm));
-
-    if ( NormalizeLiblognorm == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _NormalizeLiblognorm, Abort!", __FILE__, __LINE__);
-        }
-
-#endif
-*/
-
-
     uint_fast8_t i;
 
     while(death == false)
@@ -270,35 +223,6 @@ void Processor ( void )
                                 }
                         }
 
-                    /* Zero GeoIP SRC */
-/*
-                    GeoIP_SRC->city[0] = '\0';
-                    GeoIP_SRC->country[0] = '\0';
-                    GeoIP_SRC->subdivision[0] = '\0';
-                    GeoIP_SRC->postal[0] = '\0';
-                    GeoIP_SRC->timezone[0] = '\0';
-                    GeoIP_SRC->latitude[0] = '\0';
-                    GeoIP_SRC->longitude[0] = '\0';
-		    */
-
-                    /* Zero GeoIP DEST */
-/*
-                    GeoIP_DEST->city[0] = '\0';
-                    GeoIP_DEST->country[0] = '\0';
-                    GeoIP_DEST->subdivision[0] = '\0';
-                    GeoIP_DEST->postal[0] = '\0';
-                    GeoIP_DEST->timezone[0] = '\0';
-                    GeoIP_DEST->latitude[0] = '\0';
-                    GeoIP_DEST->longitude[0] = '\0';
-		    */
-
-//                    memset(GeoIP_SRC, 0, sizeof(_GeoIP));
-//                    memset(GeoIP_DEST, 0, sizeof(_GeoIP));
-//                    memset(SaganRouting, 0, sizeof(_Sagan_Routing));
-//		      memset(NormalizeLiblognorm, 0, sizeof(_NormalizeLiblognorm));
-
-//                    SaganRouting->check_flow_return = true;
-
                     Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, dynamic_rule_flag );
 
                     /* If this is a dynamic run,  reset back to normal */
@@ -330,14 +254,6 @@ void Processor ( void )
 
     free( SaganProcSyslog_LOCAL );
     free( SaganPassSyslog_LOCAL );
-//    free( SaganRouting );
-//    free( GeoIP_SRC );
-//    free( GeoIP_DEST );
-
-//#ifdef HAVE_LIBLOGNORM
-//    free(NormalizeLiblognorm);
-//#endif
-
 
 #if defined(HAVE_LIBFASTJSON)
     free(JSON_LOCAL);

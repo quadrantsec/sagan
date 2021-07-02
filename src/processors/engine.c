@@ -101,32 +101,39 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
 
+#ifdef HAVE_LIBMAXMINDDB
+
     struct _Sagan_Routing *SaganRouting = NULL;
     SaganRouting = malloc(sizeof(struct _Sagan_Routing));
-    
+
     if ( SaganRouting == NULL )
-        {   
+        {
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
         }
 
     SaganRouting->check_flow_return = true;
 
-    struct _GeoIP *GeoIP_SRC = NULL;                                                                         
-    GeoIP_SRC = malloc(sizeof(struct _GeoIP));                                                               
-                                                                                                             
-    if ( GeoIP_SRC == NULL )                                                                                 
-        {                                                                                                    
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (SRC). Abort!", __FILE__, __LINE__);                                                                                                     
-        } 
+    struct _GeoIP *GeoIP_SRC = NULL;
+    GeoIP_SRC = malloc(sizeof(struct _GeoIP));
 
-    struct _GeoIP *GeoIP_DEST = NULL;                                                                        
-    GeoIP_DEST = malloc(sizeof(struct _GeoIP));                                                              
-                                                                                                             
-    if ( GeoIP_DEST == NULL )                                                                                
-        {                                                                                                    
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);                                                                                                    
+    if ( GeoIP_SRC == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (SRC). Abort!", __FILE__, __LINE__);
         }
 
+    memset(GeoIP_SRC, 0, sizeof(_GeoIP) );
+
+    struct _GeoIP *GeoIP_DEST = NULL;
+    GeoIP_DEST = malloc(sizeof(struct _GeoIP));
+
+    if ( GeoIP_DEST == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
+        }
+
+    memset(GeoIP_DEST, 0, sizeof(_GeoIP) );
+
+#endif
 
     bool after_log_flag = false;
     bool thresh_log_flag = false;
@@ -661,12 +668,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     /* We only want to run normalization on the log _one_ time.  If
                                      * multiple sigs want normalization, reuse the normalization data. */
 
-					// DONT NORMALIZE IF JSON WORKED?!? 
+                                    // DEBUG: If JSON is successful,  do we still want to do this?
 
                                     if ( liblognorm_status == false && rulestruct[b].normalize == true )
                                         {
 
-				            Normalize_Liblognorm( SaganProcSyslog_LOCAL );
+                                            Normalize_Liblognorm( SaganProcSyslog_LOCAL );
                                             liblognorm_status = true;
 
                                         }
@@ -836,8 +843,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     SaganProcSyslog_LOCAL->proto = rulestruct[b].default_proto;
                                 }
 
-//                            strlcpy(s_msg, rulestruct[b].s_msg, sizeof(s_msg));
-
                             /* Check for flow of rule - has_flow is set as rule loading.  It 1, then
                             the rule has some sort of flow.  It 0,  rule is set any:any/any:any */
 
@@ -949,8 +954,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 #ifdef HAVE_LIBMAXMINDDB
 
 
-//                            GeoIP_SRC->country[0] = '\0';
-//                            GeoIP_DEST->country[0] = '\0';
+                            GeoIP_SRC->country[0] = '\0';
+                            GeoIP_DEST->country[0] = '\0';
 
                             if ( rulestruct[b].geoip2_flag && config->have_geoip2 == true )
                                 {
@@ -1359,7 +1364,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                         {
 
                                                             Send_Alert(SaganProcSyslog_LOCAL,
-                                                                       //SaganProcSyslog_LOCAL->json_normalize,
                                                                        b, tp,
                                                                        bluedot_json,
                                                                        bluedot_results,
@@ -1386,10 +1390,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     pre_match = false;  		      /* Reset match! */
 
-//                    SaganRouting->flexbit_return=false;	      /* Flexbit reset */
-//                    SaganRouting->xbit_return=false;            /* xbit reset */
-//                    SaganRouting->check_flow_return = true;      /* Rule flow direction reset */
-
                     memset(SaganRouting, 0, sizeof(_Sagan_Routing));
                     SaganRouting->check_flow_return = true;
 
@@ -1410,8 +1410,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     free(lookup_cache);
     free(SaganRouting);
+
+#ifdef HAVE_LIBMAXMINDDB
+
     free(GeoIP_SRC);
     free(GeoIP_DEST);
+
+#endif
 
     return;
 }

@@ -114,11 +114,11 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     struct json_object *json_norm = NULL;
     struct json_object *string_obj = NULL;
 
-      rc_normalize = ln_normalize(ctx, SaganProcSyslog_LOCAL->syslog_message, strlen(SaganProcSyslog_LOCAL->syslog_message), &json_norm);
+    rc_normalize = ln_normalize(ctx, SaganProcSyslog_LOCAL->syslog_message, strlen(SaganProcSyslog_LOCAL->syslog_message), &json_norm);
 
     /* See liblognorm.h for error codes. -1000 == LN_WRONGPARSER, etc */
 
-    if ( json_norm == NULL || rc_normalize != 0 ) 
+    if ( json_norm == NULL || rc_normalize != 0 )
         {
             json_object_put(json_norm);
             return;
@@ -132,19 +132,19 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     if ( tmp != NULL)
         {
 
-	   if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
-		   {
-		   json_object_put(json_norm);
-		   return;
-		   }
+            if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
+                {
+                    json_object_put(json_norm);
+                    return;
+                }
 
             strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp, MAXIP);
-	    IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);   
+            IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
 
-	    if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
-	    {
-		    SaganProcSyslog_LOCAL->src_ip[0] = '\0';
-	    }
+            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
+                {
+                    SaganProcSyslog_LOCAL->src_ip[0] = '\0';
+                }
 
         }
 
@@ -155,19 +155,19 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     if ( tmp != NULL )
         {
 
-	   if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
-		   {
-		   json_object_put(json_norm);
-		   return;
-		   }
+            if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
+                {
+                    json_object_put(json_norm);
+                    return;
+                }
 
             strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp, MAXIP);
-	    IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
+            IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
 
             if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_dst_bits ) )
-            {                                                                                                
-                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';                                                 
-            } 
+                {
+                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
+                }
 
         }
 
@@ -184,44 +184,44 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     /* Do DNS lookup for source hostname */
 
-/*
-    json_object_object_get_ex(json_norm, "src-host", &string_obj);
-    tmp = json_object_get_string(string_obj);
+    /*
+        json_object_object_get_ex(json_norm, "src-host", &string_obj);
+        tmp = json_object_get_string(string_obj);
 
-    if ( tmp != NULL )
-        {
-            strlcpy(NormalizeLiblognorm->src_host, tmp, MAXHOST);
+        if ( tmp != NULL )
+            {
+                strlcpy(NormalizeLiblognorm->src_host, tmp, MAXHOST);
 
-            if ( NormalizeLiblognorm->ip_src[0] == '0' && config->syslog_src_lookup)
-                {
+                if ( NormalizeLiblognorm->ip_src[0] == '0' && config->syslog_src_lookup)
+                    {
 
-                    if (!DNS_Lookup(NormalizeLiblognorm->src_host, tmp_host, sizeof(tmp_host)))
-                        {
-                            strlcpy(NormalizeLiblognorm->ip_src, tmp_host, MAXIP);
-                        }
+                        if (!DNS_Lookup(NormalizeLiblognorm->src_host, tmp_host, sizeof(tmp_host)))
+                            {
+                                strlcpy(NormalizeLiblognorm->ip_src, tmp_host, MAXIP);
+                            }
 
-                }
+                    }
 
-        }
+            }
 
-    json_object_object_get_ex(json_norm, "dst-host", &string_obj);
-    tmp = json_object_get_string(string_obj);
+        json_object_object_get_ex(json_norm, "dst-host", &string_obj);
+        tmp = json_object_get_string(string_obj);
 
-    if ( tmp != NULL )
-        {
-            strlcpy(NormalizeLiblognorm->dst_host, tmp, MAXHOST);
-            NormalizeLiblognorm->status = true;
+        if ( tmp != NULL )
+            {
+                strlcpy(NormalizeLiblognorm->dst_host, tmp, MAXHOST);
+                NormalizeLiblognorm->status = true;
 
-            if ( NormalizeLiblognorm->ip_dst[0] == '0' && config->syslog_src_lookup)
-                {
+                if ( NormalizeLiblognorm->ip_dst[0] == '0' && config->syslog_src_lookup)
+                    {
 
-                    if (!DNS_Lookup(NormalizeLiblognorm->dst_host, tmp_host, sizeof(tmp_host)))
-                        {
-                            strlcpy(NormalizeLiblognorm->ip_dst, tmp_host, MAXIP);
-                        }
-                }
-        }
-	*/
+                        if (!DNS_Lookup(NormalizeLiblognorm->dst_host, tmp_host, sizeof(tmp_host)))
+                            {
+                                strlcpy(NormalizeLiblognorm->ip_dst, tmp_host, MAXIP);
+                            }
+                    }
+            }
+    	*/
 
     /* Get port information */
 

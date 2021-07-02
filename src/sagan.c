@@ -1236,10 +1236,10 @@ int main(int argc, char **argv)
                                             counters->max_bytes_length = bytes_total;
                                         }
 
-				    if ( bytes_total >= MAX_SYSLOGMSG ) 
-					{
-					    counters->max_bytes_over++;
-					}
+                                    if ( bytes_total >= MAX_SYSLOGMSG )
+                                        {
+                                            counters->max_bytes_over++;
+                                        }
 
 
                                     /* Check for "drop" to save CPU from "ignore list" */
