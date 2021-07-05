@@ -387,6 +387,9 @@ struct _Sagan_Proc_Syslog
     char src_ip[MAXIP];
     char dst_ip[MAXIP];
 
+    char src_host[MAXHOST];
+    char dst_host[MAXHOST];
+
     unsigned char ip_src_bits[MAXIPBIT];
     unsigned char ip_dst_bits[MAXIPBIT];
 

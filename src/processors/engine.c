@@ -255,11 +255,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             ip_src_is_valid = false;
             ip_dst_is_valid = false;
 
+	    /* DEBUG: BELOW IS WRONG. Need to test with JSON */
+
 #ifdef HAVE_LIBFASTJSON
 
             /* If we've already located the source/destination IP address in JSON,  we can
                set it here.  "normalize" and "parse_*_ip can still over ride */
-
+/*
             if ( SaganProcSyslog_LOCAL->src_ip[0] != '\0' )
                 {
                     IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
@@ -279,6 +281,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                     snprintf(tmp_normalize_http_uri, sizeof(tmp_normalize_http_uri), "%s%s", SaganProcSyslog_LOCAL->hostname, SaganProcSyslog_LOCAL->url);
                     strlcpy(SaganProcSyslog_LOCAL->url, tmp_normalize_http_uri, MAX_URL_SIZE);
                 }
+		*/
 
 #endif
 
