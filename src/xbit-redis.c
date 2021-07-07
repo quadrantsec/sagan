@@ -260,7 +260,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
 {
 
     int r;
-    char redis_command[64] = { 0 };
+    char redis_command[512] = { 0 };
     char redis_results[MAX_SYSLOGMSG] = { 0 };
     char tmp_ip[MAXIP] = { 0 };
 

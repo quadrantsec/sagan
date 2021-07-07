@@ -148,8 +148,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     char *ptmp = NULL;
     char *tok2 = NULL;
 
-    bool ip_src_is_valid = false;
-    bool ip_dst_is_valid = false;
+//    bool ip_src_is_valid = false;
+//    bool ip_dst_is_valid = false;
 
     unsigned char ip_syslog_host_bits[MAXIPBIT];
 
@@ -252,36 +252,36 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     for(b=0; b < counters->rulecount; b++)
         {
 
-            ip_src_is_valid = false;
-            ip_dst_is_valid = false;
+//            SaganProcSyslog_LOCAL->ip_src_is_valid = false;
+//            SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
 
-	    /* DEBUG: BELOW IS WRONG. Need to test with JSON */
+            /* DEBUG: BELOW IS WRONG. Need to test with JSON */
 
 #ifdef HAVE_LIBFASTJSON
 
             /* If we've already located the source/destination IP address in JSON,  we can
                set it here.  "normalize" and "parse_*_ip can still over ride */
-/*
-            if ( SaganProcSyslog_LOCAL->src_ip[0] != '\0' )
-                {
-                    IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
-                    ip_src_is_valid = true;
-                }
+            /*
+                        if ( SaganProcSyslog_LOCAL->src_ip[0] != '\0' )
+                            {
+                                IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
+                                ip_src_is_valid = true;
+                            }
 
-            if ( SaganProcSyslog_LOCAL->dst_ip[0] != '\0' )
-                {
+                        if ( SaganProcSyslog_LOCAL->dst_ip[0] != '\0' )
+                            {
 
-                    IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
-                    ip_dst_is_valid = true;
-                }
+                                IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
+                                ip_dst_is_valid = true;
+                            }
 
-            if ( SaganProcSyslog_LOCAL->hostname[0] != '\0' )
-                {
-                    char tmp_normalize_http_uri[MAX_HOSTNAME_SIZE + MAX_URL_SIZE + 1] = { 0 };
-                    snprintf(tmp_normalize_http_uri, sizeof(tmp_normalize_http_uri), "%s%s", SaganProcSyslog_LOCAL->hostname, SaganProcSyslog_LOCAL->url);
-                    strlcpy(SaganProcSyslog_LOCAL->url, tmp_normalize_http_uri, MAX_URL_SIZE);
-                }
-		*/
+                        if ( SaganProcSyslog_LOCAL->hostname[0] != '\0' )
+                            {
+                                char tmp_normalize_http_uri[MAX_HOSTNAME_SIZE + MAX_URL_SIZE + 1] = { 0 };
+                                snprintf(tmp_normalize_http_uri, sizeof(tmp_normalize_http_uri), "%s%s", SaganProcSyslog_LOCAL->hostname, SaganProcSyslog_LOCAL->url);
+                                strlcpy(SaganProcSyslog_LOCAL->url, tmp_normalize_http_uri, MAX_URL_SIZE);
+                            }
+            		*/
 
 #endif
 
@@ -318,15 +318,17 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                             if ( tmp_json_value[0] != '\0' )
                                                 {
+                                                    printf("COPY: %s\n", tmp_json_value);
                                                     strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
                                                 }
                                             else
                                                 {
+                                                    printf("COPY LOCAL\n");
                                                     strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
                                                 }
 
                                             IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
-                                            ip_src_is_valid = true;
+                                            SaganProcSyslog_LOCAL->ip_src_is_valid = true;
                                         }
 
                                     else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
@@ -344,7 +346,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                 }
 
                                             IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
-                                            ip_dst_is_valid = true;
+                                            SaganProcSyslog_LOCAL->ip_dst_is_valid = true;
                                         }
 
                                     else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_PORT )
@@ -713,15 +715,15 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             /* parse_src_ip: {position} - Parse_IP build a cache table for IPs, ports, etc.  This way,
                             we only parse the syslog string one time regardless of the rule options! */
 
-                            if ( ( rulestruct[b].s_find_src_ip == true && ip_src_is_valid == false ) ||
-                                    ( rulestruct[b].s_find_dst_ip == true && ip_dst_is_valid == false ) )
+                            if ( ( rulestruct[b].s_find_src_ip == true && SaganProcSyslog_LOCAL->ip_src_is_valid == false ) ||
+                                    ( rulestruct[b].s_find_dst_ip == true && SaganProcSyslog_LOCAL->ip_dst_is_valid == false ) )
                                 {
 
                                     lookup_cache_size = Parse_IP(SaganProcSyslog_LOCAL->syslog_message, lookup_cache );
 
                                 }
 
-                            if ( ip_src_is_valid == false && rulestruct[b].s_find_src_ip == true )
+                            if ( SaganProcSyslog_LOCAL->ip_src_is_valid == false && rulestruct[b].s_find_src_ip == true )
                                 {
 
 
@@ -734,12 +736,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                             SaganProcSyslog_LOCAL->src_port = lookup_cache[rulestruct[b].s_find_src_pos-1].port;
                                             SaganProcSyslog_LOCAL->proto = lookup_cache[0].proto;
-                                            ip_src_is_valid = true;
+                                            SaganProcSyslog_LOCAL->ip_src_is_valid = true;
 
 
                                             if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
                                                 {
-                                                    ip_src_is_valid = false;
+                                                    SaganProcSyslog_LOCAL->ip_src_is_valid = false;
                                                 }
                                         }
 
@@ -748,7 +750,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             /* parse_dst_ip: {position} */
 
-                            if ( ip_dst_is_valid == false && rulestruct[b].s_find_dst_ip == true )
+                            if ( SaganProcSyslog_LOCAL->ip_dst_is_valid == false && rulestruct[b].s_find_dst_ip == true )
                                 {
 
                                     if ( lookup_cache[rulestruct[b].s_find_dst_pos-1].status == true )
@@ -759,12 +761,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                             SaganProcSyslog_LOCAL->dst_port = lookup_cache[rulestruct[b].s_find_dst_pos-1].port;
                                             SaganProcSyslog_LOCAL->proto = lookup_cache[0].proto;
-                                            ip_dst_is_valid = true;
+                                            SaganProcSyslog_LOCAL->ip_dst_is_valid = true;
 
 
                                             if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
                                                 {
-                                                    ip_dst_is_valid = false;
+                                                    SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
                                                 }
                                         }
 
@@ -970,9 +972,10 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     geoip2_return = GEOIP_SKIP;
                                     SaganRouting->geoip2_isset = false;
 
-                                    if ( ip_src_is_valid == true && rulestruct[b].geoip2_src_or_dst == 1 )
+                                    if ( SaganProcSyslog_LOCAL->ip_src_is_valid == true && rulestruct[b].geoip2_src_or_dst == 1 )
                                         {
                                             geoip2_return = GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );
+
                                             if ( config->geoip2_lookup_all_alerts == true )
                                                 {
                                                     (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
@@ -980,7 +983,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                         }
 
-                                    else if ( ip_dst_is_valid == true && rulestruct[b].geoip2_src_or_dst == 2 )
+                                    else if ( SaganProcSyslog_LOCAL->ip_dst_is_valid == true && rulestruct[b].geoip2_src_or_dst == 2 )
                                         {
                                             geoip2_return = GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
 
@@ -1076,12 +1079,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                     SaganRouting->blacklist_results = false;
 
-                                    if ( rulestruct[b].blacklist_ipaddr_src && ip_src_is_valid == true )
+                                    if ( rulestruct[b].blacklist_ipaddr_src && SaganProcSyslog_LOCAL->ip_src_is_valid == true )
                                         {
                                             SaganRouting->blacklist_results = Sagan_Blacklist_IPADDR( SaganProcSyslog_LOCAL->ip_src_bits );
                                         }
 
-                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_dst && ip_dst_is_valid == true )
+                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_dst && SaganProcSyslog_LOCAL->ip_dst_is_valid == true )
                                         {
                                             SaganRouting->blacklist_results = Sagan_Blacklist_IPADDR( SaganProcSyslog_LOCAL->ip_dst_bits );
                                         }
@@ -1091,7 +1094,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             SaganRouting->blacklist_results = Sagan_Blacklist_IPADDR_All(SaganProcSyslog_LOCAL->syslog_message, lookup_cache, lookup_cache_size);
                                         }
 
-                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_both && ip_src_is_valid == true && ip_dst_is_valid == true )
+                                    if ( SaganRouting->blacklist_results == false && rulestruct[b].blacklist_ipaddr_both && SaganProcSyslog_LOCAL->ip_src_is_valid == true && SaganProcSyslog_LOCAL->ip_dst_is_valid == true )
                                         {
                                             if ( Sagan_Blacklist_IPADDR( SaganProcSyslog_LOCAL->ip_src_bits ) || Sagan_Blacklist_IPADDR( SaganProcSyslog_LOCAL->ip_dst_bits ) )
                                                 {
@@ -1113,19 +1116,19 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                             /* 1 == src,  2 == dst,  3 == both,  4 == all */
 
-                                            if ( rulestruct[b].bluedot_ipaddr_type == 1 && ip_src_is_valid == true )
+                                            if ( rulestruct[b].bluedot_ipaddr_type == 1 && SaganProcSyslog_LOCAL->ip_src_is_valid == true )
                                                 {
                                                     bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->src_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_ip_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_IP);
                                                 }
 
-                                            if ( rulestruct[b].bluedot_ipaddr_type == 2 && ip_dst_is_valid == true )
+                                            if ( rulestruct[b].bluedot_ipaddr_type == 2 && SaganProcSyslog_LOCAL->ip_dst_is_valid == true )
                                                 {
                                                     bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->dst_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
                                                     SaganRouting->bluedot_ip_flag = Sagan_Bluedot_Cat_Compare( bluedot_results, b, BLUEDOT_LOOKUP_IP);
                                                 }
 
-                                            if ( rulestruct[b].bluedot_ipaddr_type == 3 && ip_src_is_valid == true && ip_dst_is_valid == true )
+                                            if ( rulestruct[b].bluedot_ipaddr_type == 3 && SaganProcSyslog_LOCAL->ip_src_is_valid == true && SaganProcSyslog_LOCAL->ip_dst_is_valid == true )
                                                 {
 
                                                     bluedot_results = Sagan_Bluedot_Lookup(SaganProcSyslog_LOCAL->src_ip, BLUEDOT_LOOKUP_IP, b, bluedot_json, sizeof(bluedot_json));
@@ -1226,12 +1229,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                     SaganRouting->zeekintel_results = false;
 
-                                    if ( rulestruct[b].zeekintel_ipaddr_src && ip_src_is_valid == true )
+                                    if ( rulestruct[b].zeekintel_ipaddr_src && SaganProcSyslog_LOCAL->ip_src_is_valid == true )
                                         {
                                             SaganRouting->zeekintel_results = ZeekIntel_IPADDR( SaganProcSyslog_LOCAL->ip_src_bits, SaganProcSyslog_LOCAL->src_ip );
                                         }
 
-                                    if ( SaganRouting->zeekintel_results == false && rulestruct[b].zeekintel_ipaddr_dst && ip_dst_is_valid == true )
+                                    if ( SaganRouting->zeekintel_results == false && rulestruct[b].zeekintel_ipaddr_dst && SaganProcSyslog_LOCAL->ip_dst_is_valid == true )
                                         {
                                             SaganRouting->zeekintel_results = ZeekIntel_IPADDR( SaganProcSyslog_LOCAL->ip_dst_bits, SaganProcSyslog_LOCAL->dst_ip );
                                         }
@@ -1241,7 +1244,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             SaganRouting->zeekintel_results = ZeekIntel_IPADDR_All ( SaganProcSyslog_LOCAL->syslog_message, lookup_cache, MAX_PARSE_IP);
                                         }
 
-                                    if ( SaganRouting->zeekintel_results == false && rulestruct[b].zeekintel_ipaddr_both && ip_src_is_valid == true && ip_dst_is_valid == true )
+                                    if ( SaganRouting->zeekintel_results == false && rulestruct[b].zeekintel_ipaddr_both && SaganProcSyslog_LOCAL->ip_src_is_valid == true && SaganProcSyslog_LOCAL->ip_dst_is_valid == true )
                                         {
                                             if ( ZeekIntel_IPADDR( SaganProcSyslog_LOCAL->ip_src_bits, SaganProcSyslog_LOCAL->src_ip ) || ZeekIntel_IPADDR( SaganProcSyslog_LOCAL->ip_dst_bits, SaganProcSyslog_LOCAL->dst_ip ) )
                                                 {

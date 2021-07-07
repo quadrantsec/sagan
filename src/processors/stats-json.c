@@ -20,7 +20,7 @@
 
 /* stats-json.c - write statistics about Sagan in a JSON format */
 
-/* NOTES:  Zeek (Bro) Intel "hits" never get counted.  That should be
+/* NOTES:  Zeek Intel "hits" never get counted.  That should be
    part of the stats
 
    "Dynamic" load data also has no stats */
@@ -177,6 +177,10 @@ void Stats_JSON_Handler( void )
     char json_2[1024] = { 0 };
     char json_head[1024*3] = { 0 };
     char json_final[1024*3+11] = { 0 };
+
+    /* We don't want stat's at startup.  So "sleep" until we hit our time */
+
+    sleep( config->stats_json_time );
 
     while(1)
         {
@@ -570,10 +574,6 @@ void Stats_JSON_Handler( void )
 #ifdef WITH_BLUEDOT
             json_object_put(jobj_bluedot);
 #endif
-
-//            json_object_put(jobj_zeek);
-
-            sleep( config->stats_json_time );
 
         }
 }

@@ -390,6 +390,9 @@ struct _Sagan_Proc_Syslog
     char src_host[MAXHOST];
     char dst_host[MAXHOST];
 
+    bool ip_src_is_valid;
+    bool ip_dst_is_valid;
+
     unsigned char ip_src_bits[MAXIPBIT];
     unsigned char ip_dst_bits[MAXIPBIT];
 
