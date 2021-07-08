@@ -318,12 +318,10 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                             if ( tmp_json_value[0] != '\0' )
                                                 {
-                                                    printf("COPY: %s\n", tmp_json_value);
                                                     strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
                                                 }
                                             else
                                                 {
-                                                    printf("COPY LOCAL\n");
                                                     strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
                                                 }
 
