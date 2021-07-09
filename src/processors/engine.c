@@ -148,12 +148,9 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     char *ptmp = NULL;
     char *tok2 = NULL;
 
-//    bool ip_src_is_valid = false;
-//    bool ip_dst_is_valid = false;
-
     unsigned char ip_syslog_host_bits[MAXIPBIT];
 
-    char tmpbuf[256];
+    char tmpbuf[256] = { 0 };
 
     char syslog_append_program[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6];
     char syslog_append_orig_message[MAX_SYSLOGMSG];
@@ -251,39 +248,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     for(b=0; b < counters->rulecount; b++)
         {
-
-//            SaganProcSyslog_LOCAL->ip_src_is_valid = false;
-//            SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
-
-            /* DEBUG: BELOW IS WRONG. Need to test with JSON */
-
-#ifdef HAVE_LIBFASTJSON
-
-            /* If we've already located the source/destination IP address in JSON,  we can
-               set it here.  "normalize" and "parse_*_ip can still over ride */
-            /*
-                        if ( SaganProcSyslog_LOCAL->src_ip[0] != '\0' )
-                            {
-                                IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
-                                ip_src_is_valid = true;
-                            }
-
-                        if ( SaganProcSyslog_LOCAL->dst_ip[0] != '\0' )
-                            {
-
-                                IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
-                                ip_dst_is_valid = true;
-                            }
-
-                        if ( SaganProcSyslog_LOCAL->hostname[0] != '\0' )
-                            {
-                                char tmp_normalize_http_uri[MAX_HOSTNAME_SIZE + MAX_URL_SIZE + 1] = { 0 };
-                                snprintf(tmp_normalize_http_uri, sizeof(tmp_normalize_http_uri), "%s%s", SaganProcSyslog_LOCAL->hostname, SaganProcSyslog_LOCAL->url);
-                                strlcpy(SaganProcSyslog_LOCAL->url, tmp_normalize_http_uri, MAX_URL_SIZE);
-                            }
-            		*/
-
-#endif
 
             /* Process "normal" rules.  Skip dynamic rules if it's not time to process them */
 
@@ -670,8 +634,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                     /* We only want to run normalization on the log _one_ time.  If
                                      * multiple sigs want normalization, reuse the normalization data. */
-
-                                    // DEBUG: If JSON is successful,  do we still want to do this?
 
                                     if ( liblognorm_status == false && rulestruct[b].normalize == true )
                                         {

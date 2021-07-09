@@ -160,38 +160,38 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
             token = strtok_r(portstring, " ", &saveptr2);
 
             while ( token != NULL )
-            {
+                {
 
-                result = Is_IP(token, IPv4);
+                    result = Is_IP(token, IPv4);
 
-                /* Found IP,  get the port */
+                    /* Found IP,  get the port */
 
-                if ( result != 0 )
-                    {
-                        /* IP:PORT */
+                    if ( result != 0 )
+                        {
+                            /* IP:PORT */
 
-                        portstring = strtok_r(NULL, ":", &saveptr1);
-                        if (Is_Numeric(portstring))
-                            {
-                                port=atoi(portstring);
-                                return(port);
-                            }
-                        else
-                            {
+                            portstring = strtok_r(NULL, ":", &saveptr1);
+                            if (Is_Numeric(portstring))
+                                {
+                                    port=atoi(portstring);
+                                    return(port);
+                                }
+                            else
+                                {
 
-                                /* IP:PORT string or IP::PORT */
+                                    /* IP:PORT string or IP::PORT */
 
-                                token = strtok_r(portstring, " ", &saveptr1);
-                                if (Is_Numeric(token))
-                                    {
-                                        port=atoi(portstring);
-                                        return(port);
-                                    }
-                            }
-                    }
+                                    token = strtok_r(portstring, " ", &saveptr1);
+                                    if (Is_Numeric(token))
+                                        {
+                                            port=atoi(portstring);
+                                            return(port);
+                                        }
+                                }
+                        }
 
-                token = strtok_r(NULL, " ", &saveptr2);
-            }
+                    token = strtok_r(NULL, " ", &saveptr2);
+                }
         }
 
     snprintf(tmpmsg, sizeof(tmpmsg), "%s", msg);

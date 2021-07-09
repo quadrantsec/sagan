@@ -183,9 +183,9 @@ void Stats_JSON_Handler( void )
     while(1)
         {
 
-	    /* We don't want stat's at startup.  So "sleep" until we hit our time */
+            /* We don't want stat's at startup.  So "sleep" until we hit our time */
 
-	    sleep( config->stats_json_time );
+            sleep( config->stats_json_time );
 
             /* Get our "uptime" */
 
