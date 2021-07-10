@@ -101,8 +101,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
 
-#ifdef HAVE_LIBMAXMINDDB
-
     struct _Sagan_Routing *SaganRouting = NULL;
     SaganRouting = malloc(sizeof(struct _Sagan_Routing));
 
@@ -112,6 +110,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
         }
 
     SaganRouting->check_flow_return = true;
+
+#ifdef HAVE_LIBMAXMINDDB
 
     struct _GeoIP *GeoIP_SRC = NULL;
     GeoIP_SRC = malloc(sizeof(struct _GeoIP));
@@ -1333,8 +1333,15 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                                        b, tp,
                                                                        bluedot_json,
                                                                        bluedot_results,
+#ifdef HAVE_LIBMAXMINDDB
                                                                        GeoIP_SRC,
                                                                        GeoIP_DEST );
+#endif
+
+#ifndef HAVE_LIBMAXMINDDB
+								       NULL,
+								       NULL );
+#endif							    
 
                                                         }
                                                     else
