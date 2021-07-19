@@ -286,7 +286,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                 }
                                             else
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->syslog_host, MAXIP);
+                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
                                                 }
 
                                             IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
