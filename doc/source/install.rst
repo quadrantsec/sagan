@@ -228,7 +228,7 @@ This example installs Sagan with the most common and useful prerequisites.
 
 A more complete quick start::
 
-   sudo apt-get install build-essential libpcre3-dev libpcre3 libyaml-dev liblognorm-dev libesmtp-dev libmaxminddb0 libmaxminddb-dev libhiredis-dev libpcap-dev liblognorm-dev libfastjson-dev libestr-dev
+   sudo apt-get install build-essential libpcre3-dev libpcre3 libyaml-dev liblognorm-dev libesmtp-dev libmaxminddb0 libmaxminddb-dev libhiredis-dev libpcap-dev liblognorm-dev libfastjson-dev libestr-dev pkg-config
    wget https://quadrantsec.com/download/sagan-2.0.1.tar.gz
    tar -xvzf sagan-2.0.1.tar.gz
    cd sagan-2.0.1

@@ -749,7 +749,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             if ( SaganProcSyslog_LOCAL->dst_ip[0] == '\0' || is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
                                 {
-                                    memcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                    memcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
                                 }
 
                             if ( SaganProcSyslog_LOCAL->src_port == 0 )
@@ -789,21 +789,21 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             /* No source port was normalized, Use the rules default */
 
-                            if ( SaganProcSyslog_LOCAL->src_port == 0 )
+                            if ( SaganProcSyslog_LOCAL->src_port != 0 )
                                 {
                                     SaganProcSyslog_LOCAL->src_port=rulestruct[b].default_src_port;
                                 }
 
                             /* No destination port was normalzied. Use the rules default */
 
-                            if ( SaganProcSyslog_LOCAL->dst_port == 0 )
+			    if ( rulestruct[b].default_dst_port != 0 ) 
                                 {
                                     SaganProcSyslog_LOCAL->dst_port=rulestruct[b].default_dst_port;
                                 }
 
                             /* No protocol was normalized.  Use the rules default */
 
-                            if ( SaganProcSyslog_LOCAL->proto == 0 )
+                            if ( rulestruct[b].default_proto != 0 )
                                 {
                                     SaganProcSyslog_LOCAL->proto = rulestruct[b].default_proto;
                                 }

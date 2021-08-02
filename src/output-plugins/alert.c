@@ -70,7 +70,40 @@ void Alert_File( _Sagan_Event *Event )
     fprintf(sagan_alert_stream, "\n[**] [%lu:%" PRIu64 ":%" PRIuFAST16 "] %s [**]\n", Event->generatorid, Event->sid, Event->rev, Event->f_msg);
     fprintf(sagan_alert_stream, "[Classification: %s] [Priority: %d] [%s]\n", Event->class, Event->pri, Event->host );
     fprintf(sagan_alert_stream, "[Alert Time: %s]\n", timebuf);
-    fprintf(sagan_alert_stream, "%s %s %s:%" PRIuFAST16 " [%s] -> %s:%" PRIuFAST16 " [%s] %s %s %s\n", Event->date, Event->time, Event->ip_src, Event->src_port,   Event->country_src,  Event->ip_dst, Event->dst_port, Event->country_dst, Event->facility, Event->priority, Event->program);
+
+    fprintf(sagan_alert_stream, "%s ", Event->date);
+    fprintf(sagan_alert_stream, "%s ", Event->time);
+    fprintf(sagan_alert_stream, "%s ", Event->ip_src);
+    fprintf(sagan_alert_stream, "%" PRIuFAST16 " ", Event->src_port);
+
+#ifdef HAVE_LIBMAXMINDDB
+
+    if  ( config->have_geoip2 == true )
+        {
+            fprintf(sagan_alert_stream, "[%s]", Event->country_src);
+        }
+
+#endif
+
+    fprintf(sagan_alert_stream, " -> ");
+
+    fprintf(sagan_alert_stream, "%s ", Event->ip_dst );
+    fprintf(sagan_alert_stream, "%" PRIuFAST16 " ", Event->dst_port);
+
+#ifdef HAVE_LIBMAXMINDDB
+
+    if  ( config->have_geoip2 == true )
+        {
+            fprintf(sagan_alert_stream, "[%s]", Event->country_dst);
+        }
+
+#endif
+
+    fprintf(sagan_alert_stream, "%s ", Event->facility);
+    fprintf(sagan_alert_stream, "%s ", Event->priority);
+    fprintf(sagan_alert_stream, "%s", Event->program);
+
+    fprintf(sagan_alert_stream, "\n");
 
     fprintf(sagan_alert_stream, "Message: %s\n", Event->message);
 
