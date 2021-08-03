@@ -259,9 +259,9 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             if ( rulestruct[b].type == NORMAL_RULE || ( rulestruct[b].type == DYNAMIC_RULE && dynamic_rule_flag == true ) )
                 {
 
-                    /* If we have JSON maps, apply them! */
+                    /* If we have JSON maps, apply them (if we actually have JSON ! */
 
-                    if ( rulestruct[b].json_map_count > 0 )
+                    if ( JSON_LOCAL->json_count > 0 && rulestruct[b].json_map_count > 0 )
                         {
 
 #ifdef HAVE_LIBFASTJSON

@@ -113,8 +113,8 @@ struct _Rule_Struct
     pcre_extra *pcre_extra[MAX_PCRE];
 
     uint_fast8_t       json_map_type[MAX_JSON_MAP];
-    char          json_map_key[MAX_JSON_MAP][JSON_MAX_KEY_SIZE];
-    uint_fast8_t	  json_map_count;
+    char               json_map_key[MAX_JSON_MAP][JSON_MAX_KEY_SIZE];
+    uint_fast8_t       json_map_count;
 
     char content[MAX_CONTENT][256];
     char s_reference[MAX_REFERENCE][256];
