@@ -261,10 +261,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     /* If we have JSON maps, apply them (if we actually have JSON ! */
 
+#ifdef HAVE_LIBFASTJSON
+
+		    if ( config->json_parse_data == true )
+		    {
+
                     if ( JSON_LOCAL->json_count > 0 && rulestruct[b].json_map_count > 0 )
                         {
-
-#ifdef HAVE_LIBFASTJSON
 
                             for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                 {
@@ -401,9 +404,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                         }
                                 }
-#endif
 
                         }
+
+		    }
+
+#endif
 
                     pre_match = false;
 
