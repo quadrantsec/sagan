@@ -299,13 +299,29 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->src_ip[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->src_ip));
-                                    src_ip_found = true;
-                                    break;
+                                    if ( Is_IP(JSON_LOCAL->json_value[i], IPv4) || Is_IP(JSON_LOCAL->json_value[i], IPv6) )
+                                        {
 
+                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, JSON_LOCAL->json_value[i], MAXIP);
+                                            IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
+
+                                            src_ip_found = true;
+                                            break;
+
+                                        }
+                                    else
+                                        {
+
+                                            Sagan_Log(WARN, "[%s, line %d] Bad 'src_ip' IP address '%s'. Using '%s' instead. ", __FILE__, __LINE__,  JSON_LOCAL->json_value[i], config->sagan_host  );
+
+                                            src_ip_found = false;
+                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
+
+                                        }
                                 }
                         }
                 }
+
 
             if ( Syslog_JSON_Map->dst_ip[0][0] != '\0' && dst_ip_found == false )
                 {
@@ -315,10 +331,26 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->dst_ip[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->dst_ip));
-                                    dst_ip_found = true;
-                                    break;
+                                    if ( Is_IP(JSON_LOCAL->json_value[i], IPv4) || Is_IP(JSON_LOCAL->json_value[i], IPv6) )
+                                        {
 
+                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, JSON_LOCAL->json_value[i], MAXIP);
+                                            IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
+
+                                            dst_ip_found = true;
+                                            break;
+
+                                        }
+                                    else
+                                        {
+
+                                            Sagan_Log(WARN, "[%s, line %d] Bad 'dest_ip' IP address '%s'. Using '%s' instead. ", __FILE__, __LINE__,  JSON_LOCAL->json_value[i], config->sagan_host  );
+
+                                            dst_ip_found = false;
+
+                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+
+                                        }
                                 }
                         }
                 }

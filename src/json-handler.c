@@ -143,7 +143,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     json_object *jproto = json_object_new_string( proto );
     json_object_object_add(jobj,"proto", jproto);
 
-#ifdef HAVE_LIBMAXMINDDB                                                                                     
+#ifdef HAVE_LIBMAXMINDDB
 
     /* GeoIP by source */
 
@@ -233,7 +233,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
             json_object_object_add(jobj,"dest_longitude", jlongitude_dst);
         }
 
-#endif 
+#endif
 
     /* Store payload */
 

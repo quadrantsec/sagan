@@ -1125,6 +1125,7 @@ int Netaddr_To_Range( char *ipstr, unsigned char *out )
     Mask2Bit(mask, out+16);
 
     return mask != maxmask;
+
 } /* netaddr_to_range() */
 
 

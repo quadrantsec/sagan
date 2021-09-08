@@ -275,32 +275,32 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
 
             Redis_Reader ( redis_command, redis_results, MAX_SYSLOGMSG );
 
-	    if ( redis_results[0] == '\0' ) 
-	    { 
-
-            if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
+            if ( redis_results[0] == '\0' )
                 {
 
-                    if ( debug->debugxbit )
+                    if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Xbit '%s' was not found IP address %s for isset. Returning false.", __FILE__, __LINE__, rulestruct[rule_position].xbit_name[r], tmp_ip);
+
+                            if ( debug->debugxbit )
+                                {
+                                    Sagan_Log(DEBUG, "[%s, line %d] Xbit '%s' was not found IP address %s for isset. Returning false.", __FILE__, __LINE__, rulestruct[rule_position].xbit_name[r], tmp_ip);
+                                }
+
+                            return(false);
                         }
 
-                    return(false);
-                }
-
-            else if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISNOTSET )
-                {
-
-                    if ( debug->debugxbit )
+                    else if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISNOTSET )
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] Xbit '%s' was found for IP address %s for isnotset. Returning false.", __FILE__, __LINE__, rulestruct[rule_position].xbit_name[r], tmp_ip);
+
+                            if ( debug->debugxbit )
+                                {
+                                    Sagan_Log(DEBUG, "[%s, line %d] Xbit '%s' was found for IP address %s for isnotset. Returning false.", __FILE__, __LINE__, rulestruct[rule_position].xbit_name[r], tmp_ip);
+                                }
+
+
+                            return(false);
                         }
-
-
-                    return(false);
                 }
-	    }
         }
 
     if ( debug->debugxbit )
@@ -308,10 +308,10 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
             Sagan_Log(DEBUG, "[%s, line %d] Rule matches all xbit conditions. Returning true.", __FILE__, __LINE__);
         }
 
-    if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET ) 
-    {
-    strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
-    }
+    if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
+        {
+            strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
+        }
 
     return(true);
 

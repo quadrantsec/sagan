@@ -264,6 +264,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     if ( tmp != NULL )
         {
             SaganProcSyslog_LOCAL->src_port = atoi(tmp);
+            SaganProcSyslog_LOCAL->port_src_is_valid = true;
         }
 
     json_object_object_get_ex(json_norm, "dst-port", &string_obj);
@@ -272,6 +273,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     if ( tmp != NULL )
         {
             SaganProcSyslog_LOCAL->dst_port = atoi(tmp);
+            SaganProcSyslog_LOCAL->port_dst_is_valid = true;
         }
 
 

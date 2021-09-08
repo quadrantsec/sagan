@@ -53,6 +53,7 @@
 
 extern struct _SaganConfig *config;
 
+/*
 uint_fast16_t Parse_Src_Port ( const char *msg )
 {
 
@@ -76,7 +77,7 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
     To_UpperC(tmpmsg);
 
     /* See if the word " port" is in the string */
-
+/*
     if ( Sagan_strstr(tmpmsg, " PORT "))
         {
 
@@ -87,24 +88,24 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
 
                     /* tokenize by " ",  grab string after "port".  */
 
-                    if (!strcmp(token, "PORT"))
-                        {
-                            tmpport = strtok_r(NULL, " ", &saveptr1);
+/*                   if (!strcmp(token, "PORT"))
+                       {
+                           tmpport = strtok_r(NULL, " ", &saveptr1);
 
-                            if (tmpport == NULL) break;
+                           if (tmpport == NULL) break;
 
-                            /* if it's a number, set it.  If not,  default */
+                           /* if it's a number, set it.  If not,  default */
 
-                            if (Is_Numeric(tmpport))
-                                {
-                                    port=atoi(tmpport);
-                                    return(port);
-                                }
-                            else
-                                {
+/*                          if (Is_Numeric(tmpport))
+                              {
+                                  port=atoi(tmpport);
+                                  return(port);
+                              }
+                          else
+                              {
 
-                                    /* drop last char.  Sometimes port ends in port "#." */
-
+                                  /* drop last char.  Sometimes port ends in port "#." */
+/*
                                     tmpport[strlen(tmpport) - 1] = '\0';
                                     if (Is_Numeric(tmpport))
                                         {
@@ -123,8 +124,8 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
     To_UpperC(tmpmsg);
 
     /* See if the word " spt" (source port) is in the string */
-    /* We accept " spt[any char except space][a port number]" */
-
+/* We accept " spt[any char except space][a port number]" */
+/*
     if ( Sagan_strstr(tmpmsg, " SPT"))
         {
 
@@ -137,94 +138,94 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
                     if ( token == NULL ) break;
 
                     /* tokenize by " ",  grab string after "spt".  */
-
+/*
                     if (!strncmp(token, "SPT", 3))
                         {
                             if (token[3] == '\0') break;
                             /* if it's a number, set it.  If not,  default */
-                            if (Is_Numeric(token + 4))
-                                {
-                                    port=atoi(token + 4);
-                                }
-                        }
-                }
-        }
+/*                           if (Is_Numeric(token + 4))
+                               {
+                                   port=atoi(token + 4);
+                               }
+                       }
+               }
+       }
 
-    snprintf(tmpmsg, sizeof(tmpmsg), "%s", msg);
-    To_UpperC(tmpmsg);
+   snprintf(tmpmsg, sizeof(tmpmsg), "%s", msg);
+   To_UpperC(tmpmsg);
 
-    if ( Sagan_strstr(tmpmsg, ":"))
-        {
+   if ( Sagan_strstr(tmpmsg, ":"))
+       {
 
-            portstring = strtok_r(tmpmsg, ":", &saveptr1);
-            token = strtok_r(portstring, " ", &saveptr2);
+           portstring = strtok_r(tmpmsg, ":", &saveptr1);
+           token = strtok_r(portstring, " ", &saveptr2);
 
-            while ( token != NULL )
-                {
+           while ( token != NULL )
+               {
 
-                    result = Is_IP(token, IPv4);
+                   result = Is_IP(token, IPv4);
 
-                    /* Found IP,  get the port */
-
+                   /* Found IP,  get the port */
+/*
                     if ( result != 0 )
                         {
                             /* IP:PORT */
 
-                            portstring = strtok_r(NULL, ":", &saveptr1);
-                            if (Is_Numeric(portstring))
-                                {
-                                    port=atoi(portstring);
-                                    return(port);
-                                }
-                            else
-                                {
+/*                           portstring = strtok_r(NULL, ":", &saveptr1);
+                           if (Is_Numeric(portstring))
+                               {
+                                   port=atoi(portstring);
+                                   return(port);
+                               }
+                           else
+                               {
 
-                                    /* IP:PORT string or IP::PORT */
+                                   /* IP:PORT string or IP::PORT */
 
-                                    token = strtok_r(portstring, " ", &saveptr1);
-                                    if (Is_Numeric(token))
-                                        {
-                                            port=atoi(portstring);
-                                            return(port);
-                                        }
-                                }
-                        }
+/*                                  token = strtok_r(portstring, " ", &saveptr1);
+                                  if (Is_Numeric(token))
+                                      {
+                                          port=atoi(portstring);
+                                          return(port);
+                                      }
+                              }
+                      }
 
-                    token = strtok_r(NULL, " ", &saveptr2);
-                }
-        }
+                  token = strtok_r(NULL, " ", &saveptr2);
+              }
+      }
 
-    snprintf(tmpmsg, sizeof(tmpmsg), "%s", msg);
-    To_UpperC(tmpmsg);
+  snprintf(tmpmsg, sizeof(tmpmsg), "%s", msg);
+  To_UpperC(tmpmsg);
 
-    if ( Sagan_strstr(tmpmsg, "#"))
-        {
+  if ( Sagan_strstr(tmpmsg, "#"))
+      {
 
-            portstring = strtok_r(tmpmsg, "#", &saveptr1);
-            token = strtok_r(portstring, " ", &saveptr2);
+          portstring = strtok_r(tmpmsg, "#", &saveptr1);
+          token = strtok_r(portstring, " ", &saveptr2);
 
-            while ( token != NULL )
-                {
+          while ( token != NULL )
+              {
 
-                    result = inet_pton(AF_INET, token,  &(sa.sin_addr));
+                  result = inet_pton(AF_INET, token,  &(sa.sin_addr));
 
-                    /* Found IP,  get the port */
+                  /* Found IP,  get the port */
 
-                    if ( result != 0 )
-                        {
-                            /* IP#PORT */
-                            portstring = strtok_r(NULL, "#", &saveptr1);
+/*                   if ( result != 0 )
+                       {
+                           /* IP#PORT */
+/*                          portstring = strtok_r(NULL, "#", &saveptr1);
 
-                            if (Is_Numeric(portstring))
-                                {
-                                    port=atoi(portstring);
-                                    return(port);
-                                }
-                            else
-                                {
-                                    /* IP:PORT string or IP##PORT */
+                          if (Is_Numeric(portstring))
+                              {
+                                  port=atoi(portstring);
+                                  return(port);
+                              }
+                          else
+                              {
+                                  /* IP:PORT string or IP##PORT */
 
-                                    token = strtok_r(portstring, " ", &saveptr1);
+/*                                    token = strtok_r(portstring, " ", &saveptr1);
                                     if (Is_Numeric(token))
                                         {
                                             port=atoi(token);
@@ -251,6 +252,7 @@ uint_fast16_t Parse_Src_Port ( const char *msg )
 
 /* Why are there two? */
 
+/*
 uint_fast16_t Parse_Dst_Port ( const char *msg )
 {
 
@@ -266,8 +268,8 @@ uint_fast16_t Parse_Dst_Port ( const char *msg )
     To_UpperC(tmpmsg);
 
     /* See if the word " dpt" (destination port) is in the string */
-    /* We accept " dpt[any char except space][a port number]" */
-
+/* We accept " dpt[any char except space][a port number]" */
+/*
     if ( Sagan_strstr(tmpmsg, " DPT"))
         {
 
@@ -281,19 +283,20 @@ uint_fast16_t Parse_Dst_Port ( const char *msg )
 
                     /* tokenize by " ",  grab string after "dpt".  */
 
-                    if (!strncmp(token, "DPT", 3))
-                        {
-                            if (token[3] == '\0') break;
-                            /* if it's a number, set it.  If not,  default */
-                            if (Is_Numeric(token + 4))
-                                {
-                                    port=atoi(token + 4);
-                                }
-                        }
+/*                   if (!strncmp(token, "DPT", 3))
+                       {
+                           if (token[3] == '\0') break;
+                           /* if it's a number, set it.  If not,  default */
+/*                          if (Is_Numeric(token + 4))
+                              {
+                                  port=atoi(token + 4);
+                              }
+                      }
 
-                    token = strtok_r(NULL, " ", &saveptr1);
-                }
-        }
+                  token = strtok_r(NULL, " ", &saveptr1);
+              }
+      }
 
-    return(port);
+  return(port);
 }
+*/

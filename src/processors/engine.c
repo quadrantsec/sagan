@@ -263,151 +263,151 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #ifdef HAVE_LIBFASTJSON
 
-		    if ( config->json_parse_data == true )
-		    {
-
-                    if ( JSON_LOCAL->json_count > 0 && rulestruct[b].json_map_count > 0 )
+                    if ( config->json_parse_data == true )
                         {
 
-                            for ( i = 0; i < rulestruct[b].json_map_count; i++ )
+                            if ( JSON_LOCAL->json_count > 0 && rulestruct[b].json_map_count > 0 )
                                 {
 
-                                    char tmp_json_value[JSON_MAX_VALUE_SIZE] = { 0 };
-
-                                    tmp_json_value[0] = '\0';
-
-                                    Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
-
-                                    if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
+                                    for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                         {
 
-                                            /* Make sure we have a "good" value to copy */
+                                            char tmp_json_value[JSON_MAX_VALUE_SIZE] = { 0 };
 
-                                            if ( tmp_json_value[0] != '\0' )
+                                            tmp_json_value[0] = '\0';
+
+                                            Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, sizeof(tmp_json_value) );
+
+                                            if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
                                                 {
-                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
-                                                }
-                                            else
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
-                                                }
 
-                                            IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
-                                            SaganProcSyslog_LOCAL->ip_src_is_valid = true;
-                                        }
+                                                    /* Make sure we have a "good" value to copy */
 
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
-                                        {
+                                                    if ( tmp_json_value[0] != '\0' )
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp_json_value, MAXIP);
+                                                        }
+                                                    else
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
+                                                        }
 
-                                            /* Make sure we have a "good" value to copy */
-
-                                            if ( tmp_json_value[0] != '\0' )
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp_json_value, MAXIP);
-                                                }
-                                            else
-                                                {
-                                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+                                                    IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
+                                                    SaganProcSyslog_LOCAL->ip_src_is_valid = true;
                                                 }
 
-                                            IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
-                                            SaganProcSyslog_LOCAL->ip_dst_is_valid = true;
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_PORT )
-                                        {
-                                            SaganProcSyslog_LOCAL->src_port = atoi( tmp_json_value );
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_PORT )
-                                        {
-                                            SaganProcSyslog_LOCAL->dst_port = atoi( tmp_json_value );
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_USERNAME )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->username, tmp_json_value, MAX_USERNAME_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MESSAGE )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, MAX_SYSLOGMSG);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROGRAM )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->syslog_program, tmp_json_value, MAX_SYSLOG_PROGRAM);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_EVENT_ID )
-                                        {
-                                            strlcpy( SaganProcSyslog_LOCAL->event_id, tmp_json_value, sizeof( SaganProcSyslog_LOCAL->event_id) );
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FLOW_ID )
-                                        {
-                                            SaganProcSyslog_LOCAL->flow_id = atol( tmp_json_value );
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MD5 )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->md5, tmp_json_value, MD5_HASH_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA1 )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->sha1, tmp_json_value, SHA1_HASH_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA256 )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->sha256, tmp_json_value, SHA256_HASH_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FILENAME )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_FILENAME_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_HOSTNAME )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_HOSTNAME_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_URL )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MAX_URL_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_JA3 )
-                                        {
-                                            strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MD5_HASH_SIZE);
-                                        }
-
-                                    else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROTO )
-                                        {
-
-                                            if ( !Sagan_stristr(tmp_json_value, "tcp", true))
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_IP )
                                                 {
-                                                    SaganProcSyslog_LOCAL->proto = 6;
+
+                                                    /* Make sure we have a "good" value to copy */
+
+                                                    if ( tmp_json_value[0] != '\0' )
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp_json_value, MAXIP);
+                                                        }
+                                                    else
+                                                        {
+                                                            strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+                                                        }
+
+                                                    IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
+                                                    SaganProcSyslog_LOCAL->ip_dst_is_valid = true;
                                                 }
 
-                                            else if ( !Sagan_stristr(tmp_json_value, "udp", true))
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_PORT )
                                                 {
-                                                    SaganProcSyslog_LOCAL->proto = 17;
+                                                    SaganProcSyslog_LOCAL->src_port = atoi( tmp_json_value );
                                                 }
 
-                                            else if ( !Sagan_stristr(tmp_json_value, "icmp", true))
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_DEST_PORT )
                                                 {
-                                                    SaganProcSyslog_LOCAL->proto = 1;
+                                                    SaganProcSyslog_LOCAL->dst_port = atoi( tmp_json_value );
                                                 }
 
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_USERNAME )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->username, tmp_json_value, MAX_USERNAME_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MESSAGE )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, MAX_SYSLOGMSG);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROGRAM )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->syslog_program, tmp_json_value, MAX_SYSLOG_PROGRAM);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_EVENT_ID )
+                                                {
+                                                    strlcpy( SaganProcSyslog_LOCAL->event_id, tmp_json_value, sizeof( SaganProcSyslog_LOCAL->event_id) );
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FLOW_ID )
+                                                {
+                                                    SaganProcSyslog_LOCAL->flow_id = atol( tmp_json_value );
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MD5 )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->md5, tmp_json_value, MD5_HASH_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA1 )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->sha1, tmp_json_value, SHA1_HASH_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_SHA256 )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->sha256, tmp_json_value, SHA256_HASH_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_FILENAME )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_FILENAME_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_HOSTNAME )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->filename, tmp_json_value, MAX_HOSTNAME_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_URL )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MAX_URL_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_JA3 )
+                                                {
+                                                    strlcpy(SaganProcSyslog_LOCAL->url, tmp_json_value, MD5_HASH_SIZE);
+                                                }
+
+                                            else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROTO )
+                                                {
+
+                                                    if ( !Sagan_stristr(tmp_json_value, "tcp", true))
+                                                        {
+                                                            SaganProcSyslog_LOCAL->proto = 6;
+                                                        }
+
+                                                    else if ( !Sagan_stristr(tmp_json_value, "udp", true))
+                                                        {
+                                                            SaganProcSyslog_LOCAL->proto = 17;
+                                                        }
+
+                                                    else if ( !Sagan_stristr(tmp_json_value, "icmp", true))
+                                                        {
+                                                            SaganProcSyslog_LOCAL->proto = 1;
+                                                        }
+
+                                                }
                                         }
+
                                 }
 
                         }
-
-		    }
 
 #endif
 
@@ -696,7 +696,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     if ( lookup_cache[rulestruct[b].s_find_src_pos-1].status == true )
                                         {
 
-
                                             memcpy(SaganProcSyslog_LOCAL->src_ip, lookup_cache[rulestruct[b].s_find_src_pos-1].ip, MAXIP );
                                             memcpy(SaganProcSyslog_LOCAL->ip_src_bits, lookup_cache[rulestruct[b].s_find_src_pos-1].ip_bits, MAXIPBIT);
 
@@ -712,7 +711,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                         }
 
                                 }
-
 
                             /* parse_dst_ip: {position} */
 
@@ -738,15 +736,16 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                 }
 
-
-                            /* If we never manage to get IP addresses,  set them to defaults */
-
                             IP2Bit(SaganProcSyslog_LOCAL->syslog_host, ip_syslog_host_bits);
 
-                            if ( SaganProcSyslog_LOCAL->syslog_host[0] == '\0' || is_notlocalhost( ip_syslog_host_bits ) )
+                            if ( SaganProcSyslog_LOCAL->ip_src_is_valid == true &&
+                                    SaganProcSyslog_LOCAL->ip_dst_is_valid == false )
                                 {
-                                    memcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, MAXIP);
+                                    memcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                    memcpy(SaganProcSyslog_LOCAL->ip_dst_bits, ip_syslog_host_bits, MAXIPBIT);
                                 }
+
+                            /* If we never manage to get IP addresses,  set them to defaults */
 
                             if ( SaganProcSyslog_LOCAL->src_ip[0] == '\0' || is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
                                 {
@@ -758,16 +757,17 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     memcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
                                 }
 
-                            if ( SaganProcSyslog_LOCAL->src_port == 0 )
-                                {
-                                    SaganProcSyslog_LOCAL->src_port = config->sagan_port;
-                                }
+                            /*
+                                                        if ( SaganProcSyslog_LOCAL->src_port == 0 )
+                                                            {
+                                                                SaganProcSyslog_LOCAL->src_port = config->sagan_port;
+                                                            }
 
-                            if ( SaganProcSyslog_LOCAL->dst_port == 0 )
-                                {
-                                    SaganProcSyslog_LOCAL->dst_port = config->sagan_port;
-                                }
-
+                                                        if ( SaganProcSyslog_LOCAL->dst_port == 0 )
+                                                            {
+                                                                SaganProcSyslog_LOCAL->dst_port = config->sagan_port;
+                                                            }
+                            */
 
                             /* parse_hash: md5 */
 
@@ -795,14 +795,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             /* No source port was normalized, Use the rules default */
 
-                            if ( SaganProcSyslog_LOCAL->src_port != 0 )
+                            if ( rulestruct[b].default_src_port != 0 && SaganProcSyslog_LOCAL->port_src_is_valid == false )
                                 {
                                     SaganProcSyslog_LOCAL->src_port=rulestruct[b].default_src_port;
                                 }
 
                             /* No destination port was normalzied. Use the rules default */
 
-			    if ( rulestruct[b].default_dst_port != 0 ) 
+                            if ( rulestruct[b].default_dst_port != 0 && SaganProcSyslog_LOCAL->port_dst_is_valid == false )
                                 {
                                     SaganProcSyslog_LOCAL->dst_port=rulestruct[b].default_dst_port;
                                 }
@@ -1345,9 +1345,9 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 #endif
 
 #ifndef HAVE_LIBMAXMINDDB
-								       NULL,
-								       NULL );
-#endif							    
+                                                            NULL,
+                                                            NULL );
+#endif
 
                                                         }
                                                     else

@@ -54,18 +54,32 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
 
-    /* If we're using DNS (and we shouldn't be!),  we start DNS checks and lookups
-     * here.  We cache both good and bad lookups to not over load our DNS server(s).
-     * The only way DNS cache can be cleared is to restart Sagan */
-
-    if ( config->syslog_src_lookup && ptr != NULL )
+    if ( ptr != NULL )
         {
 
-            if ( !Is_IP(ptr, IPv4) || !Is_IP(ptr, IPv6) )   	/* Is inbound a valid IP? */
+            /* If we're using DNS (and we shouldn't be!),  we start DNS checks and lookups
+             * here.  We cache both good and bad lookups to not over load our DNS server(s).
+             * The only way DNS cache can be cleared is to restart Sagan */
+
+            if ( config->syslog_src_lookup == false )
                 {
+
+                    /* Check, make sure we have a valid IP for the syslog_host */
+
+                    if ( Is_IP(ptr, IPv4) || !Is_IP(ptr, IPv6) )
+                        {
+                            strlcpy(SaganProcSyslog_LOCAL->syslog_host, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                        }
+
+                }
+            else
+                {
+
+                    /* Do a DNS lookup for the correct hostname */
+
                     dns_flag = false;
 
-                    for(i=0; i <= counters->dns_cache_count ; i++)  			/* Check cache first */
+                    for(i=0; i <= counters->dns_cache_count ; i++)                      /* Check cache first */
                         {
                             if (!strcmp( dnscache[i].hostname, ptr))
                                 {
@@ -73,6 +87,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                                     dns_flag = true;
                                 }
                         }
+
 
                     /* If entry was not found in cache,  look it up */
 
@@ -93,7 +108,6 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
                                 }
 
-
                             /* Add entry to DNS Cache */
 
                             dnscache = (_SaganDNSCache *) realloc(dnscache, (counters->dns_cache_count+1) * sizeof(_SaganDNSCache));
@@ -112,31 +126,25 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             counters->dns_cache_count++;
                             strlcpy(SaganProcSyslog_LOCAL->syslog_host, src_dns_lookup, sizeof(SaganProcSyslog_LOCAL->syslog_host));
 
-                        }
-                }
+
+                        } /* End of dns_flag == false */
+
+                }  /* End of config->syslog_src_lookup == false */
 
         }
-    else
+    else		/* ptr != NULL */
         {
 
-            /* We check to see if values from our FIFO are valid.  If we aren't doing DNS related
-            * stuff (above),  we start basic check with the SaganProcSyslog_LOCAL->syslog_host */
+            /* ptr was NULL,  throw error */
 
-            if ( ptr == NULL || !Is_IP(ptr, IPv4) || !Is_IP(ptr, IPv6) )
+            __atomic_add_fetch(&counters->malformed_host, 1, __ATOMIC_SEQ_CST);
+
+            strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+
+            if ( debug->debugmalformed )
                 {
-                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, sizeof(SaganProcSyslog_LOCAL->syslog_host));
-
-                    __atomic_add_fetch(&counters->malformed_host, 1, __ATOMIC_SEQ_CST);
-
-                    if ( debug->debugmalformed )
-                        {
-                            Sagan_Log(DEBUG, "Sagan received a malformed 'host': '%s' (replaced with %s)", SaganProcSyslog_LOCAL->syslog_host, config->sagan_host);
-                            Sagan_Log(DEBUG, "Raw malformed log: \"%s\"", syslog_string);
-                        }
-                }
-            else
-                {
-                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                    Sagan_Log(DEBUG, "Sagan received a malformed 'host': '%s' (replaced with %s)", SaganProcSyslog_LOCAL->syslog_host, config->sagan_host);
+                    Sagan_Log(DEBUG, "Raw malformed log: \"%s\"", syslog_string);
                 }
         }
 
