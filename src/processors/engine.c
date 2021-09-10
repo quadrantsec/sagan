@@ -148,8 +148,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     char *ptmp = NULL;
     char *tok2 = NULL;
 
-    unsigned char ip_syslog_host_bits[MAXIPBIT];
-
     char tmpbuf[256] = { 0 };
 
     char syslog_append_program[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6];
@@ -703,11 +701,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             SaganProcSyslog_LOCAL->proto = lookup_cache[0].proto;
                                             SaganProcSyslog_LOCAL->ip_src_is_valid = true;
 
-
-                                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
-                                                {
-                                                    SaganProcSyslog_LOCAL->ip_src_is_valid = false;
-                                                }
                                         }
 
                                 }
@@ -727,47 +720,25 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             SaganProcSyslog_LOCAL->proto = lookup_cache[0].proto;
                                             SaganProcSyslog_LOCAL->ip_dst_is_valid = true;
 
-
-                                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
-                                                {
-                                                    SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
-                                                }
                                         }
 
                                 }
 
-                            IP2Bit(SaganProcSyslog_LOCAL->syslog_host, ip_syslog_host_bits);
+                            /* We never want localhost/127.0.0.1 or null for src_ip/ds_ip */
 
-                            if ( SaganProcSyslog_LOCAL->ip_src_is_valid == true &&
-                                    SaganProcSyslog_LOCAL->ip_dst_is_valid == false )
+                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) || SaganProcSyslog_LOCAL->src_ip[0] == '\0' )
                                 {
-                                    memcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
-                                    memcpy(SaganProcSyslog_LOCAL->ip_dst_bits, ip_syslog_host_bits, MAXIPBIT);
+                                    SaganProcSyslog_LOCAL->ip_src_is_valid = false;
+                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
+                                    memcpy(SaganProcSyslog_LOCAL->ip_src_bits, config->sagan_host, MAXIPBIT);
                                 }
 
-                            /* If we never manage to get IP addresses,  set them to defaults */
-
-                            if ( SaganProcSyslog_LOCAL->src_ip[0] == '\0' || is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
+                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_dst_bits ) || SaganProcSyslog_LOCAL->dst_ip[0] == '\0' )
                                 {
-                                    memcpy(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
+                                    SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
+                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
+                                    memcpy(SaganProcSyslog_LOCAL->ip_dst_bits, config->sagan_host, MAXIPBIT);
                                 }
-
-                            if ( SaganProcSyslog_LOCAL->dst_ip[0] == '\0' || is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )
-                                {
-                                    memcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
-                                }
-
-                            /*
-                                                        if ( SaganProcSyslog_LOCAL->src_port == 0 )
-                                                            {
-                                                                SaganProcSyslog_LOCAL->src_port = config->sagan_port;
-                                                            }
-
-                                                        if ( SaganProcSyslog_LOCAL->dst_port == 0 )
-                                                            {
-                                                                SaganProcSyslog_LOCAL->dst_port = config->sagan_port;
-                                                            }
-                            */
 
                             /* parse_hash: md5 */
 
