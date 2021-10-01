@@ -85,7 +85,7 @@ void Fast_File( _Sagan_Event *Event )
             fprintf(sagan_fast_stream, "{UNKNOWN}");
         }
 
-    fprintf(sagan_fast_stream," %s:%" PRIuFAST16 " [%s] -> %s:%" PRIuFAST16 " [%s]\n", Event->ip_src, Event->src_port, Event->country_src, Event->ip_dst, Event->dst_port, Event->country_dst);
+    fprintf(sagan_fast_stream," %s:%" PRIuFAST16 " -> %s:%" PRIuFAST16 "\n", Event->ip_src, Event->src_port, Event->ip_dst, Event->dst_port);
 
     File_Unlock( sagan_fast_stream_int );
 

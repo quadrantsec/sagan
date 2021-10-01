@@ -76,6 +76,7 @@ void Alert_File( _Sagan_Event *Event )
     fprintf(sagan_alert_stream, "%s:", Event->ip_src);
     fprintf(sagan_alert_stream, "%" PRIuFAST16 " ", Event->src_port);
 
+/*
 #ifdef HAVE_LIBMAXMINDDB
 
     if  ( config->have_geoip2 == true )
@@ -84,12 +85,14 @@ void Alert_File( _Sagan_Event *Event )
         }
 
 #endif
+*/
 
     fprintf(sagan_alert_stream, " -> ");
 
     fprintf(sagan_alert_stream, "%s:", Event->ip_dst );
     fprintf(sagan_alert_stream, "%" PRIuFAST16 " ", Event->dst_port);
 
+/*
 #ifdef HAVE_LIBMAXMINDDB
 
     if  ( config->have_geoip2 == true )
@@ -98,6 +101,7 @@ void Alert_File( _Sagan_Event *Event )
         }
 
 #endif
+*/
 
     fprintf(sagan_alert_stream, "%s ", Event->facility);
     fprintf(sagan_alert_stream, "%s ", Event->priority);

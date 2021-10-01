@@ -143,10 +143,10 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     json_object *jproto = json_object_new_string( proto );
     json_object_object_add(jobj,"proto", jproto);
 
-#ifdef HAVE_LIBMAXMINDDB
+//#ifdef HAVE_LIBMAXMINDDB
 
     /* GeoIP by source */
-
+/*
     if ( Event->country_src[0] != '\0' )
         {
             json_object *jcountry_src = json_object_new_string( Event->country_src );
@@ -190,7 +190,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
         }
 
     /* GeoIP by destination */
-
+/*
     if ( Event->country_dst[0] != '\0' )
         {
             json_object *jcountry_dst = json_object_new_string( Event->country_dst );
@@ -234,6 +234,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
         }
 
 #endif
+*/
 
     /* Store payload */
 

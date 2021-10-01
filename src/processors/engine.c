@@ -724,21 +724,34 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                 }
 
-                            /* We never want localhost/127.0.0.1 or null for src_ip/ds_ip */
+                            /* If the syslog_host is localhost, then we set it to the sagan_host value */
 
-                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) || SaganProcSyslog_LOCAL->src_ip[0] == '\0' )
+			    IP2Bit(SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_bits);
+
+			    if ( is_notlocalhost( SaganProcSyslog_LOCAL->syslog_bits ) )
+			    	{
+				   strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, MAXIP);
+				}
+
+			    /* We never want the source or destiniation to be null or localhost */
+
+                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) ||
+                                    SaganProcSyslog_LOCAL->src_ip[0] == '\0' ||
+                                    SaganProcSyslog_LOCAL->ip_src_is_valid == false )
                                 {
                                     SaganProcSyslog_LOCAL->ip_src_is_valid = false;
-                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, config->sagan_host, MAXIP);
-                                    memcpy(SaganProcSyslog_LOCAL->ip_src_bits, config->sagan_host, MAXIPBIT);
+                                    strlcpy(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
                                 }
 
-                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_dst_bits ) || SaganProcSyslog_LOCAL->dst_ip[0] == '\0' )
+                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_dst_bits ) ||
+                                    SaganProcSyslog_LOCAL->dst_ip[0] == '\0' ||
+                                    SaganProcSyslog_LOCAL->ip_dst_is_valid == false)
                                 {
                                     SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
-                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, config->sagan_host, MAXIP);
-                                    memcpy(SaganProcSyslog_LOCAL->ip_dst_bits, config->sagan_host, MAXIPBIT);
+                                    strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
                                 }
+
+//                            printf("ip_src: %s  (%d),  ip_dest: %s (%d)\n", SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_is_valid, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_is_valid);
 
                             /* parse_hash: md5 */
 

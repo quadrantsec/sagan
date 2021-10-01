@@ -36,10 +36,10 @@ struct _GeoIP
     char city[32];
     char country[32];
     char subdivision[3];
-    char postal[16];
-    char timezone[32];
-    char latitude[16];
-    char longitude[16];
+//    char postal[16];
+//    char timezone[32];
+//    char latitude[16];
+//    char longitude[16];
 
 };
 

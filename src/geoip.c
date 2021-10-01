@@ -192,6 +192,7 @@ int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, stru
             strlcpy(GeoIP->subdivision, entry_data.utf8_string, entry_data.data_size+1);
         }
 
+/*
     MMDB_get_value(&result.entry, &entry_data, "postal", "code", NULL);
 
     if ( entry_data.has_data )
@@ -221,6 +222,7 @@ int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, stru
             snprintf(GeoIP->longitude, sizeof(GeoIP->longitude), "%f", entry_data.double_value);
             GeoIP->longitude[ sizeof(GeoIP->longitude) - 1 ] = '\0';
         }
+	*/
 
     if (debug->debuggeoip2)
         {
@@ -229,10 +231,10 @@ int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, stru
             Sagan_Log(DEBUG, "Country                       : %s", GeoIP->country);
             Sagan_Log(DEBUG, "City                          : %s", GeoIP->city);
             Sagan_Log(DEBUG, "Subdivision                   : %s", GeoIP->subdivision);
-            Sagan_Log(DEBUG, "Postal Code                   : %s", GeoIP->postal);
-            Sagan_Log(DEBUG, "Timezone                      : %s", GeoIP->timezone);
-            Sagan_Log(DEBUG, "Longitude                     : %s", GeoIP->longitude);
-            Sagan_Log(DEBUG, "Latitude                      : %s", GeoIP->latitude);
+            //Sagan_Log(DEBUG, "Postal Code                   : %s", GeoIP->postal);
+            //Sagan_Log(DEBUG, "Timezone                      : %s", GeoIP->timezone);
+            //Sagan_Log(DEBUG, "Longitude                     : %s", GeoIP->longitude);
+            //Sagan_Log(DEBUG, "Latitude                      : %s", GeoIP->latitude);
             Sagan_Log(DEBUG, "User Defined Country Codes    : %s", rulestruct[rule_position].geoip2_country_codes);
         }
 
