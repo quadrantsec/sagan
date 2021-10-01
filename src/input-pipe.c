@@ -66,9 +66,21 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
                     /* Check, make sure we have a valid IP for the syslog_host */
 
-                    if ( Is_IP(ptr, IPv4) || !Is_IP(ptr, IPv6) )
+                    if ( Is_IP(ptr, IPv4) || Is_IP(ptr, IPv6) )
                         {
                             strlcpy(SaganProcSyslog_LOCAL->syslog_host, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                        }
+                    else
+                        {
+
+                            __atomic_add_fetch(&counters->malformed_host, 1, __ATOMIC_SEQ_CST);
+
+                            strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                            if ( debug->debugmalformed )
+                                {
+                                    Sagan_Log(DEBUG, "Sagan received a malformed 'host': '%s' (replaced with %s)", SaganProcSyslog_LOCAL->syslog_host, config->sagan_host);
+                                    Sagan_Log(DEBUG, "Raw malformed log: \"%s\"", syslog_string);
+                                }
                         }
 
                 }
@@ -143,7 +155,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
             if ( debug->debugmalformed )
                 {
-                    Sagan_Log(DEBUG, "Sagan received a malformed 'host': '%s' (replaced with %s)", SaganProcSyslog_LOCAL->syslog_host, config->sagan_host);
+                    Sagan_Log(DEBUG, "Sagan received a malformed NULL 'host' (replaced with %s)", config->sagan_host);
                     Sagan_Log(DEBUG, "Raw malformed log: \"%s\"", syslog_string);
                 }
         }

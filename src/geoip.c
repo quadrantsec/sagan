@@ -192,37 +192,37 @@ int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, stru
             strlcpy(GeoIP->subdivision, entry_data.utf8_string, entry_data.data_size+1);
         }
 
-/*
-    MMDB_get_value(&result.entry, &entry_data, "postal", "code", NULL);
+    /*
+        MMDB_get_value(&result.entry, &entry_data, "postal", "code", NULL);
 
-    if ( entry_data.has_data )
-        {
-            strlcpy(GeoIP->postal, entry_data.utf8_string, entry_data.data_size+1);
-        }
+        if ( entry_data.has_data )
+            {
+                strlcpy(GeoIP->postal, entry_data.utf8_string, entry_data.data_size+1);
+            }
 
-    MMDB_get_value(&result.entry, &entry_data, "location", "time_zone", NULL);
+        MMDB_get_value(&result.entry, &entry_data, "location", "time_zone", NULL);
 
-    if ( entry_data.has_data )
-        {
-            strlcpy(GeoIP->timezone, entry_data.utf8_string, entry_data.data_size+1);
-        }
+        if ( entry_data.has_data )
+            {
+                strlcpy(GeoIP->timezone, entry_data.utf8_string, entry_data.data_size+1);
+            }
 
-    MMDB_get_value(&result.entry, &entry_data, "location", "latitude", NULL);
+        MMDB_get_value(&result.entry, &entry_data, "location", "latitude", NULL);
 
-    if ( entry_data.has_data )
-        {
-            snprintf(GeoIP->latitude, sizeof(GeoIP->latitude), "%f", entry_data.double_value);
-            GeoIP->latitude[ sizeof(GeoIP->latitude) - 1 ] = '\0';
-        }
+        if ( entry_data.has_data )
+            {
+                snprintf(GeoIP->latitude, sizeof(GeoIP->latitude), "%f", entry_data.double_value);
+                GeoIP->latitude[ sizeof(GeoIP->latitude) - 1 ] = '\0';
+            }
 
-    MMDB_get_value(&result.entry, &entry_data, "location", "longitude", NULL);
+        MMDB_get_value(&result.entry, &entry_data, "location", "longitude", NULL);
 
-    if ( entry_data.has_data )
-        {
-            snprintf(GeoIP->longitude, sizeof(GeoIP->longitude), "%f", entry_data.double_value);
-            GeoIP->longitude[ sizeof(GeoIP->longitude) - 1 ] = '\0';
-        }
-	*/
+        if ( entry_data.has_data )
+            {
+                snprintf(GeoIP->longitude, sizeof(GeoIP->longitude), "%f", entry_data.double_value);
+                GeoIP->longitude[ sizeof(GeoIP->longitude) - 1 ] = '\0';
+            }
+    	*/
 
     if (debug->debuggeoip2)
         {
