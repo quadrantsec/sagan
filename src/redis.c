@@ -47,7 +47,7 @@ extern struct _SaganDebug *debug;
 
 uint_fast16_t redis_msgslot = 0;
 
-bool death;
+extern bool death;
 
 pthread_cond_t SaganRedisDoWork=PTHREAD_COND_INITIALIZER;
 pthread_mutex_t SaganRedisWorkMutex=PTHREAD_MUTEX_INITIALIZER;

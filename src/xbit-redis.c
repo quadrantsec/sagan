@@ -49,13 +49,12 @@ extern struct _SaganCounters *counters;
 extern struct _Rule_Struct *rulestruct;
 extern struct _SaganDebug *debug;
 extern struct _SaganConfig *config;
+extern struct _Sagan_Redis_Write *Sagan_Redis_Write;
 
-struct _Sagan_Redis_Write *Sagan_Redis_Write;
+extern pthread_cond_t SaganRedisDoWork;
+extern pthread_mutex_t SaganRedisWorkMutex;
 
-pthread_cond_t SaganRedisDoWork;
-pthread_mutex_t SaganRedisWorkMutex;
-
-int redis_msgslot;
+extern uint_fast16_t redis_msgslot;
 
 /*******************************************************/
 /* Xbit_Set_Redis - set/unset xbit in Redis (threaded) */

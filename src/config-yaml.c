@@ -79,7 +79,7 @@ extern int liblognorm_count;
 #ifdef HAVE_LIBMAXMINDDB
 #include "geoip.h"
 
-struct _Sagan_GeoIP_Skip *GeoIP_Skip;
+extern struct _Sagan_GeoIP_Skip *GeoIP_Skip;
 
 #endif
 
