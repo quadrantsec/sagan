@@ -223,11 +223,6 @@ void Load_YAML_Config( char *yaml_file )
             config->rule_tracking_time = 1440;
 
 #endif
-
-#ifdef HAVE_LIBMAXMINDDB
-            config->geoip2_lookup_all_alerts = true;
-#endif
-
             config->sagan_host[0] = '\0';
             config->sagan_port = 514;
             config->input_type = INPUT_PIPE;
@@ -1131,16 +1126,6 @@ void Load_YAML_Config( char *yaml_file )
                                                 {
                                                     config->have_geoip2 = true;
                                                 }
-                                        }
-
-                                    if (!strcmp(last_pass, "lookup_all_alerts") && config->have_geoip2 == true)
-                                        {
-
-                                            if (!strcasecmp(value, "false") || !strcasecmp(value, "no") )
-                                                {
-                                                    config->geoip2_lookup_all_alerts = false;
-                                                }
-
                                         }
 
                                     if (!strcmp(last_pass, "country_database") && config->have_geoip2 == true)

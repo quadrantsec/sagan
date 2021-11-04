@@ -925,23 +925,11 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     if ( SaganProcSyslog_LOCAL->ip_src_is_valid == true && rulestruct[b].geoip2_src_or_dst == 1 )
                                         {
                                             geoip2_return = GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );
-
-                                            if ( config->geoip2_lookup_all_alerts == true )
-                                                {
-                                                    (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
-                                                }
-
                                         }
 
                                     else if ( SaganProcSyslog_LOCAL->ip_dst_is_valid == true && rulestruct[b].geoip2_src_or_dst == 2 )
                                         {
                                             geoip2_return = GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->dst_ip, b, GeoIP_DEST );
-
-                                            if ( config->geoip2_lookup_all_alerts == true )
-                                                {
-                                                    (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );
-                                                }
-
                                         }
 
                                     if ( geoip2_return != GEOIP_SKIP )
@@ -993,7 +981,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     /* If we want to store all GeoIP information for all alerts event
                                     not GeoIP related events */
 
-                                    if ( config->geoip2_lookup_all_alerts == true && config->have_geoip2 == true )
+                                    if ( config->have_geoip2 == true )
                                         {
 
                                             (void)GeoIP2_Lookup_Country(SaganProcSyslog_LOCAL->src_ip, b, GeoIP_SRC );

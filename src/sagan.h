@@ -30,6 +30,7 @@
 #include <stddef.h>
 #include <pcre.h>
 #include <time.h>
+#include <sys/time.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
 
