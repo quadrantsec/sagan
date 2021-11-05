@@ -40,7 +40,6 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-
 #ifdef HAVE_SYS_PRCTL_H
 #include <sys/prctl.h>
 #endif
@@ -209,6 +208,12 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
     strftime(timet, sizeof(timet), "%s",  now);
     epoch = atol(timet);
 
+    /* Validate inbound IP */
+
+    if ( !Is_IP(ip, IPv4) || !Is_IP(ip, IPv6) )
+	    {
+		    return;
+	    }
 
     for ( i = 0; i < counters->client_stats_count; i++ )
         {
