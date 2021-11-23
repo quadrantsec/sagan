@@ -154,8 +154,11 @@ void Client_Stats_Handler( void )
                     json_object *jarray_sensor = json_object_new_string( config->sagan_sensor_name );
                     json_object_object_add(jobj,"sensor_name", jarray_sensor);
 
-                    json_object *jipaddr = json_object_new_string( Client_Stats[i].ip  );
-                    json_object_object_add(jobj,"src_ip", jipaddr);
+                    json_object *jsrc_addr = json_object_new_string( Client_Stats[i].ip  );
+                    json_object_object_add(jobj,"src_ip", jsrc_addr);
+
+                    json_object *jdest_addr = json_object_new_string( config->sagan_host  );
+                    json_object_object_add(jobj,"dest_ip", jdest_addr);
 
 		    json_object *jflow_id = json_object_new_int64( FlowGetId(tp) );
 		    json_object_object_add(jobj,"flow_id", jflow_id);
