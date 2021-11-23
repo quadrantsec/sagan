@@ -1264,9 +1264,7 @@ int PageSupportsRWX(void)
 #endif /* HAVE_SYS_MMAN_H */
 
 /***************************************************************************
- * FlowGetId - Generates a Suricata "FLow ID".  We don't really support
- * "FLow ID" idea like Suricata.  This is for compatibility with Suricata
- * EVE
+ * FlowGetId - Generates a Suricata "Flow ID".
  ***************************************************************************/
 
 int_fast64_t FlowGetId( struct timeval tp )

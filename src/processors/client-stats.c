@@ -155,7 +155,10 @@ void Client_Stats_Handler( void )
                     json_object_object_add(jobj,"sensor_name", jarray_sensor);
 
                     json_object *jipaddr = json_object_new_string( Client_Stats[i].ip  );
-                    json_object_object_add(jobj,"ip_address", jipaddr);
+                    json_object_object_add(jobj,"src_ip", jipaddr);
+
+		    json_object *jflow_id = json_object_new_int64( FlowGetId(tp) );
+		    json_object_object_add(jobj,"flow_id", jflow_id);
 
                     json_object *jtimestamp = json_object_new_int64( Client_Stats[i].epoch );
                     json_object_object_add(jobj,"timestamp", jtimestamp);
