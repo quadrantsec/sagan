@@ -28,8 +28,8 @@
 #  --enable-tcmalloc	   Enable Google's TCMalloc
 
 STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc"
-ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-libfastjson --enable-tcmalloc"
-NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-libfastjson --disable-tcmalloc"
+ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-tcmalloc"
+NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-tcmalloc"
 
 LOG="output.log" 
 

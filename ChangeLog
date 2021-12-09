@@ -1,3 +1,55 @@
+2021/12/10 - 	Sagan 2.0.2 released. 
+
+		* Fixes that allow Sagan to compile using GCC 10. 
+
+		  https://github.com/quadrantsec/sagan/commit/21f753d2ad0f1c4fe5488ad5e325b9ddb3b8f2c7
+
+		* When Sagan finds a "correlated event" (via a "xbit" or "flexbit"),  Sagan will store
+		  the correlated data within the fired alert EVE.  This means you don't have to search
+		  for the data! 
+
+		  https://github.com/quadrantsec/sagan/commit/efed225c0e90b8ea9d975fed1efd390d9c6d2345
+
+		* Patch for Stef Roskam chaning the engine order and improve json parsing. Thanks Stef!!
+
+		  https://github.com/quadrantsec/sagan/pull/14
+		
+		* Various minor JSON fixes.
+
+		  https://github.com/quadrantsec/sagan/commit/ac447fb1b75f5d260e761d161167fa82c8bbe53f
+		  https://github.com/quadrantsec/sagan/commit/7060725730a1311de7cfc8912f4fcc5b495fa1b4
+		  https://github.com/quadrantsec/sagan/commit/e2e70565fe8f159ae4c249e585ca0129377ac053
+
+		* Major code cleanup in processors/engine.c.  Over time,  this code had become 
+	 	  harder to maintain.  This cleanup makes the code more maintainable and 
+	 	  more efficient.  This cleanup resulted in improved preformance and better
+		  memory footprint.  Various other code cleanups as well to improve preformance and 
+		  memory footprint!
+
+		  https://github.com/quadrantsec/sagan/commit/ac6dcf754d1476ed7e4ceebff317a40f9f19eaf9
+		  https://github.com/quadrantsec/sagan/commit/ce9a6d791b8ef6a7232a5d66d462cba0299f590f
+		  https://github.com/quadrantsec/sagan/commit/54ab349c5f0c07b1c251e874cd55bd7228f27ab4
+		  https://github.com/quadrantsec/sagan/commit/350edda012b6588b81d1b165b8e7e495e92168b3
+	 	  https://github.com/quadrantsec/sagan/commit/90f479b28ef14e55f7fd0652c0a6fd3c90d0485e
+		  https://github.com/quadrantsec/sagan/commit/54ab349c5f0c07b1c251e874cd55bd7228f27ab4
+		  https://github.com/quadrantsec/sagan/commit/21f753d2ad0f1c4fe5488ad5e325b9ddb3b8f2c7
+		
+		* Allow message "mapping" to take place in the signature. For example;  
+
+		  json_map: "src_ip", ".ClientIP"
+
+		  This will map the JSON data value of ".ClientIP" to Sagan internal engine of
+		  "src_ip".  That is,  the ".ClientIP" will become what Sagan knows as "src_ip"
+	  	  which can then be used with other keywords (threshold, after, etc).  Removed the
+		  code for the "json-message.map",  as this is a much more efficient way to map
+		  JSON data. 
+		 
+		  https://github.com/quadrantsec/sagan/commit/2382f87c187bccadb453b5aa8287952290906896
+		  https://github.com/quadrantsec/sagan/commit/977668e9f2e9f0b042ca59518d949263a68e3a1a
+
+		* Fix issue when value is "null" in JSON 
+	   	  https://github.com/quadrantsec/sagan/commit/475cbf97518a6b3b8b0c95cf7192daf66f105e8f
+
 2021/02/08 -	Sagan 2.0.1 released.
 
 		* Multiple bug fixes that address compile time issues with GCC 10. 
