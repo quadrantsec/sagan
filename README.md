@@ -1,7 +1,11 @@
 
-Join the Sagan Discord channel.
+Join the Sagan Discord channel
+------------------------------
 
 [![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED)
+
+Sagan Documentation
+-------------------
 
 Sagan "Read The Docs! https://sagan.readthedocs.io
 
