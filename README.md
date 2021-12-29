@@ -70,8 +70,7 @@ https://sagan.readthedocs.io/en/latest/
 
 For help & assistence,  check out the Sagan mailing list.  If it located at:
 https://groups.google.com/forum/#!forum/sagan-users.  You can also ask questions on the
-Sagan chat system at https://m.telephreak.org/sagan/channels/town-square.  The chat system
-is similar to "Slack".
+Sagan Discord channel at https://discord.gg/n6ReCZED
 
 If you're looking for Sagan rule sets on Github,  they are located at:
 https://github.com/beave/sagan-rules
