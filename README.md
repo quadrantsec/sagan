@@ -1,18 +1,3 @@
-
-Join the Sagan Discord channel
-------------------------------
-
-[![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED) - Sagan and Meer Discord Channel
-
-Sagan Documentation
--------------------
-
-Sagan "Read The Docs! https://sagan.readthedocs.io
-
-
-What is Sagan? 
---------------
-
 <pre>
 ,-._,-.    Sagan, the advanced Suricata/Snort like log analysis engine!
 \/)"(\/ 
@@ -22,6 +7,20 @@ What is Sagan?
  oo-oo  
 </pre>
 
+
+Join the Sagan Discord channel
+------------------------------
+
+[![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED)
+
+Sagan Documentation
+-------------------
+
+Sagan "Read The Docs! https://sagan.readthedocs.io
+
+
+What is Sagan? 
+--------------
 
 Sagan is an open source (GNU/GPLv2) high performance, real-time log 
 analysis & correlation engine.  It is written in C and uses a 
