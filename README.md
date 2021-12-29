@@ -1,4 +1,9 @@
 
+Join the Sagan Discord channel.
+
+[![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED)
+
+
 <pre>
 ,-._,-.    Sagan, the advanced Suricata/Snort like log analysis engine!
 \/)"(\/ 
