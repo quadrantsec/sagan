@@ -2,7 +2,7 @@
 Join the Sagan Discord channel
 ------------------------------
 
-[![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED)
+[![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED) - Sagan and Meer Discord Channel
 
 Sagan Documentation
 -------------------
