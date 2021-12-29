@@ -18,9 +18,9 @@ If you need to report a compile or programming issue,  please use our Github.com
 
 `https://github.com/beave/sagan/issues <https://github.com/beave/sagan/issues>`_
 
-If you want to chat about Sagan you can hit up our "Mattermost" chat system!
+If you want to chat about Sagan you can hit up our Discord channel!
 
-`https://m.telephreak.org/sagan/channels/town-square <https://m.telephreak.org/sagan/channels/town-square>`_
+`https://discord.gg/n6ReCZED  <https://https://discord.gg/n6ReCZED>`_
 
 
 
