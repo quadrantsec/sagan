@@ -10,6 +10,9 @@ Sagan Documentation
 Sagan "Read The Docs! https://sagan.readthedocs.io
 
 
+What is Sagan? 
+--------------
+
 <pre>
 ,-._,-.    Sagan, the advanced Suricata/Snort like log analysis engine!
 \/)"(\/ 
@@ -19,9 +22,6 @@ Sagan "Read The Docs! https://sagan.readthedocs.io
  oo-oo  
 </pre>
 
-
-What is Sagan? 
---------------
 
 Sagan is an open source (GNU/GPLv2) high performance, real-time log 
 analysis & correlation engine.  It is written in C and uses a 
