@@ -3,6 +3,8 @@ Join the Sagan Discord channel.
 
 [![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED)
 
+Sagan "Read The Docs! https://sagan.readthedocs.io
+
 
 <pre>
 ,-._,-.    Sagan, the advanced Suricata/Snort like log analysis engine!
