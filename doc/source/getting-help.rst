@@ -20,7 +20,7 @@ If you need to report a compile or programming issue,  please use our Github.com
 
 If you want to chat about Sagan you can hit up our Discord channel!
 
-`https://discord.gg/n6ReCZED  <https://https://discord.gg/n6ReCZED>`_
+`https://discord.gg/VS6jTjH4gW <https://discord.gg/VS6jTjH4gW>`_
 
 
 

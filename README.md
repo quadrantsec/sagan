@@ -11,7 +11,7 @@
 Join the Sagan Discord channel
 ------------------------------
 
-[![Discord](./screenshots/discord.png)](https://discord.gg/n6ReCZED)
+[![Discord](./screenshots/discord.png)](https://discord.gg/VS6jTjH4gW)
 
 Sagan Documentation
 -------------------
@@ -70,7 +70,7 @@ https://sagan.readthedocs.io/en/latest/
 
 For help & assistence,  check out the Sagan mailing list.  If it located at:
 https://groups.google.com/forum/#!forum/sagan-users.  You can also ask questions on the
-Sagan Discord channel at https://discord.gg/n6ReCZED
+Sagan Discord channel at https://discord.gg/VS6jTjH4gW
 
 If you're looking for Sagan rule sets on Github,  they are located at:
 https://github.com/beave/sagan-rules
