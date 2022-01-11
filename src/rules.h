@@ -116,6 +116,8 @@ struct _Rule_Struct
     char               json_map_key[MAX_JSON_MAP][JSON_MAX_KEY_SIZE];
     uint_fast8_t       json_map_count;
 
+    uint_fast8_t	rule_type;
+
     char content[MAX_CONTENT][256];
     char s_reference[MAX_REFERENCE][256];
     char s_classtype[32];

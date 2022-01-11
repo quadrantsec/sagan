@@ -212,7 +212,7 @@ sagan-core:
     threshold: $MMAP_DEFAULT
     track-clients: $MMAP_DEFAULT
 
-  # A "short circuit" list of terms or strings to ignore.  If the the string
+  # A "short circuit" list of terms or strings to ignore.  If the string
   # is found in pre-processing a log message, it will be dropped.  This can
   # be useful when you have log messages repeating without any useful 
   # information & you don't want to burn CPU cycles analyzing them.  Items 
@@ -484,6 +484,17 @@ outputs:
 # it takes to process events! 
  
 rules-files: 
+
+  ##################################################################################
+  # Bypass signatures - This works similar to the “ignore-list” configuration      #
+  # option but uses the Sagan rule syntax to generate “drop” criteria.  This can   #
+  # be useful to “short circuit” further analysis, thus saving CPU. These          #
+  # signatures use the “pass” rule keyword rather than “alert” or “drop.” Once a   #
+  # “pass” signature conditions are met, no figure signatures are processed, thus  #
+  # saving CPU.  Hence the reason this signature set is the first loaded.          #
+  ##################################################################################
+
+  #- $RULE_PATH/bypass.rules
 
   ##################################################################################
   # Dynamic signatures - Only use if you have the 'dynamic_load' processor enabled #

@@ -17,7 +17,7 @@ Basic Sagan rule::
 
 .. option:: alert
 
-This informs Sagan how to flag the event.  Valid options are ``alert`` or ``drop``.
+This informs Sagan how to flag the event.  Valid options are ``alert``, ``drop`` or ``pass``.  When using the ``pass`` option and the signatures conditions are met,  no other signatures are processed.
 
 .. option:: any
 

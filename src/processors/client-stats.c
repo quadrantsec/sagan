@@ -160,8 +160,8 @@ void Client_Stats_Handler( void )
                     json_object *jdest_addr = json_object_new_string( config->sagan_host  );
                     json_object_object_add(jobj,"dest_ip", jdest_addr);
 
-		    json_object *jflow_id = json_object_new_int64( FlowGetId(tp) );
-		    json_object_object_add(jobj,"flow_id", jflow_id);
+                    json_object *jflow_id = json_object_new_int64( FlowGetId(tp) );
+                    json_object_object_add(jobj,"flow_id", jflow_id);
 
                     json_object *jtimestamp = json_object_new_int64( Client_Stats[i].epoch );
                     json_object_object_add(jobj,"timestamp", jtimestamp);
@@ -217,9 +217,9 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
     /* Validate inbound IP */
 
     if ( !Is_IP(ip, IPv4) || !Is_IP(ip, IPv6) )
-	    {
-		    return;
-	    }
+        {
+            return;
+        }
 
     for ( i = 0; i < counters->client_stats_count; i++ )
         {

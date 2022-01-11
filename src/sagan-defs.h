@@ -215,6 +215,10 @@ typedef void json_object;
 #define FLEXBIT				2
 #define XBIT				3
 
+#define RULE_TYPE_ALERT			1	/* "alert" */
+#define RULE_TYPE_DROP			2	/* "drop" */
+#define RULE_TYPE_PASS			3	/* "pass" */
+
 #define PARSE_HASH_MD5			1
 #define	PARSE_HASH_SHA1			2
 #define PARSE_HASH_SHA256		3

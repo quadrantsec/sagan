@@ -246,6 +246,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     for(b=0; b < counters->rulecount; b++)
         {
+            printf("Rule counter: %d\n", b);
 
             /* Process "normal" rules.  Skip dynamic rules if it's not time to process them */
 
@@ -726,14 +727,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             /* If the syslog_host is localhost, then we set it to the sagan_host value */
 
-			    IP2Bit(SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_bits);
+                            IP2Bit(SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_bits);
 
-			    if ( is_notlocalhost( SaganProcSyslog_LOCAL->syslog_bits ) )
-			    	{
-				   strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, MAXIP);
-				}
+                            if ( is_notlocalhost( SaganProcSyslog_LOCAL->syslog_bits ) )
+                                {
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, MAXIP);
+                                }
 
-			    /* We never want the source or destiniation to be null or localhost */
+                            /* We never want the source or destiniation to be null or localhost */
 
                             if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) ||
                                     SaganProcSyslog_LOCAL->src_ip[0] == '\0' ||
@@ -1321,12 +1322,19 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                             NULL );
 #endif
 
+
+                                                            /* If this is a "pass" signature,  we can stop processing now */
+
+                                                            if ( rulestruct[b].rule_type == RULE_TYPE_PASS )
+                                                                {
+                                                                    break;
+                                                                }
+
                                                         }
                                                     else
                                                         {
 
                                                             Dynamic_Rules(SaganProcSyslog_LOCAL, b, SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->dst_ip);
-
 
                                                         }
 

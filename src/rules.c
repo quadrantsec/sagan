@@ -339,50 +339,54 @@ void Load_Rules( const char *ruleset )
 
             rc=0;
 
-            if (!Sagan_strstr(rulebuf, "alert"))
+            if ( rulebuf[0] == 'a' && rulebuf[1] == 'l' && rulebuf[2] == 'e' && rulebuf[3] == 'r' && rulebuf[4] == 't' )
                 {
-                    rc++;
+                    rulestruct[counters->rulecount].rule_type = RULE_TYPE_ALERT;
                 }
 
-            if (!Sagan_strstr(rulebuf, "drop"))
+            else if ( rulebuf[0] == 'd' && rulebuf[1] == 'r' && rulebuf[2] == 'o' && rulebuf[3] == 'p' )
                 {
-                    rc++;
+                    rulestruct[counters->rulecount].rule_type = RULE_TYPE_DROP;
                 }
 
-            if ( rc == 2 )
+            else if ( rulebuf[0] == 'p' && rulebuf[1] == 'a' && rulebuf[2] == 's' && rulebuf[3] == 's' )
                 {
-                    Sagan_Log(ERROR, "[%s, line %d] %s on line %d appears to not have a 'alert' or 'drop', Abort", __FILE__, __LINE__, ruleset_fullname, linecount);
-                    continue;
+                    rulestruct[counters->rulecount].rule_type = RULE_TYPE_PASS;
+                }
+
+            if ( rulestruct[counters->rulecount].rule_type == 0 )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] %s on line %d appears to not have a 'alert', 'drop' or 'pass', Abort.", __FILE__, __LINE__, ruleset_fullname, linecount, rulestruct[counters->rulecount].rule_type);
                 }
 
             rc=0;
 
-            if (!Sagan_strstr(rulebuf, "alert any ") && !Sagan_strstr(rulebuf, "drop any "))
+            if (!Sagan_strstr(rulebuf, "alert any ") && !Sagan_strstr(rulebuf, "drop any ") && !Sagan_strstr(rulebuf, "pass any ") )
                 {
                     rc++;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert ip ") && !Sagan_strstr(rulebuf, "drop ip "))
+            if (!Sagan_strstr(rulebuf, "alert ip ") && !Sagan_strstr(rulebuf, "drop ip ") && !Sagan_strstr(rulebuf, "pass ip ") )
                 {
                     rc++;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert tcp ") && !Sagan_strstr(rulebuf, "drop tcp "))
+            if (!Sagan_strstr(rulebuf, "alert tcp ") && !Sagan_strstr(rulebuf, "drop tcp ") && !Sagan_strstr(rulebuf, "pass tcp ") )
                 {
                     rc++;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert udp ") && !Sagan_strstr(rulebuf, "drop udp "))
+            if (!Sagan_strstr(rulebuf, "alert udp ") && !Sagan_strstr(rulebuf, "drop udp ") && !Sagan_strstr(rulebuf, "pass udp ") )
                 {
                     rc++;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert icmp ") && !Sagan_strstr(rulebuf, "drop icmp "))
+            if (!Sagan_strstr(rulebuf, "alert icmp ") && !Sagan_strstr(rulebuf, "drop icmp ") && !Sagan_strstr(rulebuf, "pass icmp ") )
                 {
                     rc++;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert syslog ") && !Sagan_strstr(rulebuf, "drop syslog "))
+            if (!Sagan_strstr(rulebuf, "alert syslog ") && !Sagan_strstr(rulebuf, "drop syslog ") && !Sagan_strstr(rulebuf, "pass syslog ") )
                 {
                     rc++;
                 }
