@@ -25,5 +25,5 @@
  */
 
 void Log_JSON ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct timeval tp );
-void Alert_JSON( _Sagan_Event * );
+void Alert_JSON( const char *alert_data );
 

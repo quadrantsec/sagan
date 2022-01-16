@@ -18,4 +18,4 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-void External_Thread( _Sagan_Event *, char * );
+void External_Thread( char *alert_data, char *execute_script);

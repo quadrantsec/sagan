@@ -246,7 +246,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     for(b=0; b < counters->rulecount; b++)
         {
-            printf("Rule counter: %d\n", b);
 
             /* Process "normal" rules.  Skip dynamic rules if it's not time to process them */
 

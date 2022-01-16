@@ -36,6 +36,7 @@
 #include "output.h"
 #include "rules.h"
 #include "sagan-config.h"
+#include "json-handler.h"
 
 #include "output-plugins/alert.h"
 #include "output-plugins/external.h"
@@ -64,6 +65,9 @@ void Output( _Sagan_Event *Event )
     /******************************/
     /* Single threaded operations */
     /******************************/
+  
+    char alert_data[MAX_SYSLOGMSG+1024] = { 0 };
+    Format_JSON_Alert_EVE( Event, alert_data, sizeof(alert_data) );
 
     /* Single threaded */
 
@@ -82,7 +86,7 @@ void Output( _Sagan_Event *Event )
 
             if ( rulestruct[Event->rule_position].xbit_noeve == false && rulestruct[Event->rule_position].flexbit_noeve == false )
                 {
-                    Alert_JSON(Event);
+			Alert_JSON( alert_data );
                 }
         }
 
@@ -128,7 +132,7 @@ void Output( _Sagan_Event *Event )
 
     if (  rulestruct[Event->rule_position].external_flag )
         {
-            External_Thread( Event, rulestruct[Event->rule_position].external_program );
+	    External_Thread( alert_data, rulestruct[Event->rule_position].external_program );
         }
 }
 

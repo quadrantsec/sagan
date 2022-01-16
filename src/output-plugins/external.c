@@ -54,8 +54,7 @@ extern struct _SaganConfig *config;
 
 pthread_mutex_t ext_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
-void External_Thread ( _Sagan_Event *Event, char *execute_script )
+void External_Thread ( char *alert_data, char *execute_script )
 {
 
 #ifndef HAVE_LIBFASTJSON
@@ -69,135 +68,10 @@ void External_Thread ( _Sagan_Event *Event, char *execute_script )
     uint_fast32_t n;
     uint_fast32_t pid;
     char buf[MAX_SYSLOGMSG];
-    char tmpref[256];
-    char timebuf[64] = { 0 };
-
-    char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
-    char data[MAX_SYSLOGMSG*3] = { 0 };
-
-    char *drop=NULL;
-    char *proto=NULL;
-
-    struct json_object *jobj;
 
     if ( debug->debugexternal )
         {
-            Sagan_Log(WARN, "[%s, line %d] In External_Thread()", __FILE__, __LINE__);
-        }
-
-    Reference_Lookup( Event->rule_position, 1, tmpref, sizeof(tmpref));
-    CreateTimeString(&Event->event_time, timebuf, sizeof(timebuf), 1);
-
-    if ( Event->drop == 1 )
-        {
-            drop="true";
-        }
-    else
-        {
-            drop="false";
-        }
-
-    if ( Event->ip_proto == 17 )
-        {
-            proto = "UDP";
-        }
-
-    else if ( Event->ip_proto == 6 )
-        {
-            proto = "TCP";
-        }
-
-    else if ( Event->ip_proto == 1 )
-        {
-            proto = "ICMP";
-        }
-    else if ( Event->ip_proto != 1 || Event->ip_proto != 6 || Event->ip_proto != 17 )
-        {
-            proto = "UNKNOWN";
-        }
-
-    jobj = json_object_new_object();
-
-    json_object *jsensor_id = json_object_new_int64( Event->sid );
-    json_object_object_add(jobj,"signature_id", jsensor_id);
-
-    json_object *jsignature = json_object_new_string( Event->f_msg );
-    json_object_object_add(jobj,"signature", jsignature);
-
-    json_object *jrev = json_object_new_int64( Event->rev );
-    json_object_object_add(jobj,"rev", jrev);
-
-    json_object *jseverity = json_object_new_int( Event->pri );
-    json_object_object_add(jobj,"severity", jseverity);
-
-    json_object *jcategory = json_object_new_string( Event->class );
-    json_object_object_add(jobj,"category", jcategory);
-
-    json_object *jpriority = json_object_new_int( Event->pri );
-    json_object_object_add(jobj,"priority", jpriority);
-
-    json_object *jtimestamp = json_object_new_string( timebuf );
-    json_object_object_add(jobj,"timestamp", jtimestamp);
-
-    json_object *jdrop = json_object_new_string( drop );
-    json_object_object_add(jobj,"drop", jdrop);
-
-    json_object *jflow_id = json_object_new_int64( FlowGetId(Event->event_time) );
-    json_object_object_add(jobj,"flow_id", jflow_id);
-
-    json_object *jin_iface = json_object_new_string( config->eve_interface );
-    json_object_object_add(jobj,"in_iface", jin_iface);
-
-    json_object *jip_src = json_object_new_string( Event->ip_src );
-    json_object_object_add(jobj,"src_ip", jip_src);
-
-    json_object *jsrc_port = json_object_new_int( Event->src_port );
-    json_object_object_add(jobj,"src_port", jsrc_port);
-
-//    json_object *jcountry_src = json_object_new_string( Event->country_src );
-//    json_object_object_add(jobj,"src_country", jcountry_src);
-
-    json_object *jip_dst = json_object_new_string( Event->ip_dst );
-    json_object_object_add(jobj,"dest_ip", jip_dst);
-
-    json_object *jdst_port = json_object_new_int( Event->dst_port );
-    json_object_object_add(jobj,"dest_port", jdst_port);
-
-//    json_object *jcountry_dst = json_object_new_string( Event->country_dst );
-//    json_object_object_add(jobj,"dst_country", jcountry_dst);
-
-    json_object *jxff = json_object_new_string( Event->host );
-    json_object_object_add(jobj,"xff", jxff);
-
-    json_object *jproto = json_object_new_string( proto );
-    json_object_object_add(jobj,"proto", jproto);
-
-    json_object *jsyslog_facility = json_object_new_string( Event->facility );
-    json_object_object_add(jobj,"syslog_facility", jsyslog_facility);
-
-    json_object *jsyslog_level = json_object_new_string( Event->level );
-    json_object_object_add(jobj,"syslog_level", jsyslog_level);
-
-    json_object *jsyslog_priority = json_object_new_string( Event->priority );
-    json_object_object_add(jobj,"syslog_priority", jsyslog_priority);
-
-    json_object *jsyslog_message = json_object_new_string( Event->message );
-    json_object_object_add(jobj,"syslog_message", jsyslog_message);
-
-    /* liblognorm doesn't support JSON_C_TO_STRING_NOSLASHESCAPE :( */
-
-    snprintf(tmp_data, sizeof(tmp_data), "%s", json_object_to_json_string(jobj));
-    tmp_data[strlen(tmp_data) - 2] = '\0';
-
-    snprintf(data, sizeof(data), "%s, \"normalize\": %s }\n", tmp_data, !Event->json_normalize ? "{}" : Event->json_normalize);
-
-    data[ sizeof(data) - 1 ] = '\0';
-
-    json_object_put(jobj);
-
-    if ( debug->debugexternal )
-        {
-            Sagan_Log(WARN, "[%s, line %d] Sending: %s", __FILE__, __LINE__, data);
+            Sagan_Log(WARN, "[%s, line %d] Sending: %s", __FILE__, __LINE__, alert_data);
         }
 
     pthread_mutex_lock( &ext_mutex );
@@ -246,7 +120,7 @@ void External_Thread ( _Sagan_Event *Event, char *execute_script )
 
     /* Write to child input */
 
-    n = write(in[1], data, strlen(data));
+    n = write(in[1], alert_data, strlen(alert_data));
     close(in[1]);
 
     n = read(out[0], buf, sizeof(buf));

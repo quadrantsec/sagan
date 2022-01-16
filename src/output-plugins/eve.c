@@ -45,10 +45,9 @@
 
 extern struct _SaganConfig *config;
 
-void Alert_JSON( _Sagan_Event *Event )
+void Alert_JSON( const char *alert_data )
 {
 
-    char alert_data[MAX_SYSLOGMSG+1024] = { 0 };
     FILE *eve_stream;
     int eve_stream_int = 0;
 
@@ -61,8 +60,6 @@ void Alert_JSON( _Sagan_Event *Event )
     eve_stream_int = fileno( eve_stream );
 
     File_Lock( eve_stream_int );
-
-    Format_JSON_Alert_EVE( Event, alert_data, sizeof(alert_data) );
     fprintf(eve_stream, "%s\n", alert_data);
 
     File_Unlock( eve_stream_int );

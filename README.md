@@ -2,7 +2,7 @@
 ,-._,-.    Sagan, the advanced Suricata/Snort like log analysis engine!
 \/)"(\/ 
  (_o_)     Champ Clark III & The Quadrant InfoSec Team [quadrantsec.com]
- /   \/)   Copyright (C) 2009-2021 Quadrant Information Security, et al.
+ /   \/)   Copyright (C) 2009-2022 Quadrant Information Security, et al.
 (|| ||) 
  oo-oo  
 </pre>
