@@ -43,7 +43,16 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
     uint_fast8_t z = 0;
     uint_fast32_t alter_num = 0;
-    char alter_content[MAX_SYSLOGMSG] = { 0 };
+
+    char *alter_content = malloc( MAX_SYSLOGMSG );
+
+    if ( alter_content == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(alter_content, 0, MAX_SYSLOGMSG);
 
     /* Content: OFFSET */
 
@@ -118,6 +127,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
                             if ( !Sagan_stristr(alter_content, rulestruct[rule_position].content[z], true))
                                 {
+                                    free(alter_content);
                                     return(false);
                                 }
 
@@ -129,6 +139,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
                             if ( Sagan_stristr(alter_content, rulestruct[rule_position].content[z], true))
                                 {
+                                    free(alter_content);
                                     return(false);
                                 }
 
@@ -143,6 +154,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
                             if ( !Sagan_strstr(alter_content, rulestruct[rule_position].content[z]))
                                 {
+                                    free(alter_content);
                                     return(false);
                                 }
 
@@ -154,6 +166,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
                             if ( Sagan_strstr(alter_content, rulestruct[rule_position].content[z]))
                                 {
+                                    free(alter_content);
                                     return(false);
                                 }
 
@@ -161,6 +174,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
                 }
         }
 
+    free(alter_content);
     return(true);
 }
 

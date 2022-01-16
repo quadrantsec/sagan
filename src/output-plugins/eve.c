@@ -70,9 +70,19 @@ void Alert_JSON( const char *alert_data )
 void Log_JSON ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct timeval tp )
 {
 
-    char log_data[MAX_SYSLOGMSG+1024] = { 0 };
     FILE *eve_stream;
     int eve_stream_int = 0;
+
+    char *log_data = malloc( MAX_SYSLOGMSG );
+
+    if ( log_data == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(log_data, 0, MAX_SYSLOGMSG);
+
 
     if (( eve_stream = fopen( config->eve_filename, "a" )) == NULL )
         {
@@ -89,6 +99,7 @@ void Log_JSON ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct timeval tp )
 
     File_Unlock( eve_stream_int );
     fclose(eve_stream);
+    free(log_data);
 
 
 }

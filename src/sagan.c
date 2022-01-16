@@ -250,8 +250,6 @@ int main(int argc, char **argv)
     bool fifoerr = false;
     bool ignore_flag = false;
 
-    char syslogstring[MAX_SYSLOGMSG] = { 0 };
-
     signed char c;
     int rc=0;
 
@@ -264,6 +262,17 @@ int main(int argc, char **argv)
     bool debugflag = false;
 
     uint_fast16_t batch_count = 0;
+
+    char *syslogstring = malloc( MAX_SYSLOGMSG );
+
+    if ( syslogstring == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(syslogstring, 0, MAX_SYSLOGMSG);
+
 
     /* Allocate memory for global struct _SaganDebug */
 
@@ -701,6 +710,11 @@ int main(int argc, char **argv)
         }
 
     pthread_mutex_unlock(&SaganRulesLoadedMutex);
+
+    //char syslog[MAX_SYSLOG_BATCH][MAX_SYSLOGMSG];
+    //char *batch_string = malloc ( MAX_SYSLOG_BATCH * MAX_SYSLOGMSG );
+
+
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
 
@@ -1364,6 +1378,7 @@ int main(int argc, char **argv)
 
         } /* End of while(1) */
 
+    free(syslogstring);
     return(0);
 } /* End of main */
 

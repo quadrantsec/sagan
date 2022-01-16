@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <pthread.h>
 
 #include "sagan.h"
@@ -65,9 +66,19 @@ void Output( _Sagan_Event *Event )
     /******************************/
     /* Single threaded operations */
     /******************************/
-  
-    char alert_data[MAX_SYSLOGMSG+1024] = { 0 };
-    Format_JSON_Alert_EVE( Event, alert_data, sizeof(alert_data) );
+
+
+    char *alert_data = malloc( MAX_SYSLOGMSG );
+
+    if ( alert_data == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(alert_data, 0, MAX_SYSLOGMSG);
+
+    Format_JSON_Alert_EVE( Event, alert_data, MAX_SYSLOGMSG );
 
     /* Single threaded */
 
@@ -86,7 +97,7 @@ void Output( _Sagan_Event *Event )
 
             if ( rulestruct[Event->rule_position].xbit_noeve == false && rulestruct[Event->rule_position].flexbit_noeve == false )
                 {
-			Alert_JSON( alert_data );
+                    Alert_JSON( alert_data );
                 }
         }
 
@@ -132,7 +143,9 @@ void Output( _Sagan_Event *Event )
 
     if (  rulestruct[Event->rule_position].external_flag )
         {
-	    External_Thread( alert_data, rulestruct[Event->rule_position].external_program );
+            External_Thread( alert_data, rulestruct[Event->rule_position].external_program );
         }
+
+    free(alert_data);
 }
 

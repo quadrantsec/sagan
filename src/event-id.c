@@ -61,7 +61,7 @@ extern struct _Rule_Struct *rulestruct;
 bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
-    char alter_message[MAX_SYSLOGMSG] = { 0 };
+    char alter_message[11] = { 0 };
     char tmp_content[MAX_EVENT_ID + 10] = { 0 };
 
     int i = 0;
@@ -125,6 +125,5 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
             return(false);
         }
-
 
 }

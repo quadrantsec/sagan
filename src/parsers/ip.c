@@ -97,8 +97,6 @@ int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cac
 
     uint_fast32_t current_position = 0;
 
-    char mod_string[MAX_SYSLOGMSG] = { 0 };
-
     char tmp_token[64] = { 0 };
 
     char *ptr1 = NULL;
@@ -123,6 +121,16 @@ int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cac
     uint_fast16_t num_hashes = 0;
 
     uint_fast16_t port = config->sagan_port;
+
+    char *mod_string = malloc( MAX_SYSLOGMSG );
+
+    if ( mod_string  == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(mod_string, 0, MAX_SYSLOGMSG);
 
     for (i=0; i<strlen(syslog_message); i++)
         {
@@ -985,7 +993,7 @@ int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cac
 
         }
 
-
+    free(mod_string);
     return(current_position);
 }
 

@@ -211,7 +211,6 @@ void To_LowerC(char *const s)
 void Sagan_Log (uint_fast8_t type, const char *format,... )
 {
 
-    char buf[MAX_SYSLOGMSG * 2] = { 0 };
     va_list ap;
     va_start(ap, format);
     char *chr="*";
@@ -221,6 +220,16 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
     t = time(NULL);
     now=localtime(&t);
     strftime(curtime, sizeof(curtime), "%m/%d/%Y %H:%M:%S",  now);
+
+    char *buf = malloc( MAX_SYSLOGMSG );
+
+    if ( buf == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(buf, 0, MAX_SYSLOGMSG);
 
     if ( type == ERROR )
         {
@@ -237,7 +246,7 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
             chr="D";
         }
 
-    vsnprintf(buf, sizeof(buf), format, ap);
+    vsnprintf(buf, MAX_SYSLOGMSG, format, ap);
 
     File_Lock( config->sagan_log_stream_int );
 
@@ -250,9 +259,7 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     if ( config->sagan_log_syslog == true )
         {
-//            openlog("sagan", LOG_PID, LOG_DAEMON);
             syslog(LOG_INFO, "[%s] %s", chr, buf);
-//            closelog();
         }
 
     if ( config->daemonize == 0 && config->quiet == 0 )
@@ -262,9 +269,11 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     if ( type == ERROR )
         {
+            free(buf);
             exit(1);
         }
 
+    free(buf);
 }
 
 bool Mask2Bit(int mask, unsigned char *out)

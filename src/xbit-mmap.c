@@ -272,12 +272,21 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
 #ifdef HAVE_LIBFASTJSON
 
             struct json_object *jobj;
-            char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
 
             unsigned long b64_len = strlen(SaganProcSyslog_LOCAL->syslog_message) * 2;
             uint8_t b64_target[b64_len];
 
             char *proto = "UNKNOWN";
+
+            char *tmp_data = malloc( MAX_SYSLOGMSG*2 );
+
+            if ( tmp_data == NULL )
+                {
+                    fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+                    exit(-1);
+                }
+
+            memset(tmp_data, 0, MAX_SYSLOGMSG*2);
 
             jobj = json_object_new_object();
 
@@ -374,8 +383,8 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
             json_object *jproto = json_object_new_string( proto );
             json_object_object_add(jobj,"proto", jproto);
 
-            snprintf(tmp_data, sizeof(tmp_data), "%s", json_object_to_json_string(jobj));
-            tmp_data[sizeof(tmp_data) - 1] = '\0';
+            snprintf(tmp_data, MAX_SYSLOGMSG*2, "%s", json_object_to_json_string(jobj));
+            tmp_data[ (MAX_SYSLOGMSG*2) - 1 ] = '\0';
 
             if ( rulestruct[rule_position].xbit_isset_count == xbit_isset )
                 {
@@ -386,6 +395,7 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
 
 #endif
 
+            free(tmp_data);
             return(true);
         }
 
@@ -394,6 +404,7 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
             Sagan_Log(DEBUG, "[%s, line %d] Xbit_Condition is returning false.", __FILE__, __LINE__);
         }
 
+    //free(tmp_data);
     return(false);
 
 }

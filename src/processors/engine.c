@@ -150,8 +150,16 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     char tmpbuf[256] = { 0 };
 
-    char syslog_append_program[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6];
-    char syslog_append_orig_message[MAX_SYSLOGMSG];
+    char *syslog_append_orig_message = malloc( MAX_SYSLOGMSG );
+
+    if ( syslog_append_orig_message == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(syslog_append_orig_message, 0, MAX_SYSLOGMSG);
+
     bool append_program_flag = false;
 
     struct timeval tp;
@@ -198,7 +206,16 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                     SaganProcSyslog_LOCAL->syslog_program[1] == '{' )
                 {
 
-                    char tmp_json[MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM] = { 0 };
+                    char *tmp_json = malloc( MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM );
+
+                    if ( tmp_json == NULL )
+                        {
+                            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+                            exit(-1);
+                        }
+
+                    memset(tmp_json, 0, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM);
+
 
                     if ( debug->debugjson )
                         {
@@ -207,12 +224,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     /* Merge program+message */
 
-                    snprintf(tmp_json, sizeof(tmp_json), "%s%s", SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
+                    snprintf(tmp_json, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM, "%s%s", SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
 
                     /* Zero out program (might get set by JSON) */
 
                     SaganProcSyslog_LOCAL->syslog_program[0] = '\0';
                     strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, sizeof(SaganProcSyslog_LOCAL->syslog_message));
+                    free( tmp_json );
 
                 }
 
@@ -513,12 +531,25 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             if ( rulestruct[b].append_program == true && append_program_flag == false &&
                                     SaganProcSyslog_LOCAL->syslog_program[0] != '\0' )
                                 {
-                                    memcpy(syslog_append_orig_message, SaganProcSyslog_LOCAL->syslog_message, sizeof( syslog_append_orig_message ));
 
-                                    snprintf(syslog_append_program, sizeof(syslog_append_program), "%s | %s", SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL->syslog_program);
-                                    syslog_append_program[ sizeof(syslog_append_program) - 1 ] = '\0';
+                                    char *syslog_append_program = malloc( MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6 );
+
+                                    if ( syslog_append_program == NULL )
+                                        {
+                                            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+                                            exit(-1);
+                                        }
+
+                                    memset(syslog_append_program, 0, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6);
+
+                                    memcpy(syslog_append_orig_message, SaganProcSyslog_LOCAL->syslog_message, MAX_SYSLOGMSG );
+
+                                    snprintf(syslog_append_program, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6, "%s | %s", SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL->syslog_program);
+                                    syslog_append_program[ (MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6) - 1 ] = '\0';
                                     memcpy(SaganProcSyslog_LOCAL->syslog_message, syslog_append_program, sizeof(SaganProcSyslog_LOCAL->syslog_message));
                                     append_program_flag = true;
+
+                                    free( syslog_append_program) ;
                                 }
 
                             /* If the signature _doesn't_ have an "append_program" but we've already
@@ -1368,6 +1399,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     free(lookup_cache);
     free(SaganRouting);
+    free(syslog_append_orig_message);
 
 #ifdef HAVE_LIBMAXMINDDB
 

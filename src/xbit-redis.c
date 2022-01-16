@@ -67,12 +67,21 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
 
     int r = 0;
     char tmp_ip[MAXIP] = { 0 };
-    char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
 
     unsigned long b64_len = strlen(SaganProcSyslog_LOCAL->syslog_message) * 2;
     uint8_t b64_target[b64_len];
 
     char *proto = "UNKNOWN";
+
+    char *tmp_data= malloc( MAX_SYSLOGMSG*2 );
+
+    if ( tmp_data == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(tmp_data, 0, MAX_SYSLOGMSG*2);
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
@@ -188,8 +197,8 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
                             json_object *jproto = json_object_new_string( proto );
                             json_object_object_add(jobj,"proto", jproto);
 
-                            snprintf(tmp_data, sizeof(tmp_data), "%s", json_object_to_json_string(jobj));
-                            tmp_data[sizeof(tmp_data) - 1] = '\0';
+                            snprintf(tmp_data, MAX_SYSLOGMSG*2, "%s", json_object_to_json_string(jobj));
+                            tmp_data[ (MAX_SYSLOGMSG*2) - 1] = '\0';
 
                             json_object_put(jobj);
 
@@ -249,6 +258,8 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
                         }
                 }
         }
+
+    free(tmp_data);
 }
 
 /****************************************************************/
@@ -260,8 +271,17 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
 
     int r;
     char redis_command[512] = { 0 };
-    char redis_results[MAX_SYSLOGMSG] = { 0 };
     char tmp_ip[MAXIP] = { 0 };
+
+    char *redis_results = malloc( MAX_SYSLOGMSG );
+
+    if ( redis_results == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(redis_results, 0, MAX_SYSLOGMSG);
 
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
@@ -285,6 +305,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
                                     Sagan_Log(DEBUG, "[%s, line %d] Xbit '%s' was not found IP address %s for isset. Returning false.", __FILE__, __LINE__, rulestruct[rule_position].xbit_name[r], tmp_ip);
                                 }
 
+                            free(redis_results);
                             return(false);
                         }
 
@@ -296,7 +317,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
                                     Sagan_Log(DEBUG, "[%s, line %d] Xbit '%s' was found for IP address %s for isnotset. Returning false.", __FILE__, __LINE__, rulestruct[rule_position].xbit_name[r], tmp_ip);
                                 }
 
-
+                            free(redis_results);
                             return(false);
                         }
                 }
@@ -312,6 +333,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
             strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
         }
 
+    free(redis_results);
     return(true);
 
 }

@@ -40,13 +40,22 @@ extern struct _SaganConfig *config;
 
 void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
 {
-    char mod_string[MAX_SYSLOGMSG];
 
     char *ptmp=NULL;
     char *tok=NULL;
     char tmp[SHA256_HASH_SIZE+1];
 
     uint_fast32_t i;
+
+    char *mod_string = malloc( MAX_SYSLOGMSG );
+
+    if ( mod_string == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(mod_string, 0, MAX_SYSLOGMSG);
 
     /* Remove anything we dont want */
 
@@ -94,6 +103,7 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
                             if ( Validate_HEX(tmp) == true )
                                 {
                                     snprintf(str, size, "%s", tmp);
+                                    free(mod_string);
                                     return;
                                 }
                         }
@@ -107,6 +117,7 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
                             if ( Validate_HEX(tmp) == true )
                                 {
                                     snprintf(str, size, "%s", tmp);
+                                    free(mod_string);
                                     return;
                                 }
                         }
@@ -121,6 +132,7 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
                             if ( Validate_HEX(tmp) == true )
                                 {
                                     snprintf(str, size, "%s", tmp);
+                                    free(mod_string);
                                     return;
                                 }
                         }
@@ -132,7 +144,9 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
         }
 
     tmp[0] = '\0';
+    free(mod_string);
     snprintf(str, size, "%s", tmp);
+
 }
 
 

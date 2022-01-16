@@ -241,8 +241,17 @@ void Redis_Writer ( void )
 
     char command[16] = { 0 };
     char key[128] = { 0 };
-    char value[MAX_SYSLOGMSG*2];
     uint_fast32_t expire = 0;
+
+    char *value = malloc( MAX_SYSLOGMSG*2 );
+
+    if ( value  == NULL )
+        {
+            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+            exit(-1);
+        }
+
+    memset(value, 0, MAX_SYSLOGMSG*2);
 
     Redis_Writer_Connect();
 
@@ -259,7 +268,7 @@ void Redis_Writer ( void )
 
             strlcpy(command, Sagan_Redis_Write[redis_msgslot].command, sizeof(command));
             strlcpy(key, Sagan_Redis_Write[redis_msgslot].key, sizeof(key));
-            strlcpy(value, Sagan_Redis_Write[redis_msgslot].value, sizeof(value));
+            strlcpy(value, Sagan_Redis_Write[redis_msgslot].value, MAX_SYSLOGMSG*2);
             expire = Sagan_Redis_Write[redis_msgslot].expire;
 
             pthread_mutex_unlock(&SaganRedisWorkMutex);
@@ -326,6 +335,7 @@ void Redis_Writer ( void )
                 }
         }
 
+    free(value);
     free(Sagan_Redis_Write);
 
 }
