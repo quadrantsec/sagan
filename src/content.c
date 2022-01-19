@@ -83,7 +83,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
             else
                 {
 
-                    strlcpy(alter_content, syslog_message, sizeof(alter_content));
+                    strlcpy(alter_content, syslog_message, MAX_SYSLOGMSG);
 
                 }
 
