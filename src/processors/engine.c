@@ -109,6 +109,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
         }
 
+    memset( SaganRouting, 0, sizeof(_Sagan_Routing) ); 
+
     SaganRouting->check_flow_return = true;
 
 #ifdef HAVE_LIBMAXMINDDB
