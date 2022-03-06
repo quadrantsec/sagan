@@ -157,6 +157,7 @@ bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fas
         {
             for ( i=0; i<rulestruct[rule_position].meta_content_containers[z].meta_counter; i++ )
                 {
+
                     if ( rulestruct[rule_position].meta_content_case[z] == true )
                         {
 

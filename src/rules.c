@@ -155,7 +155,7 @@ void Load_Rules( const char *ruleset )
 
     char tmp4[MAX_CHECK_FLOWS * 10] = { 0 };
     char tmp3[MAX_CHECK_FLOWS * 21] = { 0 };
-    char tmp2[RULEBUF] = { 0 };
+    char tmp2[CONFBUF] = { 0 };
     char tmp[2] = { 0 };
     char tmp1[CONFBUF] = { 0 };
 
@@ -181,8 +181,8 @@ void Load_Rules( const char *ruleset )
     uint16_t json_map_count=0;
     uint8_t meta_content_count=0;
 
-    uint8_t meta_content_converted_count=0;
-    uint8_t json_meta_content_converted_count=0;
+    uint16_t meta_content_converted_count=0;
+    uint16_t json_meta_content_converted_count=0;
     uint8_t json_pcre_count=0;
     uint8_t json_meta_content_count=0;
     uint8_t pcre_count=0;

@@ -88,14 +88,14 @@ typedef struct meta_content_conversion meta_content_conversion;
 struct meta_content_conversion
 {
     char meta_content_converted[MAX_META_CONTENT_ITEMS][256];
-    uint_fast8_t  meta_counter;
+    uint_fast16_t  meta_counter;
 };
 
 typedef struct json_meta_content_conversion json_meta_content_conversion;
 struct json_meta_content_conversion
 {
     char json_meta_content_converted[MAX_JSON_META_CONTENT_ITEMS][256];
-    uint_fast8_t json_meta_counter;
+    uint_fast16_t json_meta_counter;
 };
 
 
