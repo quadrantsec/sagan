@@ -507,7 +507,7 @@ int DNS_Lookup( const char *host, char *str, size_t size )
 void Replace_String(const char *in_str, char *orig, char *rep, char *str, size_t size)
 {
 
-    char buffer[4096] = { 0 };
+    char buffer[MAX_VAR_VALUE_SIZE] = { 0 };
     char *p = NULL;
 
     if(!(p = strstr(in_str, orig)))
