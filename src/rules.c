@@ -2288,7 +2288,7 @@ void Load_Rules( const char *ruleset )
 
                                     if (rc != 0 || jit != 1)
                                         {
-                                            Sagan_Log(WARN, "[%s, line %d] PCRE JIT does not support regexp in %s at line %d (json_pcre: \"%s\"). Continuing without PCRE JIT enabled for this rule.", __FILE__, __LINE__, ruleset_fullname, linecount, pcrerule);
+                                            Sagan_Log(WARN, "[%s, line %d] PCRE JIT does not support regexp in %s at line %d. Continuing without PCRE JIT enabled for this rule.", __FILE__, __LINE__, ruleset_fullname, linecount);
                                         }
                                 }
 
