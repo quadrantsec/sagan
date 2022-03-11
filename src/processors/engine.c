@@ -784,8 +784,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     strlcpy(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->syslog_host, MAXIP);
                                 }
 
-//                            printf("ip_src: %s  (%d),  ip_dest: %s (%d)\n", SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_is_valid, SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_is_valid);
-
                             /* parse_hash: md5 */
 
                             if ( SaganProcSyslog_LOCAL->md5[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )

@@ -273,7 +273,6 @@ int main(int argc, char **argv)
 
     memset(syslogstring, 0, MAX_SYSLOGMSG);
 
-
     /* Allocate memory for global struct _SaganDebug */
 
     debug = malloc(sizeof(_SaganDebug));
@@ -713,8 +712,6 @@ int main(int argc, char **argv)
 
     //char syslog[MAX_SYSLOG_BATCH][MAX_SYSLOGMSG];
     //char *batch_string = malloc ( MAX_SYSLOG_BATCH * MAX_SYSLOGMSG );
-
-
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
 
@@ -1287,8 +1284,10 @@ int main(int argc, char **argv)
 
                                             /* Copy data to _LOCAL array - Need safe copy! Don't use memcpy() */
 
+//					    Sagan_Log(DEBUG,"syslogstring: %s", syslogstring);
                                             strlcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
 
+//					    Sagan_Log(DEBUG, "COPY: %s", SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]);
                                             batch_count++;
                                         }
 

@@ -155,11 +155,11 @@ void Load_Rules( const char *ruleset )
 
     char tmp4[MAX_CHECK_FLOWS * 10] = { 0 };
     char tmp3[MAX_CHECK_FLOWS * 21] = { 0 };
-    char tmp2[CONFBUF] = { 0 };
+    char tmp2[MAX_VAR_VALUE_SIZE] = { 0 };
     char tmp[2] = { 0 };
     char tmp1[CONFBUF] = { 0 };
 
-    char rule_tmp[RULEBUF] = { 0 };
+    char rule_tmp[MAX_VAR_VALUE_SIZE] = { 0 };
 
     char final_content[512] = { 0 };
 
@@ -179,12 +179,12 @@ void Load_Rules( const char *ruleset )
     uint8_t json_content_count=0;
 
     uint16_t json_map_count=0;
-    uint8_t meta_content_count=0;
+    uint32_t meta_content_count=0;
 
     uint16_t meta_content_converted_count=0;
     uint16_t json_meta_content_converted_count=0;
     uint8_t json_pcre_count=0;
-    uint8_t json_meta_content_count=0;
+    uint32_t json_meta_content_count=0;
     uint8_t pcre_count=0;
     uint8_t event_id_count;
 
@@ -1877,7 +1877,9 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             Var_To_Value(tmptoken, tmp1, sizeof(tmp1));
+
                             Content_Pipe(tmp1, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
+
                             Remove_Spaces(rule_tmp);
 
                             strlcpy(tmp2, rule_tmp, sizeof(tmp2));
@@ -1889,6 +1891,7 @@ void Load_Rules( const char *ruleset )
                                 {
 
                                     Replace_Sagan(rulestruct[counters->rulecount].meta_content_help[meta_content_count], ptmp, tmp_help, sizeof(tmp_help));
+
                                     strlcpy(rulestruct[counters->rulecount].meta_content_containers[meta_content_count].meta_content_converted[meta_content_converted_count], tmp_help, sizeof(rulestruct[counters->rulecount].meta_content_containers[meta_content_count].meta_content_converted[meta_content_converted_count]));
 
                                     meta_content_converted_count++;

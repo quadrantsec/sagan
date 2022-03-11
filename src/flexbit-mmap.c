@@ -803,12 +803,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
             snprintf(tmp_data, MAX_SYSLOGMSG*2, "%s", json_object_to_json_string(jobj));
             tmp_data[ (MAX_SYSLOGMSG*2) - 1] = '\0';
 
-//	    DEBUG: NOT SURE BOUT THIS ONE
-//            strlcpy( SaganProcSyslog_LOCAL->correlation_json, tmp_data, MAX_SYSLOGMSG);
-
             json_object_put(jobj);
-
-            printf("%s\n",  SaganProcSyslog_LOCAL->correlation_json );
 
 #endif
 

@@ -147,7 +147,6 @@ void Processor ( void )
             proc_msgslot--;     /* This was ++ before coming over, so we now -- it to get to
                                  * original value */
 
-
             /* Copy inbound array from global to local */
 
             for (i=0; i < config->max_batch; i++)

@@ -75,7 +75,6 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
        1234 == the event ID.  This is how most logging programs (NXlog, Evtsys, etc) record the
        event ID. */
 
-
     if ( SaganProcSyslog_LOCAL->event_id[0] == '\0' )
         {
 
@@ -111,7 +110,6 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
             /* If we have a decoded "event id" via JSON/liblognorm,  we can use that
                value instead */
-
 
             for (i = 0; i < rulestruct[position].event_id_count; i++ )
                 {

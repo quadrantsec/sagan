@@ -49,7 +49,7 @@ extern struct _Rule_Struct *rulestruct;
 bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
 {
 
-    uint_fast8_t z=0;
+    uint_fast32_t z=0;
     uint_fast32_t meta_alter_num=0;
     uint_fast8_t match=0;
 
@@ -145,11 +145,11 @@ bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
 /* Meta_Content_Search does the actual "searching" (or content!) of the data */
 /*****************************************************************************/
 
-bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fast8_t meta_content_count)
+bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fast32_t meta_content_count)
 {
 
     int z = meta_content_count;
-    int i;
+    int i = 0;
 
     /* Normal "meta_content" search */
 
@@ -158,11 +158,14 @@ bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fas
             for ( i=0; i<rulestruct[rule_position].meta_content_containers[z].meta_counter; i++ )
                 {
 
+//		    Sagan_Log(NORMAL, "LOOKING: |%s|", rulestruct[rule_position].meta_content_containers[z].meta_content_converted[i]);
+
                     if ( rulestruct[rule_position].meta_content_case[z] == true )
                         {
 
                             if (Sagan_stristr(syslog_msg, rulestruct[rule_position].meta_content_containers[z].meta_content_converted[i], true))
                                 {
+//			    	    Sagan_Log(NORMAL, "MATCH:   |%s|", rulestruct[rule_position].meta_content_containers[z].meta_content_converted[i]);
                                     return(true);
                                 }
                         }

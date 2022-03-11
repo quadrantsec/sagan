@@ -44,7 +44,7 @@ extern struct _Rule_Struct *rulestruct;
 bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 {
 
-    uint_fast16_t i=0;
+    uint_fast32_t i=0;
     uint_fast16_t a=0;
 
     bool rc=0;

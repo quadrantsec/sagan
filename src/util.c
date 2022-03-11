@@ -384,6 +384,8 @@ bool Is_Numeric (const char *str)
 
 void Between_Quotes( const char *in_str, char *str, size_t size)
 {
+
+
     bool flag = false;
     uint_fast32_t i = 0;
 
@@ -736,12 +738,12 @@ void Var_To_Value(const char *in_str, char *str, size_t size)
                 }
 
             strlcpy(tmp, tmp_result, sizeof(tmp));
+
             memset(tmp_result, 0, sizeof(tmp_result));
         }
 
 
     tmp[strlen(tmp)-1] = 0;		/* Remove trailing space */
-
     snprintf(str, size, "%s", tmp);
 
 }
@@ -810,8 +812,8 @@ void Content_Pipe( const char *in_string, int linecount, const char *ruleset, ch
     static char final_content[RULEBUF] = { 0 };
     memset(final_content,0,sizeof(final_content));
 
-    char final_content_tmp[RULEBUF] = { 0 };
-    char tmp2[RULEBUF];
+    char final_content_tmp[MAX_VAR_VALUE_SIZE] = { 0 };
+    char tmp2[MAX_VAR_VALUE_SIZE];
     uint_fast32_t i;
     unsigned int x;
     char tmp[2];

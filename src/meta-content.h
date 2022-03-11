@@ -19,6 +19,6 @@
 */
 
 bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message);
-bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fast8_t meta_content_count);
+bool Meta_Content_Search(char *syslog_msg, uint_fast32_t rule_position, uint_fast32_t meta_content_count);
 
 

@@ -480,7 +480,7 @@ void Load_YAML_Config( char *yaml_file )
 
                                                     if ((varfile = fopen(filename, "r")) == NULL)
                                                         {
-                                                            Sagan_Log(ERROR, "[%s, line %d] Cannot open var file:%s\n", __FILE__,  __LINE__, filename);
+                                                            Sagan_Log(ERROR, "[%s, line %d] Cannot open var file:%s", __FILE__,  __LINE__, filename);
                                                         }
 
 
@@ -516,7 +516,6 @@ void Load_YAML_Config( char *yaml_file )
                                                             /* Append to the var */
 
                                                             strlcat(var[counters->var_count].var_value, tmpbuf, sizeof(var[counters->var_count].var_value));
-
 
                                                             var[counters->var_count].var_value[strlen(var[counters->var_count].var_value)] = ',';
                                                             var[counters->var_count].var_value[strlen(var[counters->var_count].var_value) + 1] = '\0';
