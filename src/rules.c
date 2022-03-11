@@ -1921,8 +1921,16 @@ void Load_Rules( const char *ruleset )
 
                     if (!strcmp(rulesplit, "meta_nocase"))
                         {
-                            strtok_r(NULL, ":", &saveptrrule2);
-                            rulestruct[counters->rulecount].meta_content_case[meta_content_count-1] = 1;
+
+                            if ( meta_content_count >= 1 )
+                                {
+                                    strtok_r(NULL, ":", &saveptrrule2);
+                                    rulestruct[counters->rulecount].meta_content_case[meta_content_count-1] = 1;
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'meta_content' to apply a 'meta_nocase' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
 
@@ -2386,8 +2394,17 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_meta_nocase' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            strtok_r(NULL, ":", &saveptrrule2);
-                            rulestruct[counters->rulecount].json_meta_content_case[json_meta_content_count-1] = true;
+                            if ( json_meta_content_count >= 1 )
+                                {
+
+                                    strtok_r(NULL, ":", &saveptrrule2);
+                                    rulestruct[counters->rulecount].json_meta_content_case[json_meta_content_count-1] = true;
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'json_meta_content' to apply a 'json_meta_nocase' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
+
                         }
 
 #endif
@@ -2669,8 +2686,16 @@ void Load_Rules( const char *ruleset )
 
                     if (!strcmp(rulesplit, "nocase"))
                         {
-                            strtok_r(NULL, ":", &saveptrrule2);
-                            rulestruct[counters->rulecount].content_case[content_count - 1] = true;
+                            if ( content_count >= 1 )
+                                {
+                                    strtok_r(NULL, ":", &saveptrrule2);
+                                    rulestruct[counters->rulecount].content_case[content_count - 1] = true;
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'content' to apply a 'nocase' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
+
                         }
 
                     if (!strcmp(rulesplit, "offset"))
@@ -2682,7 +2707,14 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"offset\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            rulestruct[counters->rulecount].s_offset[content_count - 1] = atoi(arg);
+                            if ( content_count >= 1)
+                                {
+                                    rulestruct[counters->rulecount].s_offset[content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'content' to apply a 'offset' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
                     if (!strcmp(rulesplit, "meta_offset"))
@@ -2694,7 +2726,14 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"meta_offset\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            rulestruct[counters->rulecount].meta_offset[meta_content_count - 1] = atoi(arg);
+                            if ( meta_content_count >= 1)
+                                {
+                                    rulestruct[counters->rulecount].meta_offset[meta_content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'meta_content' to apply a 'meta_offset' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
 
@@ -2707,7 +2746,14 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"depth\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            rulestruct[counters->rulecount].s_depth[content_count - 1] = atoi(arg);
+                            if ( content_count >= 1 )
+                                {
+                                    rulestruct[counters->rulecount].s_depth[content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'content' to apply a 'depth' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
                     if (!strcmp(rulesplit, "meta_depth"))
@@ -2719,7 +2765,14 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"meta_depth\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            rulestruct[counters->rulecount].meta_depth[meta_content_count - 1] = atoi(arg);
+                            if ( meta_content_count >= 1 )
+                                {
+                                    rulestruct[counters->rulecount].meta_depth[meta_content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'meta_content' to apply a 'meta_depth' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
 
@@ -2732,7 +2785,14 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"distance\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            rulestruct[counters->rulecount].s_distance[content_count - 1] = atoi(arg);
+                            if ( content_count >= 1 )
+                                {
+                                    rulestruct[counters->rulecount].s_distance[content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'content' to apply a 'distance' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
                     if (!strcmp(rulesplit, "meta_distance"))
@@ -2744,7 +2804,15 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"meta_distance\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            rulestruct[counters->rulecount].meta_distance[meta_content_count - 1] = atoi(arg);
+                            if ( meta_content_count >= 1 )
+                                {
+                                    rulestruct[counters->rulecount].meta_distance[meta_content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'meta_content' to apply a 'meta_distance' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
+
                         }
 
 
@@ -2756,7 +2824,15 @@ void Load_Rules( const char *ruleset )
                                 {
                                     Sagan_Log(ERROR, "[%s, line %d] The \"within\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
-                            rulestruct[counters->rulecount].s_within[content_count - 1] = atoi(arg);
+
+                            if ( content_count >= 1 )
+                                {
+                                    rulestruct[counters->rulecount].s_within[content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'content' to apply a 'within' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
 
@@ -2768,7 +2844,15 @@ void Load_Rules( const char *ruleset )
                                 {
                                     Sagan_Log(ERROR, "[%s, line %d] The \"meta_within\" appears to be missing at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
-                            rulestruct[counters->rulecount].meta_within[meta_content_count - 1] = atoi(arg);
+
+                            if ( meta_content_count >= 1 )
+                                {
+                                    rulestruct[counters->rulecount].meta_within[meta_content_count - 1] = atoi(arg);
+                                }
+                            else
+                                {
+                                    Sagan_Log(ERROR, "There is no 'meta_content' to apply a 'meta_within' to in %s at line %d!", ruleset_fullname, linecount );
+                                }
                         }
 
 
