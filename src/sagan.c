@@ -263,15 +263,7 @@ int main(int argc, char **argv)
 
     uint_fast16_t batch_count = 0;
 
-    char *syslogstring = malloc( MAX_SYSLOGMSG );
-
-    if ( syslogstring == NULL )
-        {
-            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-            exit(-1);
-        }
-
-    memset(syslogstring, 0, MAX_SYSLOGMSG);
+    char syslogstring[MAX_SYSLOGMSG] = { 0 }; 
 
     /* Allocate memory for global struct _SaganDebug */
 
@@ -1284,10 +1276,8 @@ int main(int argc, char **argv)
 
                                             /* Copy data to _LOCAL array - Need safe copy! Don't use memcpy() */
 
-//					    Sagan_Log(DEBUG,"syslogstring: %s", syslogstring);
                                             strlcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
 
-//					    Sagan_Log(DEBUG, "COPY: %s", SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]);
                                             batch_count++;
                                         }
 
@@ -1377,7 +1367,6 @@ int main(int argc, char **argv)
 
         } /* End of while(1) */
 
-    free(syslogstring);
     return(0);
 } /* End of main */
 
