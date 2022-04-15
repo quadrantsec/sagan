@@ -450,7 +450,7 @@ Finally, configure the system to run the daemon in the background.  Create
    User=sagan
    Group=sagan
    EnvironmentFile=-/etc/default/sagan
-   ExecStart=/usr/local/sbin/sagan $OPTIONS
+   ExecStart=/usr/local/bin/sagan $OPTIONS
    ExecReload=/bin/kill -HUP $MAINPID
    Restart=on-failure
 
