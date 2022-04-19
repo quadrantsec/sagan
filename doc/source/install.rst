@@ -71,7 +71,7 @@ More information about ``liblognorm`` can be found at the `LibLogNorm <https://F
 
 To install ``liblognorm`` on Debian/Ubuntu:
 
-.. option:: apt-get install liblognorm-dev liblognorm2
+.. option:: apt-get install liblognorm-dev liblognorm5
 
 To install ``liblognorm`` on Redhat/Centos:
 
@@ -88,7 +88,7 @@ parsing and building JSON data faster and more efficent.
 
 To install ``libfastjson`` on Debian/Ubuntu:
 
-.. option:: LOOK THIS UP
+.. option:: apt-get install libfastjson-dev libfastjson4
 
 To install ``liblfastjson`` on Redhat/Centos:
 
@@ -192,7 +192,7 @@ Installation from source distributions files.
 
 Basic steps::
 
-    git clone https://github.com/beave/sagan
+    git clone https://github.com/quadrantsec/sagan.git
     cd sagan
     ./autogen.sh
     ./configure
@@ -450,7 +450,7 @@ Finally, configure the system to run the daemon in the background.  Create
    User=sagan
    Group=sagan
    EnvironmentFile=-/etc/default/sagan
-   ExecStart=/usr/local/sbin/sagan $OPTIONS
+   ExecStart=/usr/local/bin/sagan $OPTIONS
    ExecReload=/bin/kill -HUP $MAINPID
    Restart=on-failure
 
