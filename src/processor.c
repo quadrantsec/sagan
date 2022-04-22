@@ -234,7 +234,17 @@ void Processor ( void )
                     if ( config->client_stats_flag )
                         {
 
-                            Client_Stats_Add_Update_IP ( SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
+                            uint_fast32_t bytes = strlen(SaganProcSyslog_LOCAL->syslog_host) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_facility) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_priority) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_level) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_tag) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_date) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_time) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_program) +
+                                                  strlen(SaganProcSyslog_LOCAL->syslog_message) + 9; /* 9 == delimiters! */
+
+                            Client_Stats_Add_Update_IP ( SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message, bytes );
 
                         }
 

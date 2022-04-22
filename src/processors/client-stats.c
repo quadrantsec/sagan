@@ -172,6 +172,12 @@ void Client_Stats_Handler( void )
                     json_object *jmessage = json_object_new_string( Client_Stats[i].message );
                     json_object_object_add(jobj,"message", jmessage);
 
+		    json_object *jbytes = json_object_new_int64( Client_Stats[i].bytes );
+		    json_object_object_add(jobj,"bytes", jbytes);
+
+		    json_object *jevents = json_object_new_int64( Client_Stats[i].number_of_events );
+		    json_object_object_add(jobj,"events", jevents);
+
                     File_Lock( config->client_stats_file_stream_int );
 
                     fprintf(config->client_stats_file_stream, "%s\n", json_object_to_json_string(jobj));
@@ -198,7 +204,7 @@ void Client_Stats_Handler( void )
  * array of systems Sagan is keeping track of.
  ****************************************************************************/
 
-void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message )
+void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message, uint_fast32_t bytes )
 {
 
     uint_fast32_t hash = Djb2_Hash( ip );
@@ -229,10 +235,11 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
             if ( Client_Stats[i].hash == hash )
                 {
                     Client_Stats[i].epoch = epoch;
+		    Client_Stats[i].number_of_events++;
+		    Client_Stats[i].bytes = Client_Stats[i].bytes + bytes;
 
                     if ( Client_Stats[i].epoch > Client_Stats[i].old_epoch + config->client_stats_interval)
                         {
-
 
                             if ( debug->debugclient_stats )
                                 {

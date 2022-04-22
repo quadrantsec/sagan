@@ -263,7 +263,7 @@ int main(int argc, char **argv)
 
     uint_fast16_t batch_count = 0;
 
-    char syslogstring[MAX_SYSLOGMSG] = { 0 }; 
+    char syslogstring[MAX_SYSLOGMSG] = { 0 };
 
     /* Allocate memory for global struct _SaganDebug */
 

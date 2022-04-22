@@ -20,7 +20,7 @@
 
 void Client_Stats_Init( void );
 void Client_Stats_Handler( void );
-void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message );
+void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message, uint_fast32_t bytes );
 void Client_Stats_Close( void );
 
 /* Client Stats strucure */
@@ -32,6 +32,8 @@ struct _Client_Stats_Struct
     char ip[64];
     uint_fast64_t epoch;
     uint_fast64_t old_epoch;
+    uint_fast64_t number_of_events;
+    uint_fast64_t bytes;
     char program[MAX_SYSLOG_PROGRAM];
     char message[MAX_SYSLOGMSG];
 };
