@@ -294,6 +294,8 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
 
             Redis_Reader ( redis_command, redis_results, MAX_SYSLOGMSG );
 
+            /* Was not found */
+
             if ( redis_results[0] == '\0' )
                 {
 
@@ -320,17 +322,25 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
                             free(redis_results);
                             return(false);
                         }
+
                 }
+            else
+                {
+
+                    /* Was found,  need to copy correlation data */
+
+                    if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
+                        {
+                            strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
+                        }
+
+                }
+
         }
 
     if ( debug->debugxbit )
         {
             Sagan_Log(DEBUG, "[%s, line %d] Rule matches all xbit conditions. Returning true.", __FILE__, __LINE__);
-        }
-
-    if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
-        {
-            strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
         }
 
     free(redis_results);
