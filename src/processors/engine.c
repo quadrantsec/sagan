@@ -1382,8 +1382,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                     memset(SaganRouting, 0, sizeof(_Sagan_Routing));
                     SaganRouting->check_flow_return = true;
 
-
                 } /* If normal or dynamic rule */
+
+
+	       /* Clear data that gets added between signature passes */
+	    
+#ifdef HAVE_LIBFASTJSON
+	       SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
+#endif
 
         } /* End for for loop */
 
