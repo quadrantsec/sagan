@@ -109,7 +109,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
         }
 
-    memset( SaganRouting, 0, sizeof(_Sagan_Routing) ); 
+    memset( SaganRouting, 0, sizeof(_Sagan_Routing) );
 
     SaganRouting->check_flow_return = true;
 
@@ -1384,11 +1384,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                 } /* If normal or dynamic rule */
 
+            /* Clear data collected btween signature passes.  Unlike other data,
+             * "correlation" data isn't "static" (like IP addresses, normalization,
+             * protocols, log data, etc).  We need to clear that out each pass
+             * or a non-correlated signature will have "correlated" data that doesn't
+             * make sense! */
 
-	       /* Clear data that gets added between signature passes */
-	    
 #ifdef HAVE_LIBFASTJSON
-	       SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
+            SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
 #endif
 
         } /* End for for loop */
