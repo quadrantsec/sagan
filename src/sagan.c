@@ -723,7 +723,6 @@ int main(int argc, char **argv)
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
-
     pthread_t processor_id[config->max_processor_threads];
     pthread_attr_t thread_processor_attr;
     pthread_attr_init(&thread_processor_attr);
@@ -1283,7 +1282,18 @@ int main(int argc, char **argv)
 
                                 }
 
-                            /* Do we have enough threads? */
+                            /* If we are running data from a file,  we do this to prevent threat
+                               exhaustion */
+
+                            while ( config->sagan_is_file == true && proc_msgslot >= config->max_processor_threads )
+                                {
+
+                                    struct timespec ts = { 0, 0 };
+                                    nanosleep(&ts, &ts);
+
+                                }
+
+                            /* Do we have enough threads? - Important for named pipe! */
 
                             if ( proc_msgslot < config->max_processor_threads )
                                 {
@@ -1310,6 +1320,8 @@ int main(int argc, char **argv)
                                             proc_msgslot++;
 
                                             /* Send work to thread */
+
+//					    printf("Send! %d\n", proc_msgslot);
 
                                             pthread_cond_signal(&SaganProcDoWork);
                                             pthread_mutex_unlock(&SaganProcWorkMutex);
