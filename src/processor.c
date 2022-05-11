@@ -145,7 +145,7 @@ void Processor ( void )
                 }
 
             proc_msgslot--;     /* This was ++ before coming over, so we now -- it to get to
-                                 * original value */
+                                 /* original value */
 
             /* Copy inbound array from global to local */
 
@@ -160,7 +160,6 @@ void Processor ( void )
                     strlcpy(SaganPassSyslog_LOCAL->syslog[i],  SaganPassSyslog[proc_msgslot].syslog[i], sizeof(SaganPassSyslog_LOCAL->syslog[i]));
 
                 }
-
 
             pthread_mutex_unlock(&SaganProcWorkMutex);
 

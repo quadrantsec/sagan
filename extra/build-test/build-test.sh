@@ -12,6 +12,7 @@
 #   2019/11/03 - Removed --disable-snortsam
 #   2020/11/20 - Remove --disable-libdnet
 #   2021/01/26 - Added --enable-tcmalloc
+#   2022/05/10 - Added --enable-gzip
 
 # Champ Clark III 
 
@@ -27,9 +28,9 @@
 #  --disable-libfastjson   Enable libfastjson
 #  --enable-tcmalloc	   Enable Google's TCMalloc
 
-STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc"
-ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-tcmalloc"
-NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-tcmalloc"
+STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc --disable-gzip"
+ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-tcmalloc --enable-gzip"
+NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-tcmalloc --disable-gzip"
 
 LOG="output.log" 
 

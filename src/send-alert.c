@@ -41,8 +41,6 @@
 
 #include "routing.h"
 
-//#include "processors/engine.h"
-
 extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
 
@@ -100,29 +98,8 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
     SaganProcessorEvent->bluedot_results    =    bluedot_results;
 
     SaganProcessorEvent->flow_id	    =    SaganProcSyslog_LOCAL->flow_id;
-
-    //SaganProcessorEvent->country_src	    =	 GeoIP_SRC->country;
-    //SaganProcessorEvent->country_dst	    =    GeoIP_DEST->country;
-
-    //SaganProcessorEvent->city_src	    =	 GeoIP_SRC->city;
-    //SaganProcessorEvent->city_dst	    =    GeoIP_DEST->city;
-
-    //SaganProcessorEvent->subdivision_src    =	 GeoIP_SRC->subdivision;
-    //SaganProcessorEvent->subdivision_dst    =    GeoIP_DEST->subdivision;
-
-//    SaganProcessorEvent->postal_src	    =	 GeoIP_SRC->postal;
-//    SaganProcessorEvent->postal_dst	    =    GeoIP_DEST->postal;
-
-//    SaganProcessorEvent->timezone_src	    =	 GeoIP_SRC->timezone;
-//    SaganProcessorEvent->timezone_dst	    =    GeoIP_DEST->timezone;
-
-//    SaganProcessorEvent->latitude_src	    =	 GeoIP_SRC->latitude;
-//    SaganProcessorEvent->latitude_dst	    =    GeoIP_DEST->latitude;
-
-//    SaganProcessorEvent->longitude_src	    =	 GeoIP_SRC->longitude;
-//    SaganProcessorEvent->longitude_dst	    =    GeoIP_DEST->longitude;
-
     SaganProcessorEvent->correlation_json	 = SaganProcSyslog_LOCAL->correlation_json;
+
 
     Output ( SaganProcessorEvent );
     free(SaganProcessorEvent);

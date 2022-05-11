@@ -64,6 +64,12 @@ echo -n "installation for $host OS... "
 
 AC_C_BIGENDIAN(AC_SUBST([ENDIAN],[big]),AC_SUBST([ENDIAN],[little]))
 
+AC_ARG_ENABLE(gzip,
+  [  --enable-gzip           Enable libz/gzip file support.],
+  [ GZIP="$enableval"],
+  [ GZIP="no" ]
+)
+
 AC_ARG_ENABLE(bluedot,
   [  --enable-bluedot        Enable Quadrant\'s "Bluedot" lookups.],
   [ BLUEDOT="$enableval"],
@@ -226,7 +232,7 @@ PKG_PROG_PKG_CONFIG
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 
-AC_CHECK_HEADERS([stdio.h stdlib.h sys/types.h unistd.h stdint.h inttypes.h ctype.h errno.h fcntl.h sys/stat.h string.h getopt.h time.h stdarg.h limits.h stdbool.h arpa/inet.h netinet/in.h sys/time.h sys/socket.h sys/mmap.h sys/mman.h sys/prctl.h libgen.h])
+AC_CHECK_HEADERS([stdio.h stdlib.h sys/types.h unistd.h stdint.h inttypes.h ctype.h errno.h fcntl.h sys/stat.h string.h getopt.h time.h stdarg.h limits.h stdbool.h arpa/inet.h netinet/in.h sys/time.h sys/socket.h sys/mmap.h sys/mman.h sys/prctl.h libgen.h glob.h])
 
 AC_CHECK_SIZEOF([size_t])
 
@@ -547,6 +553,12 @@ if test "$ESMTP" = "yes"; then
 If you're not interested in libesmtp support use the --disable-esmtp flag.))
        fi
 
+if test "$GZIP" = "yes"; then
+       AC_MSG_RESULT([------- libz / gzip support is enabled -------])
+       AC_CHECK_HEADER([libz.h])
+       AC_CHECK_LIB(z, main,,AC_MSG_ERROR(The libz library cannot be found.
+If you're not interested in libz/gzip support use the --disable-gzip flag.))
+       fi
 
 if test "$FASTJSON" = "yes"; then
 	AC_MSG_RESULT([------- libfastjson support is enabled -------])

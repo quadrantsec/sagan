@@ -54,6 +54,9 @@
 /* Define to 1 if you have the `gettimeofday' function. */
 #undef HAVE_GETTIMEOFDAY
 
+/* Define to 1 if you have the <glob.h> header file. */
+#undef HAVE_GLOB_H
+
 /* Define to 1 if you have the `htons' function. */
 #undef HAVE_HTONS
 
@@ -102,6 +105,9 @@
 
 /* Define to 1 if you have the `yaml' library (-lyaml). */
 #undef HAVE_LIBYAML
+
+/* Define to 1 if you have the `z' library (-lz). */
+#undef HAVE_LIBZ
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H

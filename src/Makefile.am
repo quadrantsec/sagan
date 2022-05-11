@@ -56,6 +56,7 @@ AUTOMAKE_OPIONS=foreign no-dependencies subdir-objects
 						       routing.c \
 						       content.c \
 						       pcre-s.c \
+						       ignore.c \
                                                        parsers/ip.c \
                                                        parsers/proto.c \
                                                        parsers/hash.c \
@@ -63,6 +64,9 @@ AUTOMAKE_OPIONS=foreign no-dependencies subdir-objects
                                                        parsers/strstr-asm/strstr-hook.c \
                                                        parsers/strstr-asm/strstr_sse2.S \
                                                        parsers/strstr-asm/strstr_sse4_2.S \
+						       input-plugins/file.c \
+						       input-plugins/gzip.c \
+						       input-plugins/fifo.c \
                                                        output-plugins/alert.c \
 						       output-plugins/fast.c \
                                                        output-plugins/esmtp.c \

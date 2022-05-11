@@ -50,6 +50,7 @@
 #include <sys/socket.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include <glob.h>
 
 #include "sagan.h"
 #include "sagan-defs.h"
@@ -97,6 +98,10 @@
 #include "processors/client-stats.h"
 #include "processors/zeek-intel.h"
 #include "processors/stats-json.h"
+
+#include "input-plugins/file.h"
+#include "input-plugins/gzip.h"
+#include "input-plugins/fifo.h"
 
 #define OVECCOUNT 30
 
@@ -163,13 +168,16 @@ int main(int argc, char **argv)
         { "log",          required_argument,    NULL,   'l' },
         { "file",	  required_argument,    NULL,   'F' },
         { "quiet", 	  no_argument, 		NULL, 	'Q' },
+        { "threads",	  required_argument,    NULL,   't' },
         {0, 0, 0, 0}
     };
 
     static const char *short_options =
-        "l:f:u:F:d:c:pDhCQ";
+        "l:f:u:F:d:c:t:pDhCQ";
 
     int option_index = 0;
+
+    uint_fast16_t max_threads_override = 0;
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
 
@@ -554,6 +562,17 @@ int main(int argc, char **argv)
                     strlcpy(config->sagan_log_filepath,optarg,sizeof(config->sagan_log_filepath) - 1);
                     break;
 
+                case 't':
+
+                    max_threads_override = atoi(optarg);
+
+                    if ( max_threads_override == 0 )
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] --threads / -t option is zero or invalid.", __FILE__, __LINE__);
+                        }
+
+                    break;
+
                 default:
                     fprintf(stderr, "Invalid argument! See below for command line switches.\n");
                     Usage();
@@ -702,8 +721,12 @@ int main(int argc, char **argv)
 
     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
-    //char syslog[MAX_SYSLOG_BATCH][MAX_SYSLOGMSG];
-    //char *batch_string = malloc ( MAX_SYSLOG_BATCH * MAX_SYSLOGMSG );
+    /* This is for --threads (over rides the sagan.yaml file) */
+
+    if ( max_threads_override != 0 )
+        {
+            config->max_processor_threads = max_threads_override;
+        }
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
 
@@ -1122,264 +1145,63 @@ int main(int argc, char **argv)
 
     Sagan_Log(NORMAL, "");
 
-    if ( !config->sagan_is_file )
+    if ( config->sagan_is_file == true )
         {
 
-            Sagan_Log(NORMAL, "Attempting to open syslog FIFO (%s).", config->sagan_fifo);
+            uint32_t z = 0;
 
-        }
-    else
-        {
+            glob_t globbuf = {0};
 
-            Sagan_Log(NORMAL, "Attempting to open syslog FILE (%s).", config->sagan_fifo);
+            glob(config->sagan_fifo, GLOB_DOOFFS, NULL, &globbuf);
 
-        }
-
-
-
-    while( death == false )
-        {
-
-            FILE *fd;
-
-            if (( fd = fopen(config->sagan_fifo, "r" )) == NULL )
+            for (size_t z = 0; z != globbuf.gl_pathc; ++z)
                 {
 
-                    if ( config->sagan_is_file == false )
+                    if ( globbuf.gl_pathv[z][ strlen(globbuf.gl_pathv[z]) - 3 ] == '.' &&
+                            globbuf.gl_pathv[z][ strlen(globbuf.gl_pathv[z]) - 2 ] == 'g' &&
+                            globbuf.gl_pathv[z][ strlen(globbuf.gl_pathv[z]) - 1 ] == 'z' )
                         {
 
-                            /* try to create it */
+#ifdef HAVE_LIBZ
+                            GZIP_Input( globbuf.gl_pathv[z] );
+#endif
 
-                            Sagan_Log(NORMAL, "Fifo not found, creating it (%s).", config->sagan_fifo);
-
-                            if (mkfifo(config->sagan_fifo, 0700) == -1)
-                                {
-                                    Remove_Lock_File();
-                                    Sagan_Log(ERROR, "Could not create FIFO '%s'. Abort!", config->sagan_fifo);
-                                }
-
-                            fd = fopen(config->sagan_fifo, "r");
-
-                            if ( fd == NULL )
-                                {
-                                    Remove_Lock_File();
-                                    Sagan_Log(ERROR, "Error opening %s. Abort!", config->sagan_fifo);
-                                }
+#ifndef	HAVE_LIBZ
+                            Sagan_Log(WARN, "[%s, line %d] Sagan lack gzip/libz support.  Skipping %s.", __FILE__, __LINE__, globbuf.gl_pathv[z]);
+#endif
 
                         }
                     else
                         {
-                            Remove_Lock_File();
-                            Sagan_Log(ERROR, "Could not open file '%s'. Abort!", config->sagan_fifo);
+                            File_Input( globbuf.gl_pathv[z] );
                         }
-
                 }
 
-            if ( config->sagan_is_file == false )
-                {
-                    Sagan_Log(NORMAL, "Successfully opened FIFO (%s).", config->sagan_fifo);
 
-#if defined(HAVE_GETPIPE_SZ) && defined(HAVE_SETPIPE_SZ)
+        }
 
-                    Set_Pipe_Size(fd);
+    if ( config->sagan_is_file == false )
+        {
 
-#endif
+            /* Can only be FIFO right now */
 
-                }
-            else
-                {
-                    Sagan_Log(NORMAL, "Successfully opened FILE (%s) and processing events.....", config->sagan_fifo);
-                }
+            FIFO_Input();
 
-            while(fd != NULL)
-                {
+        }
 
+    /* The input plugin is done.  Wait for any busy threads before exiting */
 
-                    clearerr( fd );
+    while(proc_msgslot != 0 || proc_running != 0)
+        {
+            Sagan_Log(NORMAL, "Waiting on %d/%d threads....", proc_msgslot, proc_running);
+            sleep(1);
+        }
 
-                    while(fgets(syslogstring, MAX_SYSLOGMSG, fd) != NULL)
-                        {
-
-                            /* If the FIFO was in a error state,  let user know the FIFO writer has resumed */
-
-                            if ( fifoerr == true )
-                                {
-
-                                    Sagan_Log(NORMAL, "FIFO writer has restarted. Processing events.");
-
-#if defined(HAVE_GETPIPE_SZ) && defined(HAVE_SETPIPE_SZ)
-
-                                    Set_Pipe_Size(fd);
-
-#endif
-                                    fifoerr = false;
-                                }
-
-                            counters->events_received++;
-
-                            /* Copy log line to batch/queue if we haven't reached our batch limit */
-
-                            if ( batch_count <= config->max_batch )
-                                {
-
-                                    if (debug->debugsyslog)
-                                        {
-                                            Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, batch_count, syslogstring);
-                                        }
-
-                                    /* We're not threads here so no reason to lock */
-
-                                    uint_fast32_t bytes_total = strlen( syslogstring );
-
-                                    counters->bytes_total = counters->bytes_total + bytes_total;
-
-                                    if ( bytes_total > counters->max_bytes_length )
-                                        {
-                                            counters->max_bytes_length = bytes_total;
-                                        }
-
-                                    if ( bytes_total >= MAX_SYSLOGMSG )
-                                        {
-                                            counters->max_bytes_over++;
-                                        }
-
-
-                                    /* Check for "drop" to save CPU from "ignore list" */
-
-                                    if ( config->sagan_droplist_flag )
-                                        {
-
-                                            ignore_flag = false;
-
-                                            for (k = 0; k < counters->droplist_count; k++)
-                                                {
-
-                                                    if (Sagan_strstr(syslogstring, SaganIgnorelist[k].ignore_string))
-                                                        {
-
-                                                            counters->bytes_ignored = counters->bytes_ignored + strlen( syslogstring );
-                                                            counters->ignore_count++;
-
-                                                            ignore_flag = true;
-                                                            break;
-
-                                                        }
-                                                }
-
-                                        }
-
-                                    /* Add to batch */
-
-                                    if ( ignore_flag == false )
-                                        {
-
-                                            /* Copy data to _LOCAL array - Need safe copy! Don't use memcpy() */
-
-                                            strlcpy(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL[proc_msgslot].syslog[batch_count]));
-
-                                            batch_count++;
-                                        }
-
-                                }
-
-                            /* If we are running data from a file,  we do this to prevent threat
-                               exhaustion */
-
-                            while ( config->sagan_is_file == true && proc_msgslot >= config->max_processor_threads )
-                                {
-
-                                    struct timespec ts = { 0, 0 };
-                                    nanosleep(&ts, &ts);
-
-                                }
-
-                            /* Do we have enough threads? - Important for named pipe! */
-
-                            if ( proc_msgslot < config->max_processor_threads )
-                                {
-
-                                    /* Has our batch count been reached */
-
-                                    if ( batch_count >= config->max_batch )
-                                        {
-
-                                            batch_count=0;              /* Reset batch/queue */
-
-                                            pthread_mutex_lock(&SaganProcWorkMutex);
-
-                                            /* Copy local thread data to global thread */
-
-                                            for ( i = 0; i < config->max_batch; i++)
-                                                {
-                                                    strlcpy(SaganPassSyslog[proc_msgslot].syslog[i], SaganPassSyslog_LOCAL[proc_msgslot].syslog[i], sizeof(SaganPassSyslog[proc_msgslot].syslog[i]));
-
-                                                }
-
-                                            counters->events_processed = counters->events_processed + config->max_batch;
-
-                                            proc_msgslot++;
-
-                                            /* Send work to thread */
-
-//					    printf("Send! %d\n", proc_msgslot);
-
-                                            pthread_cond_signal(&SaganProcDoWork);
-                                            pthread_mutex_unlock(&SaganProcWorkMutex);
-                                        }
-
-                                }
-                            else
-                                {
-
-                                    /* If there's no thread, we lose the entire batch */
-
-                                    counters->worker_thread_exhaustion = counters->worker_thread_exhaustion + config->max_batch; ;
-                                    batch_count = 0;
-                                }
-
-                        } /* while(fgets) */
-
-                    /* fgets() has returned a error,  likely due to the FIFO writer leaving */
-
-                    if ( fifoerr == false )
-                        {
-
-                            if ( config->sagan_is_file != 0 )
-                                {
-                                    Sagan_Log(NORMAL, "EOF reached. Waiting for threads to catch up....");
-                                    Sagan_Log(NORMAL, "");
-
-                                    while(proc_msgslot != 0 || proc_running != 0)
-                                        {
-                                            Sagan_Log(NORMAL, "Waiting on %d/%d threads....", proc_msgslot, proc_running);
-                                            sleep(1);
-                                        }
-
-                                    fclose(fd);
-                                    Statistics();
-                                    Remove_Lock_File();
-
-                                    Sagan_Log(NORMAL, "Exiting.");
-                                    exit(0);
-
-                                }
-                            else
-                                {
-
-                                    Sagan_Log(WARN, "FIFO writer closed.  Waiting for FIFO writer to restart....");
-                                    clearerr(fd);
-                                    fifoerr = true; 			/* Set flag so our wile(fgets) knows */
-                                }
-                        }
-                    sleep(1);		/* So we don't eat 100% CPU */
-
-                } /* while(fd != NULL)  */
-
-            fclose(fd); 			/* ???? */
-
-        } /* End of while(1) */
+    Statistics();
+    Remove_Lock_File();
 
     return(0);
+
 } /* End of main */
 
 

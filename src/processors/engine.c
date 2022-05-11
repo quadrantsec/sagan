@@ -1352,7 +1352,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                             NULL );
 #endif
 
-
                                                             /* If this is a "pass" signature,  we can stop processing now */
 
                                                             if ( rulestruct[b].rule_type == RULE_TYPE_PASS )
