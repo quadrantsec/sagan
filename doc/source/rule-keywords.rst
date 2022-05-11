@@ -348,16 +348,16 @@ This tells the flexbit ``isset`` or ``isnotset`` to 'wait' for a specified numbe
 json_content
 ------------
 
-.. option:: json_content: "{key}", "{search}"; 
+.. option:: json_content: ".{key}", "{search}"; 
 
 This functions similar to ``content`` but works on JSON key/value data.  This option does _not_ 
 depend on JSON mapping and can be used on any located key. For example:
 
-**json_content: "sni", "www.quadrantsec.net";**
+**json_content: ".sni", "www.quadrantsec.net";**
 
 Similar to ``content``,  the not operator (!) can also be used:
 
-**json_content:! "sni", "www.google.com";**
+**json_content:! ".sni", "www.google.com";**
 
 json_nocase
 -----------
@@ -375,7 +375,7 @@ json_contains
 Normally ``json_content`` will search for a literal match to a key/value pair.  The ``json_contains``
 makes the previous ``json_content`` do a full string search for a value.  For example:
 
-**json_content: "name", "example"; json_contains;** 
+**json_content: ".name", "example"; json_contains;** 
 
 This will search the key "name" for the word "example".  Without the ``json_contains`` the search
 is a literal match.  With the ``json_contains`` rule option,  it will search for the presences of 
@@ -386,12 +386,12 @@ because it would be a literal search.
 json_pcre
 ---------
 
-.. option:: json_pcre: "key", "/regularexpression/"; 
+.. option:: json_pcre: ".key", "/regularexpression/"; 
 
 This functions similar to ``pcre`` but works on JSON key/value data. This option does _not_ 
 depend on JSON mapping and can be used on any located key.  For example:
 
-**json_pcre: "sni", "/www.quadrantsec.com/i";**
+**json_pcre: ".sni", "/www.quadrantsec.com/i";**
 
 json_map
 ~~~~~~~~
@@ -440,16 +440,16 @@ it can be used with other keywords like ``after``, ``threshold``, ``bluedot``, `
 json_meta_content
 -----------------
 
-.. option:: json_meta_content: "key", value1,value2,value3... ; 
+.. option:: json_meta_content: ".key", value1,value2,value3... ; 
 
 This functions similar to ``meta_content`` but works on a JSON key/value data. This option
 does _not_ depend on JSON mapping and can be used with any located key.  For example:
 
-**json_meta_content: "threat",medium,low;** 
+**json_meta_content: ".threat",medium,low;** 
 
 This function can also be used with the not (!) operator.
 
-**json_meta_content: !"threat",informational,low;** 
+**json_meta_content: !".threat",informational,low;** 
 
 json_meta_nocase
 ----------------

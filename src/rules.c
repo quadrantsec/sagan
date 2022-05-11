@@ -2113,6 +2113,12 @@ void Load_Rules( const char *ruleset )
 
                             Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_content_key[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_key[json_content_count]));
 
+                            if ( rulestruct[counters->rulecount].json_content_key[json_content_count][0] != '.' )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Invalid key for 'json_content' at line %d in %s. A '.' should prepend the key.", __FILE__, __LINE__, linecount, ruleset_fullname);
+
+                                }
+
                             tmptoken = strtok_r(NULL, ",", &saveptrrule2);
 
                             if ( tmptoken == NULL )
@@ -2205,6 +2211,11 @@ void Load_Rules( const char *ruleset )
 
 
                             Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_pcre_key[json_pcre_count], sizeof(rulestruct[counters->rulecount].json_pcre_key[json_pcre_count]));
+
+                            if ( rulestruct[counters->rulecount].json_pcre_key[json_pcre_count][0] != '.' )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Invalid key for 'json_pcre' at line %d in %s. A '.' should prepend the key.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
 
                             tmptoken = strtok_r(NULL, ",", &saveptrrule2);
 
@@ -2344,6 +2355,13 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count],sizeof(rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count]));
+
+
+                            if ( rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count][0] != '.' )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Invalid key for 'json_meta_content' at line %d in %s. A '.' should prepend the key.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
 
                             tmptoken = strtok_r(NULL, ";", &saveptrrule2);           /* Grab Search data */
 
