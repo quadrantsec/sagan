@@ -255,23 +255,15 @@ int main(int argc, char **argv)
     pthread_attr_init(&tracking_thread_attr);
     pthread_attr_setdetachstate(&tracking_thread_attr,  PTHREAD_CREATE_DETACHED);
 
-    bool fifoerr = false;
-    bool ignore_flag = false;
-
     signed char c;
     int rc=0;
 
     uint_fast16_t i = 0;
-    uint_fast32_t k = 0;
 
     time_t t;
     struct tm *run;
 
     bool debugflag = false;
-
-    uint_fast16_t batch_count = 0;
-
-    char syslogstring[MAX_SYSLOGMSG] = { 0 };
 
     /* Allocate memory for global struct _SaganDebug */
 
@@ -1147,8 +1139,6 @@ int main(int argc, char **argv)
 
     if ( config->sagan_is_file == true )
         {
-
-            uint32_t z = 0;
 
             glob_t globbuf = {0};
 

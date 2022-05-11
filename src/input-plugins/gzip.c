@@ -59,7 +59,6 @@ void GZIP_Input( const char *input_file )
     uint_fast16_t batch_count = 0;
 
     int i = 0;
-    int z = 0;
 
     gzFile fd;
 
