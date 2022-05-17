@@ -22,9 +22,11 @@
 
 /* IP Lookup cache */
 
-int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cache );
+uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cache );
 
-int   Parse_Proto_Program( char * );
+uint_fast8_t Parse_Proto_Program( const char *program );
+uint_fast8_t Parse_Proto( const char *syslog_message );
+
 void  Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size);
 void  Parse_Hash_Cleanup(char *, char *str, size_t size );
 

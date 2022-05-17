@@ -48,7 +48,7 @@ struct _Sagan_Protocol_Map_Program *map_program;
  * the event by the program that generate it.
  ****************************************************************************/
 
-int Parse_Proto_Program( char *program )
+uint_fast8_t Parse_Proto_Program( const char *program )
 {
 
     uint_fast16_t i;
@@ -73,3 +73,36 @@ int Parse_Proto_Program( char *program )
         }
     return(0);
 }
+
+
+/****************************************************************************
+ * Sagan_Parse_Proto - Searches for simple clues from the message about what
+ * protocl might have generated this event
+ ****************************************************************************/
+
+uint_fast8_t Parse_Proto( const char *syslog_message )
+{
+
+    int i;
+
+    for (i = 0; i < counters->mapcount_message; i++)
+        {
+
+            if ( map_message[i].nocase == 1 )
+                {
+                    if (Sagan_stristr(syslog_message, map_message[i].search, true))
+                        {
+                            return(map_message[i].proto);
+                        }
+                }
+            else
+                {
+                    if (Sagan_strstr(syslog_message, map_message[i].search))
+                        {
+                            return(map_message[i].proto);
+                        }
+                }
+        }
+    return(0);
+}
+

@@ -194,12 +194,21 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #ifdef HAVE_LIBFASTJSON
 
+    char o_syslog_message[MAX_SYSLOGMSG] = { 0 }; 
+    bool o_syslog_message_flag = false; 
+
+    char o_syslog_program[MAX_SYSLOG_PROGRAM] = { 0 }; 
+    bool o_syslog_program_flag = false;
+
     /* If "parse-json-program" is enabled, we'll look for signs in the program
        field for JSON.  If we find it,  we'll append the program and message
        field */
 
     if ( config->json_parse_data == true )
         {
+
+//	strlcpy(o_syslog_message, SaganProcSyslog_LOCAL->syslog_message, MAX_SYSLOGMSG);
+//	strlcpy(o_program, SaganProcSyslog_LOCAL->syslog_program, MAX_SYSLOG_PROGRAM);
 
             /* If we detect JSON in the "program" field,  append the program with the
             * message */
@@ -263,6 +272,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     /* First we search for 'program' and such.   This way,  we don't waste CPU
      * time with pcre/content.  */
+
+
 
     for(b=0; b < counters->rulecount; b++)
         {
@@ -349,12 +360,21 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                             else if ( rulestruct[b].json_map_type[i] == JSON_MAP_MESSAGE )
                                                 {
+
+						    o_syslog_message_flag = true;
+
+					            strlcpy(o_syslog_message, SaganProcSyslog_LOCAL->syslog_message, MAX_SYSLOGMSG);
                                                     strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, MAX_SYSLOGMSG);
                                                 }
 
                                             else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROGRAM )
                                                 {
+
+						    o_syslog_program_flag = true;
+
+						    strlcpy(o_syslog_program, SaganProcSyslog_LOCAL->syslog_program, MAX_SYSLOG_PROGRAM);
                                                     strlcpy(SaganProcSyslog_LOCAL->syslog_program, tmp_json_value, MAX_SYSLOG_PROGRAM);
+						    	
                                                 }
 
                                             else if ( rulestruct[b].json_map_type[i] == JSON_MAP_EVENT_ID )
@@ -801,7 +821,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA256, SaganProcSyslog_LOCAL->sha256, SHA256_HASH_SIZE );
                                 }
 
+
                             /* If the rule calls for proto searching,  we do it now */
+
+			    if ( rulestruct[b].s_find_proto == true ) 
+			        {
+				    SaganProcSyslog_LOCAL->proto = Parse_Proto_Program(SaganProcSyslog_LOCAL->syslog_message);
+				}
 
                             if ( rulestruct[b].s_find_proto_program == true )
                                 {
@@ -1390,10 +1416,32 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
              * make sense! */
 
 #ifdef HAVE_LIBFASTJSON
+
             SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
+
+	    /* In case JSON mapping over wrote our original values,  we copy them back to their 
+	       original states.  */
+
+	    if ( config->json_parse_data == true && JSON_LOCAL->json_count > 0 )
+	    	{
+
+		if ( o_syslog_message_flag == true ) 
+			{
+			strlcpy( SaganProcSyslog_LOCAL->syslog_message, o_syslog_message, MAX_SYSLOGMSG);
+			o_syslog_message_flag = false;
+			}
+
+		if ( o_syslog_program_flag == true )
+			{			
+			strlcpy( SaganProcSyslog_LOCAL->syslog_program, o_syslog_program, MAX_SYSLOG_PROGRAM);
+			o_syslog_program_flag = false; 
+			}
+
+		}
+
 #endif
 
-        } /* End for for loop */
+        } /* for(b=0; b < counters->rulecount; b++) */
 
 
 #ifdef HAVE_LIBFASTJSON

@@ -22,8 +22,7 @@ This informs Sagan how to flag the event.  Valid options are ``alert``, ``drop``
 .. option:: any
 
 Valid options for this field are ``any``, ``tcp``, ``udp`` or ``icmp``.  In most cases,  you will 
-likely want to specify ``any``.  The protocal is determined by the ``parse_proto`` or ``parse_program_proto``
-rule options.  
+likely want to specify ``any``.  The protocal is determined by the ``parse_proto``, ``parse_proto_program`` or liblognorm rule keywords.
 
 .. option:: $EXTERNAL_NET
 

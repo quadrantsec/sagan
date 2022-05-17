@@ -85,7 +85,7 @@
 extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
 
-int Parse_IP( char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cache )
+uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_Entry *lookup_cache )
 {
 
     if ( debug->debugparse_ip )

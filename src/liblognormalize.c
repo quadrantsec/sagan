@@ -102,7 +102,6 @@ void Liblognorm_Load(const char *infile)
  * Locates interesting log data via Rainer's liblognorm library
  ***********************************************************************/
 
-
 void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
@@ -216,6 +215,30 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         {
             strlcpy(SaganProcSyslog_LOCAL->dst_host, tmp, MAXHOST);
         }
+
+    json_object_object_get_ex(json_norm, "proto", &string_obj);
+    tmp = json_object_get_string(string_obj);
+
+    if ( tmp != NULL )
+        {
+
+            if ( !strcasecmp(tmp, "tcp" ) )
+                {
+                    SaganProcSyslog_LOCAL->proto = 6;
+                }
+
+            else if ( !strcasecmp(tmp, "udp" ) )
+                {
+                    SaganProcSyslog_LOCAL->proto = 17;
+                }
+
+            else if ( !strcasecmp(tmp, "icmp" ) )
+                {
+                    SaganProcSyslog_LOCAL->proto = 1;
+                }
+
+        }
+
 
     /*
         json_object_object_get_ex(json_norm, "src-host", &string_obj);
@@ -341,33 +364,31 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         {
             strlcpy(SaganProcSyslog_LOCAL->event_id, tmp, MAX_EVENT_ID_SIZE);
         }
-    /*
-        if ( debug->debugnormalize )
-            {
 
-                Sagan_Log(DEBUG, "---------------------------------------------------");
-                Sagan_Log(DEBUG, "Log message to normalize: %s", SaganProcSyslog_LOCAL->syslog_message);
-                Sagan_Log(DEBUG, "Parsed: %s", SaganProcSyslog_LOCAL->json_normalize);
-                Sagan_Log(DEBUG, "Source IP: %s", SaganProcSyslog_LOCAL->src_ip);
-                Sagan_Log(DEBUG, "Destination IP: %s", SaganProcSyslog_LOCAL->dst_ip);
-                Sagan_Log(DEBUG, "Source Port: %d", SaganProcSyslog_LOCAL->src_port);
-                Sagan_Log(DEBUG, "Destination Port: %d", SaganProcSyslog_LOCAL->dst_port);
-                Sagan_Log(DEBUG, "Source Host: %s", SaganProcSyslog_LOCAL->src_host);
-                Sagan_Log(DEBUG, "Destination Host: %s", SaganProcSyslog_LOCAL->dst_host);
-                Sagan_Log(DEBUG, "Username: %s", SaganProcSyslog_LOCAL->username);
-                Sagan_Log(DEBUG, "MD5 Hash: %s", SaganProcSyslog_LOCAL->md5);
-                Sagan_Log(DEBUG, "SHA1 Hash: %s", SaganProcSyslog_LOCAL->sha1);
-                Sagan_Log(DEBUG, "SHA265 Hash: %s", SaganProcSyslog_LOCAL->sha256);
-                Sagan_Log(DEBUG, "HTTP URI: %s", SaganProcSyslog_LOCAL->url);
-                Sagan_Log(DEBUG, "HTTP HOSTNAME: %s", SaganProcSyslog_LOCAL->hostname);
-                Sagan_Log(DEBUG, "Filename: %s", SaganProcSyslog_LOCAL->filename);
-                Sagan_Log(DEBUG, "JA3: %s",  SaganProcSyslog_LOCAL->ja3);
-                Sagan_Log(DEBUG, "Event ID: %s",  SaganProcSyslog_LOCAL->event_id);
+    if ( debug->debugnormalize )
+        {
 
-                Sagan_Log(DEBUG, "");
-            }
+            Sagan_Log(DEBUG, "---------------------------------------------------");
+            Sagan_Log(DEBUG, "Log message to normalize: %s", SaganProcSyslog_LOCAL->syslog_message);
+            Sagan_Log(DEBUG, "Parsed: %s", SaganProcSyslog_LOCAL->json_normalize);
+            Sagan_Log(DEBUG, "Source IP: %s", SaganProcSyslog_LOCAL->src_ip);
+            Sagan_Log(DEBUG, "Destination IP: %s", SaganProcSyslog_LOCAL->dst_ip);
+            Sagan_Log(DEBUG, "Source Port: %d", SaganProcSyslog_LOCAL->src_port);
+            Sagan_Log(DEBUG, "Destination Port: %d", SaganProcSyslog_LOCAL->dst_port);
+            Sagan_Log(DEBUG, "Source Host: %s", SaganProcSyslog_LOCAL->src_host);
+            Sagan_Log(DEBUG, "Destination Host: %s", SaganProcSyslog_LOCAL->dst_host);
+            Sagan_Log(DEBUG, "Username: %s", SaganProcSyslog_LOCAL->username);
+            Sagan_Log(DEBUG, "MD5 Hash: %s", SaganProcSyslog_LOCAL->md5);
+            Sagan_Log(DEBUG, "SHA1 Hash: %s", SaganProcSyslog_LOCAL->sha1);
+            Sagan_Log(DEBUG, "SHA265 Hash: %s", SaganProcSyslog_LOCAL->sha256);
+            Sagan_Log(DEBUG, "HTTP URI: %s", SaganProcSyslog_LOCAL->url);
+            Sagan_Log(DEBUG, "HTTP HOSTNAME: %s", SaganProcSyslog_LOCAL->hostname);
+            Sagan_Log(DEBUG, "Filename: %s", SaganProcSyslog_LOCAL->filename);
+            Sagan_Log(DEBUG, "JA3: %s",  SaganProcSyslog_LOCAL->ja3);
+            Sagan_Log(DEBUG, "Event ID: %s",  SaganProcSyslog_LOCAL->event_id);
 
-    	*/
+            Sagan_Log(DEBUG, "");
+        }
 
     json_object_put(json_norm);
 }

@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <json.h>
 
 #include "sagan.h"
 #include "sagan-defs.h"
@@ -48,12 +49,22 @@ void Load_Protocol_Map( const char *map )
     FILE *mapfile;
     char mapbuf[1024];
 
-    char *saveptr=NULL;
+    uint32_t line_number = 0;
 
-    char *map1=NULL;
-    char *map2=NULL;
-    char *map3=NULL;
-    char *map4=NULL;
+    struct json_object *json_obj = NULL;
+    struct json_object *tmp = NULL;
+
+    const char *type = NULL;
+    const char *protocol_number = NULL;
+    const char *case_sensitive = NULL;
+    const char *string = NULL;
+
+//    char *saveptr=NULL;
+
+//    char *map1=NULL;
+//    char *map2=NULL;
+//    char *map3=NULL;
+//    char *map4=NULL;
 
     counters->mapcount_message = 0;
     counters->mapcount_program = 0;
@@ -73,55 +84,58 @@ void Load_Protocol_Map( const char *map )
 
             if (mapbuf[0] == '#' || mapbuf[0] == 10 || mapbuf[0] == ';' || mapbuf[0] == 32)
                 {
+
+                    line_number++;
                     continue;
                 }
             else
                 {
-                    /* Allocate memory for references,  not comments */
 
-                    map1 = strtok_r(mapbuf, "|", &saveptr);
+                    line_number++;
 
-                    if ( map1 == NULL )
+                    json_obj = json_tokener_parse(mapbuf);
+
+// { "type": "message", "protocol_number": 17, "case_sensitive": false, "string": "UDP" }
+
+                    if (json_object_object_get_ex(json_obj, "type", &tmp))
                         {
-                            Sagan_Log(ERROR, "%s is incorrect or not correctly formated (map1)", map);
+                            type = json_object_get_string(tmp);
+                        }
+                    else
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'type' specified at line %d", __FILE__, __LINE__, line_number );
                         }
 
-                    Remove_Return(map1);
-                    Remove_Spaces(map1);
-
-                    map2 = strtok_r(NULL, "|", &saveptr);
-
-                    if ( map2 == NULL )
+                    if (json_object_object_get_ex(json_obj, "protocol_number", &tmp))
                         {
-                            Sagan_Log(ERROR, "%s is incorrect or not correctly formated (map2)", map);
+                            protocol_number  = json_object_get_string(tmp);
+                        }
+                    else
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'protocol_number' specified at line %d", __FILE__, __LINE__, line_number );
                         }
 
-                    Remove_Return(map2);
-                    Remove_Spaces(map2);
-
-                    map3 = strtok_r(NULL, "|", &saveptr);
-
-                    if ( map3 == NULL )
+                    if (json_object_object_get_ex(json_obj, "case_sensitive", &tmp))
                         {
-                            Sagan_Log(ERROR, "%s is incorrect or not correctly formated (map3)", map);
+                            case_sensitive  = json_object_get_string(tmp);
+                        }
+                    else
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'case_sensitive' specified at line %d", __FILE__, __LINE__, line_number );
                         }
 
-                    Remove_Return(map3);
-                    Remove_Spaces(map3);
-
-                    map4 = strtok_r(NULL, "|", &saveptr);
-
-                    if ( map4 == NULL )
+                    if (json_object_object_get_ex(json_obj, "string", &tmp))
                         {
-                            Sagan_Log(ERROR, "%s is incorrect or not correctly formated (map4)", map);
+                            string  = json_object_get_string(tmp);
+                        }
+                    else
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'string' specified at %d", __FILE__, __LINE__, line_number);
                         }
 
-                    Remove_Return(map4);
-                    Remove_Spaces(map4);
-
-
-                    if (!strcmp(map1, "message"))
+                    if ( !strcmp(type, "message" ) )
                         {
+
                             map_message = (_Sagan_Protocol_Map_Message *) realloc(map_message, (counters->mapcount_message+1) * sizeof(_Sagan_Protocol_Map_Message));
 
                             if ( map_message == NULL )
@@ -131,15 +145,28 @@ void Load_Protocol_Map( const char *map )
 
                             memset(&map_message[counters->mapcount_message], 0, sizeof(struct _Sagan_Protocol_Map_Message));
 
+                            map_message[counters->mapcount_message].proto = atoi( protocol_number );
 
-                            map_message[counters->mapcount_message].proto = atoi(map2);
-                            if (!strcmp(map3, "nocase")) map_message[counters->mapcount_message].nocase = 1;
-                            strlcpy(map_message[counters->mapcount_message].search, map4, sizeof(map_message[counters->mapcount_message].search));
+                            if ( map_message[counters->mapcount_message].proto == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Protocol number is invalid at line %d.", __FILE__, __LINE__, line_number);
+                                }
+
+                            if ( !strcmp(case_sensitive, "true" ) )
+                                {
+                                    map_message[counters->mapcount_message].nocase = true;
+                                }
+
+
+                            strlcpy( map_message[counters->mapcount_message].search, string, sizeof( map_message[counters->mapcount_message].search ) );
+
                             counters->mapcount_message++;
+
                         }
 
-                    if (!strcmp(map1, "program"))
+                    else if ( !strcmp(type, "program" ) )
                         {
+
                             map_program = (_Sagan_Protocol_Map_Program *) realloc(map_program, (counters->mapcount_program+1) * sizeof(_Sagan_Protocol_Map_Program));
 
                             if ( map_program == NULL )
@@ -147,18 +174,43 @@ void Load_Protocol_Map( const char *map )
                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for map_program. Abort!", __FILE__, __LINE__);
                                 }
 
-                            map_program[counters->mapcount_program].proto = atoi(map2);
-                            if (!strcmp(map3, "nocase")) map_program[counters->mapcount_program].nocase = 1;
-                            strlcpy(map_program[counters->mapcount_program].program, map4, sizeof(map_program[counters->mapcount_program].program));
+                            memset(&map_message[counters->mapcount_program], 0, sizeof(struct _Sagan_Protocol_Map_Program));
+
+                            map_program[counters->mapcount_program].proto = atoi( protocol_number );
+
+                            if ( map_program[counters->mapcount_program].proto == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Protocol number is invalid at line %d.", __FILE__, __LINE__, line_number);
+                                }
+
+                            if ( !strcmp(case_sensitive, "true" ) )
+                                {
+                                    map_program[counters->mapcount_program].nocase = true;
+                                }
+
+                            strlcpy( map_program[counters->mapcount_program].program, string, sizeof(map_program[counters->mapcount_program].program) );
+
                             counters->mapcount_program++;
+
+                        }
+
+                    else
+                        {
+
+                            Sagan_Log(ERROR, "[%s, line %d]  Invalid 'type' specified at line %d. Need to be 'message' or 'program'.", __FILE__, __LINE__, line_number );
+
+
                         }
 
                 }
-
         }
 
     fclose(mapfile);
-    Sagan_Log(NORMAL, "%d protocols loaded [Message search: %d|Program search: %d]", counters->mapcount_message + counters->mapcount_program, counters->mapcount_message, counters->mapcount_program);
+
+    json_object_put(json_obj);
+
+    Sagan_Log(NORMAL, "%d protocols loaded.  Loaded %d 'message' search items and %d 'program' items.", counters->mapcount_message + counters->mapcount_program, counters->mapcount_message, counters->mapcount_program);
+
 
 }
 
