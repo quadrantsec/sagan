@@ -95,15 +95,13 @@ void Load_Protocol_Map( const char *map )
 
                     json_obj = json_tokener_parse(mapbuf);
 
-// { "type": "message", "protocol_number": 17, "case_sensitive": false, "string": "UDP" }
-
                     if (json_object_object_get_ex(json_obj, "type", &tmp))
                         {
                             type = json_object_get_string(tmp);
                         }
                     else
                         {
-                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'type' specified at line %d", __FILE__, __LINE__, line_number );
+                            Sagan_Log(ERROR, "[%s, line %d] 'type' not specified at line %d", __FILE__, __LINE__, line_number );
                         }
 
                     if (json_object_object_get_ex(json_obj, "protocol_number", &tmp))
@@ -112,7 +110,7 @@ void Load_Protocol_Map( const char *map )
                         }
                     else
                         {
-                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'protocol_number' specified at line %d", __FILE__, __LINE__, line_number );
+                            Sagan_Log(ERROR, "[%s, line %d] 'protocol_number' not specified at line %d", __FILE__, __LINE__, line_number );
                         }
 
                     if (json_object_object_get_ex(json_obj, "case_sensitive", &tmp))
@@ -121,7 +119,7 @@ void Load_Protocol_Map( const char *map )
                         }
                     else
                         {
-                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'case_sensitive' specified at line %d", __FILE__, __LINE__, line_number );
+                            Sagan_Log(ERROR, "[%s, line %d] 'case_sensitive' not specified at line %d", __FILE__, __LINE__, line_number );
                         }
 
                     if (json_object_object_get_ex(json_obj, "string", &tmp))
@@ -130,7 +128,7 @@ void Load_Protocol_Map( const char *map )
                         }
                     else
                         {
-                            Sagan_Log(ERROR, "[%s, line %d] Not protocol 'string' specified at %d", __FILE__, __LINE__, line_number);
+                            Sagan_Log(ERROR, "[%s, line %d] 'string' not specified at %d", __FILE__, __LINE__, line_number);
                         }
 
                     if ( !strcmp(type, "message" ) )
@@ -174,7 +172,7 @@ void Load_Protocol_Map( const char *map )
                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for map_program. Abort!", __FILE__, __LINE__);
                                 }
 
-                            memset(&map_message[counters->mapcount_program], 0, sizeof(struct _Sagan_Protocol_Map_Program));
+                            memset(&map_program[counters->mapcount_program], 0, sizeof(struct _Sagan_Protocol_Map_Program));
 
                             map_program[counters->mapcount_program].proto = atoi( protocol_number );
 
@@ -209,7 +207,7 @@ void Load_Protocol_Map( const char *map )
 
     json_object_put(json_obj);
 
-    Sagan_Log(NORMAL, "%d protocols loaded.  Loaded %d 'message' search items and %d 'program' items.", counters->mapcount_message + counters->mapcount_program, counters->mapcount_message, counters->mapcount_program);
+    Sagan_Log(NORMAL, "%d protocols loaded. Loaded %d 'message' search items and %d 'program' items.", counters->mapcount_message + counters->mapcount_program, counters->mapcount_message, counters->mapcount_program);
 
 
 }

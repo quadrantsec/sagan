@@ -382,7 +382,7 @@ bool Is_Numeric (const char *str)
  * parsing msg: and pcre
  ***************************************************************************/
 
-void Between_Quotes( const char *in_str, char *str, size_t size)
+void Between_Quotes( const char *in_str, char *str, size_t size, const char *filename, uint32_t line_number )
 {
 
 
@@ -408,6 +408,14 @@ void Between_Quotes( const char *in_str, char *str, size_t size)
 
             if ( in_str[i] == '\"' ) flag = true;
 
+        }
+
+    /* We need to verify we found data.  If not, the signature is likely using unicode quotes and
+       not ASCII quotes.  Doh! */
+
+    if ( tmp2[0] == '\0' )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Invalid quotes found in %s at line %d. Are you actually using real quotes?!", __FILE__, __LINE__, filename, line_number);
         }
 
     snprintf(str, size, "%s", tmp2);
