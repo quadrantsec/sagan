@@ -78,8 +78,8 @@ void Usage(void)
     fprintf(stderr, "\t\t\tfrom a FIFO.  The file must be in the Sagan format!\n");
     fprintf(stderr, "-l, --log [file]\tsagan.log location [default: %s].\n", SAGANLOG );
     fprintf(stderr, "-Q, --quiet\t\tRun Sagan in 'quiet' mode (no console output)\n");
-    fprintf(stderr, "-t, --threads\t\tSet number of threads to use (overrides the sagan.yaml).\n");
-    fprintf(stderr, "-r, --rules\t\tUse a specific rule set (overrides the sagan.yaml).\n");
+    fprintf(stderr, "-t, --threads [#]\tSet number of threads to use (overrides the sagan.yaml).\n");
+    fprintf(stderr, "-r, --rules [file]\tUse a specific rule set (overrides the sagan.yaml).\n");
     fprintf(stderr, "\n");
 
 #ifdef HAVE_LIBESMTP
