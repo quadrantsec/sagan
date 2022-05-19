@@ -438,13 +438,11 @@ struct _Sagan_JSON
 
 };
 
-
 typedef struct _Sagan_Pass_Syslog _Sagan_Pass_Syslog;
 struct _Sagan_Pass_Syslog
 {
     char syslog[MAX_SYSLOG_BATCH][MAX_SYSLOGMSG];
 };
-
 
 #ifdef HAVE_LIBFASTJSON
 
@@ -586,22 +584,6 @@ struct _Sagan_Event
     char filename[MAX_FILENAME_SIZE+1];
     char hostname[MAX_HOSTNAME_SIZE+1];
     char url[MAX_URL_SIZE+1];
-
-//    char *country_src;
-//    char *city_src;
-//    char *postal_src;
-//    char *timezone_src;
-//    char *subdivision_src;
-//    char *latitude_src;
-//    char *longitude_src;
-
-//    char *country_dst;
-//    char *city_dst;
-//    char *postal_dst;
-//    char *timezone_dst;
-//    char *subdivision_dst;
-//    char *latitude_dst;
-//    char *longitude_dst;
 
 #ifdef HAVE_LIBLOGNORM
 

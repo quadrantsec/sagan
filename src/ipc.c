@@ -107,7 +107,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
 
             struct _After2_IPC *Temp_After2_IPC;
             Temp_After2_IPC = malloc(sizeof(struct _After2_IPC) * config->max_after2);
-            memset(Temp_After2_IPC, 0, sizeof(sizeof(struct _After2_IPC) * config->max_after2));
+            memset(Temp_After2_IPC, 0, sizeof(struct _After2_IPC) * config->max_after2);
 
             old_count = counters_ipc->after2_count;
 
@@ -195,7 +195,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
             struct _Threshold2_IPC *Temp_Threshold2_IPC;
             Temp_Threshold2_IPC = malloc(sizeof(struct _Threshold2_IPC) * config->max_threshold2);
 
-            memset(Temp_Threshold2_IPC, 0, sizeof(sizeof(struct _Threshold2_IPC) * config->max_threshold2));
+            memset(Temp_Threshold2_IPC, 0, sizeof(struct _Threshold2_IPC) * config->max_threshold2);
 
             old_count = counters_ipc->thresh2_count;
 
@@ -282,7 +282,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
             struct _Sagan_IPC_Flexbit *temp_flexbit_ipc;
             temp_flexbit_ipc = malloc(sizeof(struct _Sagan_IPC_Flexbit) * config->max_flexbits);
 
-            memset(temp_flexbit_ipc, 0, sizeof(sizeof(struct _Sagan_IPC_Flexbit) * config->max_flexbits));
+            memset(temp_flexbit_ipc, 0, sizeof(struct _Sagan_IPC_Flexbit) * config->max_flexbits);
 
             old_count = counters_ipc->flexbit_count;
 
@@ -363,7 +363,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
 
             struct _Sagan_IPC_Xbit *temp_xbit_ipc;
             temp_xbit_ipc = malloc(sizeof(struct _Sagan_IPC_Xbit) * config->max_xbits);
-            memset(temp_xbit_ipc, 0, sizeof(sizeof(struct _Sagan_IPC_Xbit) * config->max_xbits));
+            memset(temp_xbit_ipc, 0, sizeof(struct _Sagan_IPC_Xbit) * config->max_xbits);
 
             old_count = counters_ipc->xbit_count;
 

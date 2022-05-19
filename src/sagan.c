@@ -114,8 +114,6 @@ struct _SaganDNSCache *dnscache = NULL;
 struct _Track_Clients_Networks *Track_Clients_Networks = NULL;
 struct _Sagan_Track_Clients *SaganTrackClients;
 
-
-
 #ifdef HAVE_LIBFASTJSON
 struct _Syslog_JSON_Map *Syslog_JSON_Map = NULL;
 struct _JSON_Message_Map *JSON_Message_Map = NULL;
@@ -124,7 +122,6 @@ struct _JSON_Message_Map *JSON_Message_Map = NULL;
 /* Already Init'ed */
 
 extern struct _Rule_Struct *rulestruct;
-extern struct _Sagan_Ignorelist *SaganIgnorelist;
 
 #ifdef WITH_BLUEDOT
 #include "processors/bluedot.h"
@@ -145,6 +142,7 @@ bool death=false;
 
 pthread_cond_t SaganProcDoWork=PTHREAD_COND_INITIALIZER;
 pthread_mutex_t SaganProcWorkMutex=PTHREAD_MUTEX_INITIALIZER;
+
 extern pthread_mutex_t SaganRulesLoadedMutex;
 
 /* ########################################################################
@@ -169,17 +167,16 @@ int main(int argc, char **argv)
         { "file",	  required_argument,    NULL,   'F' },
         { "quiet", 	  no_argument, 		NULL, 	'Q' },
         { "threads",	  required_argument,    NULL,   't' },
+        { "rules", 	  required_argument,    NULL,   'r' },
         {0, 0, 0, 0}
     };
 
     static const char *short_options =
-        "l:f:u:F:d:c:t:pDhCQ";
+        "l:f:u:r:F:d:c:t:pDhCQ";
 
     int option_index = 0;
 
     uint_fast16_t max_threads_override = 0;
-
-    struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
 
     FILE *test_open;			/* Used to test file access */
 
@@ -565,6 +562,13 @@ int main(int argc, char **argv)
 
                     break;
 
+                case 'r':
+
+                    config->rules_from_file_flag = true;
+                    strlcpy(config->rules_from_file, optarg, sizeof(config->rules_from_file) );
+
+                    break;
+
                 default:
                     fprintf(stderr, "Invalid argument! See below for command line switches.\n");
                     Usage();
@@ -728,15 +732,6 @@ int main(int argc, char **argv)
         }
 
     memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
-
-    SaganPassSyslog_LOCAL = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
-
-    if ( SaganPassSyslog_LOCAL == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
-        }
-
-    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
     pthread_t processor_id[config->max_processor_threads];
     pthread_attr_t thread_processor_attr;

@@ -2535,7 +2535,7 @@ void Load_YAML_Config( char *yaml_file )
 #endif
                         } /* else if ype == YAML_TYPE_OUTPUT */
 
-                    else if ( type == YAML_TYPE_RULES )
+                    else if ( type == YAML_TYPE_RULES && config->rules_from_file_flag == false )
                         {
 
 #ifdef WITH_BLUEDOT
@@ -2553,6 +2553,7 @@ void Load_YAML_Config( char *yaml_file )
 #endif
 
                             Var_To_Value(value, tmp, sizeof(tmp));
+
                             (void)Load_Rules( (char*)tmp );
 
                             rules_loaded = (_Rules_Loaded *) realloc(rules_loaded, (counters->rules_loaded_count+1) * sizeof(_Rules_Loaded));
@@ -2871,6 +2872,28 @@ void Load_YAML_Config( char *yaml_file )
         }
 
 #endif
+
+    /* This is for support to load data from the command line */
+
+    if ( config->rules_from_file_flag == true )
+        {
+
+#ifdef WITH_BLUEDOT
+
+            if ( config->bluedot_flag == true && bluedot_load == false )
+                {
+
+                    Sagan_Bluedot_Init();
+                    Sagan_Bluedot_Load_Cat();
+
+                    bluedot_load = true;
+
+                }
+
+#endif
+
+            (void)Load_Rules( (char*)config->rules_from_file );
+        }
 
     reload_rules = false;
 

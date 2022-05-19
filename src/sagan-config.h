@@ -60,6 +60,9 @@ struct _SaganConfig
     bool		eve_alerts_base64;
     bool		eve_logs;
 
+    bool	rules_from_file_flag;
+    char	rules_from_file[MAXPATH];
+
     char         sagan_alert_filepath[MAXPATH];
 
     char	 sagan_sensor_name[64];

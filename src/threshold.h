@@ -18,6 +18,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, char *ip_dst,  uint16_t dst_port, char *username, char *syslog_message );
+bool Threshold2 ( uint_fast32_t rule_position, const char *ip_src, uint16_t src_port, const char *ip_dst,  uint16_t dst_port, const char *username, const char *syslog_message );
 
 

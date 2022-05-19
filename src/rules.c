@@ -234,8 +234,6 @@ void Load_Rules( const char *ruleset )
             Sagan_Log(ERROR, "[%s, line %d] Cannot open rule file (%s - %s)", __FILE__, __LINE__, ruleset_fullname, strerror(errno));
         }
 
-
-
     Ruleset_Track = (_Sagan_Ruleset_Track *) realloc(Ruleset_Track, (counters->ruleset_track_count+1) * sizeof(_Sagan_Ruleset_Track));
 
     if ( Ruleset_Track == NULL )

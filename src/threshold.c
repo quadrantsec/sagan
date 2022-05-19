@@ -51,7 +51,7 @@ extern struct _SaganConfig *config;
 /* Threshold2          */
 /***********************/
 
-bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, char *ip_dst,  uint16_t dst_port, char *username, char *syslog_message )
+bool Threshold2 ( uint_fast32_t rule_position, const char *ip_src, uint16_t src_port, const char *ip_dst,  uint16_t dst_port, const char *username, const char *syslog_message )
 {
 
     time_t t;
@@ -63,7 +63,7 @@ bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, 
     uint_fast64_t thresh_oldtime = 0;
     uint_fast64_t current_time = 0;
 
-    uint_fast32_t i;
+    uint_fast32_t i = 0;
 
     t = time(NULL);
     now=localtime(&t);
@@ -81,8 +81,6 @@ bool Threshold2 ( uint_fast32_t rule_position, char *ip_src, uint16_t src_port, 
     uint_fast32_t hash;
 
     current_time = atoi(timet);
-
-    username_tmp[0] = '\0';
 
     if ( rulestruct[rule_position].threshold2_method_src == true )
         {
