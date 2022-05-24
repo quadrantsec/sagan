@@ -1,3 +1,48 @@
+2022/05/24 - 	Sagan 2.1.0 released.
+
+		* Sagan now has the ability to read in files (via the command line --files or -F).
+		  This includes file globbing ( ie -  --files "/var/log/*.log"),  gzip files 
+		  ( --files "/var/log/*.log.gz ).  Also fixed issue that cause reading in files 
+		  to cause thread exhaustion (Thanks @sdesorbo!). 
+
+		* New --rules command line option.  This allows you to override the "sagan.yaml" 
+		  rules and specify a signature set from the command line. 
+
+		* New --threads option.  This overrides the "sagan.yaml" option.  This can be 
+		  useful when dealing with files.  for example: 
+
+		  $ sagan --threads 8 --rules /home/champ/my-test-rules.rules --file "/var/log/syslog/*.log.gz" 
+
+		* New "pass" rule option.  These work the same as normal rules except that instead of 
+		  "alert" or "drop" they use the "pass" action.  The "pass" action tells the Sagan 
+		  engine to send an alert and stop processing any more rules. 
+
+		  - https://github.com/quadrantsec/sagan/commit/eb3fe15c2cd67ee9d43ce337cd1e658e750b5127 
+
+		* The "external" output now uses the unified, normal EVE (JSON) as everything else. 
+
+		  - https://github.com/quadrantsec/sagan/commit/c341c27cdc234e381d100c758dabf2e299881bfc 
+
+		* Fixes for meta_content and json_meta_content 
+
+		  - https://github.com/quadrantsec/sagan/commit/0b0a16c04bd909d1f98deeb5807ef30539790632 
+
+		* Added "byte" count and "events" to client stats.  This means that "client-stats" JSON now 
+		  contains the amount of data seen by Sagan per-host. 
+
+		* Fixed a bug in the "correlation" JSON.  When Redis was used for xbits,  the 
+		  "correlation" JSON was not being added. 
+
+		* The "protocol.map" is now stored in a JSON format. 
+
+		* Better signature validation on startup. 
+
+		* Increase the default "max" number of JSON keys Sagan can process.  From 128 -> 256. 
+
+		* Minor updates to documentation (thanks @wrharding) 
+
+		* More memory and stability improvements! 
+
 2021/12/10 - 	Sagan 2.0.2 released. 
 
 		* Fixes that allow Sagan to compile using GCC 10. 
