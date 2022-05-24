@@ -875,7 +875,7 @@ int main(int argc, char **argv)
         {
             if (( test_open = fopen( config->fast_filename, "a" )) == NULL )
                 {
-                    Sagan_Log(ERROR, "[%s, line %d] Cannot open %s (%s). Abort", __FILE__, __LINE__, config->sagan_alert_filepath, strerror(errno));
+                    Sagan_Log(ERROR, "[%s, line %d] Cannot open %s (%s). Abort", __FILE__, __LINE__,config->fast_filename, strerror(errno));
                 }
 
             fclose(test_open);
