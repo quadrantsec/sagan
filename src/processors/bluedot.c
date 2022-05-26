@@ -779,7 +779,7 @@ uint_fast8_t Sagan_Bluedot_Lookup(const char *data,  uint_fast8_t type, uint_fas
     uint64_t mdate_utime_u32 = 0;
 
     signed char bluedot_alertid = 0;		/* -128 to 127 */
-    uint_fast16_t i;
+    uint_fast32_t i;
 
     char tmp[64] = { 0 };
 
