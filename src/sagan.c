@@ -168,17 +168,20 @@ int main(int argc, char **argv)
         { "quiet", 	  no_argument, 		NULL, 	'Q' },
         { "threads",	  required_argument,    NULL,   't' },
         { "rules", 	  required_argument,    NULL,   'r' },
+        { "test", 	  no_argument, 		NULL,	'T' },
         {0, 0, 0, 0}
     };
 
     static const char *short_options =
-        "l:f:u:r:F:d:c:t:pDhCQ";
+        "l:f:u:r:F:d:c:t:pDhCQT";
 
     int option_index = 0;
 
     uint_fast16_t max_threads_override = 0;
 
     FILE *test_open;			/* Used to test file access */
+
+    bool test_mode = false;
 
     /****************************************************************************/
     /* libpcap/PLOG (syslog sniffer) local variables                            */
@@ -371,6 +374,10 @@ int main(int argc, char **argv)
                 case 'C':
                     Credits();
                     exit(0);
+                    break;
+
+                case 'T':
+                    test_mode = true;
                     break;
 
                 case 'd':
@@ -589,6 +596,16 @@ int main(int argc, char **argv)
 
     config->sagan_log_stream_int = fileno( config->sagan_log_stream );
 
+    /* If in "test" mode,  let the user know.  Disabled config->daemon! */
+
+    if ( test_mode == true )
+        {
+            Sagan_Log(NORMAL, "*******************************************************************************");
+            Sagan_Log(NORMAL, "** Running Sagan in 'test'. Engine will not start after testing is complete. **");
+            Sagan_Log(NORMAL, "*******************************************************************************");
+            config->daemonize = false;
+        }
+
     /* Become a daemon if requested */
 
     Sagan_Log(NORMAL, "Sagan's PID is %d", getpid() );
@@ -682,12 +699,20 @@ int main(int argc, char **argv)
     /* Create the signal handlers thread _after_ the fork() so it can properly
      * handly signals - Champ Clark III - 06/13/2011 */
 
-    rc = pthread_create( &sig_thread, NULL, (void *)Sig_Handler, NULL );
+    /* No reason to start a signal handler if we are just "testing"
+       Champ Clark III / 06/09/2022 */
 
-    if ( rc != 0  )
+    if ( test_mode == false )
         {
-            Remove_Lock_File();
-            Sagan_Log(ERROR, "[%s, line %d] Error creating signal handler thread. [error: %d]", __FILE__, __LINE__, rc);
+
+            rc = pthread_create( &sig_thread, NULL, (void *)Sig_Handler, NULL );
+
+            if ( rc != 0  )
+                {
+                    Remove_Lock_File();
+                    Sagan_Log(ERROR, "[%s, line %d] Error creating signal handler thread. [error: %d]", __FILE__, __LINE__, rc);
+                }
+
         }
 
 
@@ -709,6 +734,20 @@ int main(int argc, char **argv)
 
     pthread_mutex_lock(&SaganRulesLoadedMutex);
     (void)Load_YAML_Config(config->sagan_config);
+
+    /* If we are in "test" mode, we can stop here */
+
+    if ( test_mode == true )
+        {
+            pthread_mutex_unlock(&SaganRulesLoadedMutex);
+
+            Sagan_Log(NORMAL, "******************************************************************");
+            Sagan_Log(NORMAL, "*** Sagan 'test' mode complete.  Looks like everything passed! ***");
+            Sagan_Log(NORMAL, "******************************************************************");
+
+            fclose( config->sagan_log_stream );
+            exit(0);
+        }
 
     if ( config->sagan_log_syslog == true )
         {

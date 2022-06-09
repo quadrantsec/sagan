@@ -335,7 +335,7 @@ void Load_Rules( const char *ruleset )
                 }
 
 
-            rc=0;
+//            rc=0;
 
             if ( rulebuf[0] == 'a' && rulebuf[1] == 'l' && rulebuf[2] == 'e' && rulebuf[3] == 'r' && rulebuf[4] == 't' )
                 {
@@ -357,39 +357,56 @@ void Load_Rules( const char *ruleset )
                     Sagan_Log(ERROR, "[%s, line %d] %s on line %d appears to not have a 'alert', 'drop' or 'pass', Abort.", __FILE__, __LINE__, ruleset_fullname, linecount, rulestruct[counters->rulecount].rule_type);
                 }
 
-            rc=0;
+            /* Sanity check alert any, alert icmp, alert tcp, alert udp */
 
-            if (!Sagan_strstr(rulebuf, "alert any ") && !Sagan_strstr(rulebuf, "drop any ") && !Sagan_strstr(rulebuf, "pass any ") )
+            rc = false;
+
+            uint8_t cs = 4;	/* This is for pass or drop */
+
+            if ( rulestruct[counters->rulecount].rule_type == RULE_TYPE_ALERT )
                 {
-                    rc++;
+                    cs = 5;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert ip ") && !Sagan_strstr(rulebuf, "drop ip ") && !Sagan_strstr(rulebuf, "pass ip ") )
+            /* any */
+
+            if ( rulebuf[cs] == ' ' && rulebuf[cs+1] == 'a' && rulebuf[cs+2] == 'n' && rulebuf[cs+3] == 'y' && rulebuf[cs+4] == ' ' )
                 {
-                    rc++;
+                    rc = true;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert tcp ") && !Sagan_strstr(rulebuf, "drop tcp ") && !Sagan_strstr(rulebuf, "pass tcp ") )
+            /* tcp */
+
+            else if ( rulebuf[cs] == ' ' && rulebuf[cs+1] == 't' && rulebuf[cs+2] == 'c' && rulebuf[cs+3] == 'p' && rulebuf[cs+4] == ' ' )
                 {
-                    rc++;
+                    rc = true;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert udp ") && !Sagan_strstr(rulebuf, "drop udp ") && !Sagan_strstr(rulebuf, "pass udp ") )
+            /* udp */
+
+            else if ( rulebuf[cs] == ' ' && rulebuf[cs+1] == 'u' && rulebuf[cs+2] == 'd' && rulebuf[cs+3] == 'p' && rulebuf[cs+4] == ' ' )
                 {
-                    rc++;
+                    rc = true;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert icmp ") && !Sagan_strstr(rulebuf, "drop icmp ") && !Sagan_strstr(rulebuf, "pass icmp ") )
+            /* icmp */
+
+            else if ( rulebuf[cs] == ' ' && rulebuf[cs+1] == 'i' && rulebuf[cs+2] == 'c' && rulebuf[cs+3] == 'm' &&
+                      rulebuf[cs+4] == 'p' && rulebuf[cs+5] == ' ' )
                 {
-                    rc++;
+                    rc = true;
                 }
 
-            if (!Sagan_strstr(rulebuf, "alert syslog ") && !Sagan_strstr(rulebuf, "drop syslog ") && !Sagan_strstr(rulebuf, "pass syslog ") )
+            /* syslog */
+
+            else if ( rulebuf[cs] == ' ' && rulebuf[cs+1] == 's' && rulebuf[cs+2] == 'y' && rulebuf[cs+3] == 's' &&
+                      rulebuf[cs+4] == 'l' && rulebuf[cs+5] == 'o' && rulebuf[cs+6] == 'g' && rulebuf[cs+7] == ' ' )
                 {
-                    rc++;
+                    rc = true;
                 }
 
-            if ( rc >= 6 )
+
+            if ( rc == false )
                 {
                     Sagan_Log(ERROR, "[%s, line %d] %s on line %d appears to not have a protocol type (any/tcp/udp/icmp/syslog), Abort", __FILE__, __LINE__, ruleset_fullname, linecount);
                 }
@@ -2498,7 +2515,17 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             Remove_Spaces(arg);
+
+                            /* references are , delimited.  For exmaple: "url,www.example.com".  I've seen people put
+                               "reference: Sharepoint;" which isn't valid.  Check the reference before passing. */
+
+                            if ( !Sagan_strstr(arg, "," ) )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] The \"reference\" \"%s\" is invalid at line %d in %s. It need to be comma delimited (ie = \"url,example.com\", \"cve,1234\")", __FILE__, __LINE__, arg, linecount, ruleset_fullname);
+                                }
+
                             strlcpy(rulestruct[counters->rulecount].s_reference[ref_count], arg, sizeof(rulestruct[counters->rulecount].s_reference[ref_count]));
+
                             rulestruct[counters->rulecount].ref_count=ref_count;
                             ref_count++;
                         }
@@ -3207,6 +3234,19 @@ void Load_Rules( const char *ruleset )
 
                                     tmptoken = strtok_r(NULL, ",", &saveptrrule2);
                                 }
+
+                            /* Sanity check */
+
+                            if ( rulestruct[counters->rulecount].threshold2_count == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] No 'threshold' count specified at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            if ( rulestruct[counters->rulecount].threshold2_seconds == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] No 'threshold' time (seconds) specified at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
                         }
 
                     /* "after"; similar to thresholding,  but the opposite direction */
@@ -3273,6 +3313,8 @@ void Load_Rules( const char *ruleset )
 
                                                     after_value2 = strtok_r(NULL, "&", &after_value3);
                                                 }
+
+
                                         }
 
                                     if (Sagan_strstr(tmptoken, "count"))
@@ -3285,7 +3327,6 @@ void Load_Rules( const char *ruleset )
                                                 {
                                                     Sagan_Log(ERROR, "[%s, line %d] Invalid after count '%s' at line %d in %s. Abort.", __FILE__, __LINE__, tmptok_tmp, linecount, ruleset_fullname);
                                                 }
-
 
                                         }
 
@@ -3302,9 +3343,23 @@ void Load_Rules( const char *ruleset )
 
                                         }
 
+
                                     tmptoken = strtok_r(NULL, ",", &saveptrrule2);
 
                                 }
+
+                            /* Sanity check */
+
+                            if ( rulestruct[counters->rulecount].after2_count == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] No 'after' count specified at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            if ( rulestruct[counters->rulecount].after2_seconds == 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] No 'after' time (seconds) specified at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
                         }
 
                     /* Blacklist */

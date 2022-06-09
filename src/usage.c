@@ -80,6 +80,7 @@ void Usage(void)
     fprintf(stderr, "-Q, --quiet\t\tRun Sagan in 'quiet' mode (no console output)\n");
     fprintf(stderr, "-t, --threads [#]\tSet number of threads to use (overrides the sagan.yaml).\n");
     fprintf(stderr, "-r, --rules [file]\tUse a specific rule set (overrides the sagan.yaml).\n");
+    fprintf(stderr, "-T, --test\t\tTest configuration (sagan.yaml) and rule sets.\n");
     fprintf(stderr, "\n");
 
 #ifdef HAVE_LIBESMTP
