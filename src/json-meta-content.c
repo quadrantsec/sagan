@@ -36,6 +36,7 @@
 #include "rules.h"
 #include "json-meta-content.h"
 #include "search-type.h"
+#include "util-base64.h"
 
 #include "parsers/parsers.h"
 
@@ -50,6 +51,8 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
     bool rc=0;
     uint_fast16_t match = 0;
 
+    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 }; 
+
     for (i=0; i < rulestruct[rule_position].json_meta_content_count; i++)
         {
 
@@ -61,9 +64,20 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                     if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_meta_content_key[i] ) )
                         {
 
+			    if ( rulestruct[rule_position].json_decode_base64[i] == true )
+			    {
+
+			    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+
+			    } else {
+
+			    memcpy(  tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
+
+			    }
+
                             /* Key found, test for json_meta_content */
 
-                            rc = JSON_Meta_Content_Search(rule_position, JSON_LOCAL->json_value[a], i );
+                            rc = JSON_Meta_Content_Search(rule_position, tmp_string, i );
 
 
                             /* Got hit */

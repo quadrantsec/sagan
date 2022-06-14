@@ -35,6 +35,7 @@
 #include "sagan-defs.h"
 #include "rules.h"
 #include "json-content.h"
+#include "util-base64.h"
 
 #include "parsers/parsers.h"
 
@@ -47,6 +48,8 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
     int a=0;
     int rc=0;
 
+    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 }; 
+
     int ovector[PCRE_OVECCOUNT];
 
     for (i=0; i < rulestruct[rule_position].json_pcre_count; i++)
@@ -58,7 +61,18 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
                     if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_pcre_key[i] ) )
                         {
 
-                            rc = pcre_exec( rulestruct[rule_position].json_re_pcre[i], rulestruct[rule_position].json_pcre_extra[i], JSON_LOCAL->json_value[a], (int)strlen(JSON_LOCAL->json_value[a]), 0, 0, ovector, PCRE_OVECCOUNT);
+			if ( rulestruct[rule_position].json_decode_base64[i] == true )
+				{
+
+				Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+
+				} else {
+
+				memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
+
+				}
+
+                            rc = pcre_exec( rulestruct[rule_position].json_re_pcre[i], rulestruct[rule_position].json_pcre_extra[i], tmp_string, (int)strlen(tmp_string), 0, 0, ovector, PCRE_OVECCOUNT);
 
                             /* If it's _not_ a match, no need to test other conditions */
 

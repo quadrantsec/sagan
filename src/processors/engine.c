@@ -207,9 +207,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     if ( config->json_parse_data == true )
         {
 
-//	strlcpy(o_syslog_message, SaganProcSyslog_LOCAL->syslog_message, MAX_SYSLOGMSG);
-//	strlcpy(o_program, SaganProcSyslog_LOCAL->syslog_program, MAX_SYSLOG_PROGRAM);
-
             /* If we detect JSON in the "program" field,  append the program with the
             * message */
 
@@ -656,7 +653,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                 {
                                     if ( validate_flag == true )
                                         {
-                                            flag = JSON_Content(b, JSON_LOCAL );
+                                            	flag = JSON_Content(b, JSON_LOCAL );
                                         }
                                     else
                                         {

@@ -181,6 +181,10 @@ void Load_Rules( const char *ruleset )
     uint16_t json_map_count=0;
     uint32_t meta_content_count=0;
 
+#ifdef HAVE_LIBFASTJSON
+    uint16_t json_decode_base64_count=0;
+#endif
+
     uint16_t meta_content_converted_count=0;
     uint16_t json_meta_content_converted_count=0;
     uint8_t json_pcre_count=0;
@@ -2165,9 +2169,7 @@ void Load_Rules( const char *ruleset )
 
                     /* Set the previous "json_strstr" to use strstr instead of strcmp */
 
-                    /* TODO:  Remove "json_strstr" */
-
-                    if ( !strcmp(rulesplit, "json_strstr") || !strcmp(rulesplit, "json_contains") )
+                    if ( !strcmp(rulesplit, "json_contains") )
                         {
 
                             if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
@@ -2179,11 +2181,25 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_content_strstr[json_content_count-1] = 1;
                         }
 
-                    /* Set the previous "json_meta_strstr" to use strstr instead of strcmp */
+                    if (!strcmp(rulesplit, "json_decode_base64"))
+                        {
 
-                    /* TODO: Remove "json_meta_strstr" */
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_decode_base64' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
 
-                    if (!strcmp(rulesplit, "json_meta_strstr") || !strcmp(rulesplit, "json_meta_contains") )
+                            strtok_r(NULL, ":", &saveptrrule2);
+                            rulestruct[counters->rulecount].json_decode_base64[json_decode_base64_count] = true;
+
+                            json_decode_base64_count++;
+                            rulestruct[counters->rulecount].json_decode_base64_count = json_decode_base64_count;
+                        }
+
+
+                    /* Set the previous "json_meta_content" to use strstr instead of strcmp */
+
+                    if ( !strcmp(rulesplit, "json_meta_contains" ) )
                         {
 
                             if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
@@ -2194,6 +2210,7 @@ void Load_Rules( const char *ruleset )
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_meta_strstr[json_meta_content_count-1] = 1;
                         }
+			
 
                     /* Search JSON via PCRE */
 

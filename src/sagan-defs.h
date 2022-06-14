@@ -247,6 +247,8 @@ typedef void json_object;
 
 #if defined(HAVE_LIBFASTJSON)
 
+#define MAX_JSON_DECODE_BASE64		5
+
 #define JSON_INPUT_S_SOURCE             32
 #define JSON_INPUT_S_SOURCE_MAX_SIZE    160
 #define JSON_INPUT_S_SOURCE_MAX_COUNT   5

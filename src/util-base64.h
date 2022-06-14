@@ -19,4 +19,7 @@
 */
 
 int Base64Encode(const unsigned char *,  unsigned long, unsigned char *, unsigned long *);
+int Base64Decode(const unsigned char *src, size_t len, char *str, size_t size);
+
+
 

@@ -36,6 +36,7 @@
 #include "rules.h"
 #include "json-content.h"
 #include "search-type.h"
+#include "util-base64.h"
 
 #include "parsers/parsers.h"
 
@@ -46,6 +47,8 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
     uint_fast16_t i = 0;
     uint_fast16_t a = 0;
+
+    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 };
 
     bool key_search = false;
 
@@ -64,6 +67,22 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
                             key_search = true;
 
+                            if ( rulestruct[rule_position].json_decode_base64[i] == true )
+                                {
+
+                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+
+                                }
+                            else
+                                {
+
+                                    memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE );
+
+                                }
+
+
+                            printf("tmp_string: %s\n", tmp_string);
+
                             /* Key was found,  is this a "nocase" rule or is it case sensitive */
 
                             if ( rulestruct[rule_position].json_content_case[i] == true )
@@ -74,7 +93,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                     if ( rulestruct[rule_position].json_content_not[i] == false )
                                         {
 
-                                            if ( Search_Nocase(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == false  )
+                                            if ( Search_Nocase( tmp_string, rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == false  )
                                                 {
 
                                                     return(false);
@@ -85,7 +104,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                     else
                                         {
 
-                                            if ( Search_Nocase(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == true )
+                                            if ( Search_Nocase(tmp_string, rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == true )
                                                 {
                                                     return(false);
                                                 }
@@ -102,7 +121,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                     if ( rulestruct[rule_position].json_content_not[i] == false )
                                         {
 
-                                            if ( Search_Case(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) ==  false )
+                                            if ( Search_Case(tmp_string, rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) ==  false )
                                                 {
                                                     return(false);
                                                 }
@@ -111,7 +130,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                     else
                                         {
 
-                                            if ( Search_Case(JSON_LOCAL->json_value[a], rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) == true )
+                                            if ( Search_Case(tmp_string, rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) == true )
                                                 {
                                                     return(false);
                                                 }
