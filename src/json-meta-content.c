@@ -64,7 +64,7 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                     if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_meta_content_key[i] ) )
                         {
 
-			    if ( rulestruct[rule_position].json_decode_base64[i] == true )
+			    if ( rulestruct[rule_position].json_decode_base64_meta[i] == true )
 			    {
 
 			    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);

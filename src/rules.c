@@ -182,7 +182,9 @@ void Load_Rules( const char *ruleset )
     uint32_t meta_content_count=0;
 
 #ifdef HAVE_LIBFASTJSON
-    uint16_t json_decode_base64_count=0;
+    uint16_t json_decode_base64_count=0;		/* For json_content */
+    uint16_t json_decode_base64_pcre_count=0;		/* For json_pcre */
+    uint16_t json_decode_base64_meta_count=0;           /* For json_meta_content */
 #endif
 
     uint16_t meta_content_converted_count=0;
@@ -2181,6 +2183,8 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_content_strstr[json_content_count-1] = 1;
                         }
 
+		    /* For json_content */
+
                     if (!strcmp(rulesplit, "json_decode_base64"))
                         {
 
@@ -2194,6 +2198,40 @@ void Load_Rules( const char *ruleset )
 
                             json_decode_base64_count++;
                             rulestruct[counters->rulecount].json_decode_base64_count = json_decode_base64_count;
+                        }
+
+		    /* For json_pcre */
+
+                    if (!strcmp(rulesplit, "json_decode_base64_pcre"))
+                        {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_decode_base64_pcre' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            strtok_r(NULL, ":", &saveptrrule2);
+                            rulestruct[counters->rulecount].json_decode_base64_pcre[json_decode_base64_pcre_count] = true;
+
+                            json_decode_base64_pcre_count++;
+                            rulestruct[counters->rulecount].json_decode_base64_pcre_count = json_decode_base64_pcre_count;
+                        }
+
+		    /* For json_meta_content */
+
+                    if (!strcmp(rulesplit, "json_decode_base64_meta"))
+                        {
+
+                            if ( config->json_parse_data == false && config->input_type != INPUT_JSON )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Trying to load a signature with the keyword 'json_decode_base64_meta' but neither 'json-parse-data' nor JSON input is enabled in the Sagan configuration.  See line %d in %s, Abort!", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
+                            strtok_r(NULL, ":", &saveptrrule2);
+                            rulestruct[counters->rulecount].json_decode_base64_meta[json_decode_base64_meta_count] = true;
+
+                            json_decode_base64_meta_count++;
+                            rulestruct[counters->rulecount].json_decode_base64_meta_count = json_decode_base64_meta_count;
                         }
 
 

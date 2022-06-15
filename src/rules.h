@@ -22,7 +22,7 @@
 #define BLUEDOT_MAX_CAT        10
 #endif
 
-#define		VALID_RULE_OPTIONS "parse_port,parse_proto,parse_proto_program,flexbits_upause,xbits_upause,flexbits_pause,xbits_pause,default_proto,default_src_port,default_dst_port,parse_src_ip,parse_dst_ip,parse_hash,xbits,flexbits,dynamic_load,country_code,meta_content,meta_nocase,rev,classtype,program,event_type,reference,sid,syslog_tag,syslog_facility,syslog_level,syslog_priority,pri,priority,email,normalize,msg,content,nocase,offset,meta_offset,depth,meta_depth,distance,meta_distance,within,meta_within,pcre,alert_time,threshold,after,blacklist,bro-intel,zeek-intel,external,bluedot,metadata,event_id,json_content,json_nocase,json_pcre,json_meta_content,json_meta_nocase,json_strstr,json_meta_strstr,append_program,json_contains,json_map,json_decode_base64,json_meta_contains"
+#define		VALID_RULE_OPTIONS "parse_port,parse_proto,parse_proto_program,flexbits_upause,xbits_upause,flexbits_pause,xbits_pause,default_proto,default_src_port,default_dst_port,parse_src_ip,parse_dst_ip,parse_hash,xbits,flexbits,dynamic_load,country_code,meta_content,meta_nocase,rev,classtype,program,event_type,reference,sid,syslog_tag,syslog_facility,syslog_level,syslog_priority,pri,priority,email,normalize,msg,content,nocase,offset,meta_offset,depth,meta_depth,distance,meta_distance,within,meta_within,pcre,alert_time,threshold,after,blacklist,bro-intel,zeek-intel,external,bluedot,metadata,event_id,json_content,json_nocase,json_pcre,json_meta_content,json_meta_nocase,json_strstr,json_meta_strstr,append_program,json_contains,json_map,json_decode_base64,json_meta_contains,json_decode_base64_pcre,json_decode_base64_meta"
 
 /* JSON Mapping in rules */
 
@@ -291,6 +291,8 @@ struct _Rule_Struct
     char meta_content_help[MAX_META_CONTENT][CONFBUF];
 
     bool json_decode_base64[MAX_JSON_DECODE_BASE64];
+    bool json_decode_base64_pcre[MAX_JSON_DECODE_BASE64];
+    bool json_decode_base64_meta[MAX_JSON_DECODE_BASE64];
 
     bool json_content_not[MAX_JSON_CONTENT];
     char json_content_key[MAX_JSON_CONTENT][128];
@@ -304,7 +306,9 @@ struct _Rule_Struct
     uint_fast32_t  json_pcre_count;
     char json_pcre_key[MAX_JSON_PCRE][128];
 
-    uint_fast16_t json_decode_base64_count;
+    uint_fast8_t json_decode_base64_count;
+    uint_fast8_t json_decode_base64_pcre_count;
+    uint_fast8_t json_decode_base64_meta_count;
 
     bool json_meta_content_case[MAX_JSON_META_CONTENT];
     bool json_meta_content_not[MAX_JSON_META_CONTENT];

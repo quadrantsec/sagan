@@ -344,7 +344,6 @@ flexbits_upause
 
 This tells the flexbit ``isset`` or ``isnotset`` to 'wait' for a specified number of microseconds before checking the flexbit state. 
 
-
 json_content
 ------------
 
@@ -358,14 +357,6 @@ depend on JSON mapping and can be used on any located key. For example:
 Similar to ``content``,  the not operator (!) can also be used:
 
 **json_content:! ".sni", "www.google.com";**
-
-json_nocase
------------
-
-.. option:: json_nocase;
-
-This makes the previous ``json_content`` case insensitive (similar to the ``nocase`` option
-for ``content``). 
 
 json_contains
 -------------
@@ -382,6 +373,54 @@ is a literal match.  With the ``json_contains`` rule option,  it will search for
 "example" within "name".   For example,  with ``json_contains``,   this would trigger on terms
 like "this is an example of data" or "example test".  Without the ``json_contains``, it would not trigger
 because it would be a literal search.
+
+json_decode_base64
+------------------
+
+... option: json_base64_decode
+
+This decodes the base64 data from the previous ``json_content``.  For example:
+
+**json_content: ".payload", "BOB"; json_base64_decode;**
+
+The ``json_base64_decode`` keyword will base64 decoded data from the '.payload' field of the previous 
+``json_content``.  The ``json_content`` keyword logic will be applied to the decoded base64 data.  This means
+that if after decoding the ".payload" key's value is the word "BOB" are found,  it will constitute as a hit.
+
+json_decode_base64_pcre
+-----------------------
+
+... option: json_base64_decode_pcre
+
+This decodes the base64 data from the previous ``json_pcre``.  For example:
+
+**json_pcre: ".payload", "/BOB/"; json_base64_decode_pcre;**
+
+The ``json_base64_decode_pcre`` keyword will base64 decoded data from the '.payload' field of the previous 
+``json_pcre``.  The ``json_pcre`` keyword logic will be applied to the decoded base64 data.  This means
+that if after decoding the ".payload" key's value is the word "BOB" are found,  it will constitute as a hit.
+
+json_decode_base64_meta
+-----------------------
+
+... option: json_base64_decode_meta_
+
+This decodes the base64 data from the previous ``json_meta_content``.  For example:
+
+**json_meta_content: ".payload", BOB,FRANK,MARY; json_base64_decode_meta;**
+
+The ``json_base64_decode_meta`` keyword will base64 decoded data from the '.payload' field of the previous 
+``json_meta_content``.  The ``json_meta_content`` keyword logic will be applied to the decoded base64 data.  
+This means that if after decoding the ".payload" key's value is the words "BOB", "FRANK" or "MARY" are found,  it will constitute as a hit.
+
+
+json_nocase
+-----------
+
+.. option:: json_nocase;
+
+This makes the previous ``json_content`` case insensitive (similar to the ``nocase`` option
+for ``content``). 
 
 json_pcre
 ---------

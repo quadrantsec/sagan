@@ -52,7 +52,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
 
     int ovector[PCRE_OVECCOUNT];
 
-    for (i=0; i < rulestruct[rule_position].json_pcre_count; i++)
+    for (i=0; i < rulestruct[rule_position].json_decode_base64_pcre_count; i++)
         {
 
             for (a=0; a < JSON_LOCAL->json_count; a++)
@@ -61,7 +61,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
                     if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_pcre_key[i] ) )
                         {
 
-			if ( rulestruct[rule_position].json_decode_base64[i] == true )
+			if ( rulestruct[rule_position].json_decode_base64_pcre[i] == true )
 				{
 
 				Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
