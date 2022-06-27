@@ -30,5 +30,6 @@
 void IPC_Init(void);
 bool Clean_IPC_Object( uint_fast8_t type );
 void IPC_Check_Object(char *tmp_object_check, bool new_counters, char *object_name);
+void IPC_Close( void );
 
 

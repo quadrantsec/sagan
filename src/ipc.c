@@ -728,3 +728,102 @@ void IPC_Init(void)
 
 
 }
+
+/*****************************************************************************
+ * IPC_Close - Close all mmap() / IPC objects
+ *****************************************************************************/
+
+void IPC_Close( void )
+{
+
+    if ( config->shm_flexbit_status == true )
+        {
+
+            File_Unlock(config->shm_flexbit);
+
+            munmap(flexbit_ipc, sizeof(_Sagan_IPC_Flexbit) * config->max_flexbits);
+
+            if ( close(config->shm_flexbit) != 0 )
+                {
+                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC flexbit! [%s]", __FILE__, __LINE__, strerror(errno));
+                }
+
+        }
+
+    if ( config->shm_thresh2_status == true )
+        {
+
+            File_Unlock(config->shm_thresh2);
+
+            munmap(Threshold2_IPC, sizeof( _Threshold2_IPC ) * config->max_threshold2);
+
+            if ( close(config->shm_thresh2) != 0 )
+                {
+                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Threshold2_IPC! [%s]", __FILE__, __LINE__, strerror(errno));
+                }
+
+        }
+
+
+    if ( config->shm_after2_status == true )
+        {
+
+            File_Unlock(config->shm_after2);
+
+            munmap(After2_IPC, sizeof( _After2_IPC ) * config->max_after2);
+
+            if ( close(config->shm_after2) != 0 )
+                {
+                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _After2_IPC! [%s]", __FILE__, __LINE__, strerror(errno));
+                }
+        }
+
+    /* Only munmap() if we're not using Redis! */
+
+    if ( config->xbit_storage == XBIT_STORAGE_MMAP && config->shm_xbit_status == true )
+        {
+
+            File_Unlock(config->shm_xbit);
+
+            munmap(Xbit_IPC, sizeof(_Sagan_IPC_Xbit) * config->max_xbits);
+
+            if ( close(config->shm_track_clients) != 0 )
+                {
+                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Sagan_IPC_Xbit! [%s]", __FILE__, __LINE__, strerror(errno));
+                }
+
+        }
+
+    /* Only munmap() if we're actually using client tracking */
+
+    if ( config->sagan_track_clients_flag == true && config->shm_track_clients == true )
+        {
+
+            File_Unlock(config->shm_track_clients);
+
+            munmap(SaganTrackClients_ipc, sizeof(_Sagan_Track_Clients_IPC) * config->max_track_clients);
+
+            if ( close(config->shm_track_clients) != 0 )
+                {
+                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Sagan_Track_Clients! [%s]", __FILE__, __LINE__, strerror(errno));
+                }
+
+        }
+
+    if ( config->shm_counters_status == true )
+        {
+
+            File_Unlock(config->shm_counters);
+
+            munmap(counters_ipc, sizeof(_Sagan_IPC_Counters));
+
+            if ( close(config->shm_counters) != 0 )
+                {
+                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC counters! [%s]", __FILE__, __LINE__, strerror(errno));
+                }
+
+        }
+
+}
+
+

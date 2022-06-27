@@ -48,7 +48,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
     int a=0;
     int rc=0;
 
-    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 }; 
+    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 };
 
     int ovector[PCRE_OVECCOUNT];
 
@@ -61,16 +61,18 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
                     if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_pcre_key[i] ) )
                         {
 
-			if ( rulestruct[rule_position].json_decode_base64_pcre[i] == true )
-				{
+                            if ( rulestruct[rule_position].json_decode_base64_pcre[i] == true )
+                                {
 
-				Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
 
-				} else {
+                                }
+                            else
+                                {
 
-				memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
+                                    memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
 
-				}
+                                }
 
                             rc = pcre_exec( rulestruct[rule_position].json_re_pcre[i], rulestruct[rule_position].json_pcre_extra[i], tmp_string, (int)strlen(tmp_string), 0, 0, ovector, PCRE_OVECCOUNT);
 

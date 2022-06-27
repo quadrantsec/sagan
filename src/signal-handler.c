@@ -53,8 +53,8 @@
 #include "lockfile.h"
 #include "signal-handler.h"
 #include "stats.h"
-//#include "gen-msg.h"
 #include "classifications.h"
+#include "ipc.h"
 
 #include "rules.h"
 #include "ignore-list.h"
@@ -211,58 +211,64 @@ void Sig_Handler( void )
 
                     /* IPC Shared Memory */
 
-                    if ( config->shm_counters_status == true )
-                        {
-
-                            File_Unlock(config->shm_counters);
-
-                            if ( close(config->shm_counters) != 0 )
+                    /*
+                            if ( config->shm_counters_status == true )
                                 {
-                                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC counters! [%s]", __FILE__, __LINE__, strerror(errno));
-                                }
-                        }
 
-                    if ( config->shm_flexbit_status == true )
-                        {
-                            File_Unlock(config->shm_flexbit);
+                                    File_Unlock(config->shm_counters);
 
-                            if ( close(config->shm_flexbit) != 0 )
-                                {
-                                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC flexbit! [%s]", __FILE__, __LINE__, strerror(errno));
-                                }
-                        }
-
-                    if ( config->shm_thresh2_status == true )
-                        {
-                            File_Unlock(config->shm_thresh2);
-
-                            if ( close(config->shm_thresh2) != 0 )
-                                {
-                                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Threshold2_IPC! [%s]", __FILE__, __LINE__, strerror(errno));
-                                }
-                        }
-
-                    if ( config->shm_after2_status == true )
-                        {
-                            File_Unlock(config->shm_after2);
-
-                            if ( close(config->shm_after2) != 0 )
-                                {
-                                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _After2_IPC! [%s]", __FILE__, __LINE__, strerror(errno));
-                                }
-                        }
-
-                    if ( config->sagan_track_clients_flag == true && config->shm_track_clients == true )
-                        {
-
-                            File_Unlock(config->shm_track_clients);
-
-                            if ( close(config->shm_track_clients) != 0 )
-                                {
-                                    Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Sagan_Track_Clients! [%s]", __FILE__, __LINE__, strerror(errno));
+                                    if ( close(config->shm_counters) != 0 )
+                                        {
+                                            Sagan_Log(WARN, "[%s, line %d] Cannot close IPC counters! [%s]", __FILE__, __LINE__, strerror(errno));
+                                        }
                                 }
 
-                        }
+                            if ( config->shm_flexbit_status == true )
+                                {
+                                    File_Unlock(config->shm_flexbit);
+
+                                    if ( close(config->shm_flexbit) != 0 )
+                                        {
+                                            Sagan_Log(WARN, "[%s, line %d] Cannot close IPC flexbit! [%s]", __FILE__, __LINE__, strerror(errno));
+                                        }
+                                }
+
+                            if ( config->shm_thresh2_status == true )
+                                {
+                                    File_Unlock(config->shm_thresh2);
+
+                                    if ( close(config->shm_thresh2) != 0 )
+                                        {
+                                            Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Threshold2_IPC! [%s]", __FILE__, __LINE__, strerror(errno));
+                                        }
+                                }
+
+                            if ( config->shm_after2_status == true )
+                                {
+                                    File_Unlock(config->shm_after2);
+
+                                    if ( close(config->shm_after2) != 0 )
+                                        {
+                                            Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _After2_IPC! [%s]", __FILE__, __LINE__, strerror(errno));
+                                        }
+                                }
+
+                            if ( config->sagan_track_clients_flag == true && config->shm_track_clients == true )
+                                {
+
+                                    File_Unlock(config->shm_track_clients);
+
+                                    if ( close(config->shm_track_clients) != 0 )
+                                        {
+                                            Sagan_Log(WARN, "[%s, line %d] Cannot close IPC _Sagan_Track_Clients! [%s]", __FILE__, __LINE__, strerror(errno));
+                                        }
+
+                                }
+
+                    */
+
+                    IPC_Close();
+
 
                     if ( config->stats_json_flag == true && config->stats_json_file_stream_status == true )
                         {

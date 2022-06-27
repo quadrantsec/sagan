@@ -2183,7 +2183,7 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_content_strstr[json_content_count-1] = 1;
                         }
 
-		    /* For json_content */
+                    /* For json_content */
 
                     if (!strcmp(rulesplit, "json_decode_base64"))
                         {
@@ -2200,7 +2200,7 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_decode_base64_count = json_decode_base64_count;
                         }
 
-		    /* For json_pcre */
+                    /* For json_pcre */
 
                     if (!strcmp(rulesplit, "json_decode_base64_pcre"))
                         {
@@ -2217,7 +2217,7 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_decode_base64_pcre_count = json_decode_base64_pcre_count;
                         }
 
-		    /* For json_meta_content */
+                    /* For json_meta_content */
 
                     if (!strcmp(rulesplit, "json_decode_base64_meta"))
                         {
@@ -2248,7 +2248,7 @@ void Load_Rules( const char *ruleset )
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_meta_strstr[json_meta_content_count-1] = 1;
                         }
-			
+
 
                     /* Search JSON via PCRE */
 

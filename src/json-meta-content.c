@@ -51,7 +51,7 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
     bool rc=0;
     uint_fast16_t match = 0;
 
-    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 }; 
+    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 };
 
     for (i=0; i < rulestruct[rule_position].json_meta_content_count; i++)
         {
@@ -64,16 +64,18 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                     if ( !strcmp(JSON_LOCAL->json_key[a], rulestruct[rule_position].json_meta_content_key[i] ) )
                         {
 
-			    if ( rulestruct[rule_position].json_decode_base64_meta[i] == true )
-			    {
+                            if ( rulestruct[rule_position].json_decode_base64_meta[i] == true )
+                                {
 
-			    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
 
-			    } else {
+                                }
+                            else
+                                {
 
-			    memcpy(  tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
+                                    memcpy(  tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
 
-			    }
+                                }
 
                             /* Key found, test for json_meta_content */
 
