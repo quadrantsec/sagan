@@ -175,9 +175,9 @@ typedef void json_object;
 #define ALERT_LOG		1
 #define ALL_LOGS		100
 
-#define MD5_HASH_SIZE		33
-#define SHA1_HASH_SIZE		41
-#define SHA256_HASH_SIZE	65
+#define MD5_HASH_SIZE		32
+#define SHA1_HASH_SIZE		40
+#define SHA256_HASH_SIZE	64
 
 #define MAX_FILENAME_SIZE	256
 #define MAX_URL_SIZE		8192

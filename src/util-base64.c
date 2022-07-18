@@ -118,7 +118,6 @@ int Base64Decode(const unsigned char *src, size_t len, char *str, size_t size)
 
     if (count == 0 || count % 4)
         {
-            printf("Wrong number: %d\n", count);
             return -1;
         }
 

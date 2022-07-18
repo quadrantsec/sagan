@@ -98,8 +98,10 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
 
             if ( type == PARSE_HASH_MD5 || type == PARSE_HASH_ALL )
                 {
+
                     if ( strlen(tmp) == MD5_HASH_SIZE )
                         {
+
                             if ( Validate_HEX(tmp) == true )
                                 {
                                     snprintf(str, size, "%s", tmp);
@@ -114,6 +116,7 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
                 {
                     if ( strlen(tmp) == SHA1_HASH_SIZE )
                         {
+
                             if ( Validate_HEX(tmp) == true )
                                 {
                                     snprintf(str, size, "%s", tmp);
@@ -126,9 +129,9 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
             else if ( type == PARSE_HASH_SHA256 || type == PARSE_HASH_ALL )
                 {
 
-
                     if ( strlen(tmp) == SHA256_HASH_SIZE )
                         {
+
                             if ( Validate_HEX(tmp) == true )
                                 {
                                     snprintf(str, size, "%s", tmp);

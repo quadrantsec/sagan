@@ -81,8 +81,6 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                 }
 
 
-                            printf("tmp_string: %s\n", tmp_string);
-
                             /* Key was found,  is this a "nocase" rule or is it case sensitive */
 
                             if ( rulestruct[rule_position].json_content_case[i] == true )

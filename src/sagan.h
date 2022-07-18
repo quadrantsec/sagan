@@ -408,16 +408,16 @@ struct _Sagan_Proc_Syslog
     uint_fast64_t flow_id;
 
     char event_id[32];
-    char md5[MD5_HASH_SIZE];
-    char sha1[SHA1_HASH_SIZE];
-    char sha256[SHA256_HASH_SIZE];
-    char filename[MAX_FILENAME_SIZE];
-    char hostname[MAX_HOSTNAME_SIZE];
-    char url[MAX_URL_SIZE];
-    char ja3[MD5_HASH_SIZE];
-    char username[MAX_USERNAME_SIZE];
+    char md5[MD5_HASH_SIZE+1];
+    char sha1[SHA1_HASH_SIZE+1];
+    char sha256[SHA256_HASH_SIZE+1];
+    char filename[MAX_FILENAME_SIZE+1];
+    char hostname[MAX_HOSTNAME_SIZE+1];
+    char url[MAX_URL_SIZE+1];
+    char ja3[MD5_HASH_SIZE+1];
+    char username[MAX_USERNAME_SIZE+1];
 
-    char json_normalize[JSON_MAX_SIZE];
+    char json_normalize[JSON_MAX_SIZE+1];
 
 #ifdef HAVE_LIBFASTJSON
     char correlation_json[MAX_SYSLOGMSG];
