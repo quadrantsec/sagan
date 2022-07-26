@@ -919,6 +919,7 @@ Sagan "zeek-intel" types::
    user_name	Intel::USER_NAME	Search message content for malicious user names
    file_nasm	Intel::FILE_NAME	Search message content for malicious file names
    cert_has	Intel::CERT_HASH	Search message content for malicious certificate hashes
+   domain       Intel::DOMAIN           Search message content for malicious domain
 
 
 
