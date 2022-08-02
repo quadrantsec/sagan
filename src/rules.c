@@ -2287,7 +2287,11 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Invalid key for 'json_pcre' at line %d in %s. A '.' should prepend the key.", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            tmptoken = strtok_r(NULL, ",", &saveptrrule2);
+
+			    /* DEBUG: This isn't great.  If the pcre has a semicolon, it will break things :( 
+			       I need to re-write this section (?) */
+
+			    tmptoken = strtok_r(NULL, ";", &saveptrrule2);	/* strtok on the ; */
 
                             if ( tmptoken == NULL )
                                 {
