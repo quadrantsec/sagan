@@ -580,8 +580,8 @@ rules-files:
   #- $RULE_PATH/cisco-ise-zeek-intel.rules
   #- $RULE_PATH/cisco-zeek-intel.rules
   #- $RULE_PATH/citrix-zeek-intel.rules
-  #- $RULE_PATH/windows-owa-zeek-intel.rules
-  #- $RULE_PATH/windows-zeek-intel.rules
+  #- $RULE_PATH/windows-owa-zeekintel.rules
+  #- $RULE_PATH/windows-zeekintel.rules
   #- $RULE_PATH/zeek-intel.rules
 
   #############################################################################
@@ -593,6 +593,7 @@ rules-files:
   #- $RULE_PATH/cisco-bluedot.rules
   #- $RULE_PATH/cisco-ise-bluedot.rules
   #- $RULE_PATH/citrix-bluedot.rules
+  #- $RULE_PATH/cloudgenix-bluedot.rules
   #- $RULE_PATH/courier-bluedot.rules
   #- $RULE_PATH/f5-big-ip-bluedot.rules
   #- $RULE_PATH/fatpipe-bluedot.rules
@@ -666,13 +667,19 @@ rules-files:
   #- $RULE_PATH/cisco-meraki.rules
   #- $RULE_PATH/cisco-pixasa.rules
   #- $RULE_PATH/cisco-prime.rules
+  #- $RULE_PATH/cisco-sdee.rules
   #- $RULE_PATH/cisco-wlc.rules
   #- $RULE_PATH/citrix.rules
+  #- $RULE_PATH/cloudgenix.rules
   #- $RULE_PATH/cloudtrail.rules
+  #- $RULE_PATH/confluent.rules
   #- $RULE_PATH/courier.rules
   #- $RULE_PATH/crowdstrike.rules
   #- $RULE_PATH/cylance.rules
+  #- $RULE_PATH/darktrace.rules
+  #- $RULE_PATH/dellemcunity.rules
   #- $RULE_PATH/digitalpersona.rules
+  #- $RULE_PATH/duo.rules
   #- $RULE_PATH/dovecot.rules
   #- $RULE_PATH/f5-big-ip.rules
   #- $RULE_PATH/fatpipe.rules
@@ -680,6 +687,7 @@ rules-files:
   #- $RULE_PATH/fipaypin.rules
   #- $RULE_PATH/fortinet.rules
   #- $RULE_PATH/ftpd.rules
+  #- $RULE_PATH/gcp-cloud-audit.rules
   #- $RULE_PATH/gcp-scc.rules		# Google Cloud Platform
   #- $RULE_PATH/grsec.rules		# Linux kernel security extensions "grsecurity"
   #- $RULE_PATH/honeyd.rules
@@ -695,11 +703,14 @@ rules-files:
   - $RULE_PATH/linux-kernel.rules
   #- $RULE_PATH/mcafee-web-gateway.rules
   #- $RULE_PATH/microsoft-atp.rules
+  #- $RULE_PATH/mimecast.rules
   #- $RULE_PATH/milter.rules		# For sendmail "milter"
   #- $RULE_PATH/mongodb.rules
   #- $RULE_PATH/msapi-airinvestigation.rules
   #- $RULE_PATH/msapi-azuread.rules
+  #- $RULE_PATH/msapi-defender.rules
   #- $RULE_PATH/msapi-exchange.rules
+  #- $RULE_PATH/msapi-mcas.rules
   #- $RULE_PATH/msapi-onedrive.rules
   #- $RULE_PATH/msapi-securitycompliancecenter.rules
   #- $RULE_PATH/msapi-sharepoint.rules
@@ -713,6 +724,7 @@ rules-files:
   - $RULE_PATH/ntp.rules
   #- $RULE_PATH/nxlog.rules
   #- $RULE_PATH/office365.rules		# Uses the Microsoft supplied JAVA Office365 software
+  #- $RULE_PATH/okta.rules
   #- $RULE_PATH/onelogin.rules
   - $RULE_PATH/openssh.rules
   #- $RULE_PATH/openvpn.rules
@@ -734,6 +746,7 @@ rules-files:
   #- $RULE_PATH/rsync.rules
   #- $RULE_PATH/samba.rules
   #- $RULE_PATH/sendmail.rules
+  #- $RULE_PATH/sentinelone.rules
   #- $RULE_PATH/snort.rules
   #- $RULE_PATH/solaris.rules
   #- $RULE_PATH/sonicwall.rules
@@ -743,6 +756,7 @@ rules-files:
   #- $RULE_PATH/su.rules
   #- $RULE_PATH/symantec-ems.rules
   - $RULE_PATH/syslog.rules		# Very generic syslog signatures
+  #- $RULE_PATH/systemd.rules
   #- $RULE_PATH/tcp.rules
   #- $RULE_PATH/telnet.rules
   #- $RULE_PATH/trendmicro.rules
@@ -760,11 +774,13 @@ rules-files:
   - $RULE_PATH/windows-misc.rules
   #- $RULE_PATH/windows-mssql.rules
   #- $RULE_PATH/windows-owa.rules
+  #- $RULE_PATH/windows-powershell.rules
   - $RULE_PATH/windows-security.rules
   - $RULE_PATH/windows-sysmon.rules
   #- $RULE_PATH/wordpress.rules
   #- $RULE_PATH/xinetd.rules
   #- $RULE_PATH/yubikey.rules
+  #- $RULE_PATH/zeeks.rules
   #- $RULE_PATH/zeus.rules
   #- $RULE_PATH/zimbra.rules
   #- $RULE_PATH/zingbox.rules
