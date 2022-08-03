@@ -580,8 +580,8 @@ rules-files:
   #- $RULE_PATH/cisco-ise-zeek-intel.rules
   #- $RULE_PATH/cisco-zeek-intel.rules
   #- $RULE_PATH/citrix-zeek-intel.rules
-  #- $RULE_PATH/windows-owa-zeek-intel.rules
-  #- $RULE_PATH/windows-zeek-intel.rules
+  #- $RULE_PATH/windows-owa-zeekintel.rules
+  #- $RULE_PATH/windows-zeekintel.rules
   #- $RULE_PATH/zeek-intel.rules
 
   #############################################################################
@@ -703,11 +703,14 @@ rules-files:
   - $RULE_PATH/linux-kernel.rules
   #- $RULE_PATH/mcafee-web-gateway.rules
   #- $RULE_PATH/microsoft-atp.rules
+  #- $RULE_PATH/mimecast.rules
   #- $RULE_PATH/milter.rules		# For sendmail "milter"
   #- $RULE_PATH/mongodb.rules
   #- $RULE_PATH/msapi-airinvestigation.rules
   #- $RULE_PATH/msapi-azuread.rules
+  #- $RULE_PATH/msapi-defender.rules
   #- $RULE_PATH/msapi-exchange.rules
+  #- $RULE_PATH/msapi-mcas.rules
   #- $RULE_PATH/msapi-onedrive.rules
   #- $RULE_PATH/msapi-securitycompliancecenter.rules
   #- $RULE_PATH/msapi-sharepoint.rules
