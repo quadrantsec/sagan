@@ -78,6 +78,9 @@
 /* Define to 1 if you have the `hiredis' library (-lhiredis). */
 #undef HAVE_LIBHIREDIS
 
+/* Define to 1 if you have the `jemalloc' library (-ljemalloc). */
+#undef HAVE_LIBJEMALLOC
+
 /* Define to 1 if you have the `lognorm' library (-llognorm). */
 #undef HAVE_LIBLOGNORM
 
