@@ -2288,10 +2288,10 @@ void Load_Rules( const char *ruleset )
                                 }
 
 
-			    /* DEBUG: This isn't great.  If the pcre has a semicolon, it will break things :( 
-			       I need to re-write this section (?) */
+                            /* DEBUG: This isn't great.  If the pcre has a semicolon, it will break things :(
+                               I need to re-write this section (?) */
 
-			    tmptoken = strtok_r(NULL, ";", &saveptrrule2);	/* strtok on the ; */
+                            tmptoken = strtok_r(NULL, ";", &saveptrrule2);	/* strtok on the ; */
 
                             if ( tmptoken == NULL )
                                 {

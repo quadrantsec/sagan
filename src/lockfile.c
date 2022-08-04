@@ -163,13 +163,19 @@ void CheckLockFile ( void )
                     fflush(lck);
                     fclose(lck);
 
-                    /* Change lockfile ownership (so we can work with it on exit) */
+                    /* Change lockfile ownership (so we can work with it on exit).  If we are _not_ root, we
+                    skip this part and let the users process handle it */
 
-                    ret = chown(config->sagan_lockfile_full, (unsigned long)pw->pw_uid,(unsigned long)pw->pw_gid);
-
-                    if ( ret < 0 )
+                    if ( getuid() == 0 )
                         {
-                            Sagan_Log(ERROR, "[%s, line %d] Cannot change ownership of %s to username \"%s\" - %s", __FILE__, __LINE__, config->sagan_lockfile_full, config->sagan_runas, strerror(errno));
+
+                            ret = chown(config->sagan_lockfile_full, (unsigned long)pw->pw_uid,(unsigned long)pw->pw_gid);
+
+                            if ( ret < 0 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] Cannot change ownership of %s to username \"%s\" - %s", __FILE__, __LINE__, config->sagan_lockfile_full, config->sagan_runas, strerror(errno));
+                                }
+
                         }
 
                     /* Let other programs have access to the lockfile */

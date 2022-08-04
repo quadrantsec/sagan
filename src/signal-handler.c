@@ -213,7 +213,7 @@ void Sig_Handler( void )
 
                     IPC_Close();
 
-		    /* Close stats files */
+                    /* Close stats files */
 
                     if ( config->stats_json_flag == true && config->stats_json_file_stream_status == true )
                         {
