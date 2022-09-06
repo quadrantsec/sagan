@@ -1539,6 +1539,14 @@ void Load_YAML_Config( char *yaml_file )
 
                                         }
 
+                                    else if (!strcmp(last_pass, "type" ) && config->client_stats_flag == true )
+                                        {
+
+                                            if ( !strcmp(value, "tag" ))
+                                                {
+                                                    config->client_stats_type = 1;
+                                                }
+                                        }
                                 }
 
                             else if ( sub_type == YAML_PROCESSORS_STATS_JSON )

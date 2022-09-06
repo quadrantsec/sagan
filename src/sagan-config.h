@@ -135,6 +135,7 @@ struct _SaganConfig
     char        blacklist_files[2048];
 
     bool        client_stats_flag;
+    bool	client_stats_type;
     char 	client_stats_file_name[MAXPATH];
     uint_fast32_t 	client_stats_time;
     uint_fast16_t	client_stats_interval;

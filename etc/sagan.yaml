@@ -299,10 +299,13 @@ processors:
   # to keep track of when clients last sent data and the types of data they sent. 
   # The 'time' option sets how often Sagan should write out this data.  The 
   # 'interval' option set how often Sagan should record data (program and message
-  # data) from the client. 
+  # data) from the client.  The "type" is how Sagan will track the systems.  Valid
+  # options are "tag" (syslog tag) or "ip" (syslog source IP address).  The
+  # default is "ip".
  
   - client-stats:
       enabled: no
+      type: "ip"
       filename: "$LOG_PATH/client-stats.json"
       time: 600
       data-interval: 900

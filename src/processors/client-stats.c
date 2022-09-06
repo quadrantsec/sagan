@@ -127,6 +127,8 @@ void Client_Stats_Handler( void )
 
     /* Wait some time before dumping stats */
 
+    /* DEBUG: Potential fault here.  Should look for 1 second and look for "death" */
+
     sleep(config->client_stats_time);
 
     while(death == false)
@@ -144,6 +146,20 @@ void Client_Stats_Handler( void )
                     CreateIsoTimeString(&tp, timebuf, sizeof(timebuf));
 
                     jobj = json_object_new_object();
+
+                    json_object *jclient_stats_type;
+
+                    if ( config->client_stats_type == 0 )
+                        {
+                            jclient_stats_type = json_object_new_string( "ip" );
+                        }
+                    else
+                        {
+                            jclient_stats_type = json_object_new_string( "tag" );
+                        }
+
+                    json_object_object_add(jobj,"client_stats_type", jclient_stats_type);
+
 
                     json_object *jdate = json_object_new_string(timebuf);
                     json_object_object_add(jobj,"timestamp", jdate);
@@ -169,6 +185,9 @@ void Client_Stats_Handler( void )
                     json_object *jprogram = json_object_new_string( Client_Stats[i].program );
                     json_object_object_add(jobj,"program", jprogram);
 
+                    json_object *jtag = json_object_new_string( Client_Stats[i].tag );
+                    json_object_object_add(jobj,"tag", jtag);
+
                     json_object *jmessage = json_object_new_string( Client_Stats[i].message );
                     json_object_object_add(jobj,"message", jmessage);
 
@@ -189,6 +208,8 @@ void Client_Stats_Handler( void )
                     json_object_put(jobj);
                 }
 
+            /* DEBUG: Potential fault here.  Should look for 1 second and look for "death" */
+
             sleep(config->client_stats_time);
         }
 
@@ -204,11 +225,10 @@ void Client_Stats_Handler( void )
  * array of systems Sagan is keeping track of.
  ****************************************************************************/
 
-void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message, uint_fast32_t bytes )
+void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char *message, const char *tag, uint_fast32_t bytes )
 {
 
-    uint_fast32_t hash = Djb2_Hash( ip );
-
+    uint_fast32_t hash = 0;
     uint_fast32_t i = 0;
     time_t t;
     struct tm *now;
@@ -220,11 +240,27 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
     strftime(timet, sizeof(timet), "%s",  now);
     epoch = atol(timet);
 
-    /* Validate inbound IP */
-
-    if ( !Is_IP(ip, IPv4) || !Is_IP(ip, IPv6) )
+    if ( config->client_stats_type == 0 )
         {
-            return;
+
+            /* Track by "src_ip" / Validate inbound IP */
+
+            if ( !Is_IP(ip, IPv4) || !Is_IP(ip, IPv6) )
+                {
+                    return;
+                }
+            else
+                {
+                    hash = Djb2_Hash( ip );
+                }
+        }
+    else
+        {
+
+            /* Track by "tag" */
+
+            hash = Djb2_Hash( tag );
+
         }
 
     for ( i = 0; i < counters->client_stats_count; i++ )
@@ -250,6 +286,7 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
 
                             strlcpy( Client_Stats[i].program, program, sizeof(Client_Stats[i].program) );
                             strlcpy( Client_Stats[i].message, message, sizeof(Client_Stats[i].message) );
+                            strlcpy( Client_Stats[i].tag, tag, sizeof(Client_Stats[i].tag) );
 
                             Client_Stats[i].old_epoch = epoch;
 
@@ -280,6 +317,8 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
             strlcpy(Client_Stats[counters->client_stats_count].ip, ip, sizeof(Client_Stats[counters->client_stats_count].ip));
             strlcpy( Client_Stats[counters->client_stats_count].program, program, sizeof(Client_Stats[counters->client_stats_count].program ) );
             strlcpy( Client_Stats[counters->client_stats_count].message, message, sizeof(Client_Stats[counters->client_stats_count].message ) );
+            strlcpy( Client_Stats[counters->client_stats_count].tag, tag, sizeof(Client_Stats[counters->client_stats_count].tag ) );
+
 
             counters->client_stats_count++;
 

@@ -653,7 +653,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                 {
                                     if ( validate_flag == true )
                                         {
-                                            	flag = JSON_Content(b, JSON_LOCAL );
+                                            flag = JSON_Content(b, JSON_LOCAL );
                                         }
                                     else
                                         {

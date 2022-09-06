@@ -243,7 +243,7 @@ void Processor ( void )
                                                   strlen(SaganProcSyslog_LOCAL->syslog_program) +
                                                   strlen(SaganProcSyslog_LOCAL->syslog_message) + 9; /* 9 == delimiters! */
 
-                            Client_Stats_Add_Update_IP ( SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message, bytes );
+                            Client_Stats_Add_Update_IP ( SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL->syslog_tag, bytes );
 
                         }
 
