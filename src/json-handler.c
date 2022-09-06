@@ -171,6 +171,9 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     json_object *jsyslog_level = json_object_new_string(Event->level);
     json_object_object_add(jobj,"level", jsyslog_level);
 
+    json_object *jsyslog_tag = json_object_new_string(Event->tag);
+    json_object_object_add(jobj,"tag", jsyslog_tag);
+
     json_object *jsyslog_program = json_object_new_string(Event->program);
     json_object_object_add(jobj,"program", jsyslog_program);
 
