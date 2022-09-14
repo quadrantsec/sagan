@@ -800,7 +800,7 @@ int main(int argc, char **argv)
 #ifdef HAVE_LIBFASTJSON
 
     Sagan_Log(NORMAL, "Named pipe/FIFO input type: %s", config->input_type == INPUT_PIPE ? "Pipe":"JSON");
-    Sagan_Log(NORMAL, "Parse log for JSON        : %s", config->json_parse_data == true ? "Enabled":"Disabled");
+    Sagan_Log(NORMAL, "JSON Parsing              : %s", config->json_parse_data == true ? "Enabled":"Disabled");
     Sagan_Log(NORMAL, "Client Stats              : %s", config->client_stats_flag == true ? "Enabled":"Disabled");
 
 #endif
