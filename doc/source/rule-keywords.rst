@@ -433,7 +433,7 @@ depend on JSON mapping and can be used on any located key.  For example:
 **json_pcre: ".sni", "/www.quadrantsec.com/i";**
 
 json_map
-~~~~~~~~
+--------
 
 .. option:: json_map: "internal_value", "key"; 
 
