@@ -2101,7 +2101,6 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] There is to many \"json_content\" types in the rule at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-
                             arg = strtok_r(NULL, ":", &saveptrrule2);
 
                             if ( arg == NULL )
@@ -2136,7 +2135,11 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Expected a json_content \"content\",  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_content_content[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_content[json_content_count]), ruleset_fullname, linecount);
+			    /* Convert |3a| type of content */
+
+			    Content_Pipe(tmptoken, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
+
+                            Between_Quotes(rule_tmp, rulestruct[counters->rulecount].json_content_content[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_content[json_content_count]), ruleset_fullname, linecount);
 
                             json_content_count++;
                             rulestruct[counters->rulecount].json_content_count=json_content_count;

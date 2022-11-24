@@ -70,16 +70,18 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                             if ( rulestruct[rule_position].json_decode_base64[i] == true )
                                 {
 
-                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]), tmp_string, JSON_MAX_VALUE_SIZE);
 
                                 }
                             else
                                 {
 
+				    /* Clear previous value */
+
+				    tmp_string[0] = '\0'; 
                                     memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE );
 
                                 }
-
 
                             /* Key was found,  is this a "nocase" rule or is it case sensitive */
 
