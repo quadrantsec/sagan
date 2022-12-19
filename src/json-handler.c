@@ -243,8 +243,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     if ( rulestruct[Event->rule_position].metadata_json[0] != '\0' )
         {
 
-            str[ strlen(str) - 2 ] = '\0';
-            snprintf(tmp_data, sizeof(tmp_data), ", \"metadata\": %s }",  rulestruct[Event->rule_position].metadata_json);
+            snprintf(tmp_data, sizeof(tmp_data), ", \"metadata\": %s",  rulestruct[Event->rule_position].metadata_json);
             strlcat(str, tmp_data, size);
 
         }
