@@ -418,6 +418,7 @@ struct _Sagan_Proc_Syslog
     char username[MAX_USERNAME_SIZE+1];
 
     char json_normalize[JSON_MAX_SIZE+1];
+    char json_original[JSON_MAX_SIZE+1];
 
 #ifdef HAVE_LIBFASTJSON
     char correlation_json[MAX_SYSLOGMSG];

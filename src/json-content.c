@@ -76,9 +76,9 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                             else
                                 {
 
-				    /* Clear previous value */
+                                    /* Clear previous value */
 
-				    tmp_string[0] = '\0'; 
+                                    tmp_string[0] = '\0';
                                     memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE );
 
                                 }

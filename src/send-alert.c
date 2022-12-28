@@ -31,6 +31,7 @@
 #include <string.h>
 
 #include "sagan.h"
+#include "sagan-config.h"
 #include "version.h"
 #include "liblognorm.h"
 #include "geoip.h"
@@ -57,9 +58,19 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
 
     memset(SaganProcessorEvent, 0, sizeof(_Sagan_Event));
 
+    /* If the event is JSON,  we want to preserve it as part of the "message" */
+
+    if ( config->json_parse_data == true || config->input_type == INPUT_JSON )
+        {
+            SaganProcessorEvent->message = SaganProcSyslog_LOCAL->json_original;
+        }
+    else
+        {
+            SaganProcessorEvent->message = SaganProcSyslog_LOCAL->syslog_message;
+        }
+
     SaganProcessorEvent->f_msg           =       rulestruct[rule_position].s_msg;
 
-    SaganProcessorEvent->message         =       SaganProcSyslog_LOCAL->syslog_message;
     SaganProcessorEvent->program	 = 	 SaganProcSyslog_LOCAL->syslog_program;
     SaganProcessorEvent->level           =       SaganProcSyslog_LOCAL->syslog_level;
 

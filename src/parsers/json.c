@@ -63,8 +63,6 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
     for (i = 0; i < json_count; i++ )
         {
 
-
-
             if ( JSON_LOCAL->json_value[i][0] == '{' || JSON_LOCAL->json_value[i][1] == '{' || JSON_LOCAL->json_value[i][2] == '{' )
                 {
 
@@ -129,7 +127,6 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
 
                 }
         }
-
 
     JSON_LOCAL->json_count = json_count;
 

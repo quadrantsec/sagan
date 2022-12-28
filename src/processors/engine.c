@@ -255,6 +255,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within message \"%s\".", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_message);
                         }
 
+		    strlcpy( SaganProcSyslog_LOCAL->json_original, SaganProcSyslog_LOCAL->syslog_message, JSON_MAX_SIZE);
                     Parse_JSON( SaganProcSyslog_LOCAL->syslog_message, JSON_LOCAL);
 
                 }
