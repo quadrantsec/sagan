@@ -87,6 +87,8 @@ extern pthread_mutex_t SaganDynamicFlag;
 void Processor ( void )
 {
 
+    uint_fast16_t z = 0;
+
 #ifdef HAVE_SYS_PRCTL_H
     (void)SetThreadName("SaganProcessor");
 #endif
@@ -110,6 +112,20 @@ void Processor ( void )
         }
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+
+//    for ( z = 0; z < config->max_processor_threads; z++ )
+      for ( z = 0; z < config->max_batch; z++ )
+        {
+            *SaganPassSyslog_LOCAL[z].syslog = malloc( MAX_SYSLOGMSG );
+
+            if ( SaganPassSyslog_LOCAL == NULL )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL[z].syslog. Abort!", __FILE__, __LINE__);
+                }
+
+            memset( *SaganPassSyslog_LOCAL[z].syslog, 0, MAX_SYSLOGMSG);
+        }
+
 
     struct _Sagan_JSON *JSON_LOCAL = NULL;
 
@@ -157,7 +173,7 @@ void Processor ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, i, SaganPassSyslog[proc_msgslot].syslog[i]);
                         }
 
-                    strlcpy(SaganPassSyslog_LOCAL->syslog[i],  SaganPassSyslog[proc_msgslot].syslog[i], sizeof(SaganPassSyslog_LOCAL->syslog[i]));
+                    strlcpy(SaganPassSyslog_LOCAL->syslog[i],  SaganPassSyslog[proc_msgslot].syslog[i], MAX_SYSLOGMSG);
 
                 }
 

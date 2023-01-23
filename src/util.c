@@ -214,14 +214,16 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
     va_list ap;
     va_start(ap, format);
     char *chr="*";
-    char curtime[64];
+    char curtime[128] = { 0 }; 
     time_t t;
     struct tm *now;
+
     t = time(NULL);
     now=localtime(&t);
+
     strftime(curtime, sizeof(curtime), "%m/%d/%Y %H:%M:%S",  now);
 
-    char *buf = malloc( MAX_SYSLOGMSG );
+    char *buf = malloc( MAX_SYSLOGMSG * 2 );
 
     if ( buf == NULL )
         {
@@ -257,10 +259,13 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     /* Log all console output to syslog */
 
-    if ( config->sagan_log_syslog == true )
-        {
-            syslog(LOG_INFO, "[%s] %s", chr, buf);
-        }
+
+    /*  DEBUGME: LOOPING?!
+        if ( config->sagan_log_syslog == true )
+            {
+                syslog(LOG_INFO, "[%s] %s", chr, buf);
+            }
+    */
 
     if ( config->daemonize == 0 && config->quiet == 0 )
         {

@@ -62,7 +62,14 @@ void File_Input( const char *input_file )
 
     FILE *fd;
 
-    char syslogstring[MAX_SYSLOGMSG] = { 0 };
+    char *syslogstring = NULL;
+    syslogstring = malloc( MAX_SYSLOGMSG );
+
+    if ( syslogstring == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for syslogstring. Abort!", __FILE__, __LINE__);
+        }
+
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc( sizeof(_Sagan_Pass_Syslog ));
@@ -141,7 +148,7 @@ void File_Input( const char *input_file )
             if ( ignore_flag == false )
                 {
 
-                    strlcpy(SaganPassSyslog_LOCAL->syslog[batch_count], syslogstring, sizeof(SaganPassSyslog_LOCAL->syslog[batch_count]));
+                    strlcpy(SaganPassSyslog_LOCAL->syslog[batch_count], syslogstring, MAX_SYSLOGMSG);
 
                     batch_count++;
                 }
@@ -175,7 +182,7 @@ void File_Input( const char *input_file )
                             for ( i = 0; i < config->max_batch; i++)
                                 {
 
-                                    strlcpy(SaganPassSyslog[proc_msgslot].syslog[i], SaganPassSyslog_LOCAL->syslog[i], sizeof(SaganPassSyslog->syslog[i]));
+                                    strlcpy(SaganPassSyslog[proc_msgslot].syslog[i], SaganPassSyslog_LOCAL->syslog[i], MAX_SYSLOGMSG);
 
                                 }
 
@@ -200,6 +207,7 @@ void File_Input( const char *input_file )
 
         }
 
+    free(syslogstring);
     fclose(fd);
 
 }

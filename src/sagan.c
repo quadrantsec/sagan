@@ -181,6 +181,7 @@ int main(int argc, char **argv)
     int option_index = 0;
 
     uint_fast16_t max_threads_override = 0;
+    uint_fast16_t z = 0;
 
     FILE *test_open;			/* Used to test file access */
 
@@ -774,6 +775,18 @@ int main(int argc, char **argv)
         }
 
     memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
+
+    for ( z = 0; z < config->max_processor_threads; z++ )
+        {
+            *SaganPassSyslog[z].syslog = malloc( MAX_SYSLOG_BATCH );
+
+            if ( *SaganPassSyslog[z].syslog == NULL )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog[z].syslog. Abort!", __FILE__, __LINE__);
+                }
+
+            memset( *SaganPassSyslog[z].syslog, 0, MAX_SYSLOG_BATCH);
+        }
 
     pthread_t processor_id[config->max_processor_threads];
     pthread_attr_t thread_processor_attr;
