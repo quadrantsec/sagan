@@ -113,20 +113,6 @@ void Processor ( void )
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
-//    for ( z = 0; z < config->max_processor_threads; z++ )
-      for ( z = 0; z < config->max_batch; z++ )
-        {
-            *SaganPassSyslog_LOCAL[z].syslog = malloc( MAX_SYSLOGMSG );
-
-            if ( SaganPassSyslog_LOCAL == NULL )
-                {
-                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL[z].syslog. Abort!", __FILE__, __LINE__);
-                }
-
-            memset( *SaganPassSyslog_LOCAL[z].syslog, 0, MAX_SYSLOGMSG);
-        }
-
-
     struct _Sagan_JSON *JSON_LOCAL = NULL;
 
 #if defined(HAVE_LIBFASTJSON)

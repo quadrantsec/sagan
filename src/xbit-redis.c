@@ -73,15 +73,7 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
 
     char *proto = "UNKNOWN";
 
-    char *tmp_data= malloc( MAX_SYSLOGMSG*2 );
-
-    if ( tmp_data == NULL )
-        {
-            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-            exit(-1);
-        }
-
-    memset(tmp_data, 0, MAX_SYSLOGMSG*2);
+    char tmp_data[ MAX_SYSLOGMSG*2 ] = { 0 }; 
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
@@ -259,7 +251,6 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
                 }
         }
 
-    free(tmp_data);
 }
 
 /****************************************************************/

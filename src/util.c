@@ -223,15 +223,7 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     strftime(curtime, sizeof(curtime), "%m/%d/%Y %H:%M:%S",  now);
 
-    char *buf = malloc( MAX_SYSLOGMSG * 2 );
-
-    if ( buf == NULL )
-        {
-            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-            exit(-1);
-        }
-
-    memset(buf, 0, MAX_SYSLOGMSG);
+    char buf[MAX_SYSLOGMSG * 2] = { 0 }; 
 
     if ( type == ERROR )
         {
@@ -274,11 +266,9 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     if ( type == ERROR )
         {
-            free(buf);
             exit(1);
         }
 
-    free(buf);
 }
 
 bool Mask2Bit(int mask, unsigned char *out)

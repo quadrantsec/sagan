@@ -62,13 +62,7 @@ void GZIP_Input( const char *input_file )
 
     gzFile fd;
 
-    char *syslogstring = NULL;
-    syslogstring = malloc( MAX_SYSLOGMSG );
-
-    if ( syslogstring == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for syslogstring. Abort!", __FILE__, __LINE__);
-        }
+    char syslogstring[ MAX_SYSLOGMSG ] = { 0 };
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc(sizeof(_Sagan_Pass_Syslog));
@@ -206,7 +200,6 @@ void GZIP_Input( const char *input_file )
 
         }
 
-    free(syslogstring);
     gzclose(fd);
 
 }

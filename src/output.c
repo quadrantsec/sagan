@@ -68,15 +68,7 @@ void Output( _Sagan_Event *Event )
     /******************************/
 
 
-    char *alert_data = malloc( MAX_SYSLOGMSG );
-
-    if ( alert_data == NULL )
-        {
-            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-            exit(-1);
-        }
-
-    memset(alert_data, 0, MAX_SYSLOGMSG);
+    char alert_data[ MAX_SYSLOGMSG ] = { 0 }; 
 
     Format_JSON_Alert_EVE( Event, alert_data, MAX_SYSLOGMSG );
 
@@ -146,6 +138,5 @@ void Output( _Sagan_Event *Event )
             External_Thread( alert_data, rulestruct[Event->rule_position].external_program );
         }
 
-    free(alert_data);
 }
 

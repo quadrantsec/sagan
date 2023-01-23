@@ -278,15 +278,7 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
 
             char *proto = "UNKNOWN";
 
-            char *tmp_data = malloc( MAX_SYSLOGMSG*2 );
-
-            if ( tmp_data == NULL )
-                {
-                    fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-                    exit(-1);
-                }
-
-            memset(tmp_data, 0, MAX_SYSLOGMSG*2);
+	    char tmp_data[ MAX_SYSLOGMSG*2 ] = { 0 }; 
 
             jobj = json_object_new_object();
 
@@ -395,7 +387,6 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
 
 #endif
 
-            free(tmp_data);
             return(true);
         }
 
@@ -404,7 +395,6 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
             Sagan_Log(DEBUG, "[%s, line %d] Xbit_Condition is returning false.", __FILE__, __LINE__);
         }
 
-    //free(tmp_data);
     return(false);
 
 }

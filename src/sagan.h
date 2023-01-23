@@ -442,7 +442,7 @@ struct _Sagan_JSON
 typedef struct _Sagan_Pass_Syslog _Sagan_Pass_Syslog;
 struct _Sagan_Pass_Syslog
 {
-    char *syslog[MAX_SYSLOG_BATCH];
+    char syslog[MAX_SYSLOG_BATCH][MAX_SYSLOGMSG];
 };
 
 #ifdef HAVE_LIBFASTJSON

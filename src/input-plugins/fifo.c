@@ -1,5 +1,6 @@
 /*
-** Copyright (C) 2009-2022 Quadrant Information Security <quadrantsec.com>                                             ** Copyright (C) 2009-2022 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2022 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2022 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -62,13 +63,7 @@ void FIFO_Input ( void )
 
     FILE *fd;
 
-    char *syslogstring = NULL;
-    syslogstring = malloc( MAX_SYSLOGMSG );
-
-    if ( syslogstring == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for syslogstring. Abort!", __FILE__, __LINE__);
-        }
+    char syslogstring[MAX_SYSLOGMSG] = { 0 }; 
 
     Sagan_Log(NORMAL, "Attempting to open syslog FIFO (%s).", config->sagan_fifo);
 
@@ -77,7 +72,6 @@ void FIFO_Input ( void )
 
     uint_fast16_t batch_count = 0;
     uint_fast16_t i = 0;
-    uint_fast16_t z = 0;
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
 
@@ -89,19 +83,6 @@ void FIFO_Input ( void )
         }
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
-
-    for ( z = 0; z < config->max_batch; z++ )
-        {
-            *SaganPassSyslog_LOCAL[z].syslog = malloc( MAX_SYSLOG_BATCH );
-
-            if ( *SaganPassSyslog_LOCAL[z].syslog == NULL )
-                {
-                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].syslog. Abort!", __FILE__, __LINE__);
-                }
-
-            memset( *SaganPassSyslog_LOCAL[z].syslog, 0, MAX_SYSLOG_BATCH);
-        }
-
 
     while( death == false )
         {
@@ -269,7 +250,5 @@ void FIFO_Input ( void )
                 } /* while(fd != NULL)  */
 
         }
-
-    free(syslogstring);
 
 }

@@ -52,9 +52,6 @@
 #include <sys/wait.h>
 #include <glob.h>
 
-//#include <jemalloc/jemalloc.h>
-
-
 #include "sagan.h"
 #include "sagan-defs.h"
 #include "version.h"
@@ -775,18 +772,6 @@ int main(int argc, char **argv)
         }
 
     memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
-
-    for ( z = 0; z < config->max_processor_threads; z++ )
-        {
-            *SaganPassSyslog[z].syslog = malloc( MAX_SYSLOG_BATCH );
-
-            if ( *SaganPassSyslog[z].syslog == NULL )
-                {
-                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog[z].syslog. Abort!", __FILE__, __LINE__);
-                }
-
-            memset( *SaganPassSyslog[z].syslog, 0, MAX_SYSLOG_BATCH);
-        }
 
     pthread_t processor_id[config->max_processor_threads];
     pthread_attr_t thread_processor_attr;

@@ -68,15 +68,7 @@ void External_Thread ( char *alert_data, char *execute_script )
     uint_fast32_t n;
     uint_fast32_t pid;
 
-    char *buf = malloc( MAX_SYSLOGMSG );
-
-    if ( buf == NULL )
-        {
-            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-            exit(-1);
-        }
-
-    memset(buf, 0, MAX_SYSLOGMSG);
+    char buf[ MAX_SYSLOGMSG ] = { 0 }; 
 
     if ( debug->debugexternal )
         {
@@ -144,8 +136,6 @@ void External_Thread ( char *alert_data, char *execute_script )
         {
             Sagan_Log(DEBUG, "[%s, line %d] Executed %s", __FILE__, __LINE__, execute_script);
         }
-
-    free(buf);
 
 #endif
 
