@@ -113,6 +113,18 @@ void Processor ( void )
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
+    for ( z = 0; z < config->max_batch; z++ )
+        {
+            *SaganPassSyslog_LOCAL[z].batch = malloc( MAX_SYSLOGMSG );
+
+            if ( SaganPassSyslog_LOCAL[z].batch == NULL )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].batch. Abort!", __FILE__, __LINE__);
+                }
+
+            memset( *SaganPassSyslog_LOCAL[z].batch, 0, MAX_SYSLOGMSG );
+        }
+
     struct _Sagan_JSON *JSON_LOCAL = NULL;
 
 #if defined(HAVE_LIBFASTJSON)
@@ -156,10 +168,10 @@ void Processor ( void )
 
                     if (debug->debugsyslog)
                         {
-                            Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, i, SaganPassSyslog[proc_msgslot].syslog[i]);
+                            Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, i, SaganPassSyslog[proc_msgslot].batch[i]);
                         }
 
-                    strlcpy(SaganPassSyslog_LOCAL->syslog[i],  SaganPassSyslog[proc_msgslot].syslog[i], MAX_SYSLOGMSG);
+		    strlcpy(SaganPassSyslog_LOCAL->batch[i],  SaganPassSyslog[proc_msgslot].batch[i], MAX_SYSLOGMSG);
 
                 }
 
@@ -188,14 +200,15 @@ void Processor ( void )
 
                     if ( config->input_type == INPUT_PIPE )
                         {
-                            SyslogInput_Pipe( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL );
+//                            SyslogInput_Pipe( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL );
+			      SyslogInput_Pipe( SaganPassSyslog_LOCAL->batch[i], SaganProcSyslog_LOCAL );                            
                         }
 
 #ifdef HAVE_LIBFASTJSON
 
                     else
                         {
-                            SyslogInput_JSON( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL, JSON_LOCAL );
+                            SyslogInput_JSON( SaganPassSyslog_LOCAL->batch[i], SaganProcSyslog_LOCAL, JSON_LOCAL );
                         }
 
 #endif
@@ -262,8 +275,15 @@ void Processor ( void )
 
     /* Exit thread on shutdown. */
 
-    free( SaganProcSyslog_LOCAL );
-    free( SaganPassSyslog_LOCAL );
+// DEBUGME: Faults
+//    free( SaganProcSyslog_LOCAL );
+
+//    for ( z = 0; z < config->max_batch; z++ )
+//    {
+//	    free(SaganPassSyslog_LOCAL[z].batch);
+//    }
+
+//    free( SaganPassSyslog_LOCAL );
 
 #if defined(HAVE_LIBFASTJSON)
     free(JSON_LOCAL);

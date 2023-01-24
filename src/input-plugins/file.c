@@ -141,7 +141,7 @@ void File_Input( const char *input_file )
             if ( ignore_flag == false )
                 {
 
-                    strlcpy(SaganPassSyslog_LOCAL->syslog[batch_count], syslogstring, MAX_SYSLOGMSG);
+                    strlcpy(SaganPassSyslog_LOCAL->batch[batch_count], syslogstring, MAX_SYSLOGMSG);
 
                     batch_count++;
                 }
@@ -175,7 +175,7 @@ void File_Input( const char *input_file )
                             for ( i = 0; i < config->max_batch; i++)
                                 {
 
-                                    strlcpy(SaganPassSyslog[proc_msgslot].syslog[i], SaganPassSyslog_LOCAL->syslog[i], MAX_SYSLOGMSG);
+                                    strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], MAX_SYSLOGMSG);
 
                                 }
 

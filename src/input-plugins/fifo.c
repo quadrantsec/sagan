@@ -72,6 +72,7 @@ void FIFO_Input ( void )
 
     uint_fast16_t batch_count = 0;
     uint_fast16_t i = 0;
+    uint_fast16_t z = 0; 
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
 
@@ -83,6 +84,18 @@ void FIFO_Input ( void )
         }
 
     memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+
+    for ( z = 0; z < config->max_batch; z++ )
+        {
+            *SaganPassSyslog_LOCAL[z].batch = malloc( MAX_SYSLOGMSG );
+
+            if ( SaganPassSyslog_LOCAL[z].batch == NULL )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].batch. Abort!", __FILE__, __LINE__);
+                }
+
+            memset( *SaganPassSyslog_LOCAL[z].batch, 0, MAX_SYSLOGMSG );
+        }
 
     while( death == false )
         {
@@ -183,7 +196,8 @@ void FIFO_Input ( void )
 
                             if ( ignore_flag == false )
                                 {
-                                    strlcpy(SaganPassSyslog_LOCAL->syslog[batch_count], syslogstring, MAX_SYSLOGMSG);
+//                                    strlcpy(SaganPassSyslog_LOCAL->syslog[batch_count], syslogstring, MAX_SYSLOGMSG);
+				    strlcpy(SaganPassSyslog_LOCAL->batch[batch_count], syslogstring, MAX_SYSLOGMSG);
                                     batch_count++;
                                 }
 
@@ -206,7 +220,8 @@ void FIFO_Input ( void )
 
                                             for ( i = 0; i < config->max_batch; i++)
                                                 {
-                                                    strlcpy(SaganPassSyslog[proc_msgslot].syslog[i], SaganPassSyslog_LOCAL->syslog[i], MAX_SYSLOGMSG);
+
+                                                strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], MAX_SYSLOGMSG);
                                                 }
 
                                             counters->events_processed = counters->events_processed + config->max_batch;

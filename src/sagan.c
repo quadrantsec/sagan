@@ -773,6 +773,25 @@ int main(int argc, char **argv)
 
     memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
 
+    for ( z = 0; z < config->max_processor_threads; z++ )
+        {
+
+	    for ( i = 0; i < config->max_batch; i++ )
+	    {
+
+            SaganPassSyslog[z].batch[i] = malloc( MAX_SYSLOGMSG );
+
+            if ( SaganPassSyslog[z].batch[i] == NULL )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog[z].batch. Abort!", __FILE__, __LINE__);
+                }
+
+            memset( SaganPassSyslog[z].batch[i], 0, MAX_SYSLOGMSG );
+
+	    }
+        }
+
+
     pthread_t processor_id[config->max_processor_threads];
     pthread_attr_t thread_processor_attr;
     pthread_attr_init(&thread_processor_attr);
