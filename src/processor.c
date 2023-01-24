@@ -115,14 +115,14 @@ void Processor ( void )
 
     for ( z = 0; z < config->max_batch; z++ )
         {
-            *SaganPassSyslog_LOCAL[z].batch = malloc( MAX_SYSLOGMSG );
+            SaganPassSyslog_LOCAL->batch[z] = malloc( MAX_SYSLOGMSG );
 
-            if ( SaganPassSyslog_LOCAL[z].batch == NULL )
+            if ( SaganPassSyslog_LOCAL->batch[z] == NULL )
                 {
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].batch. Abort!", __FILE__, __LINE__);
                 }
 
-            memset( *SaganPassSyslog_LOCAL[z].batch, 0, MAX_SYSLOGMSG );
+            memset( SaganPassSyslog_LOCAL->batch[z], 0, MAX_SYSLOGMSG );
         }
 
     struct _Sagan_JSON *JSON_LOCAL = NULL;

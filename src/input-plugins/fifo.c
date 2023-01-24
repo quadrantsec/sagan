@@ -87,14 +87,14 @@ void FIFO_Input ( void )
 
     for ( z = 0; z < config->max_batch; z++ )
         {
-            *SaganPassSyslog_LOCAL[z].batch = malloc( MAX_SYSLOGMSG );
+            SaganPassSyslog_LOCAL->batch[z] = malloc( MAX_SYSLOGMSG );
 
-            if ( SaganPassSyslog_LOCAL[z].batch == NULL )
+            if ( SaganPassSyslog_LOCAL->batch[z] == NULL )
                 {
-                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].batch. Abort!", __FILE__, __LINE__);
+                   Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
                 }
 
-            memset( *SaganPassSyslog_LOCAL[z].batch, 0, MAX_SYSLOGMSG );
+            memset( SaganPassSyslog_LOCAL->batch[z], 0, MAX_SYSLOGMSG );
         }
 
     while( death == false )
@@ -216,7 +216,6 @@ void FIFO_Input ( void )
                                             pthread_mutex_lock(&SaganProcWorkMutex);
 
                                             /* Copy local thread data to global thread */
-
 
                                             for ( i = 0; i < config->max_batch; i++)
                                                 {

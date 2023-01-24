@@ -177,7 +177,6 @@ void GZIP_Input( const char *input_file )
                             for ( i = 0; i < config->max_batch; i++)
                                 {
                                     strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], MAX_SYSLOGMSG);
-
                                 }
 
                             counters->events_processed = counters->events_processed + config->max_batch;
