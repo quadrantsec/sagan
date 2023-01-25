@@ -62,11 +62,11 @@
 #include "processors/client-stats.h"
 
 extern struct _SaganCounters *counters;
-extern struct _Sagan_Proc_Syslog *SaganProcSyslog;
 extern struct _Sagan_Pass_Syslog *SaganPassSyslog;
 extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
 
+struct _Sagan_Proc_Syslog *SaganProcSyslog;
 
 extern uint_fast16_t proc_msgslot; 		/* Comes from sagan.c */
 extern uint_fast16_t proc_running;  	        /* Comes from sagan.c */

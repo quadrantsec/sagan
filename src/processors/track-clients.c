@@ -57,7 +57,8 @@
 pthread_mutex_t IPCTrackClients=PTHREAD_MUTEX_INITIALIZER;
 
 struct _Sagan_Processor_Info *processor_info_track_client = NULL;
-struct _Sagan_Proc_Syslog *SaganProcSyslog;
+
+extern struct _Sagan_Proc_Syslog *SaganProcSyslog;
 extern struct _Sagan_Track_Clients_IPC *SaganTrackClients_ipc;
 extern struct _Sagan_IPC_Counters *counters_ipc;
 

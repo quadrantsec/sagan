@@ -314,8 +314,6 @@ struct _SaganCounters
 
 #ifdef HAVE_LIBFASTJSON
 
-//    int json_message_map;
-
     uint_fast64_t malformed_json_input_count;
 
     uint_fast64_t json_mp_count;
@@ -408,6 +406,7 @@ struct _Sagan_Proc_Syslog
     uint_fast64_t flow_id;
 
     char event_id[32];
+
     char md5[MD5_HASH_SIZE+1];
     char sha1[SHA1_HASH_SIZE+1];
     char sha256[SHA256_HASH_SIZE+1];
