@@ -804,12 +804,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             /* parse_hash: md5 */
 
-                            if ( SaganProcSyslog_LOCAL->md5[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )
+                            if ( SaganProcSyslog_LOCAL->md5 == NULL && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )
                                 {
                                     Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_MD5, SaganProcSyslog_LOCAL->md5, MD5_HASH_SIZE+1 );
                                 }
 
-                            else if ( SaganProcSyslog_LOCAL->sha1[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA1 )
+			    else if ( SaganProcSyslog_LOCAL->sha1[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA1 )
                                 {
                                     Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA1, SaganProcSyslog_LOCAL->sha1, SHA1_HASH_SIZE+1 );
                                 }

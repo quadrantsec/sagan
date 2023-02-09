@@ -93,6 +93,25 @@ void Processor ( void )
     (void)SetThreadName("SaganProcessor");
 #endif
 
+    struct _Sagan_Proc_Syslog *SaganProcSyslog = NULL;
+    SaganProcSyslog = malloc(sizeof(struct _Sagan_Proc_Syslog));
+
+    if ( SaganProcSyslog == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganProcSyslog. Abort!", __FILE__, __LINE__);
+        }
+
+    memset(SaganProcSyslog, 0, sizeof(struct _Sagan_Proc_Syslog));
+
+    SaganProcSyslog->md5 = malloc( MD5_HASH_SIZE+1 );
+    memset(SaganProcSyslog->md5, 0, MD5_HASH_SIZE+1 );
+
+    //SaganProcSyslog->json_original = malloc( JSON_MAX_SIZE+1 );
+    //memset(SaganProcSyslog->json_original, 0, JSON_MAX_SIZE+1 );
+
+    //SaganProcSyslog->json_normalize = malloc( JSON_MAX_SIZE+1 );
+    //memset(SaganProcSyslog->json_normalize, 0, JSON_MAX_SIZE+1 );
+
     struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL = NULL;
     SaganProcSyslog_LOCAL = malloc(sizeof(struct _Sagan_Proc_Syslog));
 
@@ -102,6 +121,15 @@ void Processor ( void )
         }
 
     memset(SaganProcSyslog_LOCAL, 0, sizeof(struct _Sagan_Proc_Syslog));
+
+    SaganProcSyslog_LOCAL->md5 = malloc( MD5_HASH_SIZE+1 );
+    memset(SaganProcSyslog_LOCAL->md5, 0, MD5_HASH_SIZE+1 );
+
+    //SaganProcSyslog_LOCAL->json_original = malloc( JSON_MAX_SIZE+1 );
+    //memset(SaganProcSyslog_LOCAL->json_original, 0, JSON_MAX_SIZE+1 );
+
+    //SaganProcSyslog_LOCAL->json_normalize = malloc( JSON_MAX_SIZE+1 );
+    //memset(SaganProcSyslog_LOCAL->json_normalize, 0, JSON_MAX_SIZE+1 );
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc(sizeof(struct _Sagan_Pass_Syslog));

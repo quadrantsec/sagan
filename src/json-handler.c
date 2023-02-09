@@ -250,7 +250,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     /* Dump any normalization (liblognorm) data, if we have any */
 
-    snprintf(tmp_data, sizeof(tmp_data), ", \"normalize\": %s", Event->json_normalize[0] == '\0' ? "null" : Event->json_normalize);
+    snprintf(tmp_data, sizeof(tmp_data), ", \"normalize\": %s", Event->json_normalize == NULL ? "null" : Event->json_normalize);
     strlcat(str, tmp_data, size);
 
     strlcat(str, " }", size);

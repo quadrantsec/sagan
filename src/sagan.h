@@ -407,7 +407,8 @@ struct _Sagan_Proc_Syslog
 
     char event_id[32];
 
-    char md5[MD5_HASH_SIZE+1];
+//    char md5[MD5_HASH_SIZE+1];
+    char *md5;
     char sha1[SHA1_HASH_SIZE+1];
     char sha256[SHA256_HASH_SIZE+1];
     char filename[MAX_FILENAME_SIZE+1];
@@ -417,7 +418,9 @@ struct _Sagan_Proc_Syslog
     char username[MAX_USERNAME_SIZE+1];
 
     char json_normalize[JSON_MAX_SIZE+1];
+//    char *json_normalize;
     char json_original[JSON_MAX_SIZE+1];
+//    char *json_original;
 
 #ifdef HAVE_LIBFASTJSON
     char correlation_json[MAX_SYSLOGMSG];
