@@ -214,7 +214,7 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
     va_list ap;
     va_start(ap, format);
     char *chr="*";
-    char curtime[128] = { 0 }; 
+    char curtime[128] = { 0 };
     time_t t;
     struct tm *now;
 
@@ -223,7 +223,7 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     strftime(curtime, sizeof(curtime), "%m/%d/%Y %H:%M:%S",  now);
 
-    char buf[MAX_SYSLOGMSG * 2] = { 0 }; 
+    char buf[MAX_SYSLOGMSG * 2] = { 0 };
 
     if ( type == ERROR )
         {

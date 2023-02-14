@@ -75,7 +75,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     bool event_id_found = false;
     bool proto_found = false;
 
-    memset(SaganProcSyslog_LOCAL, 0, sizeof(_Sagan_Proc_Syslog));
+//    memset(SaganProcSyslog_LOCAL, 0, sizeof(_Sagan_Proc_Syslog)); // DEBUGME : CAUSES SEGFAULT
 
     memcpy(SaganProcSyslog_LOCAL->syslog_program, "UNDEFINED", 9);
     memcpy(SaganProcSyslog_LOCAL->syslog_time, "UNDEFINED", 9);
@@ -135,7 +135,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->event_id[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->event_id, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->event_id));
+                                    strlcpy(SaganProcSyslog_LOCAL->event_id, JSON_LOCAL->json_value[i], MAX_EVENTID);
                                     event_id_found = true;
                                     break;
 
@@ -151,7 +151,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_host[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, JSON_LOCAL->json_value[i], MAX_SYSLOG_HOST);
                                     s_host_found = true;
                                     break;
 
@@ -168,7 +168,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_facility[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_facility, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_facility));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_facility, JSON_LOCAL->json_value[i], MAX_SYSLOG_FACILITY);
                                     facility_found = true;
                                     break;
 
@@ -184,7 +184,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_priority[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_priority, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_priority));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_priority, JSON_LOCAL->json_value[i], MAX_SYSLOG_PRIORITY);
                                     priority_found = true;
                                     break;
 
@@ -201,7 +201,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_level[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_level, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_level));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_level, JSON_LOCAL->json_value[i], MAX_SYSLOG_LEVEL);
                                     level_found = true;
                                     break;
 
@@ -218,7 +218,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_tag[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_tag, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_tag));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_tag, JSON_LOCAL->json_value[i], MAX_SYSLOG_TAG);
                                     tag_found = true;
                                     break;
 
@@ -235,7 +235,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_date[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_date, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_date));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_date, JSON_LOCAL->json_value[i], MAX_SYSLOG_DATE);
                                     date_found = true;
                                     break;
 
@@ -252,7 +252,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_time[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_time, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_time));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_time, JSON_LOCAL->json_value[i], MAX_SYSLOG_TIME);
                                     time_found = true;
                                     break;
 
@@ -270,7 +270,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->syslog_map_program[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_program, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->syslog_program));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_program, JSON_LOCAL->json_value[i], MAX_SYSLOG_PROGRAM);
                                     program_found = true;
                                     break;
 
@@ -287,7 +287,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->username[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->username, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->username));
+                                    strlcpy(SaganProcSyslog_LOCAL->username, JSON_LOCAL->json_value[i], MAX_USERNAME_SIZE);
                                     username_found = true;
                                     break;
 
@@ -338,7 +338,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->md5[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->md5, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->md5));
+                                    strlcpy(SaganProcSyslog_LOCAL->md5, JSON_LOCAL->json_value[i], MD5_HASH_SIZE);
                                     md5_found = true;
                                     break;
 
@@ -354,7 +354,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->sha1[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->sha1, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->sha1));
+                                    strlcpy(SaganProcSyslog_LOCAL->sha1, JSON_LOCAL->json_value[i], SHA1_HASH_SIZE);
                                     sha1_found = true;
                                     break;
 
@@ -370,7 +370,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->sha256[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->sha256, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->sha256));
+                                    strlcpy(SaganProcSyslog_LOCAL->sha256, JSON_LOCAL->json_value[i], SHA256_HASH_SIZE);
                                     sha256_found = true;
                                     break;
 
@@ -386,7 +386,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->filename[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->filename, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->filename));
+                                    strlcpy(SaganProcSyslog_LOCAL->filename, JSON_LOCAL->json_value[i], MAX_FILENAME_SIZE);
                                     filename_found = true;
                                     break;
 
@@ -402,7 +402,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->hostname[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->hostname, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->hostname));
+                                    strlcpy(SaganProcSyslog_LOCAL->hostname, JSON_LOCAL->json_value[i], MAX_HOSTNAME_SIZE);
                                     hostname_found = true;
                                     break;
 
@@ -418,7 +418,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->url[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->url, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->url));
+                                    strlcpy(SaganProcSyslog_LOCAL->url, JSON_LOCAL->json_value[i], MAX_URL_SIZE);
                                     url_found = true;
                                     break;
 
@@ -434,7 +434,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                             if ( !strcmp(Syslog_JSON_Map->ja3[a], JSON_LOCAL->json_key[i] ) )
                                 {
 
-                                    strlcpy(SaganProcSyslog_LOCAL->ja3, JSON_LOCAL->json_value[i], sizeof(SaganProcSyslog_LOCAL->ja3));
+                                    strlcpy(SaganProcSyslog_LOCAL->ja3, JSON_LOCAL->json_value[i], MD5_HASH_SIZE);
                                     ja3_found = true;
                                     break;
 

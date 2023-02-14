@@ -67,7 +67,7 @@ void Alert_File( _Sagan_Event *Event )
 
     File_Lock( sagan_alert_stream_int );
 
-    fprintf(sagan_alert_stream, "\n[**] [%lu:%" PRIu64 ":%" PRIuFAST16 "] %s [**]\n", Event->generatorid, Event->sid, Event->rev, Event->f_msg);
+    fprintf(sagan_alert_stream, "\n[**] [1:%" PRIu64 ":%" PRIuFAST16 "] %s [**]\n", Event->sid, Event->rev, Event->f_msg);
     fprintf(sagan_alert_stream, "[Classification: %s] [Priority: %d] [%s]\n", Event->class, Event->pri, Event->host );
     fprintf(sagan_alert_stream, "[Alert Time: %s]\n", timebuf);
 

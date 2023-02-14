@@ -66,17 +66,18 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
     struct timeval  tp;
 
     /* GeoIP struct for Send_Alert */
+    /*
+        struct _GeoIP *GeoIP = NULL;
+        GeoIP = malloc(sizeof(struct _GeoIP));
 
-    struct _GeoIP *GeoIP = NULL;
-    GeoIP = malloc(sizeof(struct _GeoIP));
+        if ( GeoIP == NULL )
+            {
+                Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
+            }
 
-    if ( GeoIP == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
-        }
-
-    memset(GeoIP, 0, sizeof(_GeoIP));
-    memcpy(GeoIP->country, "NONE", 4);
+        memset(GeoIP, 0, sizeof(_GeoIP));
+        memcpy(GeoIP->country, "NONE", 4);
+        */
 
     /* We don't want the array to be altered while we are working with it */
 
@@ -95,7 +96,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
                     /* Rule was already loaded.  Release mutex and continue as normal */
 
                     reload_rules = false;
-                    free(GeoIP);
+//                    free(GeoIP);
                     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
                     return;
@@ -108,7 +109,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
 
     if ( rules_loaded == NULL )
         {
-            free(GeoIP);
+            //free(GeoIP);
             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rules_loaded. Abort!", __FILE__, __LINE__);
         }
 
@@ -139,7 +140,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        //           "null",
-                       rule_position, tp, NULL, 0, GeoIP, GeoIP );
+                       rule_position, tp, NULL, 0 );
 
             /* Lock rules so other threads don't try to use it while we alter/load new rules */
 
@@ -178,11 +179,11 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        //           "null",
-                       rule_position, tp, NULL, 0, GeoIP, GeoIP );
+                       rule_position, tp, NULL, 0 );
 
         }
 
-    free(GeoIP);
+    //free(GeoIP);
     return;
 
 }

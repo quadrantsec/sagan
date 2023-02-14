@@ -201,7 +201,7 @@ void Sig_Handler( void )
 #ifdef HAVE_LIBLOGNORM
 
                     //Liblognorm_Close();		// DEBUGME: SEGFAULTS
-							// Maybe liblognorm hasnt fired?
+                    // Maybe liblognorm hasnt fired?
 
 #endif
 

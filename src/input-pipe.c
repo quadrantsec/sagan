@@ -50,7 +50,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
     char *ptr = NULL;
 
-    memset(SaganProcSyslog_LOCAL, 0, sizeof(_Sagan_Proc_Syslog));
+//    memset(SaganProcSyslog_LOCAL, 0, sizeof(_Sagan_Proc_Syslog));  // DEBUGME: CAUSES segfault!
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
 
@@ -68,14 +68,14 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
                     if ( Is_IP(ptr, IPv4) || Is_IP(ptr, IPv6) )
                         {
-                            strlcpy(SaganProcSyslog_LOCAL->syslog_host, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                            strlcpy(SaganProcSyslog_LOCAL->syslog_host, ptr, MAX_SYSLOG_HOST);
                         }
                     else
                         {
 
                             __atomic_add_fetch(&counters->malformed_host, 1, __ATOMIC_SEQ_CST);
 
-                            strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+                            strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, MAX_SYSLOG_HOST);
                             if ( debug->debugmalformed )
                                 {
                                     Sagan_Log(DEBUG, "Sagan received a malformed 'host': '%s' (replaced with %s)", SaganProcSyslog_LOCAL->syslog_host, config->sagan_host);
@@ -95,7 +95,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
                         {
                             if (!strcmp( dnscache[i].hostname, ptr))
                                 {
-                                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, dnscache[i].src_ip, sizeof(dnscache[i].src_ip));
+                                    strlcpy(SaganProcSyslog_LOCAL->syslog_host, dnscache[i].src_ip, MAX_SYSLOG_HOST);
                                     dns_flag = true;
                                 }
                         }
@@ -151,7 +151,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
             __atomic_add_fetch(&counters->malformed_host, 1, __ATOMIC_SEQ_CST);
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, sizeof(SaganProcSyslog_LOCAL->syslog_host));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_host, config->sagan_host, MAX_SYSLOG_HOST);
 
             if ( debug->debugmalformed )
                 {
@@ -168,7 +168,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_facility, "SAGAN: FACILITY ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_facility));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_facility, "SAGAN: FACILITY ERROR", MAX_SYSLOG_FACILITY);
 
             __atomic_add_fetch(&counters->malformed_facility, 1, __ATOMIC_SEQ_CST);
 
@@ -180,7 +180,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
         }
     else
         {
-            strlcpy(SaganProcSyslog_LOCAL->syslog_facility, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_facility));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_facility, ptr, MAX_SYSLOG_FACILITY);
         }
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
@@ -188,7 +188,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_priority, "SAGAN: PRIORITY ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_priority));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_priority, "SAGAN: PRIORITY ERROR", MAX_SYSLOG_PRIORITY);
 
             __atomic_add_fetch(&counters->malformed_priority, 1, __ATOMIC_SEQ_CST);
 
@@ -201,7 +201,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_priority, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_priority));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_priority, ptr, MAX_SYSLOG_PRIORITY);
 
         }
 
@@ -210,7 +210,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_level, "SAGAN: LEVEL ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_level));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_level, "SAGAN: LEVEL ERROR", MAX_SYSLOG_LEVEL);
 
             __atomic_add_fetch(&counters->malformed_level, 1, __ATOMIC_SEQ_CST);
 
@@ -223,7 +223,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_level, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_level));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_level, ptr, MAX_SYSLOG_LEVEL);
 
         }
 
@@ -232,7 +232,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, "SAGAN: TAG ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_tag));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, "SAGAN: TAG ERROR", MAX_SYSLOG_LEVEL);
 
             __atomic_add_fetch(&counters->malformed_tag, 1, __ATOMIC_SEQ_CST);
 
@@ -244,7 +244,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
         }
     else
         {
-            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_tag));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, ptr, MAX_SYSLOG_LEVEL);
         }
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
@@ -252,7 +252,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_date, "SAGAN: DATE ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_date));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_date, "SAGAN: DATE ERROR", MAX_SYSLOG_DATE);
 
             __atomic_add_fetch(&counters->malformed_date, 1, __ATOMIC_SEQ_CST);
 
@@ -265,7 +265,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_date, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_date));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_date, ptr, MAX_SYSLOG_DATE);
         }
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
@@ -273,7 +273,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy( SaganProcSyslog_LOCAL->syslog_time, "SAGAN: TIME ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_time) );
+            strlcpy( SaganProcSyslog_LOCAL->syslog_time, "SAGAN: TIME ERROR", MAX_SYSLOG_TIME );
 
             __atomic_add_fetch(&counters->malformed_time, 1, __ATOMIC_SEQ_CST);
 
@@ -286,7 +286,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_time, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_time) );
+            strlcpy(SaganProcSyslog_LOCAL->syslog_time, ptr, MAX_SYSLOG_TIME );
         }
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
@@ -294,7 +294,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy( SaganProcSyslog_LOCAL->syslog_program, "SAGAN: PROGRAM ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_program) );
+            strlcpy( SaganProcSyslog_LOCAL->syslog_program, "SAGAN: PROGRAM ERROR", MAX_SYSLOG_PROGRAM );
 
             __atomic_add_fetch(&counters->malformed_program, 1, __ATOMIC_SEQ_CST);
 
@@ -308,7 +308,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy( SaganProcSyslog_LOCAL->syslog_program, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_program) );
+            strlcpy( SaganProcSyslog_LOCAL->syslog_program, ptr, MAX_SYSLOG_PROGRAM );
 
         }
 
@@ -317,7 +317,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy( SaganProcSyslog_LOCAL->syslog_message, "SAGAN: MESSAGE ERROR", sizeof(SaganProcSyslog_LOCAL->syslog_message) );
+            strlcpy( SaganProcSyslog_LOCAL->syslog_message, "SAGAN: MESSAGE ERROR", MAX_SYSLOGMSG );
 
             __atomic_add_fetch(&counters->malformed_message, 1, __ATOMIC_SEQ_CST);
 
@@ -337,7 +337,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_message, ptr, sizeof(SaganProcSyslog_LOCAL->syslog_message));
+            strlcpy(SaganProcSyslog_LOCAL->syslog_message, ptr, MAX_SYSLOGMSG);
 
         }
 

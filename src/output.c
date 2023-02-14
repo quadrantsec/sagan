@@ -68,7 +68,7 @@ void Output( _Sagan_Event *Event )
     /******************************/
 
 
-    char alert_data[ MAX_SYSLOGMSG ] = { 0 }; 
+    char alert_data[ MAX_SYSLOGMSG ] = { 0 };
 
     Format_JSON_Alert_EVE( Event, alert_data, MAX_SYSLOGMSG );
 

@@ -19,6 +19,7 @@ AUTOMAKE_OPIONS=foreign no-dependencies subdir-objects
                                                        plog.c \
                                                        output.c \
                                                        processor.c \
+						       processor-memory.c \
 						       search-type.c \
 						       event-id.c \
 						       json-content.c \

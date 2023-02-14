@@ -156,8 +156,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     if ( syslog_append_orig_message == NULL )
         {
-            fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
-            exit(-1);
+            Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
 
     memset(syslog_append_orig_message, 0, MAX_SYSLOGMSG);
@@ -194,7 +193,15 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #ifdef HAVE_LIBFASTJSON
 
-    char o_syslog_message[MAX_SYSLOGMSG] = { 0 };
+    char *o_syslog_message = malloc( MAX_SYSLOGMSG );
+
+    if ( o_syslog_message == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
+        }
+
+    memset(o_syslog_message, 0, MAX_SYSLOGMSG );
+
     bool o_syslog_message_flag = false;
 
     char o_syslog_program[MAX_SYSLOG_PROGRAM] = { 0 };
@@ -237,7 +244,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                     /* Zero out program (might get set by JSON) */
 
                     SaganProcSyslog_LOCAL->syslog_program[0] = '\0';
-                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, sizeof(SaganProcSyslog_LOCAL->syslog_message));
+                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, MAX_SYSLOGMSG);
                     free( tmp_json );
 
                 }
@@ -255,7 +262,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within message \"%s\".", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_message);
                         }
 
-		    strlcpy( SaganProcSyslog_LOCAL->json_original, SaganProcSyslog_LOCAL->syslog_message, JSON_MAX_SIZE);
+                    strlcpy( SaganProcSyslog_LOCAL->json_original, SaganProcSyslog_LOCAL->syslog_message, JSON_MAX_SIZE);
                     Parse_JSON( SaganProcSyslog_LOCAL->syslog_message, JSON_LOCAL);
 
                 }
@@ -566,7 +573,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                     snprintf(syslog_append_program, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6, "%s | %s", SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL->syslog_program);
                                     syslog_append_program[ (MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6) - 1 ] = '\0';
-                                    memcpy(SaganProcSyslog_LOCAL->syslog_message, syslog_append_program, sizeof(SaganProcSyslog_LOCAL->syslog_message));
+                                    memcpy(SaganProcSyslog_LOCAL->syslog_message, syslog_append_program, MAX_SYSLOGMSG);
                                     append_program_flag = true;
 
                                     free( syslog_append_program) ;
@@ -577,7 +584,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             if ( rulestruct[b].append_program == false && append_program_flag == true )
                                 {
-                                    memcpy(SaganProcSyslog_LOCAL->syslog_message,syslog_append_orig_message, sizeof(SaganProcSyslog_LOCAL->syslog_message));
+                                    memcpy(SaganProcSyslog_LOCAL->syslog_message,syslog_append_orig_message, MAX_SYSLOGMSG);
 
                                     append_program_flag = false;
                                 }
@@ -804,12 +811,12 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             /* parse_hash: md5 */
 
-                            if ( SaganProcSyslog_LOCAL->md5 == NULL && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )
+                            if ( SaganProcSyslog_LOCAL->md5[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_MD5 )
                                 {
                                     Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_MD5, SaganProcSyslog_LOCAL->md5, MD5_HASH_SIZE+1 );
                                 }
 
-			    else if ( SaganProcSyslog_LOCAL->sha1[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA1 )
+                            else if ( SaganProcSyslog_LOCAL->sha1[0] == '\0' && rulestruct[b].s_find_hash_type == PARSE_HASH_SHA1 )
                                 {
                                     Parse_Hash(SaganProcSyslog_LOCAL->syslog_message, PARSE_HASH_SHA1, SaganProcSyslog_LOCAL->sha1, SHA1_HASH_SIZE+1 );
                                 }
@@ -1365,16 +1372,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                             Send_Alert(SaganProcSyslog_LOCAL,
                                                                        b, tp,
                                                                        bluedot_json,
-                                                                       bluedot_results,
-#ifdef HAVE_LIBMAXMINDDB
-                                                                       GeoIP_SRC,
-                                                                       GeoIP_DEST );
-#endif
-
-#ifndef HAVE_LIBMAXMINDDB
-                                                            NULL,
-                                                            NULL );
-#endif
+                                                                       bluedot_results );
 
                                                             /* If this is a "pass" signature,  we can stop processing now */
 
@@ -1454,6 +1452,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
     free(lookup_cache);
     free(SaganRouting);
     free(syslog_append_orig_message);
+    free(o_syslog_message);
 
 #ifdef HAVE_LIBMAXMINDDB
 

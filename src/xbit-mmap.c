@@ -278,7 +278,7 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
 
             char *proto = "UNKNOWN";
 
-	    char tmp_data[ MAX_SYSLOGMSG*2 ] = { 0 }; 
+            char tmp_data[ MAX_SYSLOGMSG*2 ] = { 0 };
 
             jobj = json_object_new_object();
 

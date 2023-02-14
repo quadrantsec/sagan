@@ -373,21 +373,22 @@ struct _SaganDebug
 typedef struct _Sagan_Proc_Syslog _Sagan_Proc_Syslog;
 struct _Sagan_Proc_Syslog
 {
-    char syslog_host[MAX_SYSLOG_HOST];
-    char syslog_facility[MAX_SYSLOG_FACILITY];
-    char syslog_priority[MAX_SYSLOG_PRIORITY];
-    char syslog_level[MAX_SYSLOG_LEVEL];
-    char syslog_tag[MAX_SYSLOG_TAG];
-    char syslog_date[MAX_SYSLOG_DATE];
-    char syslog_time[MAX_SYSLOG_TIME];
-    char syslog_program[MAX_SYSLOG_PROGRAM];
-    char syslog_message[MAX_SYSLOGMSG];
 
-    char src_ip[MAXIP];
-    char dst_ip[MAXIP];
+    char *syslog_host;
+    char *syslog_facility;
+    char *syslog_priority;
+    char *syslog_level;
+    char *syslog_tag;
+    char *syslog_date;
+    char *syslog_time;
+    char *syslog_program;
+    char *syslog_message;
 
-    char src_host[MAXHOST];
-    char dst_host[MAXHOST];
+    char *src_ip;
+    char *dst_ip;
+
+    char *src_host;
+    char *dst_host;
 
     bool ip_src_is_valid;
     bool ip_dst_is_valid;
@@ -405,25 +406,22 @@ struct _Sagan_Proc_Syslog
 
     uint_fast64_t flow_id;
 
-    char event_id[32];
+    char *event_id;
 
-//    char md5[MD5_HASH_SIZE+1];
     char *md5;
-    char sha1[SHA1_HASH_SIZE+1];
-    char sha256[SHA256_HASH_SIZE+1];
-    char filename[MAX_FILENAME_SIZE+1];
-    char hostname[MAX_HOSTNAME_SIZE+1];
-    char url[MAX_URL_SIZE+1];
-    char ja3[MD5_HASH_SIZE+1];
-    char username[MAX_USERNAME_SIZE+1];
+    char *sha1;
+    char *sha256;
+    char *filename;
+    char *hostname;
+    char *url;
+    char *ja3;
+    char *username;
 
-    char json_normalize[JSON_MAX_SIZE+1];
-//    char *json_normalize;
-    char json_original[JSON_MAX_SIZE+1];
-//    char *json_original;
+    char *json_normalize;
+    char *json_original;
 
 #ifdef HAVE_LIBFASTJSON
-    char correlation_json[MAX_SYSLOGMSG];
+    char *correlation_json;
 #endif
 
 };
@@ -436,15 +434,15 @@ struct _Sagan_JSON
 {
 
     uint_fast16_t json_count;
-    char json_key[JSON_MAX_OBJECTS][JSON_MAX_KEY_SIZE];
-    char json_value[JSON_MAX_OBJECTS][JSON_MAX_VALUE_SIZE];
+    char *json_key[JSON_MAX_OBJECTS];
+    char *json_value[JSON_MAX_OBJECTS];
 
 };
 
 typedef struct _Sagan_Pass_Syslog _Sagan_Pass_Syslog;
 struct _Sagan_Pass_Syslog
 {
-    char *batch[MAX_SYSLOG_BATCH]; 
+    char *batch[MAX_SYSLOG_BATCH];
 };
 
 #ifdef HAVE_LIBFASTJSON
@@ -577,16 +575,9 @@ struct _Sagan_Event
     char *normalize_http_uri;
     char *normalize_http_hostname;
 
-    uint_fast64_t generatorid;
     uint_fast64_t alertid;
 
     uint_fast64_t flow_id;
-    char md5[MD5_HASH_SIZE+1];
-    char sha1[SHA1_HASH_SIZE+1];
-    char sha256[SHA256_HASH_SIZE+1];
-    char filename[MAX_FILENAME_SIZE+1];
-    char hostname[MAX_HOSTNAME_SIZE+1];
-    char url[MAX_URL_SIZE+1];
 
 #ifdef HAVE_LIBLOGNORM
 

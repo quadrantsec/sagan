@@ -45,7 +45,9 @@
 extern struct _SaganConfig *config;
 extern struct _Rule_Struct *rulestruct;
 
-void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
+//void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
+
+void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results )
 {
 
     struct _Sagan_Event *SaganProcessorEvent = NULL;
@@ -102,7 +104,7 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
 
     SaganProcessorEvent->event_time	 =       tp;
 
-    SaganProcessorEvent->generatorid     =       1;
+//    SaganProcessorEvent->generatorid     =       1;
 
     SaganProcessorEvent->json_normalize     =    SaganProcSyslog_LOCAL->json_normalize;
     SaganProcessorEvent->bluedot_json       =    bluedot_json;

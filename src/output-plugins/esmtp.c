@@ -74,7 +74,7 @@ int ESMTP_Thread ( _Sagan_Event *Event )
                       "To: %s\r\n"
                       "Subject: %s%s\r\n"
                       "\r\n\n"
-                      "[**] [%lu:%" PRIu64" ] %s [**]\n"
+                      "[**] [1:%" PRIu64" ] %s [**]\n"
                       "[Classification: %s] [Priority: %d] [%s]\n"
                       "[Alert Time: %s]\n"
                       "%s %s %s:%d -> %s:%d %s %s %s\n"
@@ -83,7 +83,6 @@ int ESMTP_Thread ( _Sagan_Event *Event )
                       rulestruct[Event->rule_position].email,
                       config->sagan_email_subject,
                       Event->f_msg,
-                      Event->generatorid,
                       Event->sid,
                       Event->f_msg,
                       Event->class,

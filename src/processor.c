@@ -46,6 +46,7 @@
 #include "geoip.h"
 #include "routing.h"
 #include "parsers/parsers.h"
+#include "processor-memory.h"
 
 #ifdef HAVE_LIBLOGNORM
 #include "liblognormalize.h"
@@ -103,14 +104,7 @@ void Processor ( void )
 
     memset(SaganProcSyslog, 0, sizeof(struct _Sagan_Proc_Syslog));
 
-    SaganProcSyslog->md5 = malloc( MD5_HASH_SIZE+1 );
-    memset(SaganProcSyslog->md5, 0, MD5_HASH_SIZE+1 );
-
-    //SaganProcSyslog->json_original = malloc( JSON_MAX_SIZE+1 );
-    //memset(SaganProcSyslog->json_original, 0, JSON_MAX_SIZE+1 );
-
-    //SaganProcSyslog->json_normalize = malloc( JSON_MAX_SIZE+1 );
-    //memset(SaganProcSyslog->json_normalize, 0, JSON_MAX_SIZE+1 );
+    /* ----------------------------------------------- */
 
     struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL = NULL;
     SaganProcSyslog_LOCAL = malloc(sizeof(struct _Sagan_Proc_Syslog));
@@ -122,14 +116,9 @@ void Processor ( void )
 
     memset(SaganProcSyslog_LOCAL, 0, sizeof(struct _Sagan_Proc_Syslog));
 
-    SaganProcSyslog_LOCAL->md5 = malloc( MD5_HASH_SIZE+1 );
-    memset(SaganProcSyslog_LOCAL->md5, 0, MD5_HASH_SIZE+1 );
+    Processor_Memory ( SaganProcSyslog_LOCAL );
 
-    //SaganProcSyslog_LOCAL->json_original = malloc( JSON_MAX_SIZE+1 );
-    //memset(SaganProcSyslog_LOCAL->json_original, 0, JSON_MAX_SIZE+1 );
-
-    //SaganProcSyslog_LOCAL->json_normalize = malloc( JSON_MAX_SIZE+1 );
-    //memset(SaganProcSyslog_LOCAL->json_normalize, 0, JSON_MAX_SIZE+1 );
+    /* ----------------------- */
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc(sizeof(struct _Sagan_Pass_Syslog));
@@ -168,13 +157,23 @@ void Processor ( void )
                 }
 
             memset(JSON_LOCAL, 0, sizeof(struct _Sagan_JSON));
+
+            // DEBUGME:  Needs error checking.
+            //
+            for ( z = 0; z < JSON_MAX_OBJECTS; z++ )
+                {
+                    JSON_LOCAL->json_key[z] = malloc ( JSON_MAX_KEY_SIZE );
+                    JSON_LOCAL->json_value[z] = malloc ( JSON_MAX_VALUE_SIZE );
+                }
+
+
         }
 
 #endif
 
     uint_fast8_t i;
 
-    while(death == false)
+    while (death == false)
         {
 
             pthread_mutex_lock(&SaganProcWorkMutex);
@@ -199,7 +198,7 @@ void Processor ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] [batch position %d] Raw log: %s",  __FILE__, __LINE__, i, SaganPassSyslog[proc_msgslot].batch[i]);
                         }
 
-		    strlcpy(SaganPassSyslog_LOCAL->batch[i],  SaganPassSyslog[proc_msgslot].batch[i], MAX_SYSLOGMSG);
+                    strlcpy(SaganPassSyslog_LOCAL->batch[i],  SaganPassSyslog[proc_msgslot].batch[i], MAX_SYSLOGMSG);
 
                 }
 
@@ -226,10 +225,10 @@ void Processor ( void )
                             JSON_LOCAL->json_count = 0;
                         }
 
+
                     if ( config->input_type == INPUT_PIPE )
                         {
-//                            SyslogInput_Pipe( SaganPassSyslog_LOCAL->syslog[i], SaganProcSyslog_LOCAL );
-			      SyslogInput_Pipe( SaganPassSyslog_LOCAL->batch[i], SaganProcSyslog_LOCAL );                            
+                            SyslogInput_Pipe( SaganPassSyslog_LOCAL->batch[i], SaganProcSyslog_LOCAL );
                         }
 
 #ifdef HAVE_LIBFASTJSON
@@ -304,15 +303,16 @@ void Processor ( void )
     /* Exit thread on shutdown. */
 
 // DEBUGME: Faults
-//    free( SaganProcSyslog_LOCAL );
+    free( SaganProcSyslog_LOCAL->json_normalize );
+    free( SaganProcSyslog_LOCAL );
+    /*
+        for ( z = 0; z < config->max_batch; z++ )
+        {
+    	    free(SaganPassSyslog_LOCAL[z].batch);
+    	}
 
-//    for ( z = 0; z < config->max_batch; z++ )
-//    {
-//	    free(SaganPassSyslog_LOCAL[z].batch);
-//    }
-
-//    free( SaganPassSyslog_LOCAL );
-
+        free( SaganPassSyslog_LOCAL );
+    */
 #if defined(HAVE_LIBFASTJSON)
     free(JSON_LOCAL);
 #endif
