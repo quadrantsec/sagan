@@ -68,7 +68,14 @@ void External_Thread ( char *alert_data, char *execute_script )
     uint_fast32_t n;
     uint_fast32_t pid;
 
-    char buf[ MAX_SYSLOGMSG ] = { 0 }; 
+    char *buf = malloc( MAX_SYSLOGMSG );
+
+    if ( buf == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
+
+    memset( buf, 0, MAX_SYSLOGMSG );
 
     if ( debug->debugexternal )
         {
@@ -80,6 +87,7 @@ void External_Thread ( char *alert_data, char *execute_script )
     if ( pipe(in) < 0 )
         {
             Remove_Lock_File();
+            free(buf);
             Sagan_Log(ERROR, "[%s, line %d] Cannot create input pipe!", __FILE__, __LINE__);
         }
 
@@ -87,12 +95,14 @@ void External_Thread ( char *alert_data, char *execute_script )
     if ( pipe(out) < 0 )
         {
             Remove_Lock_File();
+            free(buf);
             Sagan_Log(ERROR, "[%s, line %d] Cannot create output pipe!", __FILE__, __LINE__);
         }
 
     pid=fork();
     if ( pid < 0 )
         {
+            free(buf);
             Sagan_Log(ERROR, "[%s, line %d] Cannot create external program process", __FILE__, __LINE__);
         }
     else if ( pid == 0 )
@@ -136,6 +146,8 @@ void External_Thread ( char *alert_data, char *execute_script )
         {
             Sagan_Log(DEBUG, "[%s, line %d] Executed %s", __FILE__, __LINE__, execute_script);
         }
+
+    free(buf);
 
 #endif
 

@@ -53,7 +53,14 @@ bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
     uint_fast32_t meta_alter_num=0;
     uint_fast8_t match=0;
 
-    char meta_alter_content[MAX_SYSLOGMSG] = { 0 };
+    char *meta_alter_content = malloc ( MAX_SYSLOGMSG );
+
+    if ( meta_alter_content == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
+
+    memset( meta_alter_content, 0, MAX_SYSLOGMSG );
 
     bool rc = 0;
 
@@ -134,9 +141,11 @@ bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
 
     if ( match == rulestruct[rule_position].meta_content_count )
         {
+            free( meta_alter_content );
             return(true);
         }
 
+    free( meta_alter_content );
     return(false);
 
 }

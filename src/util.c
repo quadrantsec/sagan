@@ -223,7 +223,14 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     strftime(curtime, sizeof(curtime), "%m/%d/%Y %H:%M:%S",  now);
 
-    char buf[MAX_SYSLOGMSG * 2] = { 0 };
+    char *buf = malloc ( MAX_SYSLOGMSG * 2 );
+
+    if ( buf == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
+
+    memset( buf, 0, MAX_SYSLOGMSG * 2);
 
     if ( type == ERROR )
         {
@@ -266,9 +273,11 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     if ( type == ERROR )
         {
+            free(buf);
             exit(1);
         }
 
+    free(buf);
 }
 
 bool Mask2Bit(int mask, unsigned char *out)

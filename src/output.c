@@ -67,8 +67,14 @@ void Output( _Sagan_Event *Event )
     /* Single threaded operations */
     /******************************/
 
+    char *alert_data = malloc ( MAX_SYSLOGMSG );
 
-    char alert_data[ MAX_SYSLOGMSG ] = { 0 };
+    if ( alert_data == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
+
+    memset( alert_data, 0, MAX_SYSLOGMSG );
 
     Format_JSON_Alert_EVE( Event, alert_data, MAX_SYSLOGMSG );
 
@@ -137,6 +143,8 @@ void Output( _Sagan_Event *Event )
         {
             External_Thread( alert_data, rulestruct[Event->rule_position].external_program );
         }
+
+    free(alert_data);
 
 }
 

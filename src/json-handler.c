@@ -68,7 +68,12 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     unsigned long b64_len = strlen(Event->message) * 2;
     uint8_t b64_target[b64_len];
 
-    char tmp_data[MAX_SYSLOGMSG*2] = { 0 };
+    char *tmp_data = malloc( MAX_SYSLOGMSG*2 );
+
+    if ( tmp_data == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
 
     if ( Event->ip_proto == 17 )
         {
@@ -255,6 +260,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     strlcat(str, " }", size);
 
+    free(tmp_data);
     json_object_put(jobj);
     json_object_put(jobj_alert);
 
@@ -262,7 +268,6 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
         {
             Sagan_Log(DEBUG, "[%s, line %d] Format_JSON_Alert_EVE Output: %s", __FILE__, __LINE__, str);
         }
-
 
 }
 
