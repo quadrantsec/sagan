@@ -30,13 +30,14 @@
 
 #include "sagan.h"
 #include "sagan-defs.h"
+#include "sagan-config.h"
 #include "rules.h"
 #include "content.h"
 
 #include "parsers/parsers.h"
 
 extern struct _Rule_Struct *rulestruct;
-
+extern struct _SaganConfig *config;
 
 bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 {
@@ -44,14 +45,14 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
     uint_fast8_t z = 0;
     uint_fast32_t alter_num = 0;
 
-    char *alter_content = malloc( MAX_SYSLOGMSG );
+    char *alter_content = malloc( config->message_buffer_size );
 
     if ( alter_content == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset(alter_content, 0, MAX_SYSLOGMSG );
+    memset(alter_content, 0, config->message_buffer_size );
 
     /* Content: OFFSET */
 
@@ -82,7 +83,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
             else
                 {
 
-                    strlcpy(alter_content, syslog_message, MAX_SYSLOGMSG);
+                    strlcpy(alter_content, syslog_message, config->message_buffer_size);
 
                 }
 

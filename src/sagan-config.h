@@ -90,7 +90,9 @@ struct _SaganConfig
     char         home_net[MAXPATH];
     char         external_net[MAXPATH];
 
-    bool 	 xbit_storage;			/* 0 == mmap, 1 == redis */
+    bool 	 xbit_storage;				/* 0 == mmap, 1 == redis */
+
+    uint32_t     message_buffer_size;
 
 
     char         sagan_droplistfile[MAXPATH];           /* Log lines to "ignore" */
@@ -98,8 +100,8 @@ struct _SaganConfig
 
     bool         output_thread_flag;
 
-    uint_fast16_t          max_processor_threads;
-    uint_fast8_t max_batch;
+    uint_fast16_t	max_processor_threads;
+    uint_fast8_t	 max_batch;
 
     uint_fast16_t     sagan_port;
     bool         disable_dns_warnings;

@@ -122,7 +122,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
     uint_fast16_t port = config->sagan_port;
 
-    char *mod_string = malloc( MAX_SYSLOGMSG );
+    char *mod_string = malloc( config->message_buffer_size );
 
     if ( mod_string  == NULL )
         {
@@ -130,7 +130,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
             exit(-1);
         }
 
-    memset(mod_string, 0, MAX_SYSLOGMSG);
+    memset(mod_string, 0, config->message_buffer_size);
 
     for (i=0; i<strlen(syslog_message); i++)
         {

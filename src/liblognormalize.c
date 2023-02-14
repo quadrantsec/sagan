@@ -116,7 +116,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     if ( debug->debugnormalize )
         {
-            Sagan_Log(DEBUG, "%s", SaganProcSyslog_LOCAL->json_normalize);
+            Sagan_Log(DEBUG, "[%s, line %d] %s", __FILE__, __LINE__, SaganProcSyslog_LOCAL->json_normalize);
         }
 
     /* See liblognorm.h for error codes. -1000 == LN_WRONGPARSER, etc */

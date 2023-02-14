@@ -67,16 +67,16 @@ void Output( _Sagan_Event *Event )
     /* Single threaded operations */
     /******************************/
 
-    char *alert_data = malloc ( MAX_SYSLOGMSG );
+    char *alert_data = malloc ( config->message_buffer_size );
 
     if ( alert_data == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( alert_data, 0, MAX_SYSLOGMSG );
+    memset( alert_data, 0, config->message_buffer_size );
 
-    Format_JSON_Alert_EVE( Event, alert_data, MAX_SYSLOGMSG );
+    Format_JSON_Alert_EVE( Event, alert_data, config->message_buffer_size );
 
     /* Single threaded */
 

@@ -62,7 +62,12 @@ void File_Input( const char *input_file )
 
     FILE *fd;
 
-    char syslogstring[ MAX_SYSLOGMSG ] = { 0 }; 
+    char *syslogstring = malloc( config->message_buffer_size );
+
+    if ( syslogstring == NULL )
+	    {
+		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+	    }
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc( sizeof(_Sagan_Pass_Syslog ));
@@ -95,7 +100,7 @@ void File_Input( const char *input_file )
 
     /* Grab data and process */
 
-    while(fgets(syslogstring, MAX_SYSLOGMSG, fd) != NULL)
+    while(fgets(syslogstring, config->message_buffer_size, fd) != NULL)
         {
 
             counters->events_received++;
@@ -111,7 +116,7 @@ void File_Input( const char *input_file )
                     counters->max_bytes_length = bytes_total;
                 }
 
-            if ( bytes_total >= MAX_SYSLOGMSG )
+            if ( bytes_total >= config->message_buffer_size )
                 {
                     counters->max_bytes_over++;
                 }
@@ -141,7 +146,7 @@ void File_Input( const char *input_file )
             if ( ignore_flag == false )
                 {
 
-                    strlcpy(SaganPassSyslog_LOCAL->batch[batch_count], syslogstring, MAX_SYSLOGMSG);
+                    strlcpy(SaganPassSyslog_LOCAL->batch[batch_count], syslogstring, config->message_buffer_size);
 
                     batch_count++;
                 }
@@ -175,7 +180,7 @@ void File_Input( const char *input_file )
                             for ( i = 0; i < config->max_batch; i++)
                                 {
 
-                                    strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], MAX_SYSLOGMSG);
+                                    strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], config->message_buffer_size);
 
                                 }
 

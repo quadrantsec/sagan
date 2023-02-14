@@ -243,6 +243,7 @@ void Load_YAML_Config( char *yaml_file )
             config->max_xbits = DEFAULT_IPC_XBITS;
 
             config->max_batch = DEFAULT_SYSLOG_BATCH;
+            config->message_buffer_size = MAX_SYSLOGMSG;
 
             config->pp_sagan_track_clients = TRACK_TIME;
 
@@ -865,6 +866,37 @@ void Load_YAML_Config( char *yaml_file )
                                             Load_Protocol_Map(tmp);
 
                                         }
+
+                                    else if (!strcmp(last_pass, "message-buffer-size"))
+                                        {
+
+                                            if ( ( value[ strlen(value) - 2 ] != 'k' || value[ strlen(value) - 1 ] != 'b' ) &&
+                                                    ( value[ strlen(value) - 2 ] != 'm' || value[ strlen(value) - 1 ] != 'b' ) &&
+                                                    ( value[ strlen(value) - 2 ] != 'g' || value[ strlen(value) - 1 ] != 'b' ) )
+                                                {
+                                                    Sagan_Log(ERROR, "[%s, line %d] The 'message-buffer-size' has an invalid size.  It needs to be kb, mb or gb.", __FILE__, __LINE__);
+                                                }
+
+                                            strlcpy(tmp, value, sizeof(value));
+                                            tmp[ strlen(tmp) - 2 ] = '\0';              /* Remove kb, mb, gb */
+
+                                            if ( value[ strlen(value) - 2 ] == 'k' && value[ strlen(value) - 1 ] == 'b' )
+                                                {
+                                                    config->message_buffer_size = atoi(tmp) * 1024;
+                                                }
+
+                                            else if ( value[ strlen(value) - 2 ] == 'm' && value[ strlen(value) - 1 ] == 'b' )
+                                                {
+                                                    config->message_buffer_size = atoi(tmp) * 1024 * 1024;
+                                                }
+
+                                            else if ( value[ strlen(value) - 2 ] == 'g' && value[ strlen(value) - 1 ] == 'b' )
+                                                {
+                                                    config->message_buffer_size = atoi(tmp) * 1024 * 1024 * 1024;
+                                                }
+
+                                        }
+
 
                                     else if (!strcmp(last_pass, "batch-size"))
                                         {

@@ -73,14 +73,14 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
 
     char *proto = "UNKNOWN";
 
-    char *tmp_data = malloc ( MAX_SYSLOGMSG * 2 );
+    char *tmp_data = malloc ( config->message_buffer_size * 2 );
 
     if ( tmp_data == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __LINE__, __FILE__);
         }
 
-    memset( tmp_data, 0, MAX_SYSLOGMSG * 2);
+    memset( tmp_data, 0, config->message_buffer_size * 2);
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
@@ -196,8 +196,8 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
                             json_object *jproto = json_object_new_string( proto );
                             json_object_object_add(jobj,"proto", jproto);
 
-                            snprintf(tmp_data, MAX_SYSLOGMSG*2, "%s", json_object_to_json_string(jobj));
-                            tmp_data[ (MAX_SYSLOGMSG*2) - 1] = '\0';
+                            snprintf(tmp_data, config->message_buffer_size * 2, "%s", json_object_to_json_string(jobj));
+                            tmp_data[ (config->message_buffer_size * 2) - 1] = '\0';
 
                             json_object_put(jobj);
 
@@ -272,7 +272,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
     char redis_command[512] = { 0 };
     char tmp_ip[MAXIP] = { 0 };
 
-    char *redis_results = malloc( MAX_SYSLOGMSG );
+    char *redis_results = malloc( config->message_buffer_size );
 
     if ( redis_results == NULL )
         {
@@ -280,7 +280,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
             exit(-1);
         }
 
-    memset(redis_results, 0, MAX_SYSLOGMSG);
+    memset(redis_results, 0, config->message_buffer_size);
 
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
@@ -291,7 +291,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
             snprintf(redis_command, sizeof(redis_command),
                      "GET %s:%s:%s:%s", REDIS_PREFIX, config->sagan_cluster_name, rulestruct[rule_position].xbit_name[r], tmp_ip);
 
-            Redis_Reader ( redis_command, redis_results, MAX_SYSLOGMSG );
+            Redis_Reader ( redis_command, redis_results, config->message_buffer_size);
 
             /* Was not found */
 
@@ -330,7 +330,7 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
 
                     if ( rulestruct[rule_position].xbit_type[r] == XBIT_ISSET )
                         {
-                            strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, MAX_SYSLOGMSG);
+                            strlcpy( SaganProcSyslog_LOCAL->correlation_json, redis_results, config->message_buffer_size);
                         }
 
                 }

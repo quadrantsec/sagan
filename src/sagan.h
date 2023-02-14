@@ -619,7 +619,7 @@ struct _Threshold2_IPC
     uint_fast64_t utime;
     uint_fast64_t sid;
     uint_fast32_t expire;
-    char syslog_message[MAX_SYSLOGMSG];
+    char syslog_message[0];
     char signature_msg[MAX_SAGAN_MSG];
 };
 
@@ -651,7 +651,7 @@ struct _After2_IPC
     uint_fast32_t rev;
 
     uint_fast32_t expire;
-    char syslog_message[MAX_SYSLOGMSG];
+    char syslog_message[0];
     char signature_msg[MAX_SAGAN_MSG];
 };
 

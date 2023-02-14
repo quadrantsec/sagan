@@ -216,7 +216,7 @@ bool After2 ( uint32_t rule_position, const char *ip_src, uint16_t src_port, con
 
             strlcpy(After2_IPC[counters_ipc->after2_count].username, username_tmp, sizeof(After2_IPC[counters_ipc->after2_count].username));
 
-            strlcpy(After2_IPC[counters_ipc->after2_count].syslog_message, syslog_message, sizeof(After2_IPC[counters_ipc->after2_count].syslog_message));
+            strlcpy(After2_IPC[counters_ipc->after2_count].syslog_message, syslog_message, config->message_buffer_size);
             strlcpy(After2_IPC[counters_ipc->after2_count].signature_msg, rulestruct[rule_position].s_msg, sizeof(After2_IPC[counters_ipc->after2_count].signature_msg));
 
             counters_ipc->after2_count++;

@@ -68,12 +68,14 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     unsigned long b64_len = strlen(Event->message) * 2;
     uint8_t b64_target[b64_len];
 
-    char *tmp_data = malloc( MAX_SYSLOGMSG*2 );
+    char *tmp_data = malloc( config->message_buffer_size * 2 );
 
     if ( tmp_data == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
+
+    memset( tmp_data, 0, config->message_buffer_size * 2);
 
     if ( Event->ip_proto == 17 )
         {

@@ -31,8 +31,8 @@ typedef struct _Sagan_Redis_Write _Sagan_Redis_Write;
 struct _Sagan_Redis_Write
 {
     char command[16];
-    char key[128];
-    char value[MAX_SYSLOGMSG*2];
+    char *key;
+    char *value; 
     uint_fast32_t expire;
 };
 

@@ -40,11 +40,13 @@
 
 #include "sagan.h"
 #include "sagan-defs.h"
+#include "sagan-config.h"
 #include "meta-content.h"
 #include "rules.h"
 #include "parsers/parsers.h"
 
 extern struct _Rule_Struct *rulestruct;
+extern struct _SaganConfig *config;
 
 bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
 {
@@ -53,14 +55,14 @@ bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
     uint_fast32_t meta_alter_num=0;
     uint_fast8_t match=0;
 
-    char *meta_alter_content = malloc ( MAX_SYSLOGMSG );
+    char *meta_alter_content = malloc ( config->message_buffer_size );
 
     if ( meta_alter_content == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( meta_alter_content, 0, MAX_SYSLOGMSG );
+    memset( meta_alter_content, 0, config->message_buffer_size );
 
     bool rc = 0;
 

@@ -50,8 +50,6 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
     char *ptr = NULL;
 
-//    memset(SaganProcSyslog_LOCAL, 0, sizeof(_Sagan_Proc_Syslog));  // DEBUGME: CAUSES segfault!
-
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;
 
     if ( ptr != NULL )
@@ -317,7 +315,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy( SaganProcSyslog_LOCAL->syslog_message, "SAGAN: MESSAGE ERROR", MAX_SYSLOGMSG );
+            strlcpy( SaganProcSyslog_LOCAL->syslog_message, "SAGAN: MESSAGE ERROR", config->message_buffer_size );
 
             __atomic_add_fetch(&counters->malformed_message, 1, __ATOMIC_SEQ_CST);
 
@@ -337,7 +335,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     else
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_message, ptr, MAX_SYSLOGMSG);
+            strlcpy(SaganProcSyslog_LOCAL->syslog_message, ptr, config->message_buffer_size);
 
         }
 

@@ -25,10 +25,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "sagan-defs.h"
 #include "sagan.h"
+#include "sagan-defs.h"
+#include "sagan-config.h"
 
 #include "processor-memory.h"
+
+extern struct _SaganConfig *config;
 
 void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
@@ -123,14 +126,14 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     memset(SaganProcSyslog_LOCAL->syslog_program, 0, MAX_SYSLOG_PROGRAM );
 
-    SaganProcSyslog_LOCAL->syslog_message = malloc( MAX_SYSLOGMSG );
+    SaganProcSyslog_LOCAL->syslog_message = malloc( config->message_buffer_size );
 
     if ( SaganProcSyslog_LOCAL->syslog_message == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset(SaganProcSyslog_LOCAL->syslog_message, 0, MAX_SYSLOGMSG );
+    memset(SaganProcSyslog_LOCAL->syslog_message, 0, config->message_buffer_size );
 
     SaganProcSyslog_LOCAL->src_ip = malloc( MAXIP );
 
@@ -251,14 +254,14 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
 #ifdef HAVE_LIBFASTJSON
 
-    SaganProcSyslog_LOCAL->correlation_json = malloc( MAX_SYSLOGMSG );
+    SaganProcSyslog_LOCAL->correlation_json = malloc( config->message_buffer_size );
 
     if ( SaganProcSyslog_LOCAL->correlation_json == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset(SaganProcSyslog_LOCAL->correlation_json, 0, MAX_SYSLOGMSG );
+    memset(SaganProcSyslog_LOCAL->correlation_json, 0, config->message_buffer_size );
 
 #endif
 

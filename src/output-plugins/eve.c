@@ -72,14 +72,14 @@ void Log_JSON ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct timeval tp )
     FILE *eve_stream;
     int eve_stream_int = 0;
 
-    char *log_data = malloc( MAX_SYSLOGMSG );
+    char *log_data = malloc( config->message_buffer_size );
 
     if ( log_data == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( log_data, 0, MAX_SYSLOGMSG );
+    memset( log_data, 0, config->message_buffer_size );
 
     if (( eve_stream = fopen( config->eve_filename, "a" )) == NULL )
         {

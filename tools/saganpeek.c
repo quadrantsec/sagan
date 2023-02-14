@@ -316,7 +316,9 @@ int main(int argc, char **argv)
                     exit(1);
                 }
 
-            if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + (sizeof(_Threshold2_IPC) * counters_ipc->thresh2_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+//            if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + (sizeof(_Threshold2_IPC) * counters_ipc->thresh2_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+//
+	if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + MAX_SYSLOGMSG * counters_ipc->thresh2_count, PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                 {
                     fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                     exit(1);
@@ -437,7 +439,8 @@ int main(int argc, char **argv)
                     exit(1);
                 }
 
-            if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + (sizeof(_After2_IPC) * counters_ipc->after2_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+//            if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + (sizeof(_After2_IPC) * counters_ipc->after2_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+		if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + MAX_SYSLOGMSG * counters_ipc->after2_count , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                 {
                     fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                     exit(1);

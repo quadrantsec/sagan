@@ -779,14 +779,14 @@ int main(int argc, char **argv)
             for ( i = 0; i < config->max_batch; i++ )
                 {
 
-                    SaganPassSyslog[z].batch[i] = malloc( MAX_SYSLOGMSG );
+                    SaganPassSyslog[z].batch[i] = malloc( config->message_buffer_size );
 
                     if ( SaganPassSyslog[z].batch[i] == NULL )
                         {
                             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog[z].batch. Abort!", __FILE__, __LINE__);
                         }
 
-                    memset( SaganPassSyslog[z].batch[i], 0, MAX_SYSLOGMSG );
+                    memset( SaganPassSyslog[z].batch[i], 0, config->message_buffer_size );
 
                 }
         }

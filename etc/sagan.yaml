@@ -138,7 +138,6 @@ sagan-core:
 
     max-threads: 50             # Increase this if the system is under heavy load.
 
-
     # Sagan can sends logs in "batches" for performance reasons. In most 
     # environments, you'll likely want to set this to 10.  For more busy
     # environments you may want to set this to 100.  This should allow Sagan
@@ -153,11 +152,17 @@ sagan-core:
 
     batch-size: 1
 
+    # This is the max "syslog message" size that can be processed.  Valid notations
+    # are kb, mb and gb.  When this value is increased, the CPU load will also 
+    # increase. 
+    
+    message-buffer-size: 32kb
+
     # Controls how data is read from the FIFO. The "pipe" setting is the traditional 
     # way Sagan reads in events and is default. "json" is more flexible and 
     # will become the default in the future. If "pipe" is set, "json-map"
     # and "json-software" have no function.
-
+ 
     input-type: pipe                       # pipe or json
     json-map: "$RULE_PATH/json-input.map"  # mapping file if input-type: json
     json-software: syslog-ng               # by "software" type. 

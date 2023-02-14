@@ -278,14 +278,14 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
 
             char *proto = "UNKNOWN";
 
-            char *tmp_data = malloc( MAX_SYSLOGMSG * 2 );
+            char *tmp_data = malloc( config->message_buffer_size * 2 );
 
             if ( tmp_data == NULL )
                 {
                     Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __LINE__, __FILE__);
                 }
 
-            memset(tmp_data, 0, MAX_SYSLOGMSG * 2);
+            memset(tmp_data, 0, config->message_buffer_size * 2);
 
             jobj = json_object_new_object();
 
@@ -382,12 +382,12 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
             json_object *jproto = json_object_new_string( proto );
             json_object_object_add(jobj,"proto", jproto);
 
-            snprintf(tmp_data, MAX_SYSLOGMSG*2, "%s", json_object_to_json_string(jobj));
-            tmp_data[ (MAX_SYSLOGMSG*2) - 1 ] = '\0';
+            snprintf(tmp_data, config->message_buffer_size * 2, "%s", json_object_to_json_string(jobj));
+            tmp_data[ (config->message_buffer_size * 2) - 1 ] = '\0';
 
             if ( rulestruct[rule_position].xbit_isset_count == xbit_isset )
                 {
-                    strlcpy( SaganProcSyslog_LOCAL->correlation_json, tmp_data, MAX_SYSLOGMSG);
+                    strlcpy( SaganProcSyslog_LOCAL->correlation_json, tmp_data, config->message_buffer_size);
                 }
 
             json_object_put(jobj);

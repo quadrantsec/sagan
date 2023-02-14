@@ -47,7 +47,7 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
 
     uint_fast32_t i;
 
-    char *mod_string = malloc( MAX_SYSLOGMSG );
+    char *mod_string = malloc( config->message_buffer_size );
 
     if ( mod_string == NULL )
         {
@@ -55,7 +55,7 @@ void Parse_Hash(char *syslog_message, uint_fast8_t type, char *str, size_t size)
             exit(-1);
         }
 
-    memset(mod_string, 0, MAX_SYSLOGMSG);
+    memset(mod_string, 0, config->message_buffer_size);
 
     /* Remove anything we dont want */
 

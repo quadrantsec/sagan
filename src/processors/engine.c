@@ -152,14 +152,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
     char tmpbuf[256] = { 0 };
 
-    char *syslog_append_orig_message = malloc( MAX_SYSLOGMSG );
+    char *syslog_append_orig_message = malloc( config->message_buffer_size );
 
     if ( syslog_append_orig_message == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
 
-    memset(syslog_append_orig_message, 0, MAX_SYSLOGMSG);
+    memset(syslog_append_orig_message, 0, config->message_buffer_size);
 
     bool append_program_flag = false;
 
@@ -193,14 +193,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #ifdef HAVE_LIBFASTJSON
 
-    char *o_syslog_message = malloc( MAX_SYSLOGMSG );
+    char *o_syslog_message = malloc( config->message_buffer_size );
 
     if ( o_syslog_message == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
 
-    memset(o_syslog_message, 0, MAX_SYSLOGMSG );
+    memset(o_syslog_message, 0, config->message_buffer_size );
 
     bool o_syslog_message_flag = false;
 
@@ -221,7 +221,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                     SaganProcSyslog_LOCAL->syslog_program[1] == '{' )
                 {
 
-                    char *tmp_json = malloc( MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM );
+                    char *tmp_json = malloc( config->message_buffer_size + MAX_SYSLOG_PROGRAM );
 
                     if ( tmp_json == NULL )
                         {
@@ -229,8 +229,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             exit(-1);
                         }
 
-                    memset(tmp_json, 0, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM);
-
+                    memset(tmp_json, 0, config->message_buffer_size + MAX_SYSLOG_PROGRAM);
 
                     if ( debug->debugjson )
                         {
@@ -239,12 +238,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     /* Merge program+message */
 
-                    snprintf(tmp_json, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM, "%s%s", SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
+                    snprintf(tmp_json, config->message_buffer_size + MAX_SYSLOG_PROGRAM, "%s%s", SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
 
                     /* Zero out program (might get set by JSON) */
 
                     SaganProcSyslog_LOCAL->syslog_program[0] = '\0';
-                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, MAX_SYSLOGMSG);
+                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json, config->message_buffer_size);
+
                     free( tmp_json );
 
                 }
@@ -368,8 +368,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                                     o_syslog_message_flag = true;
 
-                                                    strlcpy(o_syslog_message, SaganProcSyslog_LOCAL->syslog_message, MAX_SYSLOGMSG);
-                                                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, MAX_SYSLOGMSG);
+                                                    strlcpy(o_syslog_message, SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size);
+                                                    strlcpy(SaganProcSyslog_LOCAL->syslog_message, tmp_json_value, config->message_buffer_size);
                                                 }
 
                                             else if ( rulestruct[b].json_map_type[i] == JSON_MAP_PROGRAM )
@@ -559,7 +559,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     SaganProcSyslog_LOCAL->syslog_program[0] != '\0' )
                                 {
 
-                                    char *syslog_append_program = malloc( MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6 );
+                                    char *syslog_append_program = malloc( config->message_buffer_size + MAX_SYSLOG_PROGRAM + 6 );
 
                                     if ( syslog_append_program == NULL )
                                         {
@@ -567,13 +567,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             exit(-1);
                                         }
 
-                                    memset(syslog_append_program, 0, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6);
+                                    memset(syslog_append_program, 0, config->message_buffer_size + MAX_SYSLOG_PROGRAM + 6);
 
-                                    memcpy(syslog_append_orig_message, SaganProcSyslog_LOCAL->syslog_message, MAX_SYSLOGMSG );
+                                    memcpy(syslog_append_orig_message, SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size );
 
-                                    snprintf(syslog_append_program, MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6, "%s | %s", SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL->syslog_program);
-                                    syslog_append_program[ (MAX_SYSLOGMSG + MAX_SYSLOG_PROGRAM + 6) - 1 ] = '\0';
-                                    memcpy(SaganProcSyslog_LOCAL->syslog_message, syslog_append_program, MAX_SYSLOGMSG);
+                                    snprintf(syslog_append_program, config->message_buffer_size + MAX_SYSLOG_PROGRAM + 6, "%s | %s", SaganProcSyslog_LOCAL->syslog_message, SaganProcSyslog_LOCAL->syslog_program);
+                                    syslog_append_program[ (config->message_buffer_size + MAX_SYSLOG_PROGRAM + 6) - 1 ] = '\0';
+                                    memcpy(SaganProcSyslog_LOCAL->syslog_message, syslog_append_program, config->message_buffer_size);
                                     append_program_flag = true;
 
                                     free( syslog_append_program) ;
@@ -584,7 +584,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             if ( rulestruct[b].append_program == false && append_program_flag == true )
                                 {
-                                    memcpy(SaganProcSyslog_LOCAL->syslog_message,syslog_append_orig_message, MAX_SYSLOGMSG);
+                                    memcpy(SaganProcSyslog_LOCAL->syslog_message,syslog_append_orig_message, config->message_buffer_size);
 
                                     append_program_flag = false;
                                 }
@@ -1423,7 +1423,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     if ( o_syslog_message_flag == true )
                         {
-                            strlcpy( SaganProcSyslog_LOCAL->syslog_message, o_syslog_message, MAX_SYSLOGMSG);
+                            strlcpy( SaganProcSyslog_LOCAL->syslog_message, o_syslog_message, config->message_buffer_size);
                             o_syslog_message_flag = false;
                         }
 

@@ -68,14 +68,14 @@ void External_Thread ( char *alert_data, char *execute_script )
     uint_fast32_t n;
     uint_fast32_t pid;
 
-    char *buf = malloc( MAX_SYSLOGMSG );
+    char *buf = malloc( config->message_buffer_size );
 
     if ( buf == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( buf, 0, MAX_SYSLOGMSG );
+    memset( buf, 0, config->message_buffer_size );
 
     if ( debug->debugexternal )
         {
@@ -134,7 +134,7 @@ void External_Thread ( char *alert_data, char *execute_script )
     n = write(in[1], alert_data, strlen(alert_data));
     close(in[1]);
 
-    n = read(out[0], buf, MAX_SYSLOGMSG);
+    n = read(out[0], buf, config->message_buffer_size);
     close(out[0]);
     buf[n] = 0;
 

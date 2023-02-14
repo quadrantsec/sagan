@@ -38,7 +38,11 @@
 
 #include "sagan.h"
 #include "sagan-defs.h"
+#include "sagan-config.h"
+
 #include "parsers/strstr-asm/strstr-hook.h"
+
+extern struct _SaganConfig *config;
 
 #ifndef WITH_SYSSTRSTR 		/* If NOT using system built in strstr */
 
@@ -91,7 +95,16 @@ char *Sagan_stristr(const char *_x, const char *_y, bool needle_lower )
 {
 
     char *p = NULL;
-    char haystack_string[MAX_SYSLOGMSG] = { 0 };
+
+    char *haystack_string = malloc( config->message_buffer_size );
+
+    if ( haystack_string == NULL )
+	    {
+		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+	    }
+
+    memset(haystack_string, 0, config->message_buffer_size); 
+
     char needle_string[512] = { 0 };
 
     strlcpy(haystack_string, _x, sizeof(haystack_string));
@@ -105,6 +118,7 @@ char *Sagan_stristr(const char *_x, const char *_y, bool needle_lower )
 
     p = Sagan_strstr( haystack_string, needle_string);
 
+    free( haystack_string );
     return p;
 
 }

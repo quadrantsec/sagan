@@ -78,6 +78,24 @@ void Redis_Writer_Init ( void )
 
     memset(Sagan_Redis_Write, 0, sizeof(struct _Sagan_Redis_Write));
 
+    Sagan_Redis_Write->value = malloc( config->message_buffer_size );
+
+    if ( Sagan_Redis_Write->value == NULL )
+    {
+	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+    }
+
+    memset(Sagan_Redis_Write->value, 0, config->message_buffer_size );
+
+    Sagan_Redis_Write->key = malloc( 128 );
+
+    if ( Sagan_Redis_Write->key == NULL )
+    {
+	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+    }
+
+    memset(Sagan_Redis_Write->key, 0, 128 );
+
 }
 
 /*****************************************************************************
@@ -243,7 +261,7 @@ void Redis_Writer ( void )
     char key[128] = { 0 };
     uint_fast32_t expire = 0;
 
-    char *value = malloc( MAX_SYSLOGMSG*2 );
+    char *value = malloc( config->message_buffer_size * 2 );
 
     if ( value  == NULL )
         {
@@ -251,7 +269,7 @@ void Redis_Writer ( void )
             exit(-1);
         }
 
-    memset(value, 0, MAX_SYSLOGMSG*2);
+    memset(value, 0, config->message_buffer_size * 2);
 
     Redis_Writer_Connect();
 
@@ -268,7 +286,7 @@ void Redis_Writer ( void )
 
             strlcpy(command, Sagan_Redis_Write[redis_msgslot].command, sizeof(command));
             strlcpy(key, Sagan_Redis_Write[redis_msgslot].key, sizeof(key));
-            strlcpy(value, Sagan_Redis_Write[redis_msgslot].value, MAX_SYSLOGMSG*2);
+            strlcpy(value, Sagan_Redis_Write[redis_msgslot].value, config->message_buffer_size * 2);
             expire = Sagan_Redis_Write[redis_msgslot].expire;
 
             pthread_mutex_unlock(&SaganRedisWorkMutex);

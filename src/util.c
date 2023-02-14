@@ -223,6 +223,9 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     strftime(curtime, sizeof(curtime), "%m/%d/%Y %H:%M:%S",  now);
 
+    /* Can't use config->message_buffer_size since at startup, it hasn't been allocated
+     * yet */
+
     char *buf = malloc ( MAX_SYSLOGMSG * 2 );
 
     if ( buf == NULL )
@@ -247,7 +250,7 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
             chr="D";
         }
 
-    vsnprintf(buf, MAX_SYSLOGMSG, format, ap);
+    vsnprintf(buf, MAX_SYSLOGMSG * 2, format, ap);
 
     File_Lock( config->sagan_log_stream_int );
 

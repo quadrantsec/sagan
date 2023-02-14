@@ -32,7 +32,7 @@ struct _Sagan_IPC_Xbit
     uint_fast32_t xbit_name_hash;
     uint_fast64_t xbit_expire;
     uint_fast32_t expire;
-    char syslog_message[MAX_SYSLOGMSG];
+    char syslog_message[0];
     uint_fast64_t sid;
     char signature_msg[MAX_SAGAN_MSG];
 

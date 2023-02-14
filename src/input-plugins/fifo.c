@@ -63,7 +63,14 @@ void FIFO_Input ( void )
 
     FILE *fd;
 
-    char syslogstring[MAX_SYSLOGMSG] = { 0 }; 
+    char *syslogstring = malloc( config->message_buffer_size );
+
+    if ( syslogstring == NULL )
+	    {
+		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+	    }
+
+    memset( syslogstring, 0, config->message_buffer_size); 
 
     Sagan_Log(NORMAL, "Attempting to open syslog FIFO (%s).", config->sagan_fifo);
 
@@ -87,14 +94,14 @@ void FIFO_Input ( void )
 
     for ( z = 0; z < config->max_batch; z++ )
         {
-            SaganPassSyslog_LOCAL->batch[z] = malloc( MAX_SYSLOGMSG );
+            SaganPassSyslog_LOCAL->batch[z] = malloc( config->message_buffer_size );
 
             if ( SaganPassSyslog_LOCAL->batch[z] == NULL )
                 {
                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
                 }
 
-            memset( SaganPassSyslog_LOCAL->batch[z], 0, MAX_SYSLOGMSG );
+            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
         }
 
     while( death == false )
@@ -137,7 +144,7 @@ void FIFO_Input ( void )
 
                     clearerr( fd );
 
-                    while(fgets(syslogstring, MAX_SYSLOGMSG, fd) != NULL)
+                    while(fgets(syslogstring, config->message_buffer_size, fd) != NULL)
                         {
 
                             /* If the FIFO was in a error state,  let user know the FIFO writer has resumed */
@@ -175,7 +182,7 @@ void FIFO_Input ( void )
                                     counters->max_bytes_length = bytes_total;
                                 }
 
-                            if ( bytes_total >= MAX_SYSLOGMSG )
+                            if ( bytes_total >= config->message_buffer_size )
                                 {
                                     counters->max_bytes_over++;
                                 }
@@ -196,8 +203,7 @@ void FIFO_Input ( void )
 
                             if ( ignore_flag == false )
                                 {
-//                                    strlcpy(SaganPassSyslog_LOCAL->syslog[batch_count], syslogstring, MAX_SYSLOGMSG);
-				    strlcpy(SaganPassSyslog_LOCAL->batch[batch_count], syslogstring, MAX_SYSLOGMSG);
+				    strlcpy(SaganPassSyslog_LOCAL->batch[batch_count], syslogstring, config->message_buffer_size);
                                     batch_count++;
                                 }
 
@@ -220,7 +226,7 @@ void FIFO_Input ( void )
                                             for ( i = 0; i < config->max_batch; i++)
                                                 {
 
-                                                strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], MAX_SYSLOGMSG);
+                                                strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], config->message_buffer_size);
                                                 }
 
                                             counters->events_processed = counters->events_processed + config->max_batch;
@@ -265,4 +271,5 @@ void FIFO_Input ( void )
 
         }
 
+    free(syslogstring);
 }
