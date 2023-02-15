@@ -51,7 +51,12 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
     bool rc=0;
     uint_fast16_t match = 0;
 
-    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 };
+    char *tmp_string = malloc( JSON_MAX_VALUE_SIZE );
+
+    if ( tmp_string == NULL )
+    {
+	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+    }
 
     for (i=0; i < rulestruct[rule_position].json_meta_content_count; i++)
         {
@@ -81,7 +86,6 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
                             rc = JSON_Meta_Content_Search(rule_position, tmp_string, i );
 
-
                             /* Got hit */
 
                             if ( rc == true )
@@ -93,6 +97,8 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
         }
 
     /* Does the number of json_meta_contents match what we expect? */
+
+    free(tmp_string);
 
     if ( match == rulestruct[rule_position].json_meta_content_count )
         {

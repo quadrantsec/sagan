@@ -48,7 +48,12 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
     int a=0;
     int rc=0;
 
-    char tmp_string[JSON_MAX_VALUE_SIZE] = { 0 };
+    char *tmp_string = malloc( JSON_MAX_VALUE_SIZE );
+
+    if ( tmp_string == NULL )
+    {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+    }
 
     int ovector[PCRE_OVECCOUNT];
 
@@ -80,6 +85,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
 
                             if ( rc < 0 )
                                 {
+ 				    free(tmp_string);
                                     return(false);
                                 }
                         }
@@ -88,6 +94,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
 
     /* All conditions matched,  so return true */
 
+    free(tmp_string);
     return(true);
 }
 
