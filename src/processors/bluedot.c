@@ -114,7 +114,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotIPCache. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotIPCache, 0, config->bluedot_ip_max_cache * sizeof(_Sagan_Bluedot_IP_Cache));
+//            memset(SaganBluedotIPCache, 0, config->bluedot_ip_max_cache * sizeof(_Sagan_Bluedot_IP_Cache));
         }
 
     /* Bluedot Hash Cache */
@@ -129,7 +129,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotHashCache. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotHashCache, 0, config->bluedot_hash_max_cache * sizeof(_Sagan_Bluedot_Hash_Cache));
+//            memset(SaganBluedotHashCache, 0, config->bluedot_hash_max_cache * sizeof(_Sagan_Bluedot_Hash_Cache));
         }
 
 
@@ -145,7 +145,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotURLCache. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotURLCache, 0, config->bluedot_url_max_cache * sizeof(_Sagan_Bluedot_URL_Cache));
+//            memset(SaganBluedotURLCache, 0, config->bluedot_url_max_cache * sizeof(_Sagan_Bluedot_URL_Cache));
         }
 
     /* Bluedot Filename Cache */
@@ -160,7 +160,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotFilenameCache. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotFilenameCache, 0, config->bluedot_filename_max_cache * sizeof(_Sagan_Bluedot_Filename_Cache));
+//            memset(SaganBluedotFilenameCache, 0, config->bluedot_filename_max_cache * sizeof(_Sagan_Bluedot_Filename_Cache));
         }
 
     /* Bluedot JA3 Cache */
@@ -175,7 +175,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotJA3Cache. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotJA3Cache, 0, config->bluedot_ja3_max_cache * sizeof(_Sagan_Bluedot_JA3_Cache));
+//            memset(SaganBluedotJA3Cache, 0, config->bluedot_ja3_max_cache * sizeof(_Sagan_Bluedot_JA3_Cache));
         }
 
     /* ------------------ Queues ------------------------------------------------------ */
@@ -192,7 +192,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotIPQueue. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotIPQueue, 0, config->bluedot_ip_queue * sizeof(_Sagan_Bluedot_IP_Queue));
+//            memset(SaganBluedotIPQueue, 0, config->bluedot_ip_queue * sizeof(_Sagan_Bluedot_IP_Queue));
         }
 
 
@@ -207,7 +207,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotHashQueue. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotHashQueue, 0, config->bluedot_hash_queue * sizeof(_Sagan_Bluedot_Hash_Queue));
+//            memset(SaganBluedotHashQueue, 0, config->bluedot_hash_queue * sizeof(_Sagan_Bluedot_Hash_Queue));
         }
 
     /* Bluedot URL Queue */
@@ -222,7 +222,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotURLQueue. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotURLQueue, 0, config->bluedot_url_queue * sizeof(_Sagan_Bluedot_URL_Queue));
+//            memset(SaganBluedotURLQueue, 0, config->bluedot_url_queue * sizeof(_Sagan_Bluedot_URL_Queue));
         }
 
     /* Bluedot Filename Queue */
@@ -236,7 +236,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotFilenameQueue. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotFilenameQueue, 0, config->bluedot_filename_queue * sizeof(_Sagan_Bluedot_Filename_Queue));
+//            memset(SaganBluedotFilenameQueue, 0, config->bluedot_filename_queue * sizeof(_Sagan_Bluedot_Filename_Queue));
         }
 
     /* Bluedot JA3 Queue */
@@ -251,7 +251,7 @@ void Sagan_Bluedot_Init(void)
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganBluedotJA3Queue. Abort!", __FILE__, __LINE__);
                 }
 
-            memset(SaganBluedotJA3Queue, 0, config->bluedot_ja3_queue * sizeof(_Sagan_Bluedot_JA3_Queue));
+//            memset(SaganBluedotJA3Queue, 0, config->bluedot_ja3_queue * sizeof(_Sagan_Bluedot_JA3_Queue));
         }
 
 }
@@ -401,7 +401,7 @@ void Sagan_Bluedot_Load_Cat(void)
                             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for SaganBluedotCatList. Abort!", __FILE__, __LINE__);
                         }
 
-                    memset(&SaganBluedotCatList[counters->bluedot_cat_count], 0, sizeof(_Sagan_Bluedot_Cat_List));
+//                    memset(&SaganBluedotCatList[counters->bluedot_cat_count], 0, sizeof(_Sagan_Bluedot_Cat_List));
 
                     /* Normalize the list for later use.  Better to do this here than when processing rules */
 

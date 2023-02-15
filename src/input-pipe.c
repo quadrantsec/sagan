@@ -129,7 +129,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
                                 }
 
-                            memset(&dnscache[counters->dns_cache_count], 0, sizeof(_SaganDNSCache));
+                            //memset(&dnscache[counters->dns_cache_count], 0, sizeof(_SaganDNSCache));
 
                             strlcpy(dnscache[counters->dns_cache_count].hostname, ptr, sizeof(dnscache[counters->dns_cache_count].hostname));
                             strlcpy(dnscache[counters->dns_cache_count].src_ip, src_dns_lookup, sizeof(dnscache[counters->dns_cache_count].src_ip));

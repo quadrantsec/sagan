@@ -69,7 +69,7 @@ void GZIP_Input( const char *input_file )
 		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
 	    }
 
-    memset( syslogstring, 0, config->message_buffer_size);
+//    memset( syslogstring, 0, config->message_buffer_size);
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc(sizeof(_Sagan_Pass_Syslog));
@@ -79,7 +79,7 @@ void GZIP_Input( const char *input_file )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+//    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
 
@@ -88,7 +88,7 @@ void GZIP_Input( const char *input_file )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
+//    memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
 
     /* Open GZIP file */
 

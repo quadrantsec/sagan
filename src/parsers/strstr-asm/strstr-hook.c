@@ -103,7 +103,7 @@ char *Sagan_stristr(const char *_x, const char *_y, bool needle_lower )
 		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
 	    }
 
-    memset(haystack_string, 0, config->message_buffer_size); 
+//    memset(haystack_string, 0, config->message_buffer_size); 
 
     char needle_string[512] = { 0 };
 

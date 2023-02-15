@@ -247,8 +247,8 @@ void Load_Rules( const char *ruleset )
             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for _Sagan_Ruleset_Track. Abort!", __FILE__, __LINE__);
         }
 
-    memset(&Ruleset_Track[counters->ruleset_track_count], 0, sizeof(struct _Sagan_Ruleset_Track));
-    memcpy(Ruleset_Track[counters->ruleset_track_count].ruleset, ruleset_fullname, sizeof(Ruleset_Track[counters->ruleset_track_count].ruleset));
+//    memset(&Ruleset_Track[counters->ruleset_track_count], 0, sizeof(struct _Sagan_Ruleset_Track));
+    strlcpy(Ruleset_Track[counters->ruleset_track_count].ruleset, ruleset_fullname, sizeof(Ruleset_Track[counters->ruleset_track_count].ruleset));
 
     ruleset_track_id = counters->ruleset_track_count;
 
@@ -304,7 +304,7 @@ void Load_Rules( const char *ruleset )
                             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rulestruct. Abort!", __FILE__, __LINE__);
                         }
 
-                    memset(&rulestruct[counters->rulecount], 0, sizeof(struct _Rule_Struct));
+//                    memset(&rulestruct[counters->rulecount], 0, sizeof(struct _Rule_Struct));
 
                 }
 

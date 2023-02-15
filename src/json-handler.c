@@ -75,7 +75,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( tmp_data, 0, config->message_buffer_size * 2);
+//    memset( tmp_data, 0, config->message_buffer_size * 2);
 
     if ( Event->ip_proto == 17 )
         {
@@ -216,7 +216,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     /* libfastjson doesn't support JSON_C_TO_STRING_NOSLASHESCAPE :( */
 
-    snprintf(tmp_data, sizeof(tmp_data), "%s", json_object_to_json_string(jobj));
+    snprintf(tmp_data, config->message_buffer_size * 2, "%s", json_object_to_json_string(jobj));
     tmp_data[strlen(tmp_data) - 2] = '\0';
 
     snprintf(str, size, "%s, \"alert\": %s", tmp_data, json_object_to_json_string(jobj_alert));
@@ -227,7 +227,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     if ( Event->bluedot_results != 0 )
         {
-            snprintf(tmp_data, sizeof(tmp_data), ", \"bluedot\": %s", Event->bluedot_json);
+            snprintf(tmp_data, config->message_buffer_size * 2, ", \"bluedot\": %s", Event->bluedot_json);
             strlcat(str, tmp_data, size);
 
         }
@@ -240,7 +240,7 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     if ( Event->correlation_json[0] != '\0' )
         {
-            snprintf(tmp_data, sizeof(tmp_data), ", \"correlation\": %s", Event->correlation_json);
+            snprintf(tmp_data, config->message_buffer_size * 2, ", \"correlation\": %s", Event->correlation_json);
             strlcat(str, tmp_data, size);
         }
 
@@ -250,14 +250,16 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
     if ( rulestruct[Event->rule_position].metadata_json[0] != '\0' )
         {
 
-            snprintf(tmp_data, sizeof(tmp_data), ", \"metadata\": %s",  rulestruct[Event->rule_position].metadata_json);
+            snprintf(tmp_data, config->message_buffer_size * 2, ", \"metadata\": %s",  rulestruct[Event->rule_position].metadata_json);
             strlcat(str, tmp_data, size);
 
         }
 
     /* Dump any normalization (liblognorm) data, if we have any */
 
-    snprintf(tmp_data, sizeof(tmp_data), ", \"normalize\": %s", Event->json_normalize == NULL ? "null" : Event->json_normalize);
+    snprintf(tmp_data, config->message_buffer_size * 2, ", \"normalize\": %s", Event->json_normalize[0] == '\0' ? "null" : Event->json_normalize);
+
+
     strlcat(str, tmp_data, size);
 
     strlcat(str, " }", size);

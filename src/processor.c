@@ -102,7 +102,7 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganProcSyslog. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganProcSyslog, 0, sizeof(struct _Sagan_Proc_Syslog));
+//    memset(SaganProcSyslog, 0, sizeof(struct _Sagan_Proc_Syslog));
 
     /* ----------------------------------------------- */
 
@@ -114,7 +114,7 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganProcSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganProcSyslog_LOCAL, 0, sizeof(struct _Sagan_Proc_Syslog));
+//    memset(SaganProcSyslog_LOCAL, 0, sizeof(struct _Sagan_Proc_Syslog));
 
     Processor_Memory ( SaganProcSyslog_LOCAL );
 
@@ -128,7 +128,7 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+//    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
     for ( z = 0; z < config->max_batch; z++ )
         {
@@ -139,7 +139,7 @@ void Processor ( void )
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].batch. Abort!", __FILE__, __LINE__);
                 }
 
-            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
+//            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
         }
 
     struct _Sagan_JSON *JSON_LOCAL = NULL;
@@ -156,7 +156,7 @@ void Processor ( void )
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_JSON. ABort!", __FILE__, __LINE__);
                 }
 
-            memset(JSON_LOCAL, 0, sizeof(struct _Sagan_JSON));
+//            memset(JSON_LOCAL, 0, sizeof(struct _Sagan_JSON));
 
             // DEBUGME:  Needs error checking.
             //

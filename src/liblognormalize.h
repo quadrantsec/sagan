@@ -39,47 +39,7 @@ struct liblognorm_toload_struct
     char filepath[MAXPATH];
 };
 
-/*
-typedef struct _NormalizeLiblognorm _NormalizeLiblognorm;
-struct _NormalizeLiblognorm
-{
-
-#ifdef HAVE_LIBLOGNORM
-
-//    bool status;
-
-    char ip_src[MAXIP];
-    char ip_dst[MAXIP];
-
-    char src_host[MAXHOST];
-    char dst_host[MAXHOST];
-
-    uint_fast16_t src_port;
-    uint_fast16_t dst_port;
-
-    char username[MAX_USERNAME_SIZE];
-    char filename[MAX_FILENAME_SIZE];
-
-    char hash_md5[MD5_HASH_SIZE+1];
-    char hash_sha1[SHA1_HASH_SIZE+1];
-    char hash_sha256[SHA256_HASH_SIZE+1];
-
-    char http_uri[MAX_URL_SIZE];
-    char http_hostname[MAX_HOSTNAME_SIZE];
-
-    char ja3[MD5_HASH_SIZE+1];
-    char event_id[MAX_EVENT_ID];
-
-    char json_normalize[JSON_MAX_SIZE];
-
-#endif
-
-};
-*/
-
-
 void Liblognorm_Load( const char *infile );
-//void Normalize_Liblognorm(const char *syslog_msg, struct _NormalizeLiblognorm *NormalizeLiblognorm);
 void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL );
 void Liblognorm_Close(void);
 

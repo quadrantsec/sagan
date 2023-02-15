@@ -49,7 +49,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-
 #include "sagan.h"
 #include "sagan-defs.h"
 #include "sagan-config.h"
@@ -950,6 +949,7 @@ void Replace_Sagan( const char *in_str, char *replace, char *str, size_t size)
 
 bool Wildcard( char *first, char *second )
 {
+
     if (*first == '\0' && *second == '\0')
         {
             return true;
@@ -1416,4 +1416,5 @@ bool is_notlocalhost ( unsigned char *ip )
     return is_inrange(ip, (unsigned char *)tests, sizeof(tests)/(sizeof(char[32])));
 
 }
+
 

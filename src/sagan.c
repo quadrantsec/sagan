@@ -275,7 +275,7 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for debug. Abort!", __FILE__, __LINE__);
         }
 
-    memset(debug, 0, sizeof(_SaganDebug));
+    //memset(debug, 0, sizeof(_SaganDebug));
 
     /* Allocate memory for global struct _SaganConfig */
 
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for config. Abort!", __FILE__, __LINE__);
         }
 
-    memset(config, 0, sizeof(_SaganConfig));
+    //memset(config, 0, sizeof(_SaganConfig));
 
     /* Allocate memory for global struct _SaganCounters */
 
@@ -297,7 +297,7 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for counters. Abort!", __FILE__, __LINE__);
         }
 
-    memset(counters, 0, sizeof(_SaganCounters));
+    //memset(counters, 0, sizeof(_SaganCounters));
 
     /* Allocate memory for global struct _SaganDNSCache */
 
@@ -308,7 +308,7 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for dnscache. Abort!", __FILE__, __LINE__);
         }
 
-    memset(dnscache, 0, sizeof(_SaganDNSCache));
+    //memset(dnscache, 0, sizeof(_SaganDNSCache));
 
 
 #if defined(HAVE_LIBFASTJSON)
@@ -771,7 +771,7 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
+    //memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
 
     for ( z = 0; z < config->max_processor_threads; z++ )
         {
@@ -786,7 +786,7 @@ int main(int argc, char **argv)
                             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog[z].batch. Abort!", __FILE__, __LINE__);
                         }
 
-                    memset( SaganPassSyslog[z].batch[i], 0, config->message_buffer_size );
+//                    memset( SaganPassSyslog[z].batch[i], 0, config->message_buffer_size );
 
                 }
         }

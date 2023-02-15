@@ -705,8 +705,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
                     Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
                 }
 
-            memset( tmp_data, 0, config->message_buffer_size * 2 );
-
+//            memset( tmp_data, 0, config->message_buffer_size * 2 );
 
             jobj = json_object_new_object();
 
@@ -943,7 +942,7 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for flexbit_track. Abort!", __FILE__, __LINE__);
         }
 
-    memset(flexbit_track, 0, sizeof(_Sagan_Flexbit_Track));
+//    memset(flexbit_track, 0, sizeof(_Sagan_Flexbit_Track));
 
     int flexbit_track_count = 0;
 
@@ -1377,7 +1376,7 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for flexbit_track. Abort!", __FILE__, __LINE__);
                                 }
 
-                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
+//                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
 
                             strlcpy(flexbit_track[flexbit_track_count].flexbit_name, rulestruct[rule_position].flexbit_name[i], sizeof(flexbit_track[flexbit_track_count].flexbit_name));
                             strlcpy(flexbit_ipc[flexbit_track_count].syslog_message, syslog_message, sizeof(flexbit_ipc[flexbit_track_count].syslog_message));
@@ -1450,7 +1449,7 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for flexbit_track. Abort!", __FILE__, __LINE__);
                                 }
 
-                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
+//                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
 
                             strlcpy(flexbit_track[flexbit_track_count].flexbit_name, rulestruct[rule_position].flexbit_name[i], sizeof(flexbit_track[flexbit_track_count].flexbit_name));
                             strlcpy(flexbit_ipc[flexbit_track_count].syslog_message, syslog_message, sizeof(flexbit_ipc[flexbit_track_count].syslog_message));
@@ -1520,7 +1519,7 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for flexbit_track. Abort!", __FILE__, __LINE__);
                                 }
 
-                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
+//                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
 
                             strlcpy(flexbit_track[flexbit_track_count].flexbit_name, rulestruct[rule_position].flexbit_name[i], sizeof(flexbit_track[flexbit_track_count].flexbit_name));
                             strlcpy(flexbit_ipc[flexbit_track_count].syslog_message, syslog_message, sizeof(flexbit_ipc[flexbit_track_count].syslog_message));
@@ -1590,7 +1589,7 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for flexbit_track. Abort!", __FILE__, __LINE__);
                                 }
 
-                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
+//                            memset(&flexbit_track[flexbit_track_count], 0, sizeof(_Sagan_Flexbit_Track));
 
                             strlcpy(flexbit_track[flexbit_track_count].flexbit_name, rulestruct[rule_position].flexbit_name[i], sizeof(flexbit_track[flexbit_track_count].flexbit_name));
                             strlcpy(flexbit_ipc[flexbit_track_count].syslog_message, syslog_message, sizeof(flexbit_ipc[flexbit_track_count].syslog_message));

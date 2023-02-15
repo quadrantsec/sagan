@@ -113,7 +113,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rules_loaded. Abort!", __FILE__, __LINE__);
         }
 
-    memset(&rules_loaded[counters->rules_loaded_count], 0, sizeof(_Rules_Loaded));
+//    memset(&rules_loaded[counters->rules_loaded_count], 0, sizeof(_Rules_Loaded));
 
     strlcpy(rules_loaded[counters->rules_loaded_count].ruleset, rulestruct[rule_position].dynamic_ruleset, sizeof(rules_loaded[counters->rules_loaded_count].ruleset));
 

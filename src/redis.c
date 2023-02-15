@@ -76,7 +76,7 @@ void Redis_Writer_Init ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for Sagan_Redis_Write. Abort!", __FILE__, __LINE__);
         }
 
-    memset(Sagan_Redis_Write, 0, sizeof(struct _Sagan_Redis_Write));
+//    memset(Sagan_Redis_Write, 0, sizeof(struct _Sagan_Redis_Write));
 
     Sagan_Redis_Write->value = malloc( config->message_buffer_size );
 
@@ -85,7 +85,7 @@ void Redis_Writer_Init ( void )
 	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
     }
 
-    memset(Sagan_Redis_Write->value, 0, config->message_buffer_size );
+//    memset(Sagan_Redis_Write->value, 0, config->message_buffer_size );
 
     Sagan_Redis_Write->key = malloc( 128 );
 
@@ -94,7 +94,7 @@ void Redis_Writer_Init ( void )
 	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
     }
 
-    memset(Sagan_Redis_Write->key, 0, 128 );
+//    memset(Sagan_Redis_Write->key, 0, 128 );
 
 }
 
@@ -269,7 +269,7 @@ void Redis_Writer ( void )
             exit(-1);
         }
 
-    memset(value, 0, config->message_buffer_size * 2);
+//    memset(value, 0, config->message_buffer_size * 2);
 
     Redis_Writer_Connect();
 

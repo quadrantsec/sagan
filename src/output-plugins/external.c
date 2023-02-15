@@ -75,7 +75,7 @@ void External_Thread ( char *alert_data, char *execute_script )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( buf, 0, config->message_buffer_size );
+//    memset( buf, 0, config->message_buffer_size );
 
     if ( debug->debugexternal )
         {

@@ -70,7 +70,7 @@ void FIFO_Input ( void )
 		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
 	    }
 
-    memset( syslogstring, 0, config->message_buffer_size); 
+//    memset( syslogstring, 0, config->message_buffer_size); 
 
     Sagan_Log(NORMAL, "Attempting to open syslog FIFO (%s).", config->sagan_fifo);
 
@@ -90,7 +90,7 @@ void FIFO_Input ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+//    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
 
     for ( z = 0; z < config->max_batch; z++ )
         {
@@ -101,7 +101,7 @@ void FIFO_Input ( void )
                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
                 }
 
-            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
+//            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
         }
 
     while( death == false )
