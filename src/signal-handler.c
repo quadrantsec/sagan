@@ -510,7 +510,7 @@ void Sig_Handler( void )
                 /* Signals to ignore */
                 case 17:		/* Child process has exited. */
                 case 28:		/* Terminal 'resize'/alarm. */
-		case 27:		/* gprof causes this */
+                case 27:		/* gprof causes this */
                 case 33:		/* Interrupts GDB ("Real time" signal) */
                     break;
 

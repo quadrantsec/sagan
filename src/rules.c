@@ -307,6 +307,12 @@ void Load_Rules( const char *ruleset )
 
 //                    memset(&rulestruct[counters->rulecount], 0, sizeof(struct _Rule_Struct));
 
+                    rulestruct[counters->rulecount].s_program[0] = '\0';
+                    rulestruct[counters->rulecount].s_facility[0] = '\0';
+                    rulestruct[counters->rulecount].s_level[0] = '\0';
+                    rulestruct[counters->rulecount].s_tag[0] = '\0';
+                    rulestruct[counters->rulecount].s_syspri[0] = '\0';
+
                 }
 
             Remove_Return(rulebuf);

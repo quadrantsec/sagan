@@ -116,6 +116,7 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
                 }
 
+
             /* If case insensitive - nocase */
 
             if ( rulestruct[rule_position].content_case[z] == true )
@@ -123,7 +124,6 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
 
                     if ( rulestruct[rule_position].content_not[z] == false )
                         {
-
 
                             if ( !Sagan_stristr(alter_content, rulestruct[rule_position].content[z], true))
                                 {

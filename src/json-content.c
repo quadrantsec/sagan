@@ -53,9 +53,9 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
     char *tmp_string = malloc( config->message_buffer_size );
 
     if ( tmp_string == NULL )
-    {
+        {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-    }
+        }
 
     bool key_search = false;
 
@@ -103,7 +103,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                             if ( Search_Nocase( tmp_string, rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == false  )
                                                 {
 
-						    free(tmp_string);
+                                                    free(tmp_string);
                                                     return(false);
 
                                                 }
@@ -114,7 +114,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
                                             if ( Search_Nocase(tmp_string, rulestruct[rule_position].json_content_content[i], false, rulestruct[rule_position].json_content_strstr[i] ) == true )
                                                 {
-						    free(tmp_string);
+                                                    free(tmp_string);
                                                     return(false);
                                                 }
 
@@ -132,7 +132,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
                                             if ( Search_Case(tmp_string, rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) ==  false )
                                                 {
-						    free(tmp_string);
+                                                    free(tmp_string);
                                                     return(false);
                                                 }
 
@@ -142,7 +142,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
                                             if ( Search_Case(tmp_string, rulestruct[rule_position].json_content_content[i], rulestruct[rule_position].json_content_strstr[i]) == true )
                                                 {
-						    free(tmp_string);
+                                                    free(tmp_string);
                                                     return(false);
                                                 }
 
@@ -156,7 +156,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 
             if ( key_search == false )
                 {
-		    free(tmp_string);
+                    free(tmp_string);
                     return(false);
                 }
 

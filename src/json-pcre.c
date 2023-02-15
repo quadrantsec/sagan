@@ -53,9 +53,9 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
     char *tmp_string = malloc( config->message_buffer_size );
 
     if ( tmp_string == NULL )
-    {
+        {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-    }
+        }
 
     int ovector[PCRE_OVECCOUNT];
 
@@ -87,7 +87,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
 
                             if ( rc < 0 )
                                 {
- 				    free(tmp_string);
+                                    free(tmp_string);
                                     return(false);
                                 }
                         }

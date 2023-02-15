@@ -81,18 +81,18 @@ void Redis_Writer_Init ( void )
     Sagan_Redis_Write->value = malloc( config->message_buffer_size );
 
     if ( Sagan_Redis_Write->value == NULL )
-    {
-	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-    }
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
 
 //    memset(Sagan_Redis_Write->value, 0, config->message_buffer_size );
 
     Sagan_Redis_Write->key = malloc( 128 );
 
     if ( Sagan_Redis_Write->key == NULL )
-    {
-	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-    }
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
 
 //    memset(Sagan_Redis_Write->key, 0, 128 );
 

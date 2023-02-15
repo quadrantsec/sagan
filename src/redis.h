@@ -32,7 +32,7 @@ struct _Sagan_Redis_Write
 {
     char command[16];
     char *key;
-    char *value; 
+    char *value;
     uint_fast32_t expire;
 };
 

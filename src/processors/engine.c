@@ -271,13 +271,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #endif
 
+
     append_program_flag = false;
 
     /* Search for matches */
 
     /* First we search for 'program' and such.   This way,  we don't waste CPU
      * time with pcre/content.  */
-
 
 
     for(b=0; b < counters->rulecount; b++)
@@ -484,6 +484,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     if ( rulestruct[b].s_facility[0] != '\0' && pre_match == false )
                         {
+
                             strlcpy(tmpbuf, rulestruct[b].s_facility, sizeof(tmpbuf));
                             ptmp = strtok_r(tmpbuf, "|", &tok2);
                             pre_match = true;
@@ -501,6 +502,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     if ( rulestruct[b].s_level[0] != '\0' && pre_match == false )
                         {
+
                             strlcpy(tmpbuf, rulestruct[b].s_level, sizeof(tmpbuf));
                             ptmp = strtok_r(tmpbuf, "|", &tok2);
                             pre_match = true;
@@ -518,6 +520,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     if ( rulestruct[b].s_tag[0] != '\0' && pre_match == false )
                         {
+
                             strlcpy(tmpbuf, rulestruct[b].s_tag, sizeof(tmpbuf));
                             ptmp = strtok_r(tmpbuf, "|", &tok2);
                             pre_match = true;
@@ -535,6 +538,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     if ( rulestruct[b].s_syspri[0] != '\0' && pre_match == false )
                         {
+
                             strlcpy(tmpbuf, rulestruct[b].s_syspri, sizeof(tmpbuf));
                             ptmp = strtok_r(tmpbuf, "|", &tok2);
                             pre_match = true;
@@ -738,6 +742,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     if ( pre_match == false && flag == true )
                         {
+
                             /* Normalization should always over ride parse_src_ip/parse_dst_ip/parse_port,
                              * _unless_ liblognorm fails and both are in a rule or liblognorm failed to get src or dst */
 

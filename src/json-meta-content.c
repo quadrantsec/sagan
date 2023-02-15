@@ -57,9 +57,9 @@ bool JSON_Meta_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
     char *tmp_string = malloc( config->message_buffer_size );
 
     if ( tmp_string == NULL )
-    {
-	    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-    }
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
 
     for (i=0; i < rulestruct[rule_position].json_meta_content_count; i++)
         {

@@ -75,11 +75,12 @@ char *Sagan_strstr(const char *_x, const char *_y)
 
     size_t    len = strlen (_y);
     if (!*_y) return (char *) _x;
-    for (;;) {
-        if (!(_x = strchr (_x, *_y))) return NULL;
-        if (!strncmp (_x, _y, len)) return (char *) _x;
-        _x++;
-    }
+    for (;;)
+        {
+            if (!(_x = strchr (_x, *_y))) return NULL;
+            if (!strncmp (_x, _y, len)) return (char *) _x;
+            _x++;
+        }
 }
 
 #endif
@@ -99,24 +100,25 @@ char *Sagan_stristr(const char *_x, const char *_y, bool needle_lower )
     char *haystack_string = malloc( config->message_buffer_size );
 
     if ( haystack_string == NULL )
-	    {
-		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-	    }
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
 
-//    memset(haystack_string, 0, config->message_buffer_size); 
-
+    haystack_string[0] = '\0';
     char needle_string[512] = { 0 };
 
-    strlcpy(haystack_string, _x, sizeof(haystack_string));
+    strlcpy(haystack_string, _x, config->message_buffer_size);
+
     To_LowerC(haystack_string);
 
     strlcpy(needle_string, _y, sizeof(needle_string));
 
-    if ( needle_lower ) {
-        To_LowerC(needle_string);
-    }
+    if ( needle_lower )
+        {
+            To_LowerC(needle_string);
+        }
 
-    p = Sagan_strstr( haystack_string, needle_string);
+    p = Sagan_strstr( (const char*)haystack_string, needle_string);
 
     free( haystack_string );
     return p;
