@@ -36,7 +36,7 @@ extern struct _SaganConfig *config;
 void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
-    SaganProcSyslog_LOCAL->json_normalize = malloc( JSON_MAX_SIZE );
+    SaganProcSyslog_LOCAL->json_normalize = malloc( config->message_buffer_size );
 
     if ( SaganProcSyslog_LOCAL->json_normalize == NULL )
         {
@@ -45,7 +45,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     //memset(SaganProcSyslog_LOCAL->json_normalize, 0, JSON_MAX_SIZE );
 
-    SaganProcSyslog_LOCAL->json_original = malloc( JSON_MAX_SIZE );
+    SaganProcSyslog_LOCAL->json_original = malloc( config->message_buffer_size );
 
     if ( SaganProcSyslog_LOCAL->json_original == NULL )
         {

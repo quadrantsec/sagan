@@ -112,7 +112,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     struct json_object *string_obj = NULL;
 
     rc_normalize = ln_normalize(ctx, SaganProcSyslog_LOCAL->syslog_message, strlen(SaganProcSyslog_LOCAL->syslog_message), &json_norm);
-    strlcpy(SaganProcSyslog_LOCAL->json_normalize, json_object_to_json_string_ext(json_norm, FJSON_TO_STRING_PLAIN), JSON_MAX_SIZE );
+    strlcpy(SaganProcSyslog_LOCAL->json_normalize, json_object_to_json_string_ext(json_norm, FJSON_TO_STRING_PLAIN), config->message_buffer_size );
 
     if ( debug->debugnormalize )
         {

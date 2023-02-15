@@ -1,5 +1,6 @@
 /*
-** Copyright (C) 2009-2022 Quadrant Information Security <quadrantsec.com>                                             ** Copyright (C) 2009-2022 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2022 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2022 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -7,7 +8,8 @@
 ** distribute this program under any other version of the GNU General
 ** Public License.
 **
-** This program is distributed in the hope that it will be useful,                                                     ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
 **
@@ -59,6 +61,7 @@ void File_Input( const char *input_file )
     uint_fast16_t batch_count = 0;
 
     int i = 0;
+    uint_fast16_t z = 0;
 
     FILE *fd;
 
@@ -77,16 +80,17 @@ void File_Input( const char *input_file )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-//    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
-
-    SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
-
-    if ( SaganPassSyslog == NULL )
+    for ( z = 0; z < config->max_batch; z++ )
         {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog. Abort!", __FILE__, __LINE__);
-        }
+            SaganPassSyslog_LOCAL->batch[z] = malloc( config->message_buffer_size );
 
-//    memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
+            if ( SaganPassSyslog_LOCAL->batch[z] == NULL )
+                {
+                   Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
+                }
+
+//            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
+        }
 
     /* Open file */
 
@@ -128,7 +132,6 @@ void File_Input( const char *input_file )
 
 
             /* Drop any stuff that needs to be "ignored" */
-
 
             if ( config->sagan_droplist_flag == true )
                 {
@@ -180,13 +183,15 @@ void File_Input( const char *input_file )
                             for ( i = 0; i < config->max_batch; i++)
                                 {
 
-                                    strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], config->message_buffer_size);
+                                    strlcpy(SaganPassSyslog[proc_msgslot].batch[i], SaganPassSyslog_LOCAL->batch[i], config->message_buffer_size );
 
                                 }
 
-                            proc_msgslot++;
-
                             counters->events_processed = counters->events_processed + config->max_batch;
+
+			    proc_msgslot++;
+
+			    /* Send work to thread */
 
                             pthread_cond_signal(&SaganProcDoWork);
                             pthread_mutex_unlock(&SaganProcWorkMutex);

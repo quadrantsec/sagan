@@ -262,7 +262,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             Sagan_Log(DEBUG, "[%s, line %d] Found possible JSON within message \"%s\".", __FILE__, __LINE__, SaganProcSyslog_LOCAL->syslog_message);
                         }
 
-                    strlcpy( SaganProcSyslog_LOCAL->json_original, SaganProcSyslog_LOCAL->syslog_message, JSON_MAX_SIZE);
+                    strlcpy( SaganProcSyslog_LOCAL->json_original, SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size);
                     Parse_JSON( SaganProcSyslog_LOCAL->syslog_message, JSON_LOCAL);
 
                 }
@@ -306,7 +306,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                         {
 
-					    char *tmp_json_value = malloc( JSON_MAX_VALUE_SIZE );
+					    char *tmp_json_value = malloc( config->message_buffer_size );
 
 					    if ( tmp_json_value == NULL )
 						    {
@@ -314,7 +314,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 						    }
                                            	
 
-                                            Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, JSON_MAX_VALUE_SIZE );
+                                            Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, config->message_buffer_size );
 
                                             if ( rulestruct[b].json_map_type[i] == JSON_MAP_SRC_IP )
                                                 {

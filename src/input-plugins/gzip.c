@@ -56,6 +56,7 @@ void GZIP_Input( const char *input_file )
 
     bool ignore_flag = false;
 
+    uint_fast16_t z = 0;
     uint_fast16_t batch_count = 0;
 
     int i = 0;
@@ -79,16 +80,17 @@ void GZIP_Input( const char *input_file )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-//    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
+    for ( z = 0; z < config->max_batch; z++ )
+        {                                                                                                              SaganPassSyslog_LOCAL->batch[z] = malloc( config->message_buffer_size );
 
-    SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
+            if ( SaganPassSyslog_LOCAL->batch[z] == NULL )
+                {                                                                                                             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
+                }
 
-    if ( SaganPassSyslog == NULL )
-        {
-            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog. Abort!", __FILE__, __LINE__);
+//            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
         }
 
-//    memset(SaganPassSyslog, 0, sizeof(struct _Sagan_Pass_Syslog));
+
 
     /* Open GZIP file */
 

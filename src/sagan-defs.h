@@ -59,14 +59,10 @@ typedef void json_object;
 
 #define MAX_EVENTID		32
 
-
-#define JSON_MAX_SIZE	      MAX_SYSLOGMSG
-
 /* This is used in JSON message/program parsing */
 
 #define JSON_MAX_OBJECTS        256
 #define JSON_MAX_KEY_SIZE       32
-#define JSON_MAX_VALUE_SIZE     MAX_SYSLOGMSG	/* The full JSON will be in the first JSON slot! */
 
 
 #define DEFAULT_JSON_INPUT_MAP          "/usr/local/etc/sagan-rules/json-input.map"
