@@ -33,6 +33,7 @@
 
 #include "sagan.h"
 #include "sagan-defs.h"
+#include "sagan-config.h"
 #include "rules.h"
 #include "json-content.h"
 #include "util-base64.h"
@@ -40,6 +41,7 @@
 #include "parsers/parsers.h"
 
 extern struct _Rule_Struct *rulestruct;
+extern struct _SaganConfig *config;
 
 bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
 {
@@ -48,7 +50,7 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
     int a=0;
     int rc=0;
 
-    char *tmp_string = malloc( JSON_MAX_VALUE_SIZE );
+    char *tmp_string = malloc( config->message_buffer_size );
 
     if ( tmp_string == NULL )
     {
@@ -69,13 +71,13 @@ bool JSON_Pcre(int rule_position, _Sagan_JSON *JSON_LOCAL)
                             if ( rulestruct[rule_position].json_decode_base64_pcre[i] == true )
                                 {
 
-                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, JSON_MAX_VALUE_SIZE);
+                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]),  tmp_string, config->message_buffer_size);
 
                                 }
                             else
                                 {
 
-                                    memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE);
+                                    memcpy( tmp_string, JSON_LOCAL->json_value[a], config->message_buffer_size);
 
                                 }
 

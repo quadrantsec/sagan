@@ -163,7 +163,19 @@ void Processor ( void )
             for ( z = 0; z < JSON_MAX_OBJECTS; z++ )
                 {
                     JSON_LOCAL->json_key[z] = malloc ( JSON_MAX_KEY_SIZE );
-                    JSON_LOCAL->json_value[z] = malloc ( JSON_MAX_VALUE_SIZE );
+
+		    if ( JSON_LOCAL->json_key[z] == NULL )
+		    {
+			    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+		    }
+
+                    JSON_LOCAL->json_value[z] = malloc ( config->message_buffer_size );
+
+		    if ( JSON_LOCAL->json_value[z] == NULL )
+		    {
+			    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+		    }
+
                 }
 
 
@@ -262,6 +274,9 @@ void Processor ( void )
 
                                 }
                         }
+
+		    SaganProcSyslog_LOCAL->json_normalize[0] = '\0'; 
+		    SaganProcSyslog_LOCAL->json_original[0] = '\0';
 
                     Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, dynamic_rule_flag );
 

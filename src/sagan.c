@@ -297,7 +297,7 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for counters. Abort!", __FILE__, __LINE__);
         }
 
-    //memset(counters, 0, sizeof(_SaganCounters));
+    memset(counters, 0, sizeof(_SaganCounters)); 	/* Set all counters to zero */
 
     /* Allocate memory for global struct _SaganDNSCache */
 

@@ -104,8 +104,6 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
 
     SaganProcessorEvent->event_time	 =       tp;
 
-//    SaganProcessorEvent->generatorid     =       1;
-
     SaganProcessorEvent->json_normalize     =    SaganProcSyslog_LOCAL->json_normalize;
     SaganProcessorEvent->bluedot_json       =    bluedot_json;
     SaganProcessorEvent->bluedot_results    =    bluedot_results;

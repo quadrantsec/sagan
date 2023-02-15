@@ -33,6 +33,7 @@
 
 #include "sagan.h"
 #include "sagan-defs.h"
+#include "sagan-config.h"
 #include "rules.h"
 #include "json-content.h"
 #include "search-type.h"
@@ -41,6 +42,7 @@
 #include "parsers/parsers.h"
 
 extern struct _Rule_Struct *rulestruct;
+extern struct _SaganConfig *config;
 
 bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
 {
@@ -48,7 +50,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
     uint_fast16_t i = 0;
     uint_fast16_t a = 0;
 
-    char *tmp_string = malloc( JSON_MAX_VALUE_SIZE );
+    char *tmp_string = malloc( config->message_buffer_size );
 
     if ( tmp_string == NULL )
     {
@@ -75,7 +77,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                             if ( rulestruct[rule_position].json_decode_base64[i] == true )
                                 {
 
-                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]), tmp_string, JSON_MAX_VALUE_SIZE);
+                                    Base64Decode( (const unsigned char*)JSON_LOCAL->json_value[a], strlen(JSON_LOCAL->json_value[a]), tmp_string, config->message_buffer_size);
 
                                 }
                             else
@@ -84,7 +86,7 @@ bool JSON_Content(uint_fast32_t rule_position, _Sagan_JSON *JSON_LOCAL)
                                     /* Clear previous value */
 
                                     tmp_string[0] = '\0';
-                                    memcpy( tmp_string, JSON_LOCAL->json_value[a], JSON_MAX_VALUE_SIZE );
+                                    memcpy( tmp_string, JSON_LOCAL->json_value[a], config->message_buffer_size );
 
                                 }
 

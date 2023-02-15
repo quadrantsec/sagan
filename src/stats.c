@@ -195,7 +195,7 @@ void Statistics( void )
             Sagan_Log(NORMAL, "           Time                       : %" PRIu64 " (%.3f%%)", counters->malformed_time, CalcPct(counters->malformed_time, counters->events_received) );
             Sagan_Log(NORMAL, "           Program                    : %" PRIu64 " (%.3f%%)", counters->malformed_program, CalcPct(counters->malformed_program, counters->events_received) );
             Sagan_Log(NORMAL, "           Message                    : %" PRIu64 " (%.3f%%)", counters->malformed_message, CalcPct(counters->malformed_message, counters->events_received) );
-            Sagan_Log(NORMAL, "           Null Messages              : %" PRIu64 " (%.3f%%)", counters->null_message, CalcPct(counters->malformed_message, counters->events_received) );
+            Sagan_Log(NORMAL, "           Null Messages              : %" PRIu64 " (%.3f%%)", counters->null_message, CalcPct(counters->null_message, counters->events_received) );
 
 
 #if defined(HAVE_LIBFASTJSON)
