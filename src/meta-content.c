@@ -94,7 +94,7 @@ bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
             else
                 {
 
-                    strlcpy(meta_alter_content, syslog_message, sizeof(meta_alter_content));
+                    strlcpy(meta_alter_content, syslog_message, config->message_buffer_size);
 
                 }
 
