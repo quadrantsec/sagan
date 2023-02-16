@@ -106,6 +106,7 @@ void Load_Rules( const char *ruleset )
 
     char valid_rules[2048] = { 0 };
     bool is_valid = false;
+    uint8_t valid = 0;
 
     bool found = 0;
 
@@ -1897,7 +1898,7 @@ void Load_Rules( const char *ruleset )
 
                             if ( !Sagan_strstr(tmp2, "%sagan%" ) )
                                 {
-                                    Sagan_Log(ERROR, "[%s, line %d] Signature at line %d lacks the meta_content 'helper' (%%sagan%%).", __FILE__, __LINE__, linecount);
+                                    Sagan_Log(ERROR, "[%s, line %d] Line %d in %s lacks the meta_content 'helper' (%%sagan%%).", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
                             strlcpy(rulestruct[counters->rulecount].meta_content_help[meta_content_count], rule_tmp, sizeof(rulestruct[counters->rulecount].meta_content_help[meta_content_count]));
@@ -3164,6 +3165,8 @@ void Load_Rules( const char *ruleset )
                     if (!strcmp(rulesplit, "threshold" ))
                         {
 
+                            valid = 0;
+
                             tok_tmp = strtok_r(NULL, ":", &saveptrrule2);
                             tmptoken = strtok_r(tok_tmp, ",", &saveptrrule2);
 
@@ -3173,14 +3176,19 @@ void Load_Rules( const char *ruleset )
                                     if (Sagan_strstr(tmptoken, "type"))
                                         {
 
+                                            valid++;
+
+
                                             if (Sagan_strstr(tmptoken, "limit"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_type = THRESHOLD_LIMIT;
+                                                    valid++;
                                                 }
 
                                             else if (Sagan_strstr(tmptoken, "suppress"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_type = THRESHOLD_SUPPRESS;
+                                                    valid++;
                                                 }
 
                                             if ( rulestruct[counters->rulecount].threshold2_type == 0 )
@@ -3188,40 +3196,49 @@ void Load_Rules( const char *ruleset )
                                                     Sagan_Log(ERROR, "[%s, line %d] Invalid threshold type '%s' at line %d in %s. Threshold type must be 'limit' or 'suppress'. Abort.", __FILE__, __LINE__, tmptoken, linecount, ruleset_fullname);
                                                 }
 
-
                                         }
+
 
                                     if (Sagan_strstr(tmptoken, "track"))
                                         {
+                                            valid++;
 
                                             if (Sagan_strstr(tmptoken, "by_src"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_method_src = true;
+                                                    valid++;
                                                 }
 
                                             if (Sagan_strstr(tmptoken, "by_dst"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_method_dst = true;
+                                                    valid++;
                                                 }
 
                                             if (Sagan_strstr(tmptoken, "by_username") || Sagan_strstr(tmptoken, "by_string"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_method_username = true;
+                                                    valid++;
                                                 }
 
                                             if (Sagan_strstr(tmptoken, "by_srcport"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_method_srcport = true;
+                                                    valid++;
                                                 }
 
                                             if (Sagan_strstr(tmptoken, "by_dstport"))
                                                 {
                                                     rulestruct[counters->rulecount].threshold2_method_dstport = true;
+                                                    valid++;
                                                 }
                                         }
 
                                     if (Sagan_strstr(tmptoken, "count"))
                                         {
+
+                                            valid++;
+
                                             tmptok_tmp = strtok_r(tmptoken, " ", &saveptrrule3);
                                             tmptok_tmp = strtok_r(NULL, " ", &saveptrrule3);
                                             rulestruct[counters->rulecount].threshold2_count = atoi(tmptok_tmp);
@@ -3235,6 +3252,9 @@ void Load_Rules( const char *ruleset )
 
                                     if (Sagan_strstr(tmptoken, "seconds"))
                                         {
+
+                                            valid++;
+
                                             tmptok_tmp = strtok_r(tmptoken, " ", &saveptrrule3);
                                             tmptok_tmp = strtok_r(NULL, " ", &saveptrrule3 );
                                             rulestruct[counters->rulecount].threshold2_seconds = atoi(tmptok_tmp);
@@ -3249,6 +3269,11 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             /* Sanity check */
+
+                            if ( valid != 6 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] 'threshold' keyword  appears to be invalid at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
 
                             if ( rulestruct[counters->rulecount].threshold2_count == 0 )
                                 {
@@ -3267,6 +3292,8 @@ void Load_Rules( const char *ruleset )
                     if (!strcmp(rulesplit, "after" ))
                         {
 
+                            valid = 0;
+
                             rulestruct[counters->rulecount].after2 = true;
 
                             tok_tmp = strtok_r(NULL, ":", &saveptrrule2);
@@ -3284,6 +3311,7 @@ void Load_Rules( const char *ruleset )
 
                                     if (Sagan_strstr(tmptoken, "track"))
                                         {
+                                            valid++;
 
                                             strtok_r(tmptoken, " ", &after_value1);
 
@@ -3301,26 +3329,31 @@ void Load_Rules( const char *ruleset )
 
                                                     if (!strcmp(after_value2, "by_src"))
                                                         {
+                                                            valid++;
                                                             rulestruct[counters->rulecount].after2_method_src = true;
                                                         }
 
                                                     if (!strcmp(after_value2, "by_dst"))
                                                         {
+                                                            valid++;
                                                             rulestruct[counters->rulecount].after2_method_dst = true;
                                                         }
 
                                                     if (!strcmp(after_value2, "by_username"))
                                                         {
+                                                            valid++;
                                                             rulestruct[counters->rulecount].after2_method_username = true;
                                                         }
 
                                                     if(!strcmp(after_value2, "by_srcport"))
                                                         {
+                                                            valid++;
                                                             rulestruct[counters->rulecount].after2_method_srcport  = true;
                                                         }
 
                                                     if(!strcmp(after_value2, "by_dstport"))
                                                         {
+                                                            valid++;
                                                             rulestruct[counters->rulecount].after2_method_dstport  = true;
                                                         }
 
@@ -3332,6 +3365,9 @@ void Load_Rules( const char *ruleset )
 
                                     if (Sagan_strstr(tmptoken, "count"))
                                         {
+
+                                            valid++;
+
                                             tmptok_tmp = strtok_r(tmptoken, " ", &saveptrrule3);
                                             tmptok_tmp = strtok_r(NULL, " ", &saveptrrule3);
                                             rulestruct[counters->rulecount].after2_count = atoi(tmptok_tmp);
@@ -3345,6 +3381,9 @@ void Load_Rules( const char *ruleset )
 
                                     if (Sagan_strstr(tmptoken, "seconds"))
                                         {
+
+                                            valid++;
+
                                             tmptok_tmp = strtok_r(tmptoken, " ", &saveptrrule3);
                                             tmptok_tmp = strtok_r(NULL, " ", &saveptrrule3 );
                                             rulestruct[counters->rulecount].after2_seconds = atoi(tmptok_tmp);
@@ -3362,6 +3401,12 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             /* Sanity check */
+
+                            if ( valid < 4 )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] 'after' keyword appears to be invalid at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                }
+
 
                             if ( rulestruct[counters->rulecount].after2_count == 0 )
                                 {
