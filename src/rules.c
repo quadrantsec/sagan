@@ -1895,6 +1895,11 @@ void Load_Rules( const char *ruleset )
 
                             Content_Pipe(tmp2, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
 
+			    if ( !Sagan_strstr(tmp2, "%sagan%" ) )
+				{
+				Sagan_Log(ERROR, "[%s, line %d] Signature at line %d lacks the meta_content 'helper' (%%sagan%%).", __FILE__, __LINE__, linecount); 
+				}
+
                             strlcpy(rulestruct[counters->rulecount].meta_content_help[meta_content_count], rule_tmp, sizeof(rulestruct[counters->rulecount].meta_content_help[meta_content_count]));
 
                             tmptoken = strtok_r(NULL, ";", &saveptrrule2);           /* Grab Search data */
