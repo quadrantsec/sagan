@@ -3270,9 +3270,9 @@ void Load_Rules( const char *ruleset )
 
                             /* Sanity check */
 
-                            if ( valid != 6 )
+                            if ( valid < 6 )
                                 {
-                                    Sagan_Log(ERROR, "[%s, line %d] 'threshold' keyword  appears to be invalid at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
+                                    Sagan_Log(ERROR, "[%s, line %d] 'threshold' keyword appears to be invalid at line %d in %s. Abort.", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
                             if ( rulestruct[counters->rulecount].threshold2_count == 0 )
