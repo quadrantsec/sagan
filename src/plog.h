@@ -20,12 +20,6 @@
 
 #ifdef HAVE_LIBPCAP
 
-char        plog_interface[50];
-char        plog_logdev[50];
-char        plog_filter[256];
-bool        plog_flag;
-bool        plog_promiscuous;
-
 void Plog_Handler( void );
 
 #endif

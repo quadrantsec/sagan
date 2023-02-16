@@ -88,6 +88,7 @@ void Plog_Handler( void )
     struct  bpf_program     filtr;
     char 		    *iface=NULL;
     char                    eb[PCAP_ERRBUF_SIZE];
+    pcap_if_t 		    *alldevsp = NULL; /* list of capture devices */
 
     iface = config->plog_interface;
 
@@ -104,10 +105,22 @@ void Plog_Handler( void )
 
     Sagan_Log(NORMAL, "");
 
-    if(iface == (char *)0)
+    if ( iface == NULL )
         {
-            if((iface = pcap_lookupdev(eb)) == (char *)0)
-                Sagan_Log(ERROR, "[%s, line %d] Cannot get device: %s", __FILE__, __LINE__, eb);
+
+            if (pcap_findalldevs (&alldevsp, eb) == -1)
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] Cannot get device: %s", __FILE__, __LINE__, eb);
+                }
+
+            if ( alldevsp != NULL)
+                {
+                    /* get first device */
+                    iface = strdup (alldevsp->name);
+                }
+
+            pcap_freealldevs (alldevsp);
+
         }
 
     bp = pcap_open_live(iface,4096,config->plog_promiscuous,0,eb);
