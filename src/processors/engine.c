@@ -306,13 +306,13 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                     for ( i = 0; i < rulestruct[b].json_map_count; i++ )
                                         {
 
-					    char *tmp_json_value = malloc( config->message_buffer_size );
+                                            char *tmp_json_value = malloc( config->message_buffer_size );
 
-					    if ( tmp_json_value == NULL )
-						    {
-							    Sagan_Log(ERROR, "[%s, lines %d] Error allocation memory.", __FILE__, __LINE__);
-						    }
-                                           	
+                                            if ( tmp_json_value == NULL )
+                                                {
+                                                    Sagan_Log(ERROR, "[%s, lines %d] Error allocation memory.", __FILE__, __LINE__);
+                                                }
+
 
                                             Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, config->message_buffer_size );
 
@@ -451,7 +451,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                                 }
 
-					free( tmp_json_value );
+                                            free( tmp_json_value );
 
                                         } /* for ( i = 0; i < rulestruct[b].json_map_count ... */
 

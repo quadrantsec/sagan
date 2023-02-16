@@ -20,7 +20,7 @@
 
 /* track-clients.c
 *
-* Simple pre-processors that keeps track of reporting syslog clients/agents.
+* Simple processors that keeps track of reporting syslog clients/agents.
 * This is based off the IP address the clients,  not based on normalization.
 * If a client/agent hasn't sent a syslog/event message in X minutes,  then
 * generate an alert.
@@ -40,6 +40,7 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <syslog.h>
 
 #ifdef HAVE_SYS_PRCTL_H
 #include <sys/prctl.h>
@@ -208,6 +209,8 @@ void Track_Clients_Thread ( void )
             time_t t;
             struct tm *now;
 
+            char tmp_message[1024] = { 0 };
+
             struct timeval tp;
 
             t = time(NULL);
@@ -255,7 +258,15 @@ void Track_Clients_Thread ( void )
 
                                     tmp_ip = Bit2IP(SaganTrackClients_ipc[i].hostbits, NULL, 0);
 
-                                    Sagan_Log(WARN, "TRACK-CLIENT-LOGS - The IP address %s was previously not sending logs. The system is now sending logs again at %s", tmp_ip, ctime(&SaganTrackClients_ipc[i].utime) );
+                                    snprintf(tmp_message, sizeof(tmp_message), "TRACK-CLIENT-LOGS - The IP address %s was previously not sending logs. The system is now sending logs again at %s", tmp_ip, ctime(&SaganTrackClients_ipc[i].utime) );
+
+                                    tmp_message[ sizeof(tmp_message) - 1 ] = '\0';
+
+                                    Sagan_Log(WARN, tmp_message );
+
+                                    openlog("sagan", LOG_PID, LOG_DAEMON);
+                                    syslog(LOG_INFO, tmp_message);
+                                    closelog();
 
                                     gettimeofday(&tp, 0);
 
@@ -291,7 +302,16 @@ void Track_Clients_Thread ( void )
 
                                     tmp_ip = Bit2IP(SaganTrackClients_ipc[i].hostbits, NULL, 0);
 
-                                    Sagan_Log(WARN, "TRACK-CLIENT-NOLOGS - Logs have not been received from IP address %s in over %d minutes.  The last log received from this host was at %s.", tmp_ip, config->pp_sagan_track_clients, ctime(&SaganTrackClients_ipc[i].utime) );
+                                    snprintf(tmp_message, sizeof(tmp_message), "TRACK-CLIENT-NOLOGS - Logs have not been received from IP address %s in over %d minutes.  The last log received from this host was at %s.", tmp_ip, config->pp_sagan_track_clients, ctime(&SaganTrackClients_ipc[i].utime));
+
+                                    tmp_message[ sizeof(tmp_message) - 1 ] = '\0';
+
+                                    Sagan_Log(WARN, tmp_message );
+
+                                    openlog("sagan", LOG_PID, LOG_DAEMON);
+                                    syslog(LOG_INFO, tmp_message);
+                                    closelog();
+
 
                                     gettimeofday(&tp, 0);
 

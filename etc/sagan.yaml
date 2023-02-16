@@ -292,13 +292,15 @@ processors:
 
   # The "tracking clients" processor keeps track of the systems (IP addresses), 
   # reporting to Sagan.  If Sagan stops receiving logs from a client for a 
-  # specified amount of time ("timeout"), an alert/notification is created.  
-  # With the # system comes back online,  another alert/notification is 
-  # created. 
+  # specified amount of time ("timeout"), a syslog message is created.  If this
+  # option is enable and the "sagan.rules" are loaded,  an alert will be 
+  # generated when system(s) stop/start reporting.  The "networks" options lets
+  # you get granular with what you want to track within your network.
 
   - track-clients:
       enabled: no
-      timeout: 1440		# In minutes
+      timeout: 1440             # In minutes
+      networks: "10.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12"
 
   # This records information about clients reporting to Sagan.  This can be useful
   # to keep track of when clients last sent data and the types of data they sent. 

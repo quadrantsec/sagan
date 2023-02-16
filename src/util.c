@@ -260,13 +260,10 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     /* Log all console output to syslog */
 
-
-    /*  DEBUGME: LOOPING?!
-        if ( config->sagan_log_syslog == true )
-            {
-                syslog(LOG_INFO, "[%s] %s", chr, buf);
-            }
-    */
+    if ( config->sagan_log_syslog == true )
+        {
+            syslog(LOG_INFO, "[%s] %s", chr, buf);
+        }
 
     if ( config->daemonize == 0 && config->quiet == 0 )
         {

@@ -1508,9 +1508,7 @@ void Load_YAML_Config( char *yaml_file )
                                                     track_clients_ptr = strtok_r(NULL, ",", &tok);
 
                                                 }
-
                                         }
-
                                 }
 
                             else if ( sub_type == YAML_PROCESSORS_CLIENT_STATS )
@@ -2899,6 +2897,21 @@ void Load_YAML_Config( char *yaml_file )
             if ( config->client_stats_max == 0 )
                 {
                     Sagan_Log(ERROR, "[%s, line %d] client-stats \"max-clients\" is missing.", __FILE__, __LINE__);
+                }
+
+        }
+
+    if ( config->sagan_track_clients_flag == true )
+        {
+
+            if ( config->pp_sagan_track_clients == 0 )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] 'track-clients' is missing the 'timeout' option.", __FILE__, __LINE__);
+                }
+
+            if ( counters->track_clients_count == 0 )
+                {
+                    Sagan_Log(ERROR, "[%s, line %d] 'track-clients' is missing the 'networks' option.", __FILE__, __LINE__);
                 }
 
         }

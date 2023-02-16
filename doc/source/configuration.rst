@@ -1018,21 +1018,24 @@ track-clients
 
 The ``track-clients`` processor is used to detect when a syslog client has stopped or restarted sending
 logs to Sagan.  This can be useful for detecting systems where logging has been disabled.  In the 
-event a syslog client stops sending logs,  Sagan generates an alert for notification purposes.  When
-the syslog client comes back online,  Sagan will generate another alert for notification purposes.  The
-``time`` is how long a syslog client has not sent a log message to be considered "down".
+event a syslog client stops sending logs,  Sagan generates a log for notification purposes.  When
+the syslog client comes back online,  Sagan will generate another log for notification purposes.  The
+``time`` is how long a syslog client has not sent a log message to be considered "down".  When this
+processor is enabled and the "sagan.rules" are loaded,  Sagan will generate an "alert" when systems
+stop/start logging.
 
 Example ``track-clients`` subsection::
 
-     # The "tracking clients" processor keeps track of the systems (IP addresses), 
-     # reporting to Sagan.  If Sagan stops receiving logs from a client for a 
-     # specified amount of time ("timeout"), an alert/notification is created.  
-     # When the system comes back online,  another alert/notification is 
-     # created. 
+  # The "tracking clients" processor keeps track of the systems (IP addresses),
+  # reporting to Sagan.  If Sagan stops receiving logs from a client for a
+  # specified amount of time ("timeout"), a syslog message is created.  If this
+  # option is enable and the "sagan.rules" are loaded,  an alert will be
+  # generated when system(s) stop/start reporting.  The "networks" options lets                                          # you get granular with what you want to track within your network.
 
-     - track-clients:
-         enabled: no
-         timeout: 1440             # In minutes
+  - track-clients:
+      enabled: no
+      timeout: 1440             # In minutes
+      networks: "10.0.0.0/8, 192.168.0.0/16, 172.16.0.0/12"
 
 
 rule-tracking
