@@ -2194,8 +2194,8 @@ void Load_Rules( const char *ruleset )
                             strtok_r(NULL, ":", &saveptrrule2);
                             rulestruct[counters->rulecount].json_decode_base64_pcre[json_decode_base64_pcre_count] = true;
 
-                            json_decode_base64_pcre_count++;
-                            rulestruct[counters->rulecount].json_decode_base64_pcre_count = json_decode_base64_pcre_count;
+//                            json_decode_base64_pcre_count++;
+//                            rulestruct[counters->rulecount].json_decode_base64_pcre_count = json_decode_base64_pcre_count;
                         }
 
                     /* For json_meta_content */
