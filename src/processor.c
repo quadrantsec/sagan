@@ -235,6 +235,8 @@ void Processor ( void )
                     if ( config->json_parse_data || config->input_type == INPUT_JSON )
                         {
                             JSON_LOCAL->json_count = 0;
+                            SaganProcSyslog_LOCAL->json_normalize[0] = '\0';
+                            SaganProcSyslog_LOCAL->json_original[0] = '\0';
                         }
 
 
@@ -274,9 +276,6 @@ void Processor ( void )
 
                                 }
                         }
-
-                    SaganProcSyslog_LOCAL->json_normalize[0] = '\0';
-                    SaganProcSyslog_LOCAL->json_original[0] = '\0';
 
                     Sagan_Engine( SaganProcSyslog_LOCAL, JSON_LOCAL, dynamic_rule_flag );
 

@@ -64,6 +64,7 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
 
     if ( ( config->json_parse_data == true && json_count > 0 )  || config->input_type == INPUT_JSON )
         {
+            printf("JSON: %s\n", SaganProcSyslog_LOCAL->json_original);
             SaganProcessorEvent->message = SaganProcSyslog_LOCAL->json_original;
         }
     else
