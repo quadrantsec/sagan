@@ -306,9 +306,9 @@ struct _Rule_Struct
     uint_fast32_t  json_pcre_count;
     char json_pcre_key[MAX_JSON_PCRE][128];
 
-    uint_fast8_t json_decode_base64_count;
+//    uint_fast8_t json_decode_base64_count;
 //    uint_fast8_t json_decode_base64_pcre_count;
-    uint_fast8_t json_decode_base64_meta_count;
+//    uint_fast8_t json_decode_base64_meta_count;
 
     bool json_meta_content_case[MAX_JSON_META_CONTENT];
     bool json_meta_content_not[MAX_JSON_META_CONTENT];

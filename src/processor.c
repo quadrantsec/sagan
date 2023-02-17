@@ -146,15 +146,17 @@ void Processor ( void )
 
 #if defined(HAVE_LIBFASTJSON)
 
+    JSON_LOCAL = malloc(sizeof(struct _Sagan_JSON));
+
+    if ( JSON_LOCAL == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_JSON. ABort!", __FILE__, __LINE__);
+        }
+
+    JSON_LOCAL->json_count = 0;
+
     if ( config->input_type == INPUT_JSON || config->json_parse_data == true )
         {
-
-            JSON_LOCAL = malloc(sizeof(struct _Sagan_JSON));
-
-            if ( JSON_LOCAL == NULL )
-                {
-                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_JSON. ABort!", __FILE__, __LINE__);
-                }
 
 //            memset(JSON_LOCAL, 0, sizeof(struct _Sagan_JSON));
 
