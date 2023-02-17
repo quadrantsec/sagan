@@ -98,8 +98,8 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
     if ( !strcmp(Syslog_JSON_Map->syslog_map_message[0], "%JSON%" ) )
         {
-            snprintf(SaganProcSyslog_LOCAL->syslog_message, sizeof(SaganProcSyslog_LOCAL->syslog_message), "%s", syslog_string);
-            SaganProcSyslog_LOCAL->syslog_message[ sizeof(SaganProcSyslog_LOCAL->syslog_message) -1 ] = '\0';
+            snprintf(SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size, "%s", syslog_string);
+            SaganProcSyslog_LOCAL->syslog_message[ config->message_buffer_size -1 ] = '\0';
         }
 
     for (i = 0; i < JSON_LOCAL->json_count; i++ )
@@ -109,6 +109,7 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
             if ( Syslog_JSON_Map->syslog_map_message[0][0] != '\0' && message_found == false )
                 {
+
                     for ( a = 0; a < Syslog_JSON_Map->syslog_map_message_count; a++ )
                         {
 
@@ -117,14 +118,15 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
 
                                     /* Space added for further "normalization" */
 
-                                    snprintf(SaganProcSyslog_LOCAL->syslog_message, sizeof(SaganProcSyslog_LOCAL->syslog_message), " %s", JSON_LOCAL->json_value[i]);
-                                    SaganProcSyslog_LOCAL->syslog_message[ sizeof(SaganProcSyslog_LOCAL->syslog_message) -1 ] = '\0';
+                                    snprintf(SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size, " %s", JSON_LOCAL->json_value[i]);
+                                    SaganProcSyslog_LOCAL->syslog_message[ config->message_buffer_size -1 ] = '\0';
 
                                     message_found = true;
                                     break;
 
                                 }
                         }
+
                 }
 
             if ( Syslog_JSON_Map->event_id[0][0] != '\0' && event_id_found == false )

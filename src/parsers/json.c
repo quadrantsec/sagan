@@ -34,6 +34,7 @@
 #include "debug.h"
 
 extern struct _SaganCounters *counters;
+extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
 
 void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
@@ -58,7 +59,7 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
     json_count = 1;
 
     JSON_LOCAL->json_key[0][0] = '\0';
-    strlcpy(JSON_LOCAL->json_value[0], syslog_string, sizeof(JSON_LOCAL->json_value[0]));
+    strlcpy(JSON_LOCAL->json_value[0], syslog_string, config->message_buffer_size);
 
     for (i = 0; i < json_count; i++ )
         {
@@ -82,15 +83,15 @@ void Parse_JSON ( char *syslog_string, struct _Sagan_JSON *JSON_LOCAL )
                                     val_str = json_object_get_string(val);
 
                                     snprintf(JSON_LOCAL->json_key[json_count], JSON_MAX_KEY_SIZE, "%s.%s", JSON_LOCAL->json_key[i], key);
-                                    JSON_LOCAL->json_key[json_count][sizeof(JSON_LOCAL->json_key[json_count]) - 1] = '\0';
+                                    JSON_LOCAL->json_key[json_count][JSON_MAX_KEY_SIZE - 1] = '\0';
 
                                     if ( val_str != NULL )
                                         {
-                                            strlcpy(JSON_LOCAL->json_value[json_count], val_str, sizeof(JSON_LOCAL->json_value[json_count]));
+                                            strlcpy(JSON_LOCAL->json_value[json_count], val_str, config->message_buffer_size);
                                         }
                                     else
                                         {
-                                            strlcpy(JSON_LOCAL->json_value[json_count], "null", sizeof(JSON_LOCAL->json_value[json_count]));
+                                            strlcpy(JSON_LOCAL->json_value[json_count], "null", config->message_buffer_size);
                                         }
 
                                     if ( debug->debugjson )
