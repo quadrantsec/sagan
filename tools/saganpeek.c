@@ -168,9 +168,9 @@ int main(int argc, char **argv)
 
     current_time = atoi(timet);
 
-    uint64_t thresh_oldtime;
-    uint64_t after_oldtime;
-    uint64_t flexbit_oldtime;
+    int64_t thresh_oldtime;
+    int64_t after_oldtime;
+    int64_t flexbit_oldtime;
 
     /* For convert to IP string */
 
@@ -287,7 +287,7 @@ int main(int argc, char **argv)
             exit(1);
         }
 
-    if (( counters_ipc = mmap(0, sizeof(_Sagan_IPC_Counters) , PROT_READ, MAP_SHARED, shm_counters, 0)) == MAP_FAILED )
+    if (( counters_ipc = mmap(0, sizeof(_Sagan_IPC_Counters), PROT_READ, MAP_SHARED, shm_counters, 0)) == MAP_FAILED )
 
         {
             fprintf(stderr, "[%s, line %d] Error allocating memory for counters object! [%s]\n", __FILE__, __LINE__, strerror(errno));
@@ -318,7 +318,7 @@ int main(int argc, char **argv)
 
 //            if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + (sizeof(_Threshold2_IPC) * counters_ipc->thresh2_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
 //
-	if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + MAX_SYSLOGMSG * counters_ipc->thresh2_count, PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+            if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + MAX_SYSLOGMSG * counters_ipc->thresh2_count, PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                 {
                     fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                     exit(1);
@@ -440,7 +440,7 @@ int main(int argc, char **argv)
                 }
 
 //            if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + (sizeof(_After2_IPC) * counters_ipc->after2_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
-		if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + MAX_SYSLOGMSG * counters_ipc->after2_count , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+            if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + MAX_SYSLOGMSG * counters_ipc->after2_count, PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                 {
                     fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                     exit(1);
@@ -558,7 +558,7 @@ int main(int argc, char **argv)
                     exit(1);
                 }
 
-            if (( flexbit_ipc = mmap(0, sizeof(_Sagan_IPC_Flexbit) + (sizeof(_Sagan_IPC_Flexbit) * counters_ipc->flexbit_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+            if (( flexbit_ipc = mmap(0, sizeof(_Sagan_IPC_Flexbit) + (sizeof(_Sagan_IPC_Flexbit) * counters_ipc->flexbit_count ), PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                 {
                     fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                     exit(1);
@@ -573,18 +573,38 @@ int main(int argc, char **argv)
                     for (i= 0; i < counters_ipc->flexbit_count; i++ )
                         {
 
-                            if ( flexbit_ipc[i].flexbit_state == 1 || all_flag == true )
+                            flexbit_oldtime = flexbit_ipc[i].flexbit_expire - current_time;
+
+                            if (  ( flexbit_ipc[i].flexbit_state == 1 && flexbit_oldtime > 0 ) || all_flag == true )
                                 {
 
                                     u32_Time_To_Human(flexbit_ipc[i].flexbit_expire, time_buf, sizeof(time_buf));
-                                    flexbit_oldtime = flexbit_ipc[i].flexbit_expire - current_time;
 
                                     printf("Type: flexbit [%d].\n", i);
 
                                     printf("Flexbit name: \"%s\"\n", flexbit_ipc[i].flexbit_name);
-                                    printf("State: %s\n", flexbit_ipc[i].flexbit_state == 1 ? "ACTIVE" : "INACTIVE");
+
+				    /* This avoid confusion.  Sagan actually sets the "state" of 
+				       an flexbit.  So a flexbit can be "act" with negative time! 
+				       This displays to the user "TIMEOUT" rather than "active" and 
+				       removes it from the list */
+
+                                    if ( flexbit_oldtime > 0 )
+                                        {
+                                            printf("State: %s\n", flexbit_ipc[i].flexbit_state == 1 ? "ACTIVE" : "INACTIVE");
+                                        }
+                                    else
+                                        {
+                                            printf("State: TIMEOUT\n");
+                                        }
+
                                     printf("IP: %s:%d -> %s:%d\n", flexbit_ipc[i].ip_src, flexbit_ipc[i].src_port, flexbit_ipc[i].ip_dst, flexbit_ipc[i].dst_port);
-                                    printf("Username: \"%s\"\n", flexbit_ipc[i].username);
+
+                                    if ( flexbit_ipc[i].username[0] != '\0' )
+                                        {
+                                            printf("Username: \"%s\"\n", flexbit_ipc[i].username);
+                                        }
+
                                     printf("Signature: \"%s\" (Signature ID: %" PRIu64 ")\n", flexbit_ipc[i].signature_msg, flexbit_ipc[i].sid);
                                     printf("Expire Time: %s (%" PRIuFAST32 " seconds)\n", time_buf, flexbit_ipc[i].expire);
                                     printf("Time until expire: %" PRIi64 " seconds.\n", flexbit_oldtime);
@@ -610,8 +630,8 @@ int main(int argc, char **argv)
                     err = true;
                 }
 
-	    /* If using "redis" for xbit storage, this mmap() file might not exsist.  In that
-	     * case,  we just pass a warning - Champ Clark (2019/06/20) */
+            /* If using "redis" for xbit storage, this mmap() file might not exsist.  In that
+             * case,  we just pass a warning - Champ Clark (2019/06/20) */
 
             if ( err == false )
                 {
@@ -622,7 +642,7 @@ int main(int argc, char **argv)
                             exit(1);
                         }
 
-                    if (( xbit_ipc = mmap(0, sizeof(_Sagan_IPC_Xbit) + (sizeof(_Sagan_IPC_Xbit) * counters_ipc->xbit_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+                    if (( xbit_ipc = mmap(0, sizeof(_Sagan_IPC_Xbit) + (sizeof(_Sagan_IPC_Xbit) * counters_ipc->xbit_count ), PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                         {
                             fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                             exit(1);
@@ -693,7 +713,7 @@ int main(int argc, char **argv)
                             exit(1);
                         }
 
-                    if (( SaganTrackClients_ipc = mmap(0, sizeof(_Sagan_Track_Clients_IPC) + (sizeof(_Sagan_Track_Clients_IPC) * counters_ipc->track_clients_client_count ) , PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
+                    if (( SaganTrackClients_ipc = mmap(0, sizeof(_Sagan_Track_Clients_IPC) + (sizeof(_Sagan_Track_Clients_IPC) * counters_ipc->track_clients_client_count ), PROT_READ, MAP_SHARED, shm, 0)) == MAP_FAILED )
                         {
                             fprintf(stderr, "[%s, line %d] Error allocating memory object! [%s]\n", __FILE__, __LINE__, strerror(errno));
                             exit(1);
