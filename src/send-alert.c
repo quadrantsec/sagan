@@ -47,7 +47,7 @@ extern struct _Rule_Struct *rulestruct;
 
 //void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST )
 
-void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results )
+void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, uint_fast16_t json_count )
 {
 
     struct _Sagan_Event *SaganProcessorEvent = NULL;
@@ -62,7 +62,7 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
 
     /* If the event is JSON,  we want to preserve it as part of the "message" */
 
-    if ( config->json_parse_data == true || config->input_type == INPUT_JSON )
+    if ( ( config->json_parse_data == true && json_count > 0 )  || config->input_type == INPUT_JSON )
         {
             SaganProcessorEvent->message = SaganProcSyslog_LOCAL->json_original;
         }

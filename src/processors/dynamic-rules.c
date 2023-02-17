@@ -140,7 +140,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        //           "null",
-                       rule_position, tp, NULL, 0 );
+                       rule_position, tp, NULL, 0, 0 );
 
             /* Lock rules so other threads don't try to use it while we alter/load new rules */
 
@@ -179,7 +179,7 @@ void Dynamic_Rules ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint_fast
 
             Send_Alert(SaganProcSyslog_LOCAL,
                        //           "null",
-                       rule_position, tp, NULL, 0 );
+                       rule_position, tp, NULL, 0, 0 );
 
         }
 

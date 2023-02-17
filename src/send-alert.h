@@ -21,7 +21,7 @@
 
 //void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, struct _GeoIP *GeoIP_SRC, struct _GeoIP *GeoIP_DEST );
 
-void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results );
+void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rule_position, struct timeval tp, char *bluedot_json, unsigned char bluedot_results, uint_fast16_t json_count );
 
 
 

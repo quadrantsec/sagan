@@ -1384,7 +1384,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                             Send_Alert(SaganProcSyslog_LOCAL,
                                                                        b, tp,
                                                                        bluedot_json,
-                                                                       bluedot_results );
+                                                                       bluedot_results,
+								       JSON_LOCAL->json_count );
 
                                                             /* If this is a "pass" signature,  we can stop processing now */
 
