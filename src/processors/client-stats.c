@@ -91,8 +91,6 @@ void Client_Stats_Init( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Client_Stats_Struct. Abort!", __FILE__, __LINE__);
         }
 
-//    memset(Client_Stats, 0, sizeof(struct _Client_Stats_Struct));
-
 }
 
 /****************************************************************************

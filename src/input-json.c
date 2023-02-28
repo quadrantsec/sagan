@@ -75,16 +75,14 @@ void SyslogInput_JSON( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     bool event_id_found = false;
     bool proto_found = false;
 
-//    memset(SaganProcSyslog_LOCAL, 0, sizeof(_Sagan_Proc_Syslog)); // DEBUGME : CAUSES SEGFAULT
-
-    memcpy(SaganProcSyslog_LOCAL->syslog_program, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_time, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_date, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_tag, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_level, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_priority, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_facility, "UNDEFINED", 9);
-    memcpy(SaganProcSyslog_LOCAL->syslog_host, "0.0.0.0", 8);
+    memcpy(SaganProcSyslog_LOCAL->syslog_program, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_time, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_date, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_tag, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_level, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_priority, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_facility, "UNDEFINED\0", 10);
+    memcpy(SaganProcSyslog_LOCAL->syslog_host, "0.0.0.0\0", 9);
 
     /* Copy the "original" JSON so we can use it in alerts later */
 

@@ -306,13 +306,47 @@ void Load_Rules( const char *ruleset )
                             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rulestruct. Abort!", __FILE__, __LINE__);
                         }
 
-//                    memset(&rulestruct[counters->rulecount], 0, sizeof(struct _Rule_Struct));
+                    /* Init some memory segments */
 
+                    rulestruct[counters->rulecount].s_classtype[0] = '\0';
                     rulestruct[counters->rulecount].s_program[0] = '\0';
                     rulestruct[counters->rulecount].s_facility[0] = '\0';
                     rulestruct[counters->rulecount].s_level[0] = '\0';
                     rulestruct[counters->rulecount].s_tag[0] = '\0';
                     rulestruct[counters->rulecount].s_syspri[0] = '\0';
+                    rulestruct[counters->rulecount].email[0] = '\0';
+                    rulestruct[counters->rulecount].dynamic_ruleset[0] = '\0';
+
+                    rulestruct[counters->rulecount].pcre_count = 0;
+                    rulestruct[counters->rulecount].content_count = 0;
+                    rulestruct[counters->rulecount].event_id_count = 0;
+                    rulestruct[counters->rulecount].meta_content_converted_count = 0;
+
+                    rulestruct[counters->rulecount].flexbit_count = 0;
+                    rulestruct[counters->rulecount].xbit_count = 0;
+
+                    rulestruct[counters->rulecount].ref_count = 0;
+                    rulestruct[counters->rulecount].ip_proto = 0;
+                    rulestruct[counters->rulecount].default_dst_port = 0;
+                    rulestruct[counters->rulecount].default_src_port = 0;
+
+                    rulestruct[counters->rulecount].alert_time_flag = 0;
+                    rulestruct[counters->rulecount].external_flag = 0;
+
+                    rulestruct[counters->rulecount].zeekintel_flag = 0;
+                    rulestruct[counters->rulecount].blacklist_flag = 0;
+
+#ifdef WITH_BLUEDOT
+                    rulestruct[counters->rulecount].bluedot_ipaddr_type = 0;
+#endif
+
+#ifdef HAVE_LIBMAXMINDDB
+                    rulestruct[counters->rulecount].geoip2_flag = 0;
+#endif
+
+#ifdef HAVE_LIBFASTJSON
+                    rulestruct[counters->rulecount].metadata_json[0] = '\0';
+#endif
 
                 }
 

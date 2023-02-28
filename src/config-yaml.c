@@ -447,8 +447,6 @@ void Load_YAML_Config( char *yaml_file )
                                             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for var. Abort!", __FILE__, __LINE__);
                                         }
 
-//                                    memset(&var[counters->var_count], 0, sizeof(struct _SaganVar));
-
                                     snprintf(var[counters->var_count].var_name, sizeof(var[counters->var_count].var_name)-1, "$%s", value);
                                     var[counters->var_count].var_name[sizeof(var[counters->var_count].var_name)-1] = 0;
                                     toggle = 0;
@@ -1199,8 +1197,6 @@ void Load_YAML_Config( char *yaml_file )
                                                             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for GeoIP_Skip Abort!", __FILE__, __LINE__);
                                                         }
 
-//                                                    memset(&GeoIP_Skip[counters->geoip_skip_count], 0, sizeof(_Sagan_GeoIP_Skip));
-
                                                     geoip_mask = atoi(geoip_tmpmask);
 
                                                     if ( geoip_mask == 0 || !Mask2Bit(geoip_mask, geoip_maskbits))
@@ -1460,8 +1456,6 @@ void Load_YAML_Config( char *yaml_file )
                                                         {
                                                             Sagan_Log(ERROR, "[%s, line %d] processor: 'track-clients' - Failed to reallocate memory for _Track_Clients_Networks Abort!", __FILE__, __LINE__);
                                                         }
-
-//                                                    memset(&Track_Clients_Networks[counters->track_clients_count], 0, sizeof(_Track_Clients_Networks));
 
                                                     track_clients_mask = atoi(track_clients_tmpmask);
 
@@ -1862,8 +1856,6 @@ void Load_YAML_Config( char *yaml_file )
                                                         {
                                                             Sagan_Log(ERROR, "[%s, line %d] processor: 'bluedot' - Failed to reallocate memory for Bluedot_Skip Abort!", __FILE__, __LINE__);
                                                         }
-
-//                                                    memset(&Bluedot_Skip[counters->bluedot_skip_count], 0, sizeof(_Sagan_Bluedot_Skip));
 
                                                     bluedot_mask = atoi(bluedot_tmpmask);
 

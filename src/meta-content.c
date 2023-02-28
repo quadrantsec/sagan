@@ -62,8 +62,6 @@ bool Meta_Content(uint_fast32_t rule_position, const char *syslog_message)
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-//    memset( meta_alter_content, 0, config->message_buffer_size );
-
     bool rc = 0;
 
     for (z=0; z<rulestruct[rule_position].meta_content_count; z++)

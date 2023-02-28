@@ -68,9 +68,9 @@ void File_Input( const char *input_file )
     char *syslogstring = malloc( config->message_buffer_size );
 
     if ( syslogstring == NULL )
-	    {
-		    Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
-	    }
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
+        }
 
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc( sizeof(_Sagan_Pass_Syslog ));
@@ -86,10 +86,9 @@ void File_Input( const char *input_file )
 
             if ( SaganPassSyslog_LOCAL->batch[z] == NULL )
                 {
-                   Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
+                    Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL->batch[z]. Abort!", __FILE__, __LINE__);
                 }
 
-//            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
         }
 
     /* Open file */
@@ -189,9 +188,9 @@ void File_Input( const char *input_file )
 
                             counters->events_processed = counters->events_processed + config->max_batch;
 
-			    proc_msgslot++;
+                            proc_msgslot++;
 
-			    /* Send work to thread */
+                            /* Send work to thread */
 
                             pthread_cond_signal(&SaganProcDoWork);
                             pthread_mutex_unlock(&SaganProcWorkMutex);

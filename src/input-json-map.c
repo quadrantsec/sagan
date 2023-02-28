@@ -58,10 +58,6 @@ void Load_Input_JSON_Map ( const char *json_map )
 
     Sagan_Log(NORMAL, "Loading JSON FIFO mapping file. [%s]", json_map );
 
-    /* Zero out the array */
-
-//    memset(Syslog_JSON_Map, 0, sizeof(_Syslog_JSON_Map));
-
     if (( json_map_file = fopen(json_map, "r" )) == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Cannot open JSON map file (%s)", __FILE__, __LINE__, json_map);

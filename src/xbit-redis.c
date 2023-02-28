@@ -80,8 +80,6 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __LINE__, __FILE__);
         }
 
-//    memset( tmp_data, 0, config->message_buffer_size * 2);
-
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
 
@@ -279,8 +277,6 @@ bool Xbit_Condition_Redis( uint_fast32_t rule_position, struct _Sagan_Proc_Syslo
             fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
             exit(-1);
         }
-
-//    memset(redis_results, 0, config->message_buffer_size);
 
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {

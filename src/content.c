@@ -52,8 +52,6 @@ bool Content ( uint_fast32_t rule_position, const char *syslog_message )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-//    memset(alter_content, 0, config->message_buffer_size );
-
     /* Content: OFFSET */
 
     alter_num = 0;

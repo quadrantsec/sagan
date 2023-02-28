@@ -102,8 +102,6 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganProcSyslog. Abort!", __FILE__, __LINE__);
         }
 
-//    memset(SaganProcSyslog, 0, sizeof(struct _Sagan_Proc_Syslog));
-
     /* ----------------------------------------------- */
 
     struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL = NULL;
@@ -113,8 +111,6 @@ void Processor ( void )
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganProcSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
-
-//    memset(SaganProcSyslog_LOCAL, 0, sizeof(struct _Sagan_Proc_Syslog));
 
     Processor_Memory ( SaganProcSyslog_LOCAL );
 
@@ -128,8 +124,6 @@ void Processor ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for SaganPassSyslog_LOCAL. Abort!", __FILE__, __LINE__);
         }
 
-//    memset(SaganPassSyslog_LOCAL, 0, sizeof(struct _Sagan_Pass_Syslog));
-
     for ( z = 0; z < config->max_batch; z++ )
         {
             SaganPassSyslog_LOCAL->batch[z] = malloc( config->message_buffer_size );
@@ -139,7 +133,6 @@ void Processor ( void )
                     Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for *SaganPassSyslog_LOCAL[z].batch. Abort!", __FILE__, __LINE__);
                 }
 
-//            memset( SaganPassSyslog_LOCAL->batch[z], 0, config->message_buffer_size );
         }
 
     struct _Sagan_JSON *JSON_LOCAL = NULL;
@@ -158,10 +151,6 @@ void Processor ( void )
     if ( config->input_type == INPUT_JSON || config->json_parse_data == true )
         {
 
-//            memset(JSON_LOCAL, 0, sizeof(struct _Sagan_JSON));
-
-            // DEBUGME:  Needs error checking.
-            //
             for ( z = 0; z < JSON_MAX_OBJECTS; z++ )
                 {
                     JSON_LOCAL->json_key[z] = malloc ( JSON_MAX_KEY_SIZE );
@@ -171,6 +160,8 @@ void Processor ( void )
                             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
                         }
 
+                    JSON_LOCAL->json_key[z][0] = '\0';
+
                     JSON_LOCAL->json_value[z] = malloc ( config->message_buffer_size );
 
                     if ( JSON_LOCAL->json_value[z] == NULL )
@@ -178,8 +169,9 @@ void Processor ( void )
                             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
                         }
 
-                }
+                    JSON_LOCAL->json_value[z][0] = '\0';
 
+                }
 
         }
 

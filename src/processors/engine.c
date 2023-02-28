@@ -99,8 +99,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for lookup_cache. Abort!", __FILE__, __LINE__);
         }
 
-//    memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
-
     struct _Sagan_Routing *SaganRouting = NULL;
     SaganRouting = malloc(sizeof(struct _Sagan_Routing));
 
@@ -108,8 +106,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _Sagan_Routing, Abort!", __FILE__, __LINE__);
         }
-
-//    memset( SaganRouting, 0, sizeof(_Sagan_Routing) );
 
     SaganRouting->check_flow_return = true;
 
@@ -123,8 +119,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (SRC). Abort!", __FILE__, __LINE__);
         }
 
-//    memset(GeoIP_SRC, 0, sizeof(_GeoIP) );
-
     struct _GeoIP *GeoIP_DEST = NULL;
     GeoIP_DEST = malloc(sizeof(struct _GeoIP));
 
@@ -132,8 +126,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for _GeoIP (DEST). Abort!", __FILE__, __LINE__);
         }
-
-//    memset(GeoIP_DEST, 0, sizeof(_GeoIP) );
 
 #endif
 
@@ -158,8 +150,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
         {
             Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
-
-//    memset(syslog_append_orig_message, 0, config->message_buffer_size);
 
     bool append_program_flag = false;
 
@@ -200,8 +190,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
 
-//    memset(o_syslog_message, 0, config->message_buffer_size );
-
     bool o_syslog_message_flag = false;
 
     char o_syslog_program[MAX_SYSLOG_PROGRAM] = { 0 };
@@ -228,8 +216,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
                             exit(-1);
                         }
-
-//                    memset(tmp_json, 0, config->message_buffer_size + MAX_SYSLOG_PROGRAM);
 
                     if ( debug->debugjson )
                         {
@@ -577,8 +563,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
                                             exit(-1);
                                         }
-
-//                                    memset(syslog_append_program, 0, config->message_buffer_size + MAX_SYSLOG_PROGRAM + 6);
 
                                     strlcpy(syslog_append_orig_message, SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size );
 
@@ -1385,7 +1369,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                                        b, tp,
                                                                        bluedot_json,
                                                                        bluedot_results,
-								       JSON_LOCAL->json_count );
+                                                                       JSON_LOCAL->json_count );
 
                                                             /* If this is a "pass" signature,  we can stop processing now */
 

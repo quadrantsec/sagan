@@ -164,7 +164,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Addr. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_Addr[counters->zeekintel_addr_count], 0, sizeof(_ZeekIntel_Intel_Addr));
 
                                             pthread_mutex_lock(&CounterBroIntelGenericMutex);
                                             memcpy( ZeekIntel_Intel_Addr[counters->zeekintel_addr_count].bits_ip, bits_ip, sizeof(bits_ip) );
@@ -202,7 +201,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Domain. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_Domain[counters->zeekintel_domain_count], 0, sizeof(_ZeekIntel_Intel_Domain));
 
                                             strlcpy(ZeekIntel_Intel_Domain[counters->zeekintel_domain_count].domain, value, sizeof(ZeekIntel_Intel_Domain[counters->zeekintel_domain_count].domain));
 
@@ -244,7 +242,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_File_Hash. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_File_Hash[counters->zeekintel_file_hash_count], 0, sizeof(_ZeekIntel_Intel_File_Hash));
 
                                             strlcpy(ZeekIntel_Intel_File_Hash[counters->zeekintel_file_hash_count].hash, value, sizeof(ZeekIntel_Intel_File_Hash[counters->zeekintel_file_hash_count].hash));
                                             counters->zeekintel_file_hash_count++;
@@ -283,7 +280,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_URL. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_URL[counters->zeekintel_url_count], 0, sizeof(_ZeekIntel_Intel_URL));
 
                                             strlcpy(ZeekIntel_Intel_URL[counters->zeekintel_url_count].url, value, sizeof(ZeekIntel_Intel_URL[counters->zeekintel_url_count].url));
 
@@ -326,7 +322,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Software. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_Software[counters->zeekintel_software_count], 0, sizeof(_ZeekIntel_Intel_Software));
 
                                             strlcpy(ZeekIntel_Intel_Software[counters->zeekintel_software_count].software, value, sizeof(ZeekIntel_Intel_Software[counters->zeekintel_software_count].software));
 
@@ -366,7 +361,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Email. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_Email[counters->zeekintel_email_count], 0, sizeof(_ZeekIntel_Intel_Email));
 
                                             strlcpy(ZeekIntel_Intel_Email[counters->zeekintel_email_count].email, value, sizeof(ZeekIntel_Intel_Email[counters->zeekintel_email_count].email));
 
@@ -408,7 +402,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_User_Name. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_User_Name[counters->zeekintel_user_name_count], 0, sizeof(_ZeekIntel_Intel_User_Name));
 
                                             strlcpy(ZeekIntel_Intel_User_Name[counters->zeekintel_user_name_count].username, value, sizeof(ZeekIntel_Intel_User_Name[counters->zeekintel_user_name_count].username));
 
@@ -450,7 +443,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_File_Name. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_File_Name[counters->zeekintel_file_name_count], 0, sizeof(_ZeekIntel_Intel_File_Name));
 
                                             strlcpy(ZeekIntel_Intel_File_Name[counters->zeekintel_file_name_count].file_name, value, sizeof(ZeekIntel_Intel_File_Name[counters->zeekintel_file_name_count].file_name));
 
@@ -487,7 +479,6 @@ void ZeekIntel_Load_File ( void )
                                                     Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for ZeekIntel_Intel_Cert_Hash. Abort!", __FILE__, __LINE__);
                                                 }
 
-//                                            memset(&ZeekIntel_Intel_Cert_Hash[counters->zeekintel_cert_hash_count], 0, sizeof(_ZeekIntel_Intel_Cert_Hash));
 
                                             strlcpy(ZeekIntel_Intel_Cert_Hash[counters->zeekintel_cert_hash_count].cert_hash, value, sizeof(ZeekIntel_Intel_Cert_Hash[counters->zeekintel_cert_hash_count].cert_hash));
 

@@ -285,8 +285,6 @@ bool Xbit_Condition_MMAP( uint_fast32_t rule_position, struct _Sagan_Proc_Syslog
                     Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __LINE__, __FILE__);
                 }
 
-//            memset(tmp_data, 0, config->message_buffer_size * 2);
-
             jobj = json_object_new_object();
 
             json_object *jsensor = json_object_new_string(config->sagan_sensor_name);
