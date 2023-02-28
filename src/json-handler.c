@@ -219,6 +219,17 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
 
     snprintf(str, size, "%s, \"alert\": %s", tmp_data, json_object_to_json_string(jobj_alert));
 
+    if ( rulestruct[Event->rule_position].metadata_json[0] != '\0' )
+        {
+
+            str[ strlen(str) - 2 ] = '\0';
+
+            snprintf(tmp_data, config->message_buffer_size * 2, ", \"metadata\": %s}",  rulestruct[Event->rule_position].metadata_json);
+            strlcat(str, tmp_data, size);
+
+        }
+
+
 #ifdef WITH_BLUEDOT
 
     /* If we have bluedot data, dump it to eve */
