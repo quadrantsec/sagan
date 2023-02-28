@@ -43,7 +43,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->json_normalize, 0, JSON_MAX_SIZE );
+    SaganProcSyslog_LOCAL->json_normalize[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->json_original = malloc( config->message_buffer_size );
 
@@ -52,7 +52,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->json_original, 0, JSON_MAX_SIZE );
+    SaganProcSyslog_LOCAL->json_original[0] = '\0';
 
     SaganProcSyslog_LOCAL->syslog_host = malloc( MAX_SYSLOG_HOST );
 
@@ -61,7 +61,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_host, 0, MAX_SYSLOG_HOST );
+    SaganProcSyslog_LOCAL->syslog_host[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->syslog_facility = malloc( MAX_SYSLOG_FACILITY );
 
@@ -70,7 +70,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_facility, 0, MAX_SYSLOG_FACILITY );
+   SaganProcSyslog_LOCAL->syslog_facility[0] = '\0';
 
     SaganProcSyslog_LOCAL->syslog_priority = malloc( MAX_SYSLOG_PRIORITY );
 
@@ -79,7 +79,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_priority, 0, MAX_SYSLOG_PRIORITY );
+    SaganProcSyslog_LOCAL->syslog_priority[0] = '\0';
 
     SaganProcSyslog_LOCAL->syslog_level = malloc( MAX_SYSLOG_LEVEL );
 
@@ -88,7 +88,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_level, 0, MAX_SYSLOG_LEVEL );
+    SaganProcSyslog_LOCAL->syslog_level[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->syslog_tag = malloc( MAX_SYSLOG_TAG );
 
@@ -97,7 +97,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_tag, 0, MAX_SYSLOG_TAG );
+    SaganProcSyslog_LOCAL->syslog_tag[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->syslog_date = malloc( MAX_SYSLOG_DATE );
 
@@ -106,7 +106,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_date, 0, MAX_SYSLOG_DATE );
+    SaganProcSyslog_LOCAL->syslog_date[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->syslog_time = malloc( MAX_SYSLOG_TIME );
 
@@ -115,7 +115,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_time, 0, MAX_SYSLOG_TIME );
+    SaganProcSyslog_LOCAL->syslog_time[0] = '\0';
 
     SaganProcSyslog_LOCAL->syslog_program = malloc( MAX_SYSLOG_PROGRAM );
 
@@ -124,7 +124,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_program, 0, MAX_SYSLOG_PROGRAM );
+    SaganProcSyslog_LOCAL->syslog_program[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->syslog_message = malloc( config->message_buffer_size );
 
@@ -133,7 +133,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->syslog_message, 0, config->message_buffer_size );
+    SaganProcSyslog_LOCAL->syslog_message[0] = '\0';
 
     SaganProcSyslog_LOCAL->src_ip = malloc( MAXIP );
 
@@ -142,7 +142,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->src_ip, 0, MAXIP );
+    SaganProcSyslog_LOCAL->src_ip[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->dst_ip = malloc( MAXIP );
 
@@ -151,7 +151,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->dst_ip, 0, MAXIP );
+    SaganProcSyslog_LOCAL->dst_ip[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->src_host = malloc( MAXHOST );
 
@@ -160,7 +160,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->src_host, 0, MAXHOST );
+    SaganProcSyslog_LOCAL->src_host[0] = '\0';
 
     SaganProcSyslog_LOCAL->dst_host = malloc( MAXHOST );
 
@@ -169,7 +169,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->dst_host, 0, MAXHOST );
+    SaganProcSyslog_LOCAL->dst_host[0] = '\0';
 
     SaganProcSyslog_LOCAL->event_id = malloc( MAX_EVENTID );
 
@@ -178,7 +178,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->event_id, 0, MAX_EVENTID  );
+    SaganProcSyslog_LOCAL->event_id[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->md5 = malloc( MD5_HASH_SIZE+1 );
 
@@ -187,7 +187,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->md5, 0, MD5_HASH_SIZE+1 );
+    SaganProcSyslog_LOCAL->md5[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->sha1 = malloc( SHA1_HASH_SIZE+1 );
 
@@ -196,7 +196,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->sha1, 0, SHA1_HASH_SIZE+1 );
+    SaganProcSyslog_LOCAL->sha1[0] = '\0';
 
     SaganProcSyslog_LOCAL->sha256 = malloc( SHA256_HASH_SIZE+1 );
 
@@ -205,7 +205,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->sha256, 0, SHA256_HASH_SIZE+1 );
+   SaganProcSyslog_LOCAL->sha256[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->filename = malloc( MAX_FILENAME_SIZE+1 );
 
@@ -214,7 +214,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->filename, 0, MAX_FILENAME_SIZE+1 );
+    SaganProcSyslog_LOCAL->filename[0] = '\0';
 
     SaganProcSyslog_LOCAL->hostname = malloc( MAX_HOSTNAME_SIZE+1 );
 
@@ -223,7 +223,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->hostname, 0, MAX_HOSTNAME_SIZE+1 );
+    SaganProcSyslog_LOCAL->hostname[0] = '\0';
 
     SaganProcSyslog_LOCAL->url = malloc( MAX_URL_SIZE+1 );
 
@@ -232,7 +232,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->url, 0, MAX_URL_SIZE+1 );
+    SaganProcSyslog_LOCAL->url[0] = '\0';
 
     SaganProcSyslog_LOCAL->ja3 = malloc( MD5_HASH_SIZE+1 );
 
@@ -241,7 +241,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->ja3, 0, MD5_HASH_SIZE+1 );
+    SaganProcSyslog_LOCAL->ja3[0] = '\0'; 
 
     SaganProcSyslog_LOCAL->username = malloc( MAX_USERNAME_SIZE+1 );
 
@@ -250,7 +250,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->username, 0, MAX_USERNAME_SIZE+1 );
+    SaganProcSyslog_LOCAL->username[0] = '\0';
 
 #ifdef HAVE_LIBFASTJSON
 
@@ -261,8 +261,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    //memset(SaganProcSyslog_LOCAL->correlation_json, 0, config->message_buffer_size );
-
+    SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
+    
 #endif
 
 }

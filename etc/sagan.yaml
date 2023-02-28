@@ -173,12 +173,6 @@ sagan-core:
 
     json-parse-data: enabled
 
-  # This controls how the "parse_src_ip" and "parse_dst_ip" function within a rule. 
-   
-  parse-ip:
-    ipv6: enabled			# Parse IPv6 Addresses
-    ipv4-mapped-ipv6: disabled		# Map ffff::192.168.1.1 back to 192.168.1.1
-
   # Redis configuration.  Redis can be used to act as a global storage engine for
   # flexbits.  This allows Sagan to "share" flexbit data across a network # infrastructure.
   # This is experimental! 

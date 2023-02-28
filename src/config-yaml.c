@@ -594,11 +594,6 @@ void Load_YAML_Config( char *yaml_file )
                                     sub_type = YAML_SAGAN_CORE_CORE;
                                 }
 
-                            else if (!strcmp(value, "parse-ip" ))
-                                {
-                                    sub_type = YAML_SAGAN_CORE_PARSE_IP;
-                                }
-
                             else if (!strcmp(value, "redis-server" ))
                                 {
                                     sub_type = YAML_SAGAN_CORE_REDIS;
@@ -1351,31 +1346,6 @@ void Load_YAML_Config( char *yaml_file )
 
 #endif
 
-
-                            if ( sub_type == YAML_SAGAN_CORE_PARSE_IP )
-                                {
-
-                                    if (!strcmp(last_pass, "ipv6" ))
-                                        {
-
-                                            if (!strcasecmp(value, "yes") || !strcasecmp(value, "true") || !strcasecmp(value, "enabled" ))
-                                                {
-                                                    config->parse_ip_ipv6 = true;
-                                                }
-
-                                        }
-
-                                    else if (!strcmp(last_pass, "ipv4-mapped-ipv6" ))
-                                        {
-
-                                            if (!strcasecmp(value, "yes") || !strcasecmp(value, "true") || !strcasecmp(value, "enabled" ))
-                                                {
-                                                    config->parse_ip_ipv4_mapped_ipv6 = true;
-                                                }
-
-                                        }
-
-                                }
 
                         } /*  else if ( type == YAML_TYPE_SAGAN_CORE ) */
 

@@ -637,10 +637,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                 }
 
 
-            /* Do we even want to part IPv6? */
-
-            if ( config->parse_ip_ipv6 == true )
-                {
+	    /* IPv6 Parsing */
 
                     /* Stand alone IPv6 */
 
@@ -661,31 +658,6 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                                     memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
                                     IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
 
-                                    /* This converts ::ffff:192.168.1.1 to regular IPv4 (192.168.1.1) */
-
-                                    if ( config->parse_ip_ipv4_mapped_ipv6 == false )
-                                        {
-
-                                            if ( ptr1[0] == ':' && ptr1[1] == ':' && ( ptr1[2] == 'f' || ptr1[2] == 'F' ) &&
-                                                    ( ptr1[3] == 'f' || ptr1[3] == 'F' ) && ( ptr1[4] == 'f' || ptr1[4] == 'F' ) &&
-                                                    ( ptr1[5] == 'f' || ptr1[5] == 'F' ) && ptr1[6] == ':' )
-                                                {
-
-                                                    b = strlen(ptr1);
-
-                                                    for (i = 7; b > i; i++)
-                                                        {
-                                                            lookup_cache[current_position].ip[i-7] = ptr1[i];
-                                                            lookup_cache[current_position].ip[i-6] = '\0';
-                                                        }
-
-                                                    memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
-                                                    IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
-
-                                                }
-
-                                        }
-
                                     /* Look for "fe80::b614:89ff:fe11:5e24 port 1234" */
 
                                     memcpy(tmp_token, ptr2, sizeof(tmp_token));
@@ -700,7 +672,6 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                                                 {
                                                     Sagan_Log(DEBUG, "[%s:%lu] Identified the word 'port'", __FUNCTION__, pthread_self() );
                                                 }
-
 
                                             ptr3 = strtok_r(NULL, " ", &ptr4);
 
@@ -961,7 +932,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                         }
 
-                } /* If config->parse_ip_ipv6 */
+//                } /* If config->parse_ip_ipv6 */
 
             ptr1 = strtok_r(NULL, " ", &ptr2);
 
