@@ -144,6 +144,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
                 }
 
             strlcpy(SaganProcSyslog_LOCAL->src_ip, tmp, MAXIP);
+
             IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
 
             if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_src_bits ) )

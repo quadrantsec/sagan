@@ -279,6 +279,15 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             if ( rulestruct[b].type == NORMAL_RULE || ( rulestruct[b].type == DYNAMIC_RULE && dynamic_rule_flag == true ) )
                 {
 
+			/* Reset for next run */
+
+			SaganProcSyslog_LOCAL->src_ip[0] = '\0';
+			SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
+
+			SaganProcSyslog_LOCAL->ip_src_is_valid = false; 
+			SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
+				
+
                     /* If we have JSON maps, apply them (if we actually have JSON ! */
 
 #ifdef HAVE_LIBFASTJSON
@@ -1402,7 +1411,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                 } /* If normal or dynamic rule */
 
-            /* Clear data collected btween signature passes.  Unlike other data,
+            /* Clear data collected between signature passes.  Unlike other data,
              * "correlation" data isn't "static" (like IP addresses, normalization,
              * protocols, log data, etc).  We need to clear that out each pass
              * or a non-correlated signature will have "correlated" data that doesn't
