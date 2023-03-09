@@ -99,6 +99,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for lookup_cache. Abort!", __FILE__, __LINE__);
         }
 
+     memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
+
     struct _Sagan_Routing *SaganRouting = NULL;
     SaganRouting = malloc(sizeof(struct _Sagan_Routing));
 
@@ -1406,8 +1408,29 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     pre_match = false;  		      /* Reset match! */
 
-                    memset(SaganRouting, 0, sizeof(_Sagan_Routing));
-                    SaganRouting->check_flow_return = true;
+		    SaganRouting->check_flow_return = true; 
+		    SaganRouting->position = 0; 
+		    SaganRouting->flexbit_count_return = 0;
+		    SaganRouting->flexbit_return = 0;
+		    SaganRouting->xbit_return = 0;
+		    SaganRouting->event_id_return = 0;
+		    SaganRouting->alert_time_trigger = 0;
+		    SaganRouting->geoip2_isset = 0; 
+		    SaganRouting->blacklist_results = 0;
+		    SaganRouting->zeekintel_results = 0;
+
+#ifdef WITH_BLUEDOT
+
+    SaganRouting->bluedot_hash_flag = 0;
+    SaganRouting->bluedot_filename_flag = 0;
+    SaganRouting->bluedot_url_flag = 0;
+    SaganRouting->bluedot_ip_flag = 0;
+    SaganRouting->bluedot_ja3_flag = 0;
+
+#endif
+
+		    memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
+
 
                 } /* If normal or dynamic rule */
 
