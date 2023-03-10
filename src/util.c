@@ -1415,3 +1415,24 @@ bool is_notlocalhost ( unsigned char *ip )
 }
 
 
+void IPv6_Strip_FFFF( char *ipaddr )
+{
+
+    char tmp[MAXIP];
+    uint8_t i = 0;
+
+    if ( ipaddr[0] == ':' && ipaddr[1] == ':' && ( ipaddr[2] == 'f' || ipaddr[2] == 'F' ) &&
+            ( ipaddr[3] == 'f' || ipaddr[3] == 'F' ) && ( ipaddr[4] == 'f' || ipaddr[4] == 'F' ) &&
+            ( ipaddr[5] == 'f' || ipaddr[5] == 'F' ) && ipaddr[6] == ':' )
+        {
+
+            for (i = 7; strlen(ipaddr) > i; i++)
+                {
+                    tmp[i-7] = ipaddr[i];
+                    tmp[i-6] = '\0';
+                }
+
+            snprintf(ipaddr, MAXIP, "%s", tmp);
+        }
+
+}

@@ -806,9 +806,9 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                                     /* This converts ::ffff:192.168.1.1 to regular IPv4 (192.168.1.1) */
 
-                                    if ( config->parse_ip_ipv4_mapped_ipv6 == false )
-                                        {
-
+//                                    if ( config->parse_ip_ipv4_mapped_ipv6 == false )
+//                                        {
+/*
                                             if ( ptr1[0] == ':' && ptr1[1] == ':' && ( ptr1[2] == 'f' || ptr1[2] == 'F' ) &&
                                                     ( ptr1[3] == 'f' || ptr1[3] == 'F' ) && ( ptr1[4] == 'f' || ptr1[4] == 'F' ) &&
                                                     ( ptr1[5] == 'f' || ptr1[5] == 'F' ) && ptr1[6] == ':' )
@@ -828,6 +828,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                                                 }
 
                                         }
+*/
 
                                     lookup_cache[current_position].port = config->sagan_port;
                                     lookup_cache[current_position].status = 1;

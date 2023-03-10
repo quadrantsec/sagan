@@ -90,7 +90,7 @@ void Open_GeoIP2_Database( void )
  * it is in/out of HOME_COUNTRY
  ****************************************************************************/
 
-int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, struct _GeoIP *GeoIP )
+int GeoIP2_Lookup_Country( char *ipaddr, uint_fast32_t rule_position, struct _GeoIP *GeoIP )
 {
 
     int gai_error;
@@ -105,6 +105,10 @@ int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, stru
     unsigned char ip_convert[MAXIPBIT] = { 0 };
 
     uint_fast16_t i = 0;
+
+    /* GeoIP doesn't like ::FFFF:192.168.1.1 type addresses */
+
+    IPv6_Strip_FFFF( ipaddr );
 
     IP2Bit( (char*)ipaddr, ip_convert);
 

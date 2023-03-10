@@ -743,7 +743,7 @@ void Sagan_Bluedot_Clean_Cache ( void )
  * 5 == JA3
  */
 
-uint_fast8_t Sagan_Bluedot_Lookup(const char *data,  uint_fast8_t type, uint_fast32_t rule_position, char *bluedot_str, size_t bluedot_size )
+uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t rule_position, char *bluedot_str, size_t bluedot_size )
 {
 
     unsigned char ip_convert[MAXIPBIT] = { 0 };
@@ -833,6 +833,10 @@ uint_fast8_t Sagan_Bluedot_Lookup(const char *data,  uint_fast8_t type, uint_fas
             /* For some reason, when I try to use the IP2Bit passed from engine.c,  it
                is sometimes 16 bytes off!  Not idea why and doesn't happen all the time.
                We call IP2Bit here to prevent it from getting off :(  Champ 2019/05/14 */
+
+            /* GeoIP doesn't like ::FFFF:192.168.1.1 type addresses */
+
+            IPv6_Strip_FFFF( data );
 
             IP2Bit(data, ip_convert);
 

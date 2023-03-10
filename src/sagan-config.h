@@ -116,8 +116,8 @@ struct _SaganConfig
     bool 	 fast_flag;
     char         fast_filename[MAXPATH];
 
-    bool	 parse_ip_ipv6;
-    bool	 parse_ip_ipv4_mapped_ipv6;
+//    bool	 parse_ip_ipv6;
+//    bool	 parse_ip_ipv4_mapped_ipv6;
 
 #ifdef WITH_SYSLOG
 

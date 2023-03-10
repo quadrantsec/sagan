@@ -99,7 +99,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for lookup_cache. Abort!", __FILE__, __LINE__);
         }
 
-     memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
+    memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
 
     struct _Sagan_Routing *SaganRouting = NULL;
     SaganRouting = malloc(sizeof(struct _Sagan_Routing));
@@ -281,14 +281,14 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             if ( rulestruct[b].type == NORMAL_RULE || ( rulestruct[b].type == DYNAMIC_RULE && dynamic_rule_flag == true ) )
                 {
 
-			/* Reset for next run */
+                    /* Reset for next run */
 
-			SaganProcSyslog_LOCAL->src_ip[0] = '\0';
-			SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
+                    SaganProcSyslog_LOCAL->src_ip[0] = '\0';
+                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
 
-			SaganProcSyslog_LOCAL->ip_src_is_valid = false; 
-			SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
-				
+                    SaganProcSyslog_LOCAL->ip_src_is_valid = false;
+                    SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
+
 
                     /* If we have JSON maps, apply them (if we actually have JSON ! */
 
@@ -1408,28 +1408,28 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                     pre_match = false;  		      /* Reset match! */
 
-		    SaganRouting->check_flow_return = true; 
-		    SaganRouting->position = 0; 
-		    SaganRouting->flexbit_count_return = 0;
-		    SaganRouting->flexbit_return = 0;
-		    SaganRouting->xbit_return = 0;
-		    SaganRouting->event_id_return = 0;
-		    SaganRouting->alert_time_trigger = 0;
-		    SaganRouting->geoip2_isset = 0; 
-		    SaganRouting->blacklist_results = 0;
-		    SaganRouting->zeekintel_results = 0;
+                    SaganRouting->check_flow_return = true;
+                    SaganRouting->position = 0;
+                    SaganRouting->flexbit_count_return = 0;
+                    SaganRouting->flexbit_return = 0;
+                    SaganRouting->xbit_return = 0;
+                    SaganRouting->event_id_return = 0;
+                    SaganRouting->alert_time_trigger = 0;
+                    SaganRouting->geoip2_isset = 0;
+                    SaganRouting->blacklist_results = 0;
+                    SaganRouting->zeekintel_results = 0;
 
 #ifdef WITH_BLUEDOT
 
-    SaganRouting->bluedot_hash_flag = 0;
-    SaganRouting->bluedot_filename_flag = 0;
-    SaganRouting->bluedot_url_flag = 0;
-    SaganRouting->bluedot_ip_flag = 0;
-    SaganRouting->bluedot_ja3_flag = 0;
+                    SaganRouting->bluedot_hash_flag = 0;
+                    SaganRouting->bluedot_filename_flag = 0;
+                    SaganRouting->bluedot_url_flag = 0;
+                    SaganRouting->bluedot_ip_flag = 0;
+                    SaganRouting->bluedot_ja3_flag = 0;
 
 #endif
 
-		    memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
+                    memset(lookup_cache, 0, sizeof(_Sagan_Lookup_Cache_Entry) * MAX_PARSE_IP);
 
 
                 } /* If normal or dynamic rule */
@@ -1443,6 +1443,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 #ifdef HAVE_LIBFASTJSON
 
             SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
+            SaganProcSyslog_LOCAL->json_normalize[0] = '\0';
 
             /* In case JSON mapping over wrote our original values,  we copy them back to their
                original states.  */

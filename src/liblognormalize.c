@@ -136,8 +136,10 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     if ( tmp != NULL)
         {
 
-            if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
+            if ( !Is_IP(tmp, IPv4) && !Is_IP(tmp, IPv6) )
                 {
+
+                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
                     SaganProcSyslog_LOCAL->ip_src_is_valid = false;
                     json_object_put(json_norm);
                     return;
@@ -166,9 +168,10 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     if ( tmp != NULL )
         {
 
-            if ( !Is_IP(tmp, IPv4) || !Is_IP(tmp, IPv6) )
+            if ( !Is_IP(tmp, IPv4) && !Is_IP(tmp, IPv6) )
                 {
                     SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
+                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
                     json_object_put(json_norm);
                     return;
                 }
@@ -393,6 +396,12 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     */
 
     json_object_put(json_norm);
+}
+
+void IPv4_as_6( char *ip )
+{
+
+
 }
 
 #endif

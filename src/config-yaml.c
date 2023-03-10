@@ -231,8 +231,8 @@ void Load_YAML_Config( char *yaml_file )
 
             /* Defaults for Parse_IP(); */
 
-            config->parse_ip_ipv6 = true;
-            config->parse_ip_ipv4_mapped_ipv6 = false;
+//            config->parse_ip_ipv6 = true;
+//            config->parse_ip_ipv4_mapped_ipv6 = false;
 
             config->eve_alerts_base64 = true;
 

@@ -112,6 +112,7 @@ const char *Bit2IP(unsigned char *ipbits, char *str, size_t size);
 bool 	Validate_HEX (const char *string);
 void	Content_Pipe( const char *in_string, int linecount, const char *ruleset, char *str, size_t size );
 bool    is_notroutable ( unsigned char *ip );
+void    IPv6_Strip_FFFF( char *ip );
 bool    is_notlocalhost ( unsigned char *ip );
 bool    is_inrange ( unsigned char *ip, unsigned char *tests, int count);
 void    Replace_Sagan( const char *in_str, char *replace, char *str, size_t size);

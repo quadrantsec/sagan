@@ -57,5 +57,5 @@ struct _Sagan_GeoIP_Skip
 };
 
 void Open_GeoIP2_Database( void );
-int GeoIP2_Lookup_Country( const char *ipaddr, uint_fast32_t rule_position, struct _GeoIP *GeoIP );
+int GeoIP2_Lookup_Country( char *ipaddr, uint_fast32_t rule_position, struct _GeoIP *GeoIP );
 

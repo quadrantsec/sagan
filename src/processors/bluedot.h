@@ -44,7 +44,7 @@
 #define BLUEDOT_LOOKUP_JA3 5
 
 bool Sagan_Bluedot_Cat_Compare ( uint_fast8_t bluedot_results, int_fast32_t rule_position, uint_fast8_t type );
-uint_fast8_t Sagan_Bluedot_Lookup(const char *data,  uint_fast8_t type, uint_fast32_t rule_position, char *bluedot_str, size_t bluedot_size );
+uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t rule_position, char *bluedot_str, size_t bluedot_size );
 bool Sagan_Bluedot_IP_Lookup_All ( char *syslog_message, uint_fast32_t rule_position, _Sagan_Lookup_Cache_Entry *lookup_cache, uint_fast8_t lookup_cache_size );
 
 void Sagan_Bluedot_Clean_Cache ( void );
