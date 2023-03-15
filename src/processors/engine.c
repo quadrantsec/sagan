@@ -286,8 +286,29 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                     SaganProcSyslog_LOCAL->src_ip[0] = '\0';
                     SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
 
+                    SaganProcSyslog_LOCAL->src_port = 0;
+                    SaganProcSyslog_LOCAL->dst_port = 0;
+
+                    SaganProcSyslog_LOCAL->proto = 0;
+
+                    SaganProcSyslog_LOCAL->src_host[0] = '\0';
+                    SaganProcSyslog_LOCAL->dst_host[0] = '\0';
+
+                    SaganProcSyslog_LOCAL->event_id[0] = '\0';
+                    SaganProcSyslog_LOCAL->md5[0] = '\0';
+                    SaganProcSyslog_LOCAL->sha1[0] = '\0';
+                    SaganProcSyslog_LOCAL->sha256[0] = '\0';
+                    SaganProcSyslog_LOCAL->filename[0] = '\0';
+                    SaganProcSyslog_LOCAL->hostname[0] = '\0';
+                    SaganProcSyslog_LOCAL->url[0] = '\0';
+                    SaganProcSyslog_LOCAL->ja3[0] = '\0';
+                    SaganProcSyslog_LOCAL->username[0] = '\0';
+
                     SaganProcSyslog_LOCAL->ip_src_is_valid = false;
                     SaganProcSyslog_LOCAL->ip_dst_is_valid = false;
+                    SaganProcSyslog_LOCAL->port_src_is_valid = false;
+                    SaganProcSyslog_LOCAL->port_dst_is_valid = false;
+
 
 
                     /* If we have JSON maps, apply them (if we actually have JSON ! */
@@ -719,13 +740,17 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
+//				    printf("validate_flag: %d\n", validate_flag);
+
                                     if ( validate_flag == true )
                                         {
                                             flag = Event_ID( b, SaganProcSyslog_LOCAL );
+//					    printf("event_id flag: %d\n", flag);
                                         }
                                     else
                                         {
                                             __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+//					    printf("event_id flag: false\n");
                                             flag = false;
                                         }
 
