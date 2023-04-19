@@ -425,7 +425,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                             /* If we've run to the end, we're done */
 
-                            if ( current_position > MAX_PARSE_IP )
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
                                     break;
                                 }
@@ -461,7 +461,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                             current_position++;
 
-                            if ( current_position > MAX_PARSE_IP )
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
                                     break;
                                 }
@@ -513,7 +513,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                             lookup_cache[current_position].status = 1;
                             current_position++;
 
-                            if ( current_position > MAX_PARSE_IP )
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
                                     break;
                                 }
@@ -542,7 +542,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                             current_position++;
 
-                            if ( current_position > MAX_PARSE_IP )
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
                                     break;
                                 }
@@ -596,7 +596,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                             /* If we've run to the end, we're done */
 
-                            if ( current_position > MAX_PARSE_IP )
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
                                     break;
                                 }
@@ -627,7 +627,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                             /* If we've run to the end, we're done */
 
-                            if ( current_position > MAX_PARSE_IP )
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
                                     break;
                                 }
@@ -771,7 +771,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                                     current_position++;
 
-                                    if ( current_position > MAX_PARSE_IP )
+                                    if ( current_position >= MAX_PARSE_IP )
                                         {
                                             break;
                                         }
@@ -835,7 +835,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                                     current_position++;
 
-                                    if ( current_position > MAX_PARSE_IP )
+                                    if ( current_position >= MAX_PARSE_IP )
                                         {
                                             break;
                                         }
@@ -891,7 +891,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                                     /* If we've run to the end, we're done */
 
-                                    if ( current_position > MAX_PARSE_IP )
+                                    if ( current_position >= MAX_PARSE_IP )
                                         {
                                             break;
                                         }
@@ -923,7 +923,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
 
                                     /* If we've run to the end, we're done */
 
-                                    if ( current_position > MAX_PARSE_IP )
+                                    if ( current_position >= MAX_PARSE_IP )
                                         {
                                             break;
                                         }
