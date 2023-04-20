@@ -94,6 +94,7 @@ void Credits(void)
     fprintf(stderr, "Ivan Kuncl (iku899)\t\t\t\tBug fixes for event_id rule option.\n");
     fprintf(stderr, "Stef Roskam (sm1983)\t\t\t\tBug fixes related to --daemon fault.\n");
     fprintf(stderr, "Jones Smedegaad (jonassmedegaard)\t\tLots of cleanup work.\n");
+    fprintf(stderr, "\"ilya-bakhtin\" (Github)\t\t\t\tFixed \"out-of-bounds\" parse_ip issues.\n");
 
     fprintf(stderr, "\n");
 

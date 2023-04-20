@@ -73,5 +73,17 @@ https://groups.google.com/forum/#!forum/sagan-users.  You can also ask questions
 Sagan Discord channel at https://discord.gg/VS6jTjH4gW
 
 If you're looking for Sagan rule sets on Github,  they are located at:
-https://github.com/beave/sagan-rules
+https://github.com/quadrantsec/sagan-rules
+
+Credits
+-------
+
+A lot of people have invested time in Sagan.  We list people who have contributed in our source code tree. 
+See the https://github.com/quadrantsec/sagan/blob/main/src/credits.c source f
+
+Credits
+-------
+
+A lot of people have invested time in Sagan.  We list people who have contributed in our source code tree. 
+See the https://github.com/quadrantsec/sagan/blob/main/src/credits.c source file.
 
