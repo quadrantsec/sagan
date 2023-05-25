@@ -50,7 +50,7 @@ typedef void json_object;
 #define MAX_SYSLOG_FACILITY	15
 #define MAX_SYSLOG_PRIORITY	20
 #define MAX_SYSLOG_LEVEL	15
-#define MAX_SYSLOG_TAG		32
+#define MAX_SYSLOG_TAG		64
 #define MAX_SYSLOG_DATE		32
 #define MAX_SYSLOG_TIME		32
 #define MAX_SYSLOG_PROGRAM	50
@@ -82,8 +82,6 @@ typedef void json_object;
 #define MAX_SAGAN_MSG		 256		/* Max "msg" option size */
 
 #define MAX_PCRE_SIZE		 1024		/* Max pcre length in a rule */
-#define MAX_SYSLOG_TAG_SIZE 	 32     	/* Max syslog_tag length in a rule */
-
 #define MAX_FIFO_SIZE		1048576		/* Max pipe/FIFO size in bytes/pages */
 
 #define MAX_THREADS     	4096            /* Max system threads */
@@ -270,7 +268,7 @@ typedef void json_object;
 #define JSON_INPUT_PRIORITY_MAX_SIZE	160
 #define JSON_INPUT_PRIORITY_MAX_COUNT	5
 
-#define JSON_INPUT_TAG			32
+#define JSON_INPUT_TAG			64
 #define JSON_INPUT_TAG_MAX_SIZE		160
 #define JSON_INPUT_TAG_MAX_COUNT	5
 

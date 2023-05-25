@@ -2655,7 +2655,7 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] The \"syslog_tag\" appears to be incomplete at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
                             Remove_Spaces(arg);
-                            if (strlen(arg) > MAX_SYSLOG_TAG_SIZE)
+                            if (strlen(arg) > MAX_SYSLOG_TAG)
                                 {
                                     Sagan_Log(ERROR, "[%s, line %d] The complete \"syslog_tag\" appears to be exceeding the max length at line %d in %s, Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }

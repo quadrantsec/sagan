@@ -228,7 +228,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
     if ( ptr == NULL )
         {
 
-            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, "SAGAN: TAG ERROR", MAX_SYSLOG_LEVEL);
+            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, "SAGAN: TAG ERROR", MAX_SYSLOG_TAG);
 
             __atomic_add_fetch(&counters->malformed_tag, 1, __ATOMIC_SEQ_CST);
 
@@ -240,7 +240,7 @@ void SyslogInput_Pipe( char *syslog_string, struct _Sagan_Proc_Syslog *SaganProc
         }
     else
         {
-            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, ptr, MAX_SYSLOG_LEVEL);
+            strlcpy(SaganProcSyslog_LOCAL->syslog_tag, ptr, MAX_SYSLOG_TAG);
         }
 
     ptr = syslog_string != NULL ? strsep(&syslog_string, "|") : NULL;

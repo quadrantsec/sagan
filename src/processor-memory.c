@@ -45,6 +45,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->json_normalize[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->json_original = malloc( config->message_buffer_size );
 
     if ( SaganProcSyslog_LOCAL->json_original == NULL )
@@ -53,6 +55,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->json_original[0] = '\0';
+ 
+    /* ---- */
 
     SaganProcSyslog_LOCAL->syslog_host = malloc( MAX_SYSLOG_HOST );
 
@@ -63,6 +67,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->syslog_host[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->syslog_facility = malloc( MAX_SYSLOG_FACILITY );
 
     if ( SaganProcSyslog_LOCAL->syslog_facility == NULL )
@@ -71,6 +77,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->syslog_facility[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->syslog_priority = malloc( MAX_SYSLOG_PRIORITY );
 
@@ -81,6 +89,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->syslog_priority[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->syslog_level = malloc( MAX_SYSLOG_LEVEL );
 
     if ( SaganProcSyslog_LOCAL->syslog_level == NULL )
@@ -89,6 +99,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->syslog_level[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->syslog_tag = malloc( MAX_SYSLOG_TAG );
 
@@ -99,6 +111,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->syslog_tag[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->syslog_date = malloc( MAX_SYSLOG_DATE );
 
     if ( SaganProcSyslog_LOCAL->syslog_date == NULL )
@@ -107,6 +121,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->syslog_date[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->syslog_time = malloc( MAX_SYSLOG_TIME );
 
@@ -117,6 +133,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->syslog_time[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->syslog_program = malloc( MAX_SYSLOG_PROGRAM );
 
     if ( SaganProcSyslog_LOCAL->syslog_program == NULL )
@@ -125,6 +143,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->syslog_program[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->syslog_message = malloc( config->message_buffer_size );
 
@@ -135,6 +155,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->syslog_message[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->src_ip = malloc( MAXIP );
 
     if ( SaganProcSyslog_LOCAL->src_ip == NULL )
@@ -143,6 +165,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->src_ip[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->dst_ip = malloc( MAXIP );
 
@@ -153,6 +177,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->src_host = malloc( MAXHOST );
 
     if ( SaganProcSyslog_LOCAL->src_host == NULL )
@@ -161,6 +187,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->src_host[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->dst_host = malloc( MAXHOST );
 
@@ -171,6 +199,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->dst_host[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->event_id = malloc( MAX_EVENTID );
 
     if ( SaganProcSyslog_LOCAL->event_id == NULL )
@@ -179,6 +209,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->event_id[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->md5 = malloc( MD5_HASH_SIZE+1 );
 
@@ -189,6 +221,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->md5[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->sha1 = malloc( SHA1_HASH_SIZE+1 );
 
     if ( SaganProcSyslog_LOCAL->sha1 == NULL )
@@ -197,6 +231,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->sha1[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->sha256 = malloc( SHA256_HASH_SIZE+1 );
 
@@ -207,6 +243,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->sha256[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->filename = malloc( MAX_FILENAME_SIZE+1 );
 
     if ( SaganProcSyslog_LOCAL->filename == NULL )
@@ -215,6 +253,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->filename[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->hostname = malloc( MAX_HOSTNAME_SIZE+1 );
 
@@ -225,6 +265,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->hostname[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->url = malloc( MAX_URL_SIZE+1 );
 
     if ( SaganProcSyslog_LOCAL->url == NULL )
@@ -233,6 +275,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->url[0] = '\0';
+
+    /* ---- */
 
     SaganProcSyslog_LOCAL->ja3 = malloc( MD5_HASH_SIZE+1 );
 
@@ -243,6 +287,8 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->ja3[0] = '\0';
 
+    /* ---- */
+
     SaganProcSyslog_LOCAL->username = malloc( MAX_USERNAME_SIZE+1 );
 
     if ( SaganProcSyslog_LOCAL->username == NULL )
@@ -251,6 +297,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->username[0] = '\0';
+
 
 #ifdef HAVE_LIBFASTJSON
 

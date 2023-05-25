@@ -81,6 +81,7 @@ void Send_Alert ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, uint32_t rul
     SaganProcessorEvent->priority        =       SaganProcSyslog_LOCAL->syslog_level;	/* Syslog priority */
     SaganProcessorEvent->pri             =       rulestruct[rule_position].s_pri;		/* Sagan priority */
     SaganProcessorEvent->class           =       rulestruct[rule_position].s_classtype;
+
     SaganProcessorEvent->tag             =       SaganProcSyslog_LOCAL->syslog_tag;
     SaganProcessorEvent->rev             =       rulestruct[rule_position].s_rev;
 
