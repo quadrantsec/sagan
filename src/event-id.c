@@ -107,15 +107,11 @@ bool Event_ID ( int position, _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     else
         {
 
-            printf("IN NEW\n");
-
             /* If we have a decoded "event id" via JSON/liblognorm,  we can use that
                value instead */
 
             for (i = 0; i < rulestruct[position].event_id_count; i++ )
                 {
-
-                    printf("%s|%s\n", rulestruct[position].event_id[i], SaganProcSyslog_LOCAL->event_id);
 
                     if ( !strcmp(rulestruct[position].event_id[i], SaganProcSyslog_LOCAL->event_id ) )
                         {
