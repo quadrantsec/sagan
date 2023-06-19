@@ -251,12 +251,15 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     vsnprintf(buf, MAX_SYSLOGMSG * 2, format, ap);
 
-    File_Lock( config->sagan_log_stream_int );
+//  DEBUG: See issue #66 .  The File_Lock for logging is likely overkill
+//  IMHO.
+
+//    File_Lock( config->sagan_log_stream_int );
 
     fprintf(config->sagan_log_stream, "[%s] [%s] - %s\n", chr, curtime, buf);
     fflush(config->sagan_log_stream);
 
-    File_Unlock( config->sagan_log_stream_int );
+//    File_Unlock( config->sagan_log_stream_int );
 
     /* Log all console output to syslog */
 
