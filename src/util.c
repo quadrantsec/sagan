@@ -232,7 +232,9 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
-    memset( buf, 0, MAX_SYSLOGMSG * 2);
+    buf[0] = '\0';
+
+    //memset( buf, 0, MAX_SYSLOGMSG * 2);
 
     if ( type == ERROR )
         {

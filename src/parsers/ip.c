@@ -130,7 +130,7 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
             exit(-1);
         }
 
-//    memset(mod_string, 0, config->message_buffer_size);
+    mod_string[0] = '\0';
 
     for (i=0; i<strlen(syslog_message); i++)
         {
@@ -637,35 +637,78 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                 }
 
 
-	    /* IPv6 Parsing */
+            /* IPv6 Parsing */
 
-                    /* Stand alone IPv6 */
+            /* Stand alone IPv6 */
 
-                    if ( num_colons > 2 )
+            if ( num_colons > 2 )
+                {
+
+                    valid = inet_pton(AF_INET6, ptr1,  &(sa.sin_addr));
+
+                    if ( valid == 1 )
                         {
 
-                            valid = inet_pton(AF_INET6, ptr1,  &(sa.sin_addr));
+                            if ( debug->debugparse_ip )
+                                {
+                                    Sagan_Log(DEBUG, "[%s:%lu] ** Identified stand alone IPv6 address '%s' **", __FUNCTION__, pthread_self(), ptr1 );
+                                }
 
-                            if ( valid == 1 )
+                            memcpy(lookup_cache[current_position].ip, ptr1, MAXIP);
+                            memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
+                            IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
+
+                            /* Look for "fe80::b614:89ff:fe11:5e24 port 1234" */
+
+                            memcpy(tmp_token, ptr2, sizeof(tmp_token));
+
+                            ptr4 = tmp_token;
+                            ptr3 = strtok_r(NULL, " ", &ptr4);
+
+                            if ( ptr3 != NULL && strcasestr(ptr3, "port") )
                                 {
 
                                     if ( debug->debugparse_ip )
                                         {
-                                            Sagan_Log(DEBUG, "[%s:%lu] ** Identified stand alone IPv6 address '%s' **", __FUNCTION__, pthread_self(), ptr1 );
+                                            Sagan_Log(DEBUG, "[%s:%lu] Identified the word 'port'", __FUNCTION__, pthread_self() );
                                         }
 
-                                    memcpy(lookup_cache[current_position].ip, ptr1, MAXIP);
-                                    memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
-                                    IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
-
-                                    /* Look for "fe80::b614:89ff:fe11:5e24 port 1234" */
-
-                                    memcpy(tmp_token, ptr2, sizeof(tmp_token));
-
-                                    ptr4 = tmp_token;
                                     ptr3 = strtok_r(NULL, " ", &ptr4);
 
-                                    if ( ptr3 != NULL && strcasestr(ptr3, "port") )
+                                    if ( ptr3 != NULL )
+                                        {
+                                            port = atoi(ptr3);
+
+                                            if ( port == 0 )
+                                                {
+                                                    lookup_cache[current_position].port = port;
+                                                }
+                                            else
+                                                {
+                                                    lookup_cache[current_position].port = config->sagan_port;
+                                                }
+
+                                        }
+
+                                }
+
+                            /* Look for "fe80::b614:89ff:fe11:5e24 source port: 1234" or
+                            "fe80::b614:89ff:fe11:5e24 source port 1234" */
+
+                            else if ( ptr3 != NULL && ( strcasestr(ptr3, "source") ||
+                                                        strcasestr(ptr3, "destination" ) ) )
+
+                                {
+
+                                    if ( debug->debugparse_ip )
+                                        {
+                                            Sagan_Log(DEBUG, "[%s:%lu] Identified the word 'source' or 'destination'", __FUNCTION__, pthread_self() );
+                                        }
+
+
+                                    ptr3 = strtok_r(NULL, " ", &ptr4);
+
+                                    if ( ptr3 != NULL && strcasestr(ptr3, "port" ) )
                                         {
 
                                             if ( debug->debugparse_ip )
@@ -673,265 +716,222 @@ uint_fast32_t Parse_IP( const char *syslog_message, struct _Sagan_Lookup_Cache_E
                                                     Sagan_Log(DEBUG, "[%s:%lu] Identified the word 'port'", __FUNCTION__, pthread_self() );
                                                 }
 
+
                                             ptr3 = strtok_r(NULL, " ", &ptr4);
 
                                             if ( ptr3 != NULL )
                                                 {
+
                                                     port = atoi(ptr3);
 
                                                     if ( port == 0 )
                                                         {
-                                                            lookup_cache[current_position].port = port;
+                                                            lookup_cache[current_position].port = config->sagan_port;
                                                         }
                                                     else
                                                         {
-                                                            lookup_cache[current_position].port = config->sagan_port;
+                                                            lookup_cache[current_position].port = port;
                                                         }
 
                                                 }
 
-                                        }
-
-                                    /* Look for "fe80::b614:89ff:fe11:5e24 source port: 1234" or
-                                    "fe80::b614:89ff:fe11:5e24 source port 1234" */
-
-                                    else if ( ptr3 != NULL && ( strcasestr(ptr3, "source") ||
-                                                                strcasestr(ptr3, "destination" ) ) )
-
-                                        {
-
-                                            if ( debug->debugparse_ip )
-                                                {
-                                                    Sagan_Log(DEBUG, "[%s:%lu] Identified the word 'source' or 'destination'", __FUNCTION__, pthread_self() );
-                                                }
-
-
-                                            ptr3 = strtok_r(NULL, " ", &ptr4);
-
-                                            if ( ptr3 != NULL && strcasestr(ptr3, "port" ) )
-                                                {
-
-                                                    if ( debug->debugparse_ip )
-                                                        {
-                                                            Sagan_Log(DEBUG, "[%s:%lu] Identified the word 'port'", __FUNCTION__, pthread_self() );
-                                                        }
-
-
-                                                    ptr3 = strtok_r(NULL, " ", &ptr4);
-
-                                                    if ( ptr3 != NULL )
-                                                        {
-
-                                                            port = atoi(ptr3);
-
-                                                            if ( port == 0 )
-                                                                {
-                                                                    lookup_cache[current_position].port = config->sagan_port;
-                                                                }
-                                                            else
-                                                                {
-                                                                    lookup_cache[current_position].port = port;
-                                                                }
-
-                                                        }
-
-                                                }
-
-                                        }
-
-                                    /* IPv6 [fe80::b614:89ff:fe11:5e24]:443 */
-
-                                    else if ( ptr3 != NULL && ptr3[0] == ':' )
-                                        {
-
-                                            if ( debug->debugparse_ip )
-                                                {
-                                                    Sagan_Log(DEBUG, "[%s:%lu] Identified possible [IPv6]:PORT", __FUNCTION__, pthread_self() );
-                                                }
-
-                                            for ( i = 1; i < strlen(ptr3); i++ )
-                                                {
-                                                    port_test[i-1] = ptr3[i];
-                                                }
-
-                                            port_test_int = atoi(port_test);
-
-                                            if ( port_test_int == 0 )
-                                                {
-                                                    lookup_cache[current_position].port = config->sagan_port;
-                                                }
-                                            else
-                                                {
-                                                    lookup_cache[current_position].port = port_test_int;
-                                                }
-
-                                        }
-
-                                    lookup_cache[current_position].status = 1;
-
-                                    current_position++;
-
-                                    if ( current_position >= MAX_PARSE_IP )
-                                        {
-                                            break;
                                         }
 
                                 }
 
-                        }
+                            /* IPv6 [fe80::b614:89ff:fe11:5e24]:443 */
 
-
-                    /* Stand alone IPv6 with trailing period */
-
-                    if ( num_colons > 2 && ptr1[ strlen(ptr1)-1 ] == '.' )
-                        {
-
-                            /* Erase the period */
-
-                            ptr1[ strlen(ptr1)-1 ] = '\0';
-
-                            valid = inet_pton(AF_INET6, ptr1,  &(sa.sin_addr));
-
-                            if ( valid == 1 )
+                            else if ( ptr3 != NULL && ptr3[0] == ':' )
                                 {
 
                                     if ( debug->debugparse_ip )
                                         {
-                                            Sagan_Log(DEBUG, "[%s:%lu] ** Identified stand alone IPv6 '%s' with trailing period. **", __FUNCTION__, pthread_self(), ptr1 );
+                                            Sagan_Log(DEBUG, "[%s:%lu] Identified possible [IPv6]:PORT", __FUNCTION__, pthread_self() );
                                         }
 
-                                    memcpy(lookup_cache[current_position].ip, ptr1, MAXIP);
-                                    memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
-                                    IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
-
-                                    /* This converts ::ffff:192.168.1.1 to regular IPv4 (192.168.1.1) */
-
-//                                    if ( config->parse_ip_ipv4_mapped_ipv6 == false )
-//                                        {
-/*
-                                            if ( ptr1[0] == ':' && ptr1[1] == ':' && ( ptr1[2] == 'f' || ptr1[2] == 'F' ) &&
-                                                    ( ptr1[3] == 'f' || ptr1[3] == 'F' ) && ( ptr1[4] == 'f' || ptr1[4] == 'F' ) &&
-                                                    ( ptr1[5] == 'f' || ptr1[5] == 'F' ) && ptr1[6] == ':' )
-                                                {
-
-                                                    b = strlen(ptr1);
-
-                                                    for (i = 7; b > i; i++)
-                                                        {
-                                                            lookup_cache[current_position].ip[i-7] = ptr1[i];
-                                                            lookup_cache[current_position].ip[i-6] = '\0';
-                                                        }
-
-                                                    memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
-                                                    IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
-
-                                                }
-
-                                        }
-*/
-
-                                    lookup_cache[current_position].port = config->sagan_port;
-                                    lookup_cache[current_position].status = 1;
-
-                                    current_position++;
-
-                                    if ( current_position >= MAX_PARSE_IP )
+                                    for ( i = 1; i < strlen(ptr3); i++ )
                                         {
-                                            break;
+                                            port_test[i-1] = ptr3[i];
                                         }
 
-                                }
+                                    port_test_int = atoi(port_test);
 
-                        }
-
-                    /* Handle IPv6 fe80::b614:89ff:fe11:5e24#12345 or inet#fe80::b614:89ff:fe11:5e24 */
-
-                    if ( num_hashes == 1 && num_colons > 2 )
-                        {
-
-                            /* test both sides */
-
-                            ip_1 = strtok_r(ptr1, "#", &ip_2);
-
-                            if ( ip_1 != NULL )
-                                {
-                                    valid = inet_pton(AF_INET6, ip_1,  &(sa.sin_addr));
-                                }
-
-                            if ( valid == 1 )
-                                {
-
-                                    if ( debug->debugparse_ip )
-                                        {
-                                            Sagan_Log(DEBUG, "[%s:%lu] ** Identified IPv6#PORT **", __FUNCTION__, pthread_self() );
-                                        }
-
-
-                                    memcpy(lookup_cache[current_position].ip, ip_1, MAXIP);
-                                    memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
-                                    IP2Bit(ip_1, lookup_cache[current_position].ip_bits);
-
-                                    /* In many cases, the port is after the : */
-
-                                    port = atoi(ip_2);
-
-                                    if ( port == 0 )
+                                    if ( port_test_int == 0 )
                                         {
                                             lookup_cache[current_position].port = config->sagan_port;
-
                                         }
                                     else
                                         {
-
-                                            lookup_cache[current_position].port = port;
-                                        }
-
-                                    lookup_cache[current_position].status = 1;
-                                    current_position++;
-
-                                    /* If we've run to the end, we're done */
-
-                                    if ( current_position >= MAX_PARSE_IP )
-                                        {
-                                            break;
+                                            lookup_cache[current_position].port = port_test_int;
                                         }
 
                                 }
 
-                            if ( ip_2 != NULL )
+                            lookup_cache[current_position].status = 1;
+
+                            current_position++;
+
+                            if ( current_position >= MAX_PARSE_IP )
                                 {
-                                    valid = inet_pton(AF_INET6, ip_2,  &(sa.sin_addr));
-                                }
-
-                            if ( valid == 1 )
-
-                                {
-
-                                    if ( debug->debugparse_ip )
-                                        {
-                                            Sagan_Log(DEBUG, "[%s:%lu] ** Identified INTERFACE#IPv6 **", __FUNCTION__, pthread_self() );
-                                        }
-
-
-                                    memcpy(lookup_cache[current_position].ip, ip_2, MAXIP);
-                                    memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
-                                    IP2Bit(ip_2, lookup_cache[current_position].ip_bits);
-                                    lookup_cache[current_position].port = config->sagan_port;
-                                    lookup_cache[current_position].status = 1;
-
-                                    current_position++;
-
-                                    /* If we've run to the end, we're done */
-
-                                    if ( current_position >= MAX_PARSE_IP )
-                                        {
-                                            break;
-                                        }
-
-
+                                    break;
                                 }
 
                         }
+
+                }
+
+
+            /* Stand alone IPv6 with trailing period */
+
+            if ( num_colons > 2 && ptr1[ strlen(ptr1)-1 ] == '.' )
+                {
+
+                    /* Erase the period */
+
+                    ptr1[ strlen(ptr1)-1 ] = '\0';
+
+                    valid = inet_pton(AF_INET6, ptr1,  &(sa.sin_addr));
+
+                    if ( valid == 1 )
+                        {
+
+                            if ( debug->debugparse_ip )
+                                {
+                                    Sagan_Log(DEBUG, "[%s:%lu] ** Identified stand alone IPv6 '%s' with trailing period. **", __FUNCTION__, pthread_self(), ptr1 );
+                                }
+
+                            memcpy(lookup_cache[current_position].ip, ptr1, MAXIP);
+                            memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
+                            IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
+
+                            /* This converts ::ffff:192.168.1.1 to regular IPv4 (192.168.1.1) */
+
+//                                    if ( config->parse_ip_ipv4_mapped_ipv6 == false )
+//                                        {
+                            /*
+                                                                        if ( ptr1[0] == ':' && ptr1[1] == ':' && ( ptr1[2] == 'f' || ptr1[2] == 'F' ) &&
+                                                                                ( ptr1[3] == 'f' || ptr1[3] == 'F' ) && ( ptr1[4] == 'f' || ptr1[4] == 'F' ) &&
+                                                                                ( ptr1[5] == 'f' || ptr1[5] == 'F' ) && ptr1[6] == ':' )
+                                                                            {
+
+                                                                                b = strlen(ptr1);
+
+                                                                                for (i = 7; b > i; i++)
+                                                                                    {
+                                                                                        lookup_cache[current_position].ip[i-7] = ptr1[i];
+                                                                                        lookup_cache[current_position].ip[i-6] = '\0';
+                                                                                    }
+
+                                                                                memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
+                                                                                IP2Bit(ptr1, lookup_cache[current_position].ip_bits);
+
+                                                                            }
+
+                                                                    }
+                            */
+
+                            lookup_cache[current_position].port = config->sagan_port;
+                            lookup_cache[current_position].status = 1;
+
+                            current_position++;
+
+                            if ( current_position >= MAX_PARSE_IP )
+                                {
+                                    break;
+                                }
+
+                        }
+
+                }
+
+            /* Handle IPv6 fe80::b614:89ff:fe11:5e24#12345 or inet#fe80::b614:89ff:fe11:5e24 */
+
+            if ( num_hashes == 1 && num_colons > 2 )
+                {
+
+                    /* test both sides */
+
+                    ip_1 = strtok_r(ptr1, "#", &ip_2);
+
+                    if ( ip_1 != NULL )
+                        {
+                            valid = inet_pton(AF_INET6, ip_1,  &(sa.sin_addr));
+                        }
+
+                    if ( valid == 1 )
+                        {
+
+                            if ( debug->debugparse_ip )
+                                {
+                                    Sagan_Log(DEBUG, "[%s:%lu] ** Identified IPv6#PORT **", __FUNCTION__, pthread_self() );
+                                }
+
+
+                            memcpy(lookup_cache[current_position].ip, ip_1, MAXIP);
+                            memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
+                            IP2Bit(ip_1, lookup_cache[current_position].ip_bits);
+
+                            /* In many cases, the port is after the : */
+
+                            port = atoi(ip_2);
+
+                            if ( port == 0 )
+                                {
+                                    lookup_cache[current_position].port = config->sagan_port;
+
+                                }
+                            else
+                                {
+
+                                    lookup_cache[current_position].port = port;
+                                }
+
+                            lookup_cache[current_position].status = 1;
+                            current_position++;
+
+                            /* If we've run to the end, we're done */
+
+                            if ( current_position >= MAX_PARSE_IP )
+                                {
+                                    break;
+                                }
+
+                        }
+
+                    if ( ip_2 != NULL )
+                        {
+                            valid = inet_pton(AF_INET6, ip_2,  &(sa.sin_addr));
+                        }
+
+                    if ( valid == 1 )
+
+                        {
+
+                            if ( debug->debugparse_ip )
+                                {
+                                    Sagan_Log(DEBUG, "[%s:%lu] ** Identified INTERFACE#IPv6 **", __FUNCTION__, pthread_self() );
+                                }
+
+
+                            memcpy(lookup_cache[current_position].ip, ip_2, MAXIP);
+                            memset(lookup_cache[current_position].ip_bits, 0, MAXIPBIT);
+                            IP2Bit(ip_2, lookup_cache[current_position].ip_bits);
+                            lookup_cache[current_position].port = config->sagan_port;
+                            lookup_cache[current_position].status = 1;
+
+                            current_position++;
+
+                            /* If we've run to the end, we're done */
+
+                            if ( current_position >= MAX_PARSE_IP )
+                                {
+                                    break;
+                                }
+
+
+                        }
+
+                }
 
 //                } /* If config->parse_ip_ipv6 */
 

@@ -705,6 +705,8 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
                     Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
                 }
 
+            tmp_data[0] = '\0';
+
             jobj = json_object_new_object();
 
             json_object *jsensor = json_object_new_string(config->sagan_sensor_name);

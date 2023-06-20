@@ -265,6 +265,8 @@ void Redis_Writer ( void )
             exit(-1);
         }
 
+    value[0] = '\0';
+
     Redis_Writer_Connect();
 
     /* Redis "threaded" operations */

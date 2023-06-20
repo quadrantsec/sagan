@@ -79,6 +79,8 @@ void Log_JSON ( _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct timeval tp )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
+    log_data[0] = '\0';
+
     if (( eve_stream = fopen( config->eve_filename, "a" )) == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Cannot open %s (%s). Abort", __FILE__, __LINE__, config->eve_filename, strerror(errno));

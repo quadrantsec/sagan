@@ -71,6 +71,8 @@ void FIFO_Input ( void )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
+    syslogstring[0] = '\0';
+
     Sagan_Log(NORMAL, "Attempting to open syslog FIFO (%s).", config->sagan_fifo);
 
     bool fifoerr = false;

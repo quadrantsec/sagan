@@ -74,6 +74,8 @@ void Output( _Sagan_Event *Event )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
+    alert_data[0] = '\0';
+
     Format_JSON_Alert_EVE( Event, alert_data, config->message_buffer_size );
 
     /* Single threaded */

@@ -55,7 +55,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
     SaganProcSyslog_LOCAL->json_original[0] = '\0';
- 
+
     /* ---- */
 
     SaganProcSyslog_LOCAL->syslog_host = malloc( MAX_SYSLOG_HOST );

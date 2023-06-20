@@ -75,6 +75,8 @@ void Format_JSON_Alert_EVE( _Sagan_Event *Event, char *str, size_t size )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
+    tmp_data[0] = '\0';
+
     if ( Event->ip_proto == 17 )
         {
             proto = "UDP";

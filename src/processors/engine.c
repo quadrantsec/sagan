@@ -153,6 +153,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
 
+    syslog_append_orig_message[0] = '\0';
+
     bool append_program_flag = false;
 
     struct timeval tp;
@@ -218,6 +220,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
                             exit(-1);
                         }
+
+                    tmp_json[0] = '\0';
 
                     if ( debug->debugjson )
                         {
@@ -331,6 +335,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                                     Sagan_Log(ERROR, "[%s, lines %d] Error allocation memory.", __FILE__, __LINE__);
                                                 }
 
+                                            tmp_json_value[0] = '\0';
 
                                             Get_Key_Value( JSON_LOCAL, rulestruct[b].json_map_key[i], tmp_json_value, config->message_buffer_size );
 
@@ -595,6 +600,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                             fprintf(stderr, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
                                             exit(-1);
                                         }
+
+                                    syslog_append_program[0] = '\0';
 
                                     strlcpy(syslog_append_orig_message, SaganProcSyslog_LOCAL->syslog_message, config->message_buffer_size );
 

@@ -72,6 +72,8 @@ void File_Input( const char *input_file )
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
 
+    syslogstring[0] = '\0';
+
     struct _Sagan_Pass_Syslog *SaganPassSyslog_LOCAL = NULL;
     SaganPassSyslog_LOCAL = malloc( sizeof(_Sagan_Pass_Syslog ));
 
