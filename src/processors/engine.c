@@ -194,6 +194,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
             Sagan_Log(ERROR, "[%s, line %d] Fatal Error: Can't allocate memory! Abort!\n", __FILE__, __LINE__);
         }
 
+    o_syslog_message[0] = '\0';
+
     bool o_syslog_message_flag = false;
 
     char o_syslog_program[MAX_SYSLOG_PROGRAM] = { 0 };

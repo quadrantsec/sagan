@@ -234,8 +234,6 @@ void Sagan_Log (uint_fast8_t type, const char *format,... )
 
     buf[0] = '\0';
 
-    //memset( buf, 0, MAX_SYSLOGMSG * 2);
-
     if ( type == ERROR )
         {
             chr="E";
