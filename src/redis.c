@@ -179,7 +179,7 @@ void Redis_Writer_Connect(void)
     while ( c_writer_redis == NULL || c_writer_redis->err )
         {
 
-            struct timeval timeout = { 1, 500000 }; // 1.5 seconds
+            struct timeval timeout = { 5, 500000 }; // 5.5 seconds
             c_writer_redis = redisConnectWithTimeout(config->redis_server, config->redis_port, timeout);
 
             if (c_writer_redis == NULL || c_writer_redis->err)
@@ -187,15 +187,14 @@ void Redis_Writer_Connect(void)
 
                     if (c_writer_redis)
                         {
-
-                            redisFree(c_writer_redis);
+			    
                             Sagan_Log(WARN, "[%s, line %d] Redis 'writer' connection error! Sleeping for 2 seconds.", __FILE__, __LINE__);
 
                         }
                     else
                         {
 
-                            Sagan_Log(WARN, "[%s, line %d] Redis 'writer' connection error - Can't allocate Redis context.", __FILE__, __LINE__);
+                            Sagan_Log(ERROR, "[%s, line %d] Redis 'writer' connection error - Can't allocate Redis context.", __FILE__, __LINE__);
 
                         }
 
