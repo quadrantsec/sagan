@@ -270,7 +270,7 @@ void Load_YAML_Config( char *yaml_file )
             /* Bluedot defaults */
 
             strlcpy(config->bluedot_device_id, "NO_DEVICE_ID", sizeof(config->bluedot_device_id));
-            config->bluedot_timeout = 120;
+            config->bluedot_timeout = 3600;
 
             config->bluedot_cat[0] = '\0';
             config->bluedot_uri[0] = '\0';
