@@ -3427,7 +3427,7 @@ void Load_Rules( const char *ruleset )
                                                             rulestruct[counters->rulecount].after2_method_dst = true;
                                                         }
 
-                                                    if (!strcmp(after_value2, "by_username"))
+                                                    if (!strcmp(after_value2, "by_username") || Sagan_strstr(tmptoken, "by_string"))
                                                         {
                                                             valid++;
                                                             rulestruct[counters->rulecount].after2_method_username = true;

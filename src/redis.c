@@ -187,7 +187,7 @@ void Redis_Writer_Connect(void)
 
                     if (c_writer_redis)
                         {
-			    
+
                             Sagan_Log(WARN, "[%s, line %d] Redis 'writer' connection error! Sleeping for 2 seconds.", __FILE__, __LINE__);
 
                         }
