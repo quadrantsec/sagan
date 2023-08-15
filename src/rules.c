@@ -1946,10 +1946,9 @@ void Load_Rules( const char *ruleset )
 
                             Var_To_Value(tmptoken, tmp1, sizeof(tmp1));
 
-                            Content_Pipe(tmp1, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
-
                             Remove_Spaces(rule_tmp);
 
+                            Content_Pipe(tmp1, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
                             strlcpy(tmp2, rule_tmp, sizeof(tmp2));
 
                             ptmp = strtok_r(tmp2, ",", &tok);
@@ -2240,7 +2239,6 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_decode_base64[json_decode_base64_count] = true;
 
                             json_decode_base64_count++;
-//                            rulestruct[counters->rulecount].json_decode_base64_count = json_decode_base64_count;
                         }
 
                     /* For json_pcre */
@@ -2257,7 +2255,6 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_decode_base64_pcre[json_decode_base64_pcre_count] = true;
 
                             json_decode_base64_pcre_count++;
-//                            rulestruct[counters->rulecount].json_decode_base64_pcre_count = json_decode_base64_pcre_count;
                         }
 
                     /* For json_meta_content */
@@ -2274,7 +2271,6 @@ void Load_Rules( const char *ruleset )
                             rulestruct[counters->rulecount].json_decode_base64_meta[json_decode_base64_meta_count] = true;
 
                             json_decode_base64_meta_count++;
-//                            rulestruct[counters->rulecount].json_decode_base64_meta_count = json_decode_base64_meta_count;
                         }
 
 
@@ -2488,9 +2484,10 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             Var_To_Value(tmptoken, tmp1, sizeof(tmp1));
-                            Content_Pipe(tmp1, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
+
                             Remove_Spaces(rule_tmp);
 
+                            Content_Pipe(tmp1, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
                             strlcpy(tmp2, rule_tmp, sizeof(tmp2));
 
                             ptmp = strtok_r(tmp2, ",", &tok);
