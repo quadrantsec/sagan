@@ -106,7 +106,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
 
             struct _After2_IPC *Temp_After2_IPC;
 
-            Temp_After2_IPC = malloc(sizeof(struct _After2_IPC) + config->message_buffer_size * config->max_after2);
+            Temp_After2_IPC = malloc(sizeof(struct _After2_IPC) * config->max_after2);
 
             old_count = counters_ipc->after2_count;
 
@@ -193,7 +193,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
 
             struct _Threshold2_IPC *Temp_Threshold2_IPC;
 
-            Temp_Threshold2_IPC = malloc(sizeof(struct _Threshold2_IPC) + config->message_buffer_size * config->max_threshold2);
+            Temp_Threshold2_IPC = malloc(sizeof(struct _Threshold2_IPC) * config->max_threshold2);
 
 
             old_count = counters_ipc->thresh2_count;
@@ -279,7 +279,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
             pthread_mutex_lock(&Flexbit_Mutex);
 
             struct _Sagan_IPC_Flexbit *temp_flexbit_ipc;
-            temp_flexbit_ipc = malloc(sizeof(struct _Sagan_IPC_Flexbit) + config->message_buffer_size * config->max_flexbits);
+            temp_flexbit_ipc = malloc(sizeof(struct _Sagan_IPC_Flexbit) * config->max_flexbits);
 
 
             old_count = counters_ipc->flexbit_count;
@@ -360,7 +360,7 @@ bool Clean_IPC_Object( uint_fast8_t type )
             pthread_mutex_lock(&Xbit_Mutex);
 
             struct _Sagan_IPC_Xbit *temp_xbit_ipc;
-            temp_xbit_ipc = malloc(sizeof(struct _Sagan_IPC_Xbit) + config->message_buffer_size * config->max_xbits);
+            temp_xbit_ipc = malloc(sizeof(struct _Sagan_IPC_Xbit) * config->max_xbits);
 
             old_count = counters_ipc->xbit_count;
 
@@ -539,12 +539,12 @@ void IPC_Init(void)
 
             config->shm_xbit_status = true;
 
-            if ( ftruncate(config->shm_xbit, sizeof(_Sagan_IPC_Xbit) + config->message_buffer_size * config->max_xbits ) != 0 )
+            if ( ftruncate(config->shm_xbit, sizeof(_Sagan_IPC_Xbit) * config->max_xbits ) != 0 )
                 {
                     Sagan_Log(ERROR, "[%s, line %d] Failed to ftruncate xbit. [%s]", __FILE__, __LINE__, strerror(errno));
                 }
 
-            if (( Xbit_IPC = mmap(0, sizeof(_Sagan_IPC_Xbit) + config->message_buffer_size * config->max_xbits, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_xbit, 0)) == MAP_FAILED )
+            if (( Xbit_IPC = mmap(0, sizeof(_Sagan_IPC_Xbit) * config->max_xbits, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_xbit, 0)) == MAP_FAILED )
                 {
                     Sagan_Log(ERROR, "[%s, line %d] Error allocating memory for xbit object! [%s]", __FILE__, __LINE__, strerror(errno));
                 }
@@ -585,12 +585,12 @@ void IPC_Init(void)
 
     config->shm_flexbit_status = true;
 
-    if ( ftruncate(config->shm_flexbit, sizeof(_Sagan_IPC_Flexbit) + config->message_buffer_size * config->max_flexbits ) != 0 )
+    if ( ftruncate(config->shm_flexbit, sizeof(_Sagan_IPC_Flexbit) * config->max_flexbits ) != 0 )
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to ftruncate flexbit. [%s]", __FILE__, __LINE__, strerror(errno));
         }
 
-    if (( flexbit_ipc = mmap(0, sizeof(_Sagan_IPC_Flexbit) + config->message_buffer_size * config->max_flexbits, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_flexbit, 0)) == MAP_FAILED )
+    if (( flexbit_ipc = mmap(0, sizeof(_Sagan_IPC_Flexbit) * config->max_flexbits, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_flexbit, 0)) == MAP_FAILED )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory for flexbit object! [%s]", __FILE__, __LINE__, strerror(errno));
         }
@@ -623,12 +623,12 @@ void IPC_Init(void)
 
     config->shm_thresh2_status = true;
 
-    if ( ftruncate(config->shm_thresh2, sizeof(_Threshold2_IPC) + config->message_buffer_size * config->max_threshold2 ) != 0 )
+    if ( ftruncate(config->shm_thresh2, sizeof(_Threshold2_IPC) * config->max_threshold2 ) != 0 )
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to ftruncate thresh2. [%s]", __FILE__, __LINE__, strerror(errno));
         }
 
-    if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) + config->message_buffer_size * config->max_threshold2, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_thresh2, 0)) == MAP_FAILED )
+    if (( Threshold2_IPC = mmap(0, sizeof(_Threshold2_IPC) * config->max_threshold2, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_thresh2, 0)) == MAP_FAILED )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory for _Threshold2_IPC object! [%s]", __FILE__, __LINE__, strerror(errno));
         }
@@ -662,12 +662,12 @@ void IPC_Init(void)
 
     config->shm_after2_status = true;
 
-    if ( ftruncate(config->shm_after2, sizeof(_After2_IPC) + config->message_buffer_size * config->max_after2 ) != 0 )
+    if ( ftruncate(config->shm_after2, sizeof(_After2_IPC) * config->max_after2 ) != 0 )
         {
             Sagan_Log(ERROR, "[%s, line %d] Failed to ftruncate after2. [%s]", __FILE__, __LINE__, strerror(errno));
         }
 
-    if (( After2_IPC = mmap(0, sizeof(_After2_IPC) + config->message_buffer_size * config->max_after2, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_after2, 0)) == MAP_FAILED )
+    if (( After2_IPC = mmap(0, sizeof(_After2_IPC) * config->max_after2, (PROT_READ | PROT_WRITE), MAP_SHARED, config->shm_after2, 0)) == MAP_FAILED )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory for _After2_IPC object! [%s]", __FILE__, __LINE__, strerror(errno));
         }
@@ -738,7 +738,7 @@ void IPC_Close( void )
 
             File_Unlock(config->shm_flexbit);
 
-            munmap(flexbit_ipc, sizeof(_Sagan_IPC_Flexbit) + config->message_buffer_size * config->max_flexbits);
+            munmap(flexbit_ipc, sizeof(_Sagan_IPC_Flexbit) * config->max_flexbits);
 
             if ( close(config->shm_flexbit) != 0 )
                 {
@@ -752,7 +752,7 @@ void IPC_Close( void )
 
             File_Unlock(config->shm_thresh2);
 
-            munmap(Threshold2_IPC, sizeof( _Threshold2_IPC ) + config->message_buffer_size * config->max_threshold2);
+            munmap(Threshold2_IPC, sizeof( _Threshold2_IPC ) * config->max_threshold2);
 
             if ( close(config->shm_thresh2) != 0 )
                 {
@@ -767,7 +767,7 @@ void IPC_Close( void )
 
             File_Unlock(config->shm_after2);
 
-            munmap(After2_IPC, sizeof( _After2_IPC ) + config->message_buffer_size * config->max_after2);
+            munmap(After2_IPC, sizeof( _After2_IPC ) * config->max_after2);
 
             if ( close(config->shm_after2) != 0 )
                 {
@@ -782,7 +782,7 @@ void IPC_Close( void )
 
             File_Unlock(config->shm_xbit);
 
-            munmap(Xbit_IPC, sizeof(_Sagan_IPC_Xbit) + config->message_buffer_size * config->max_xbits);
+            munmap(Xbit_IPC, sizeof(_Sagan_IPC_Xbit) * config->max_xbits);
 
             if ( close(config->shm_track_clients) != 0 )
                 {
