@@ -190,11 +190,11 @@ struct _SaganConfig
 
     char	ipc_directory[MAXPATH];
 
-    int		max_flexbits;
-    int		max_xbits;
-    int		max_threshold2;
-    int		max_after2;
-    int		max_track_clients;
+    uint_fast32_t	max_flexbits;
+    uint_fast32_t	max_xbits;
+    uint_fast32_t	max_threshold2;
+    uint_fast32_t	max_after2;
+    uint_fast32_t	max_track_clients;
 
 #ifdef HAVE_LIBPCAP
     char        plog_interface[50];
