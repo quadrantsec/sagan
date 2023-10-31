@@ -1011,9 +1011,19 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #ifdef HAVE_LIBMAXMINDDB
 
+			    /* Reset values */
+
+			    GeoIP_SRC->results = 0; 
+			    GeoIP_DEST->results = 0; 
 
                             GeoIP_SRC->country[0] = '\0';
                             GeoIP_DEST->country[0] = '\0';
+
+                            GeoIP_SRC->city[0] = '\0';
+                            GeoIP_DEST->city[0] = '\0';
+
+                            GeoIP_SRC->subdivision[0] = '\0';
+                            GeoIP_DEST->subdivision[0] = '\0';
 
                             if ( rulestruct[b].geoip2_flag && config->have_geoip2 == true )
                                 {
