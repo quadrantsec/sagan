@@ -1926,7 +1926,7 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Expected a meta_content 'helper',  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            Between_Quotes(tmptoken, tmp2, sizeof(tmp2), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, tmp2, sizeof(tmp2), ruleset_fullname, linecount, true);
 
                             Content_Pipe(tmp2, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
 
@@ -2029,7 +2029,7 @@ void Load_Rules( const char *ruleset )
 
                             char json_map_type[32] = { 0 };
 
-                            Between_Quotes(tmptoken, json_map_type, sizeof(json_map_type), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, json_map_type, sizeof(json_map_type), ruleset_fullname, linecount, true);
 
                             if ( !strcmp(json_map_type, "src_ip" ) )
                                 {
@@ -2130,7 +2130,7 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Expected a json_map key,  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_map_key[json_map_count], sizeof(rulestruct[counters->rulecount].json_map_key[json_map_count]), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_map_key[json_map_count], sizeof(rulestruct[counters->rulecount].json_map_key[json_map_count]), ruleset_fullname, linecount, true);
 
                             json_map_count++;
                             rulestruct[counters->rulecount].json_map_count = json_map_count;
@@ -2171,7 +2171,7 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Expected a json_content key,  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_content_key[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_key[json_content_count]), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_content_key[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_key[json_content_count]), ruleset_fullname, linecount, true);
 
                             if ( rulestruct[counters->rulecount].json_content_key[json_content_count][0] != '.' )
                                 {
@@ -2190,7 +2190,7 @@ void Load_Rules( const char *ruleset )
 
                             Content_Pipe(tmptoken, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
 
-                            Between_Quotes(rule_tmp, rulestruct[counters->rulecount].json_content_content[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_content[json_content_count]), ruleset_fullname, linecount);
+                            Between_Quotes(rule_tmp, rulestruct[counters->rulecount].json_content_content[json_content_count], sizeof(rulestruct[counters->rulecount].json_content_content[json_content_count]), ruleset_fullname, linecount, true);
 
                             json_content_count++;
                             rulestruct[counters->rulecount].json_content_count=json_content_count;
@@ -2319,7 +2319,7 @@ void Load_Rules( const char *ruleset )
                                 }
 
 
-                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_pcre_key[json_pcre_count], sizeof(rulestruct[counters->rulecount].json_pcre_key[json_pcre_count]), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_pcre_key[json_pcre_count], sizeof(rulestruct[counters->rulecount].json_pcre_key[json_pcre_count]), ruleset_fullname, linecount, true);
 
                             if ( rulestruct[counters->rulecount].json_pcre_key[json_pcre_count][0] != '.' )
                                 {
@@ -2337,7 +2337,7 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Expected a json_pcre \"pcre\" statement,  but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            Between_Quotes(tmptoken, tmp2, sizeof(tmp2), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, tmp2, sizeof(tmp2), ruleset_fullname, linecount, false);
 
                             pcreflag=false;
 
@@ -2467,7 +2467,7 @@ void Load_Rules( const char *ruleset )
                                     Sagan_Log(ERROR, "[%s, line %d] Expected a json_meta_content key but none was found at line %d in %s - Abort", __FILE__, __LINE__, linecount, ruleset_fullname);
                                 }
 
-                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count],sizeof(rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count]), ruleset_fullname, linecount);
+                            Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count],sizeof(rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count]), ruleset_fullname, linecount, true);
 
 
                             if ( rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count][0] != '.' )
@@ -2778,7 +2778,7 @@ void Load_Rules( const char *ruleset )
                         {
                             arg = strtok_r(NULL, ";", &saveptrrule2);
 
-                            Between_Quotes(arg, tmp2, sizeof(tmp2), ruleset_fullname, linecount);
+                            Between_Quotes(arg, tmp2, sizeof(tmp2), ruleset_fullname, linecount, true);
 
                             if (tmp2[0] == '\0' )
                                 {
@@ -2806,7 +2806,7 @@ void Load_Rules( const char *ruleset )
                                     rulestruct[counters->rulecount].content_not[content_count] = true;
                                 }
 
-                            Between_Quotes(arg, tmp2, sizeof(tmp2), ruleset_fullname, linecount);
+                            Between_Quotes(arg, tmp2, sizeof(tmp2), ruleset_fullname, linecount, true);
 
                             if (tmp2[0] == '\0' )
                                 {
@@ -3010,7 +3010,7 @@ void Load_Rules( const char *ruleset )
 
                             arg = strtok_r(NULL, ";", &saveptrrule2);
 
-                            Between_Quotes(arg, tmp2, sizeof(tmp2), ruleset_fullname, linecount);
+                            Between_Quotes(arg, tmp2, sizeof(tmp2), ruleset_fullname, linecount, false);
 
                             if (tmp2[0] == '\0' )
                                 {

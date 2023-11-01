@@ -98,7 +98,7 @@ void	Chroot(const char *chrootdir );
 void	Remove_Spaces(char *s);
 void	Remove_Return(char *s);
 int	Classtype_Lookup( const char *classtype, char *str, size_t size );
-void	Between_Quotes( const char *in_str, char *str, size_t size, const char *filename, uint32_t line_number );
+void	Between_Quotes( const char *in_str, char *str, size_t size, const char *filename, uint32_t line_number, bool q_check );
 double	CalcPct(uint64_t cnt, uint64_t total);
 void	Replace_String(const char *in_str, char *orig, char *rep, char *str, size_t size);
 uint64_t Value_To_Seconds(char *type, uint64_t number);

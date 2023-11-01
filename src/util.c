@@ -388,18 +388,32 @@ bool Is_Numeric (const char *str)
  * parsing msg: and pcre
  ***************************************************************************/
 
-void Between_Quotes( const char *in_str, char *str, size_t size, const char *filename, uint32_t line_number )
+void Between_Quotes( const char *in_str, char *str, size_t size, const char *filename, uint32_t line_number, bool q_check )
 {
 
 
     bool flag = false;
     uint_fast32_t i = 0;
 
+    uint_fast8_t q_count = 0;
+
     char tmp1[2] = { 0 };
     char tmp2[1024] = { 0 };
 
     for ( i=0; i<strlen(in_str); i++)
         {
+
+    	    /* Check and make sure quotes are balanaced */
+
+            if ( in_str[i] == '\"' && q_check == true )
+                {
+                    q_count++;
+
+ 	           if ( q_count > 3 )
+       		         {
+               		     Sagan_Log(ERROR, "[%s, line %d] Improper balance of quotes found in %s at line %d.", __FILE__, __LINE__, filename, line_number);
+	                }
+		}
 
             if ( flag == true && in_str[i] == '\"' )
                 {
@@ -412,7 +426,10 @@ void Between_Quotes( const char *in_str, char *str, size_t size, const char *fil
                     strlcat(tmp2, tmp1, sizeof(tmp2));
                 }
 
-            if ( in_str[i] == '\"' ) flag = true;
+            if ( in_str[i] == '\"' )
+                {
+                    flag = true;
+                }
 
         }
 
@@ -421,7 +438,7 @@ void Between_Quotes( const char *in_str, char *str, size_t size, const char *fil
 
     if ( tmp2[0] == '\0' )
         {
-            Sagan_Log(ERROR, "[%s, line %d] Invalid quotes found in %s at line %d. Are you actually using real quotes?!", __FILE__, __LINE__, filename, line_number);
+            Sagan_Log(ERROR, "[%s, line %d] Invalid quotes found in %s at line %d. Are you actually using real quotes (HEX 0x22)?!", __FILE__, __LINE__, filename, line_number);
         }
 
     snprintf(str, size, "%s", tmp2);
