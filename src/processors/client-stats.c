@@ -233,6 +233,8 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
     uint64_t epoch = 0;
     char timet[20];
 
+    unsigned char ip_convert[MAXIPBIT] = { 0 };
+
     t = time(NULL);
     now=localtime(&t);
     strftime(timet, sizeof(timet), "%s",  now);
@@ -243,14 +245,29 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
 
             /* Track by "src_ip" / Validate inbound IP */
 
-            if ( !Is_IP(ip, IPv4) || !Is_IP(ip, IPv6) )
+            if ( config->client_stats_private_only == true )
                 {
-                    return;
+
+                    IP2Bit(ip, ip_convert);
+
+                    if ( is_notroutable(ip_convert) != true )
+                        {
+                            return;
+                        }
+                    else
+                        {
+                            hash = Djb2_Hash( ip );
+                        }
+
                 }
+
+            /* Doesn't matter if IP is private or not */
+
             else
                 {
                     hash = Djb2_Hash( ip );
                 }
+
         }
     else
         {

@@ -307,6 +307,7 @@ processors:
   - client-stats:
       enabled: no
       type: "ip"
+      private-only: enabled                   # Only collect private IP addresses
       filename: "$LOG_PATH/client-stats.json"
       time: 600
       data-interval: 900

@@ -1011,10 +1011,10 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
 #ifdef HAVE_LIBMAXMINDDB
 
-			    /* Reset values */
+                            /* Reset values */
 
-			    GeoIP_SRC->results = 0; 
-			    GeoIP_DEST->results = 0; 
+                            GeoIP_SRC->results = 0;
+                            GeoIP_DEST->results = 0;
 
                             GeoIP_SRC->country[0] = '\0';
                             GeoIP_DEST->country[0] = '\0';

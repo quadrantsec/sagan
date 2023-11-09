@@ -403,17 +403,17 @@ void Between_Quotes( const char *in_str, char *str, size_t size, const char *fil
     for ( i=0; i<strlen(in_str); i++)
         {
 
-    	    /* Check and make sure quotes are balanaced */
+            /* Check and make sure quotes are balanaced */
 
             if ( in_str[i] == '\"' && q_check == true )
                 {
                     q_count++;
 
- 	           if ( q_count > 3 )
-       		         {
-               		     Sagan_Log(ERROR, "[%s, line %d] Improper balance of quotes found in %s at line %d.", __FILE__, __LINE__, filename, line_number);
-	                }
-		}
+                    if ( q_count > 3 )
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] Improper balance of quotes found in %s at line %d.", __FILE__, __LINE__, filename, line_number);
+                        }
+                }
 
             if ( flag == true && in_str[i] == '\"' )
                 {

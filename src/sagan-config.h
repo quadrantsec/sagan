@@ -138,6 +138,7 @@ struct _SaganConfig
 
     bool        client_stats_flag;
     bool	client_stats_type;
+    bool	client_stats_private_only;
     char 	client_stats_file_name[MAXPATH];
     uint_fast32_t 	client_stats_time;
     uint_fast16_t	client_stats_interval;

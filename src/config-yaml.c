@@ -250,6 +250,8 @@ void Load_YAML_Config( char *yaml_file )
             config->sagan_proto = 17;           /* Default to UDP */
             config->max_processor_threads = MAX_PROCESSOR_THREADS;
 
+            config->client_stats_private_only = true;
+
             /* Copy default FIFO */
 
             if ( config->sagan_is_file == false )
@@ -1541,6 +1543,16 @@ void Load_YAML_Config( char *yaml_file )
                                                     config->client_stats_type = 1;
                                                 }
                                         }
+
+                                    else if (!strcmp(last_pass, "private-only" ) && config->client_stats_flag == true )
+                                        {
+
+                                            if ( !strcmp(value, "false" ) || !strcasecmp(value, "disabled") || !strcasecmp(value, "no") )
+                                                {
+                                                    config->client_stats_private_only = false;
+                                                }
+                                        }
+
                                 }
 
                             else if ( sub_type == YAML_PROCESSORS_STATS_JSON )
