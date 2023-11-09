@@ -266,12 +266,16 @@ void Client_Stats_Add_Update_IP( const char *ip, const char *program, const char
             else
                 {
 
-		    /* Make sure its a valid IP address */
+                    /* Make sure its a valid IP address */
 
-		    if ( Is_IP( ip, IPv4) == true || Is_IP( ip, IPv6 ) == true )
-			{
-                   	 hash = Djb2_Hash( ip );
-			}
+                    if ( Is_IP( ip, IPv4) == true || Is_IP( ip, IPv6 ) == true )
+                        {
+                            hash = Djb2_Hash( ip );
+                        }
+                    else
+                        {
+                            return;
+                        }
                 }
 
         }
