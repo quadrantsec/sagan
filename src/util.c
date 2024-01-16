@@ -773,8 +773,10 @@ void Var_To_Value(const char *in_str, char *str, size_t size)
             memset(tmp_result, 0, sizeof(tmp_result));
         }
 
+    if (isspace(tmp[strlen(tmp)-1])) {
+        tmp[strlen(tmp)-1] = 0;         /* Remove trailing space */
+    }
 
-    tmp[strlen(tmp)-1] = 0;		/* Remove trailing space */
     snprintf(str, size, "%s", tmp);
 
 }
