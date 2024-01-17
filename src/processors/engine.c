@@ -973,7 +973,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                         }
 
 
-                                    sleep( rulestruct[b].xbit_upause_time );
+                                    usleep( rulestruct[b].xbit_upause_time );
                                 }
 
                             /****************************************************************************
