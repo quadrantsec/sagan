@@ -411,7 +411,7 @@ void Sig_Handler( void )
                     /************************************************************/
 
                     pthread_mutex_lock(&SaganRulesLoadedMutex);
-                    Load_YAML_Config(config->sagan_config);	/* <- RELOAD */
+                    Load_YAML_Config(config->sagan_config, true);	/* <- RELOAD */
                     pthread_mutex_unlock(&SaganRulesLoadedMutex);
 
                     /************************************************************/

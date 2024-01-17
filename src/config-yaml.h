@@ -76,6 +76,6 @@
 #define		YAML_OUTPUT_ALERT		306
 #define		YAML_OUTPUT_EVE			307
 
-void Load_YAML_Config( char * );
+void Load_YAML_Config( char *, bool );
 
 #endif
