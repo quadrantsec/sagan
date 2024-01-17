@@ -729,7 +729,7 @@ int main(int argc, char **argv)
 #endif
 
     pthread_mutex_lock(&SaganRulesLoadedMutex);
-    (void)Load_YAML_Config(config->sagan_config);
+    (void)Load_YAML_Config(config->sagan_config, true);
 
     /* If we are in "test" mode, we can stop here */
 
