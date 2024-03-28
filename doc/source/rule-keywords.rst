@@ -148,7 +148,7 @@ Used to track events from specific countries.
 
 The example above means, "track by the source address of the event. If the GeoIP 2 location is not from the United States, trigger the rule".
 
-**country_code: track by_dst, is [CN,RU,HK];**
+**country_code: track by_dst, is CN,RU,HK;**
 
 The example above means, "track by the destination address of the event. If the GeoIP 2 location is going to China, Russia or Hong Kong, trigger the rule".
 
