@@ -99,7 +99,7 @@ extern bool reload_rules;
 
 #ifdef HAVE_LIBYAML
 
-void Load_YAML_Config( char *yaml_file )
+void Load_YAML_Config( char *yaml_file, bool is_root_config )
 {
 
     struct stat filecheck;
@@ -578,7 +578,7 @@ void Load_YAML_Config( char *yaml_file )
 
                                     Var_To_Value(value, tmp, sizeof(tmp));
                                     Sagan_Log(NORMAL, "Loading included file '%s'.", tmp);
-                                    Load_YAML_Config(tmp);
+                                    Load_YAML_Config(tmp, false);
 
                                     toggle = 1;
 
@@ -2747,6 +2747,11 @@ void Load_YAML_Config( char *yaml_file )
     /**********************/
     /* Sanity checks here */
     /**********************/
+
+    // Don't perform sanity checks if not root config
+    if (!is_root_config) {
+        return;
+    }
 
     /* Check rules for duplicate sid.  We can't have that! */
 
