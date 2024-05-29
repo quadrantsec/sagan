@@ -139,7 +139,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
             if ( !Is_IP(tmp, IPv4) && !Is_IP(tmp, IPv6) )
                 {
 
-                    SaganProcSyslog_LOCAL->dst_ip[0] = '\0';
+                    SaganProcSyslog_LOCAL->src_ip[0] = '\0';
                     SaganProcSyslog_LOCAL->ip_src_is_valid = false;
                     json_object_put(json_norm);
                     return;
@@ -177,7 +177,7 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
                 }
 
             strlcpy(SaganProcSyslog_LOCAL->dst_ip, tmp, MAXIP);
-            IP2Bit(SaganProcSyslog_LOCAL->src_ip, SaganProcSyslog_LOCAL->ip_src_bits);
+            IP2Bit(SaganProcSyslog_LOCAL->dst_ip, SaganProcSyslog_LOCAL->ip_dst_bits);
 
             if ( is_notlocalhost( SaganProcSyslog_LOCAL->ip_dst_bits ) )
                 {
