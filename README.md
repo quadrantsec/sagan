@@ -79,11 +79,5 @@ Credits
 -------
 
 A lot of people have invested time in Sagan.  We list people who have contributed in our source code tree. 
-See the https://github.com/quadrantsec/sagan/blob/main/src/credits.c source f
-
-Credits
--------
-
-A lot of people have invested time in Sagan.  We list people who have contributed in our source code tree. 
 See the https://github.com/quadrantsec/sagan/blob/main/src/credits.c source file.
 
