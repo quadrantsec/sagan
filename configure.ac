@@ -2,11 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 
 VERSION=`cat src/version.h | grep "#define VERSION " | sed -e 's/^.*\"\(.*\)\"/\1/'`
+AC_INIT([sagan],m4_esyscmd_s(cat src/version.h | cut -d\" -f2))
 
-AC_INIT([sagan], m4_esyscmd_s([cat src/version.h | cut -d\" -f2]))
 AC_CONFIG_SRCDIR([src])
-AC_CANONICAL_SYSTEM
-AC_GNU_SOURCE
+AC_CANONICAL_TARGET
+AC_USE_SYSTEM_EXTENSIONS
 AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE([disable])
 
@@ -223,12 +223,12 @@ fi
 
 AC_SUBST(VERSION)
 AM_INIT_AUTOMAKE([subdir-objects])
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
-AC_LANG_C
+AC_LANG([C])
 AC_PROG_MAKE_SET
 
 AM_PROG_CC_C_O
@@ -236,7 +236,10 @@ AM_PROG_CC_C_O
 PKG_PROG_PKG_CONFIG
 
 # Checks for header files.
-AC_HEADER_STDC
+
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_HEADER_SYS_WAIT
 
 AC_CHECK_HEADERS([stdio.h stdlib.h sys/types.h unistd.h stdint.h inttypes.h ctype.h errno.h fcntl.h sys/stat.h string.h getopt.h time.h stdarg.h limits.h stdbool.h arpa/inet.h netinet/in.h sys/time.h sys/socket.h sys/mmap.h sys/mman.h sys/prctl.h libgen.h glob.h])
@@ -278,14 +281,23 @@ AC_EGREP_CPP([yes_have_f_getpipe_sz], [
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
-AC_HEADER_TIME
 
 # Checks for library functions.
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MALLOC
 AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_STAT
-AC_TYPE_SIGNAL
+
+AC_CACHE_CHECK([return type of signal handlers],[ac_cv_type_signal],[AC_COMPILE_IFELSE(
+[AC_LANG_PROGRAM([#include <sys/types.h>
+#include <signal.h>
+],
+		 [return *(signal (0, 0)) (0) == 1;])],
+		   [ac_cv_type_signal=int],
+		   [ac_cv_type_signal=void])])
+AC_DEFINE_UNQUOTED([RETSIGTYPE],[$ac_cv_type_signal],[Define as the return type of signal handlers
+		    (`int' or `void').])
+
 AC_FUNC_STRFTIME
 AC_FUNC_FORK
 AC_FUNC_REALLOC
@@ -316,7 +328,7 @@ if test "$with_libpthread_includes" != "no"; then
     CPPFLAGS="${CPPFLAGS} -I${with_libpthread_includes}"
 fi
 
-dnl AC_CHECK_HEADER(pthread.h,,[AC_ERROR(pthread.h not found ...)])
+dnl AC_CHECK_HEADER(pthread.h,,[AC_MSG_ERROR(pthread.h not found ...)])
 
 if test "$with_libpthread_libraries" != "no"; then
     LDFLAGS="${LDFLAGS}  -L${with_libpthread_libraries}"
@@ -383,7 +395,7 @@ if test "$with_libpcre_includes" != "no"; then
     CPPFLAGS="${CPPFLAGS} -I${with_libpcre_includes}"
 fi
 
-AC_CHECK_HEADER(pcre.h,,[AC_ERROR(pcre.h not found ...)])
+AC_CHECK_HEADER(pcre.h,,[AC_MSG_ERROR(pcre.h not found ...)])
 
 if test "$with_libpcre_libraries" != "no"; then
     LDFLAGS="${LDFLAGS} -L${with_libpcre_libraries}"
@@ -429,10 +441,8 @@ if test "$PCRE" = "no"; then
 fi
 LIBS="${TMPLIBS}"
 
-AC_TRY_COMPILE([ #include <pcre.h> ],
-    [ int eo = 0; eo |= PCRE_EXTRA_MATCH_LIMIT_RECURSION; ],
-    [ pcre_match_limit_recursion_available=yes ], [:]
-)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[ #include <pcre.h> ]], [[ int eo = 0; eo |= PCRE_EXTRA_MATCH_LIMIT_RECURSION; ]])],[ pcre_match_limit_recursion_available=yes ],[:
+])
 
 if test "$pcre_match_limit_recursion_available" != "yes"; then
     echo
@@ -446,22 +456,18 @@ fi
 
 TMPCFLAGS="${CFLAGS}"
 CFLAGS="-O0 -g -Werror -Wall"
-AC_TRY_COMPILE([ #include <pcre.h> ],
-    [ pcre_extra *extra = NULL; pcre_free_study(extra); ],
-    [ AC_DEFINE([HAVE_PCRE_FREE_STUDY], [1], [Pcre pcre_free_study supported])], [:]
-)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[ #include <pcre.h> ]], [[ pcre_extra *extra = NULL; pcre_free_study(extra); ]])],[ AC_DEFINE([HAVE_PCRE_FREE_STUDY], [1], [Pcre pcre_free_study supported])],[:
+])
 CFLAGS="${TMPCFLAGS}"
 
 
 #enable support for PCRE-jit available since pcre-8.20
 AC_MSG_CHECKING(for PCRE JIT support)
-AC_TRY_COMPILE([ #include <pcre.h> ],
-    [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[ #include <pcre.h> ]], [[
     int jit = 0;
     pcre_config(PCRE_CONFIG_JIT, &jit);
-    ],
-    [ pcre_jit_available=yes ], [ pcre_jit_available=no ]
-    )
+    ]])],[ pcre_jit_available=yes ],[ pcre_jit_available=no 
+    ])
 
 # bug 1693, libpcre 8.35 is broken and debian jessie is still using that
 if test "$libpcre_buggy_found" = "yes"; then
@@ -474,8 +480,7 @@ if test "x$pcre_jit_available" = "xyes"; then
    AC_DEFINE([PCRE_HAVE_JIT], [1], [Pcre with JIT compiler support enabled])
 
    AC_MSG_CHECKING(for PCRE JIT support usability)
-   AC_TRY_COMPILE([ #include <pcre.h> ],
-       [
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[ #include <pcre.h> ]], [[
        const char* regexstr = "(a|b|c|d)";
        pcre *re;
        const char *error;
@@ -490,9 +495,8 @@ if test "x$pcre_jit_available" = "xyes"; then
        if (ret != 0 || jit != 1)
            exit(EXIT_FAILURE);
        exit(EXIT_SUCCESS);
-       ],
-       [ pcre_jit_works=yes ], [:]
-   )
+       ]])],[ pcre_jit_works=yes ],[:
+   ])
    if test "x$pcre_jit_works" != "xyes"; then
        AC_MSG_RESULT(no)
        echo
@@ -642,14 +646,15 @@ src/Makefile \
 tools/Makefile])
 
 
-# AC_OUTPUT(Makefile)
+# AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
 AC_OUTPUT
 
 AC_MSG_RESULT([])
 AC_MSG_RESULT([  ,-._,-.    Sagan has been configured!])
 AC_MSG_RESULT([  \/)"(\/ ])
 AC_MSG_RESULT([   (_o_)     Champ Clark III & The Quadrant InfoSec Team [[quadrantsec.com]]])
-AC_MSG_RESULT([   /   \/)   Copyright (C) 2009-2023 Quadrant Information Security, et al.])
+AC_MSG_RESULT([   /   \/)   Copyright (C) 2009-2024 Quadrant Information Security, et al.])
 AC_MSG_RESULT([  (|| ||) ])
 AC_MSG_RESULT([   oo-oo  ]) 
 AC_MSG_RESULT([])
