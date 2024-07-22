@@ -63,6 +63,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the `curl' library (-lcurl). */
+#undef HAVE_LIBCURL
+
 /* Define to 1 if you have the `esmtp' library (-lesmtp). */
 #undef HAVE_LIBESMTP
 
@@ -439,6 +442,9 @@
 
 /* With Bluedot */
 #undef WITH_BLUEDOT
+
+/* With Offload */
+#undef WITH_OFFLOAD
 
 /* With Syslog */
 #undef WITH_SYSLOG

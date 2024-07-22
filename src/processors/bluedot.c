@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -968,7 +968,7 @@ uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t 
                 }
 
 
-            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_IP_LOOKUP_URL, data, config->bluedot_host, BLUEDOT_PROCESSOR_USER_AGENT, config->bluedot_device_id);
+            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_IP_LOOKUP_URL, data, config->bluedot_host, USER_AGENT, config->bluedot_device_id);
 
         }  /* BLUEDOT_LOOKUP_IP */
 
@@ -1037,7 +1037,7 @@ uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t 
                         }
                 }
 
-            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_HASH_LOOKUP_URL, data, config->bluedot_host, BLUEDOT_PROCESSOR_USER_AGENT, config->bluedot_device_id);
+            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_HASH_LOOKUP_URL, data, config->bluedot_host, USER_AGENT, config->bluedot_device_id);
 
         }
 
@@ -1109,7 +1109,7 @@ uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t 
                         }
                 }
 
-            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_URL_LOOKUP_URL, data, config->bluedot_host, BLUEDOT_PROCESSOR_USER_AGENT, config->bluedot_device_id);
+            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_URL_LOOKUP_URL, data, config->bluedot_host, USER_AGENT, config->bluedot_device_id);
 
         }
 
@@ -1180,7 +1180,7 @@ uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t 
                         }
                 }
 
-            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_FILENAME_LOOKUP_URL, data, config->bluedot_host, BLUEDOT_PROCESSOR_USER_AGENT, config->bluedot_device_id);
+            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_FILENAME_LOOKUP_URL, data, config->bluedot_host, USER_AGENT, config->bluedot_device_id);
 
         }
 
@@ -1251,7 +1251,7 @@ uint_fast8_t Sagan_Bluedot_Lookup(char *data,  uint_fast8_t type, uint_fast32_t 
                         }
                 }
 
-            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_JA3_LOOKUP_URL, data, config->bluedot_host, BLUEDOT_PROCESSOR_USER_AGENT, config->bluedot_device_id);
+            snprintf(buff, sizeof(buff), "GET /%s%s%s HTTP/1.1\r\nHost: %s\r\n%s\r\nX-BLUEDOT-DEVICEID: %s\r\nConnection: close\r\n\r\n", config->bluedot_uri, BLUEDOT_JA3_LOOKUP_URL, data, config->bluedot_host, USER_AGENT, config->bluedot_device_id);
 
         }
 

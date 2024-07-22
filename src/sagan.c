@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -132,13 +132,17 @@ extern struct _Rule_Struct *rulestruct;
 #include "redis.h"
 #endif
 
+#ifdef WITH_OFFLOAD
+#include <curl/curl.h>
+extern bool offload_flag;
+#endif
+
 struct _Sagan_Pass_Syslog *SaganPassSyslog = NULL;
 
 uint_fast16_t proc_msgslot = 0;
 uint_fast16_t proc_running = 0;
 
 bool death=false;
-
 
 pthread_cond_t SaganProcDoWork=PTHREAD_COND_INITIALIZER;
 pthread_mutex_t SaganProcWorkMutex=PTHREAD_MUTEX_INITIALIZER;
@@ -402,7 +406,7 @@ int main(int argc, char **argv)
                             debugflag = true;
                         }
 
-                    if (Sagan_strstr(optarg, "load"))
+                    if (Sagan_strstr(optarg, "confload"))
                         {
                             debug->debugload = true;
                             debugflag = true;
@@ -469,6 +473,14 @@ int main(int argc, char **argv)
                             debugflag = true;
                         }
 
+#ifdef WITH_OFFLOAD
+
+                    if (Sagan_strstr(optarg, "offload"))
+                        {
+                            debug->debugoffload = true;
+                            debugflag = true;
+                        }
+#endif
 
 #ifdef HAVE_LIBMAXMINDDB
 
@@ -729,7 +741,20 @@ int main(int argc, char **argv)
 #endif
 
     pthread_mutex_lock(&SaganRulesLoadedMutex);
+
     (void)Load_YAML_Config(config->sagan_config, true);
+
+    /* Must initialize libcurl before any threads are started.  If we see a signature loaded
+       with the "offload" rule option,  we init curl_global_init() now */
+
+    if ( offload_flag == true )
+        {
+            curl_global_init(CURL_GLOBAL_ALL);
+
+            /* We _don't_ want to call curl_global_init() on reload,  so we set the offload_flag to false */
+
+            offload_flag = false;
+        }
 
     /* If we are in "test" mode, we can stop here */
 
@@ -1066,7 +1091,7 @@ int main(int argc, char **argv)
     Sagan_Log(NORMAL, " ,-._,-. 	-*> Sagan! <*-");
     Sagan_Log(NORMAL, " \\/)\"(\\/	Version %s", VERSION);
     Sagan_Log(NORMAL, "  (_o_)	Champ Clark III & The Quadrant InfoSec Team [quadrantsec.com]");
-    Sagan_Log(NORMAL, "  /   \\/)	Copyright (C) 2009-2023 Quadrant Information Security, et al.");
+    Sagan_Log(NORMAL, "  /   \\/)	Copyright (C) 2009-2024 Quadrant Information Security, et al.");
     Sagan_Log(NORMAL, " (|| ||) 	Using PCRE version: %s", pcre_version());
     Sagan_Log(NORMAL, "  oo-oo");
     Sagan_Log(NORMAL, "");

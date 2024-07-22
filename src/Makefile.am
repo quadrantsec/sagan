@@ -58,6 +58,7 @@ AUTOMAKE_OPIONS=foreign no-dependencies subdir-objects
 						       content.c \
 						       pcre-s.c \
 						       ignore.c \
+						       offload.c \
                                                        parsers/ip.c \
                                                        parsers/proto.c \
                                                        parsers/hash.c \

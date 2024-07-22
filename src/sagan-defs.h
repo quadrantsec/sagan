@@ -1,7 +1,7 @@
 /* $Id$ */
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -41,6 +41,8 @@ typedef void json_object;
 #define SENSOR_NAME		"default_sensor_name"
 #define CLUSTER_NAME		"default_cluster_name"
 #define MMAP_VERSION		2.0
+
+#define USER_AGENT		"User-Agent: Sagan-Engine"
 
 #define CLASSBUF		256
 #define RULEBUF			5128

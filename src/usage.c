@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -39,7 +39,7 @@ void Usage(void)
     fprintf(stderr, "\n--[Sagan version %s | Help/usage screen]--------------------------------\n\n", VERSION);
     fprintf(stderr, "-h, --help\t\tHelp (this screen).\n");
     fprintf(stderr, "-C, --credits\t\tSagan credits.\n");
-    fprintf(stderr, "-d, --debug [type]\tTypes: engine, syslog, load, external, threads, ipc, limits, malformed, xbit, flexbit, brointel, parse_ip, client-stats, track-clients");
+    fprintf(stderr, "-d, --debug [type]\tTypes: engine, syslog, confload, external, threads, ipc, limits, malformed, xbit, flexbit, brointel, parse_ip, client-stats, track-clients");
 #ifdef HAVE_LIBESMTP
     fprintf(stderr, ", smtp");
 #endif
@@ -121,6 +121,10 @@ void Usage(void)
 
 #ifdef HAVE_LIBHIREDIS
     fprintf(stderr, "* Using HiRedis/Redis.\n");
+#endif
+
+#ifdef WITH_OFFLOAD
+    fprintf(stderr, "* Using Offload.\n");
 #endif
 
     fprintf(stderr, "\n* Compiled on %s at %s.\n", __DATE__, __TIME__);

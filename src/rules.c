@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -65,19 +65,21 @@
 #include <json.h>
 #endif
 
+#ifdef WITH_OFFLOAD
+bool offload_flag = false;
+#endif
+
 extern struct _SaganCounters *counters;
 extern struct _SaganDebug *debug;
 extern struct _SaganConfig *config;
 
 #ifdef WITH_BLUEDOT
-
 extern struct _Sagan_Bluedot_Cat_List *SaganBluedotCatList;
 
 char *bluedot_time = NULL;
 char *bluedot_type = NULL;
 
 uint64_t bluedot_time_u32 = 0;
-
 #endif
 
 #ifdef HAVE_LIBLOGNORM
@@ -3679,7 +3681,7 @@ void Load_Rules( const char *ruleset )
 
                             if ( tok_tmp == NULL )
                                 {
-                                    Sagan_Log(ERROR, "[%s, line %d] %s at line %d has 'external' option  but not external 'program' is specified, Abort", __FILE__, __LINE__, ruleset_fullname, linecount);
+                                    Sagan_Log(ERROR, "[%s, line %d] %s at line %d has 'external' option  but no external 'program' is specified, Abort", __FILE__, __LINE__, ruleset_fullname, linecount);
                                 }
 
                             Remove_Spaces(tok_tmp);
@@ -3698,6 +3700,39 @@ void Load_Rules( const char *ruleset )
                             strlcpy(rulestruct[counters->rulecount].external_program, tok_tmp, sizeof(rulestruct[counters->rulecount].external_program));
 
                         }
+
+#ifdef WITH_OFFLOAD
+
+                    if (!strcmp(rulesplit, "offload"))
+                        {
+
+                            offload_flag = true;
+
+                            tok_tmp = strtok_r(NULL, ";", &saveptrrule2);
+
+                            if ( tok_tmp == NULL )
+                                {
+                                    Sagan_Log(ERROR, "[%s, line %d] %s at line %d has 'offload' option  but no offload 'location' is specified, Abort", __FILE__, __LINE__, ruleset_fullname, linecount);
+                                }
+
+                            /* In case the URL has spaces,  we use Between_Quotes */
+
+                            Between_Quotes(tok_tmp, tmp2, sizeof(tmp2), ruleset_fullname, linecount, true);
+
+                            rulestruct[counters->rulecount].offload_flag = 1;
+                            strlcpy(rulestruct[counters->rulecount].offload_location, tmp2, sizeof(rulestruct[counters->rulecount].offload_location));
+
+                        }
+#endif
+
+#ifndef WITH_OFFLOAD
+
+                    if (!strcmp(rulesplit, "offload"))
+                        {
+                            Sagan_Log(ERROR, "%s has 'offload' rulesoption,  but support isn't compiled in.", ruleset_fullname);
+                        }
+#endif
+
 
 #ifdef WITH_BLUEDOT
 

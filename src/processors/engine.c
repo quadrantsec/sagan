@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -57,6 +57,7 @@
 #include "event-id.h"
 #include "routing.h"
 #include "content.h"
+#include "offload.h"
 #include "pcre-s.h"
 #include "json-pcre.h"
 #include "json-content.h"
@@ -675,6 +676,25 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                         }
 
                                 }
+
+#ifdef WITH_OFFLOAD
+
+                            if ( flag == true && rulestruct[b].offload_flag == true )
+                                {
+
+                                    if ( validate_flag == true )
+                                        {
+					      flag = Offload( b, SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_facility, SaganProcSyslog_LOCAL->syslog_priority, SaganProcSyslog_LOCAL->syslog_level, SaganProcSyslog_LOCAL->syslog_tag, SaganProcSyslog_LOCAL->syslog_date, SaganProcSyslog_LOCAL->syslog_time, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );	
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
+                                }
+#endif
+
 
 #ifdef HAVE_LIBFASTJSON
 

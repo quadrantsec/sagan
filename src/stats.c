@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -119,6 +119,12 @@ void Statistics( void )
             Sagan_Log(NORMAL, "           After                      : %" PRIu64 " (%.3f%%)",  counters->after_total, CalcPct( counters->after_total, counters->events_received) );
             Sagan_Log(NORMAL, "           Threshold                  : %" PRIu64 " (%.3f%%)", counters->threshold_total, CalcPct( counters->threshold_total, counters->events_received) );
             Sagan_Log(NORMAL, "           Dropped                    : %" PRIu64 " (%.3f%%)", counters->sagan_processor_drop + counters->sagan_output_drop + counters->sagan_log_drop, CalcPct(counters->sagan_processor_drop + counters->sagan_output_drop + counters->sagan_log_drop, counters->events_received) );
+
+#ifdef WITH_OFFLOAD
+
+            Sagan_Log(NORMAL, "           Offload                    : %" PRIu64 " (%.3f%%)", counters->offload_count, CalcPct(counters->sagan_processor_drop, counters->events_received) );
+
+#endif
 
 //        Sagan_Log(NORMAL, "           Malformed                : h:%" PRIu64 "|f:%" PRIu64 "|p:%" PRIu64 "|l:%" PRIu64 "|T:%" PRIu64 "|d:%" PRIu64 "|T:%" PRIu64 "|P:%" PRIu64 "|M:%" PRIu64 "", counters->malformed_host, counters->malformed_facility, counters->malformed_priority, counters->malformed_level, counters->malformed_tag, counters->malformed_date, counters->malformed_time, counters->malformed_program, counters->malformed_message);
 

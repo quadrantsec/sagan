@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -22,7 +22,7 @@
 #define BLUEDOT_MAX_CAT        10
 #endif
 
-#define		VALID_RULE_OPTIONS "parse_port,parse_proto,parse_proto_program,flexbits_upause,xbits_upause,flexbits_pause,xbits_pause,default_proto,default_src_port,default_dst_port,parse_src_ip,parse_dst_ip,parse_hash,xbits,flexbits,dynamic_load,country_code,meta_content,meta_nocase,rev,classtype,program,event_type,reference,sid,syslog_tag,syslog_facility,syslog_level,syslog_priority,pri,priority,email,normalize,msg,content,nocase,offset,meta_offset,depth,meta_depth,distance,meta_distance,within,meta_within,pcre,alert_time,threshold,after,blacklist,bro-intel,zeek-intel,external,bluedot,metadata,event_id,json_content,json_nocase,json_pcre,json_meta_content,json_meta_nocase,json_strstr,json_meta_strstr,append_program,json_contains,json_map,json_decode_base64,json_meta_contains,json_decode_base64_pcre,json_decode_base64_meta"
+#define		VALID_RULE_OPTIONS "parse_port,parse_proto,parse_proto_program,flexbits_upause,xbits_upause,flexbits_pause,xbits_pause,default_proto,default_src_port,default_dst_port,parse_src_ip,parse_dst_ip,parse_hash,xbits,flexbits,dynamic_load,country_code,meta_content,meta_nocase,rev,classtype,program,event_type,reference,sid,syslog_tag,syslog_facility,syslog_level,syslog_priority,pri,priority,email,normalize,msg,content,nocase,offset,meta_offset,depth,meta_depth,distance,meta_distance,within,meta_within,pcre,alert_time,threshold,after,blacklist,bro-intel,zeek-intel,external,bluedot,metadata,event_id,json_content,json_nocase,json_pcre,json_meta_content,json_meta_nocase,json_strstr,json_meta_strstr,append_program,json_contains,json_map,json_decode_base64,json_meta_contains,json_decode_base64_pcre,json_decode_base64_meta,offload"
 
 /* JSON Mapping in rules */
 
@@ -324,8 +324,15 @@ struct _Rule_Struct
     uint_fast32_t	 aetas_start;
     uint_fast32_t     aetas_end;
 
+    /* Call external program */
+
     bool external_flag;
     char  external_program[MAXPATH];
+
+    /* Offload over network/socket */
+
+    bool offload_flag;
+    char offload_location[512];
 
     /* Bro Intel */
 

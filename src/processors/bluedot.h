@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -26,8 +26,6 @@
  */
 
 #ifdef WITH_BLUEDOT
-
-#define BLUEDOT_PROCESSOR_USER_AGENT "User-Agent: Sagan-SIEM"
 
 /* Extensions on URL passed depending on what type of query we want to do */
 

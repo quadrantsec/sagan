@@ -1,6 +1,6 @@
 /*
-** Copyright (C) 2009-2023 Quadrant Information Security <quadrantsec.com>
-** Copyright (C) 2009-2023 Champ Clark III <cclark@quadrantsec.com>
+** Copyright (C) 2009-2024 Quadrant Information Security <quadrantsec.com>
+** Copyright (C) 2009-2024 Champ Clark III <cclark@quadrantsec.com>
 **
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License Version 2 as
@@ -2749,9 +2749,10 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
     /**********************/
 
     // Don't perform sanity checks if not root config
-    if (!is_root_config) {
-        return;
-    }
+    if (!is_root_config)
+        {
+            return;
+        }
 
     /* Check rules for duplicate sid.  We can't have that! */
 

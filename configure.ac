@@ -76,6 +76,12 @@ AC_ARG_ENABLE(bluedot,
   [ BLUEDOT="no" ]
 )
 
+AC_ARG_ENABLE(offload,
+  [  --enable-offload        Enable "offload" in signatures.],
+  [ OFFLOAD="$enableval"],
+  [ OFFLOAD="no" ]
+)
+
 AC_ARG_ENABLE(esmtp,
   [  --enable-esmtp	  Enable libesmtp support.],
   [ ESMTP="$enableval"],
@@ -630,6 +636,15 @@ if test "$BLUEDOT" = "yes"; then
         AC_DEFINE(WITH_BLUEDOT, 1, With Bluedot)
 	PKG_CHECK_MODULES(LIBFASTJSON, libfastjson >= 0.0.0)
         fi
+
+if test "$OFFLOAD" = "yes"; then
+        AC_MSG_RESULT([------- Offload Support is enabled -------])
+        AC_CHECK_LIB(curl, main,,AC_MSG_ERROR(The libcurl library cannot be found.
+This library is used for Sagan's 'offload' support. To disable this feature use the --disable-offload flag. ))
+        AC_CHECK_HEADER([curl/curl.h])
+        AC_DEFINE(WITH_OFFLOAD, 1, With Offload)
+        fi
+
 
 test "x$prefix" = x. || test "x$prefix" = xNONE && prefix=/usr/local
 AC_DEFINE_UNQUOTED(CONFIG_FILE_PATH, "`eval echo "${sysconfdir}/sagan.yaml"`", [Sagan configuration file]) 
