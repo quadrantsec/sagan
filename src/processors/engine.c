@@ -678,21 +678,22 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                 }
 
 #ifdef WITH_OFFLOAD
+                            /*
+                                                        if ( flag == true && rulestruct[b].offload_flag == true )
+                                                            {
 
-                            if ( flag == true && rulestruct[b].offload_flag == true )
-                                {
+                                                                if ( validate_flag == true )
+                                                                    {
+                            					      flag = Offload( b, SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_facility, SaganProcSyslog_LOCAL->syslog_priority, SaganProcSyslog_LOCAL->syslog_level, SaganProcSyslog_LOCAL->syslog_tag, SaganProcSyslog_LOCAL->syslog_date, SaganProcSyslog_LOCAL->syslog_time, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
+                                                                    }
+                                                                else
+                                                                    {
+                                                                        __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                                                        flag = false;
+                                                                    }
 
-                                    if ( validate_flag == true )
-                                        {
-					      flag = Offload( b, SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_facility, SaganProcSyslog_LOCAL->syslog_priority, SaganProcSyslog_LOCAL->syslog_level, SaganProcSyslog_LOCAL->syslog_tag, SaganProcSyslog_LOCAL->syslog_date, SaganProcSyslog_LOCAL->syslog_time, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );	
-                                        }
-                                    else
-                                        {
-                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-                                            flag = false;
-                                        }
-
-                                }
+                                                            }
+                            */
 #endif
 
 
@@ -769,22 +770,38 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                             if ( flag == true && rulestruct[b].event_id_count > 0 )
                                 {
-//				    printf("validate_flag: %d\n", validate_flag);
 
                                     if ( validate_flag == true )
                                         {
                                             flag = Event_ID( b, SaganProcSyslog_LOCAL );
-//					    printf("event_id flag: %d\n", flag);
                                         }
                                     else
                                         {
                                             __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-//					    printf("event_id flag: false\n");
                                             flag = false;
                                         }
 
                                 }
 
+
+                            /* Offload - we do this last, because it might be the most CPU consuming (or not) */
+
+#ifdef WITH_OFFLOAD
+                            if ( flag == true && rulestruct[b].offload_flag == true )
+                                {
+
+                                    if ( validate_flag == true )
+                                        {
+                                            flag = Offload( b, SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_facility, SaganProcSyslog_LOCAL->syslog_priority, SaganProcSyslog_LOCAL->syslog_level, SaganProcSyslog_LOCAL->syslog_tag, SaganProcSyslog_LOCAL->syslog_date, SaganProcSyslog_LOCAL->syslog_time, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
+                                        }
+                                    else
+                                        {
+                                            __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
+                                            flag = false;
+                                        }
+
+                                }
+#endif
                         }
 
                     /* Check for match from content, pcre, etc... */
