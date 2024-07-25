@@ -744,18 +744,6 @@ int main(int argc, char **argv)
 
     (void)Load_YAML_Config(config->sagan_config, true);
 
-    /* Must initialize libcurl before any threads are started.  If we see a signature loaded
-       with the "offload" rule option,  we init curl_global_init() now */
-
-    if ( offload_flag == true )
-        {
-            curl_global_init(CURL_GLOBAL_ALL);
-
-            /* We _don't_ want to call curl_global_init() on reload,  so we set the offload_flag to false */
-
-            offload_flag = false;
-        }
-
     /* If we are in "test" mode, we can stop here */
 
     if ( test_mode == true )
@@ -769,6 +757,23 @@ int main(int argc, char **argv)
             fclose( config->sagan_log_stream );
             exit(0);
         }
+
+#ifdef WITH_OFFLOAD
+
+    /* Must initialize libcurl before any threads are started.  If we see a signature loaded
+       with the "offload" rule option,  we init curl_global_init() now */
+
+    if ( offload_flag == true )
+        {
+            curl_global_init(CURL_GLOBAL_ALL);
+
+            /* We _don't_ want to call curl_global_init() on reload,  so we set the offload_flag to false */
+
+            offload_flag = false;
+        }
+
+#endif
+
 
     if ( config->sagan_log_syslog == true )
         {
