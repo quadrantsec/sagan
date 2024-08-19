@@ -210,7 +210,7 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
             strlcpy(config->json_input_map_file, DEFAULT_JSON_INPUT_MAP, sizeof(config->json_input_map_file));
             strlcpy(config->json_input_software, "NONE SET", sizeof(config->json_input_software));
 
-            config->json_parse_data = false;
+            config->json_parse_data = true;
 
 #endif
 
@@ -680,12 +680,12 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
                                     else if ( !strcmp(last_pass, "parse-json-message") || !strcmp(last_pass, "parse-json-program") )
                                         {
 
-                                            if ( !strcasecmp(value, "enabled") || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes") )
+                                            if ( !strcasecmp(value, "disabled") || !strcasecmp(value, "false" ) || !strcasecmp(value, "no") )
                                                 {
 
                                                     Sagan_Log(WARN, "The keywords '%s' have been depreciated! Use 'json-parse-data' instead.  For now, I'll enable 'json-parse-data' for you.", last_pass);
 
-                                                    config->json_parse_data = true;
+                                                    config->json_parse_data = false;
 
                                                 }
 
@@ -695,9 +695,9 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
                                     else if (!strcmp(last_pass, "json-parse-data"))
                                         {
 
-                                            if (!strcasecmp(value, "enabled") || !strcasecmp(value, "true" ) || !strcasecmp(value, "yes") )
+                                            if (!strcasecmp(value, "disabled") || !strcasecmp(value, "false" ) || !strcasecmp(value, "no") )
                                                 {
-                                                    config->json_parse_data = true;
+                                                    config->json_parse_data = false;
                                                 }
                                         }
 
