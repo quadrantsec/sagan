@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <pthread.h>
 #include <curl/curl.h>
 
 #include "sagan.h"
@@ -59,9 +60,10 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
     if ( debug->debugoffload == true )
         {
-            Sagan_Log(WARN, "Sending data to %s for signature id %" PRIuFAST64 "", rulestruct[rule_position].offload_location, rulestruct[rule_position].s_sid);
+            Sagan_Log(WARN, "Sending data to %s for signature id %" PRIuFAST64 " - Thread ID: %ld", rulestruct[rule_position].offload_location, rulestruct[rule_position].s_sid, pthread_self());
             Sagan_Log(WARN, "Data: %s", buf);
         }
+
 
     curl = curl_easy_init();
 
@@ -105,7 +107,14 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
     if ( response == NULL )
         {
+
             Sagan_Log(WARN, "[%s, line %d] Offload program returned a empty \"response\".", __FILE__, __LINE__);
+
+            if ( debug->debugoffload == true )
+                {
+                    Sagan_Log(DEBUG, "Empty response for Thread ID: %lu", pthread_self() );
+                }
+
             return(false);
         }
 
@@ -116,7 +125,7 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
             if ( debug->debugoffload == true )
                 {
-                    Sagan_Log(DEBUG, "%s returned \"true\"", rulestruct[rule_position].offload_location);
+                    Sagan_Log(DEBUG, "%s returned \"true\" - Thread ID: %lu", rulestruct[rule_position].offload_location, pthread_self() );
                 }
 
             return( true );
@@ -125,7 +134,7 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
     if ( debug->debugoffload == true )
         {
-            Sagan_Log(DEBUG, "%s returned \"false\"", rulestruct[rule_position].offload_location);
+            Sagan_Log(DEBUG, "%s returned \"false\" - Thread ID: %lu", rulestruct[rule_position].offload_location, pthread_self() );
         }
 
     return false;
