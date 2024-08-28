@@ -74,12 +74,12 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
             if ( debug->debugoffload == true )
                 {
-                    curl_easy_setopt(curl_bluedot, CURLOPT_VERBOSE, 1);
-                    curl_easy_setopt(curl_bluedot, CURLOPT_NOBODY, 0);   /* Show output for debugging */
+                    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+                    curl_easy_setopt(curl, CURLOPT_NOBODY, 0);   /* Show output for debugging */
                 }
             else
                 {
-                    curl_easy_setopt(curl_bluedot, CURLOPT_NOBODY, 1);  /* Throw away output */
+                    curl_easy_setopt(curl, CURLOPT_NOBODY, 1);  /* Throw away output */
                 }
 
             curl_easy_setopt(curl, CURLOPT_URL, rulestruct[rule_position].offload_location );
