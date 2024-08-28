@@ -677,26 +677,6 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
 
                                 }
 
-#ifdef WITH_OFFLOAD
-                            /*
-                                                        if ( flag == true && rulestruct[b].offload_flag == true )
-                                                            {
-
-                                                                if ( validate_flag == true )
-                                                                    {
-                            					      flag = Offload( b, SaganProcSyslog_LOCAL->syslog_host, SaganProcSyslog_LOCAL->syslog_facility, SaganProcSyslog_LOCAL->syslog_priority, SaganProcSyslog_LOCAL->syslog_level, SaganProcSyslog_LOCAL->syslog_tag, SaganProcSyslog_LOCAL->syslog_date, SaganProcSyslog_LOCAL->syslog_time, SaganProcSyslog_LOCAL->syslog_program, SaganProcSyslog_LOCAL->syslog_message );
-                                                                    }
-                                                                else
-                                                                    {
-                                                                        __atomic_add_fetch(&counters->null_message, 1, __ATOMIC_SEQ_CST);
-                                                                        flag = false;
-                                                                    }
-
-                                                            }
-                            */
-#endif
-
-
 #ifdef HAVE_LIBFASTJSON
 
                             if ( flag == true && rulestruct[b].json_pcre_count > 0 )
@@ -784,7 +764,7 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                                 }
 
 
-                            /* Offload - we do this last, because it might be the most CPU consuming (or not) */
+                            /* Offload - we do this last, because it might be the most CPU consuming. */
 
 #ifdef WITH_OFFLOAD
                             if ( flag == true && rulestruct[b].offload_flag == true )

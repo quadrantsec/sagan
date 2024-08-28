@@ -69,6 +69,17 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
     if (curl)
         {
 
+
+            if ( debug->debugoffload == true )
+                {
+                    curl_easy_setopt(curl_bluedot, CURLOPT_VERBOSE, 1);
+                    curl_easy_setopt(curl_bluedot, CURLOPT_NOBODY, 0);   /* Show output for debugging */
+                }
+            else
+                {
+                    curl_easy_setopt(curl_bluedot, CURLOPT_NOBODY, 1);  /* Throw away output */
+                }
+
             curl_easy_setopt(curl, CURLOPT_URL, rulestruct[rule_position].offload_location );
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
@@ -130,7 +141,6 @@ size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, void 
     char **response_ptr =  (char**)userp;
     *response_ptr = strndup(buffer, (size_t)(size *nmemb));     /* Return the string */
 }
-
 
 
 #endif
