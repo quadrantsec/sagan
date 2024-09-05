@@ -393,7 +393,7 @@ Create a "sagan" user and related directories::
 Checkout the "sagan-rules" repository into ``/usr/local/etc/sagan-rules``::
 
     cd /usr/local/etc
-    sudo git clone https://github.com/beave/sagan-rules
+    sudo git clone https://github.com/quadrantsec/sagan-rules.git
 
 To test, run ``sagan --debug syslog,engine`` as the root user.  It will
 switch to the sagan user when ready, and remain running in the foreground.
