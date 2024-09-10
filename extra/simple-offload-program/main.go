@@ -46,6 +46,12 @@ import (
 	"net/http"
 )
 
+type C struct {
+        Counter int
+        }
+
+var CM = C{}
+		
 /********************************************************/
 /* Main - Setup a webserver to listen for POST requests */
 /********************************************************/
@@ -59,7 +65,7 @@ func main() {
 
 	router := gin.Default()
 
-	router.POST("/", Process_Data) /* URI to accept POST requests */
+	router.POST("/testme", Process_Data) /* URI to accept POST requests */
 
 	log.Printf("Listening for unencrypted traffic on %s.", HTTP_Listen)
 	err = router.Run(HTTP_Listen)
@@ -74,6 +80,10 @@ func main() {
 /*****************************************************/
 
 func Process_Data(c *gin.Context) {
+
+	CM.Counter++
+
+	log.Printf("** Logs Received: %v\n", CM.Counter)
 
 	var jsondata []uint8
 

@@ -418,8 +418,9 @@ if test "$PCRE" = "no"; then
 fi
 
 # libpcre 8.35 (especially on debian) has a known issue that results in segfaults
+
 if test "$with_libpcre_libraries" = "no"; then
-    PKG_CHECK_MODULES(LIBPCREVERSION, [libpcre = 8.35],[libpcre_buggy_found="yes"],[libprce_buggy_found="no"])
+	PKG_CHECK_MODULES(LIBPCREVERSION, [libpcre = 8.35],[libpcre_buggy_found="yes"],[libprce_buggy_found="no"])
     if test "$libpcre_buggy_found" = "yes"; then
         echo
         echo "   Warning! vulnerable libpcre version 8.35 found"
