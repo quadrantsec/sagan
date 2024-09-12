@@ -150,6 +150,8 @@ size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, void 
 {
     char **response_ptr =  (char**)userp;
     *response_ptr = strndup(buffer, (size_t)(size *nmemb));     /* Return the string */
+
+    return size * nmemb;
 }
 
 
