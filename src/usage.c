@@ -68,6 +68,10 @@ void Usage(void)
     fprintf(stderr, ", json");
 #endif
 
+#ifdef WITH_OFFLOAD
+    fprintf(stderr, ", offload");
+#endif
+
     fprintf(stderr, ".\n");
 
     fprintf(stderr, "-D, --daemon\t\tMake process a daemon (fork to the background).\n");
