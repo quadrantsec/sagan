@@ -748,7 +748,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
 
             if ( debug->debugflexbit )
                 {
-                    Sagan_Log(DEBUG, "[%s, line %d] Got %d flexbits & needed %d. Got corrent number of flexbits, return true!", __FILE__, __LINE__, flexbit_total_match, rulestruct[rule_position].flexbit_condition_count );
+                    Sagan_Log(DEBUG, "[%s, line %d] Got %d flexbits & needed %d. Got corrent number of flexbits, return true!", __FILE__, __LINE__, s_true_count, rulestruct[rule_position].flexbit_condition_count );
                 }
 
 #ifdef HAVE_LIBFASTJSON
