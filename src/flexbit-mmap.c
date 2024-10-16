@@ -67,8 +67,10 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
     struct tm *now;
     char  timet[20];
 
-    int i;
-    int a;
+    int i = 0;
+    int a = 0;
+
+    int s_check = 0;
 
     int flexbit_total_match = 0;
     bool flexbit_match = 0;
@@ -667,6 +669,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
                                         }
 
                                 } /* if memcmp(rulestruct[rule_position].flexbit_name[i] */
+
                         } /* for a = 0 */
 
                     /* flexbit wasn't found for isnotset */
@@ -683,6 +686,45 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
 
     if ( flexbit_total_match == rulestruct[rule_position].flexbit_condition_count )
         {
+
+	    /* Sanity check on flexbits.  While we are confident the flexbit count is correct, 
+  	       we verify the flexbits are unique.  In certain situations,  we've seen a race
+ 	       condition where the same flexbit is written out twice,  thus squewing the 
+  	       flexbit count numbers */
+
+            for ( i = 0; i < flexbit_total_match; i++ )
+                {
+
+                    s_check = 0;		/* Sanity check count */
+
+                    for ( a =0; a < flexbit_total_match; a++ )
+                        {
+
+			    /* Verify unique values */
+
+                            if ( !memcmp( flexbit_ipc[a].flexbit_name, flexbit_ipc[i].flexbit_name, sizeof(flexbit_ipc[a].flexbit_name) ) )
+                                {
+                                    s_check++;	/* Should always be 1 */
+                                }
+                        }
+
+
+		    /* If s_check > 1, we have a duplicate flexbit name */
+
+                    if ( s_check > 1 )
+                        {
+
+                            if ( debug->debugflexbit )
+                                {
+                                    Sagan_Log(DEBUG, "[%s, line %d] Caught possible race condition.  Returning false.", __FILE__, __LINE__);
+                                }
+
+                            return(false);
+                        }
+
+                }
+
+	    /* Passed flexbit count and sanity */
 
             if ( debug->debugflexbit )
                 {

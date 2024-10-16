@@ -48,7 +48,7 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 {
 
     CURL *curl;
-    CURLcode res; 
+    CURLcode res;
 
     char *response=NULL;
     struct curl_slist *headers = NULL;
@@ -79,7 +79,7 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
                     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
                 }
 
-	    curl_easy_setopt(curl, CURLOPT_NOBODY, 0);   /* Don't use HEAD! */
+            curl_easy_setopt(curl, CURLOPT_NOBODY, 0);   /* Don't use HEAD! */
             curl_easy_setopt(curl, CURLOPT_URL, rulestruct[rule_position].offload_location );
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
@@ -93,31 +93,32 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
             res = curl_easy_perform(curl);
 
-	    /* Verify that we actually made a clean connection to the backend */
+            /* Verify that we actually made a clean connection to the backend */
 
-	    if ( res != CURLE_OK ) {
-
-		Sagan_Log( NORMAL, "Offload failed: %s", curl_easy_strerror(res) );
-		return(false);
-
-		} 
-
-    /* Glad we made a connection,  did we get a valid response? */
-
-    if ( response == NULL )
-        {
-
-            Sagan_Log(WARN, "[%s, line %d] Offload program returned a empty \"response\".", __FILE__, __LINE__);
-
-            if ( debug->debugoffload == true )
+            if ( res != CURLE_OK )
                 {
-                    Sagan_Log(DEBUG, "Empty response for Thread ID: %lu", pthread_self() );
+
+                    Sagan_Log( NORMAL, "Offload failed: %s", curl_easy_strerror(res) );
+                    return(false);
+
                 }
 
-            return(false);
+            /* Glad we made a connection,  did we get a valid response? */
+
+            if ( response == NULL )
+                {
+
+                    Sagan_Log(WARN, "[%s, line %d] Offload program returned a empty \"response\".", __FILE__, __LINE__);
+
+                    if ( debug->debugoffload == true )
+                        {
+                            Sagan_Log(DEBUG, "Empty response for Thread ID: %lu", pthread_self() );
+                        }
+
+                    return(false);
+                }
+
         }
-	
-}
 
     Remove_Return(response);
 

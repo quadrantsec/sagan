@@ -224,9 +224,6 @@ typedef void json_object;
 #define NORMAL_RULE			0
 #define DYNAMIC_RULE			1
 
-#define FLEXBIT_STORAGE_MMAP		0
-#define FLEXBIT_STORAGE_REDIS		1
-
 #define XBIT_STORAGE_MMAP		0
 #define XBIT_STORAGE_REDIS		1
 
