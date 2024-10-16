@@ -19,7 +19,6 @@ Sagan Documentation
 
 Sagan "Read The Docs! https://sagan.readthedocs.io
 
-
 What is Sagan? 
 --------------
 
