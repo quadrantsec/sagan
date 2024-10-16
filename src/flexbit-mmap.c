@@ -71,7 +71,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
     int a = 0;
 
     int s_check = 0;
-    int s_true_count;
+    int s_true_count = 0;
 
     int flexbit_total_match = 0;
     bool flexbit_match = 0;
@@ -685,8 +685,8 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
         } /* for (i = 0; i < rulestruct[rule_position].xbit_count; i++) */
 
 
-    if ( flexbit_total_match == rulestruct[rule_position].flexbit_condition_count )
-        {
+//    if ( flexbit_total_match == rulestruct[rule_position].flexbit_condition_count )
+//        {
 
             /* Sanity check on flexbits.  While we are confident the flexbit count is correct,
                we verify the flexbits are unique.  In certain situations,  we've seen a race
@@ -709,27 +709,40 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
 
                                     if ( s_check == 1 )
                                         {
+//					    printf("GOT IT: %s\n", flexbit_ipc[a].flexbit_name);
                                             s_true_count++;
                                         }
 
                                 }
                         }
 
+		    }
+
 
                     /* If s_true_count less that what we expect, might be a race condition */
 
+/*
                     if ( s_true_count < rulestruct[rule_position].flexbit_condition_count  )
                         {
 
                             if ( debug->debugflexbit )
                                 {
+				    printf("%d < %d\n", s_true_count, rulestruct[rule_position].flexbit_condition_count);
                                     Sagan_Log(DEBUG, "[%s, line %d] Caught possible race condition.  Returning false.", __FILE__, __LINE__);
                                 }
 
                             return(false);
                         }
+	*/
 
-                }
+    //            }
+
+
+    //printf("%d == %d\n", s_true_count, rulestruct[rule_position].flexbit_condition_count);
+
+    if ( s_true_count == rulestruct[rule_position].flexbit_condition_count )
+        {
+
 
             /* Passed flexbit count and sanity */
 
