@@ -67,11 +67,8 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
     struct tm *now;
     char  timet[20];
 
-    int i = 0;
-    int a = 0;
-
-    int s_check = 0;
-    int s_true_count = 0;
+    int i;
+    int a;
 
     int flexbit_total_match = 0;
     bool flexbit_match = 0;
@@ -670,7 +667,6 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
                                         }
 
                                 } /* if memcmp(rulestruct[rule_position].flexbit_name[i] */
-
                         } /* for a = 0 */
 
                     /* flexbit wasn't found for isnotset */
@@ -685,70 +681,12 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
         } /* for (i = 0; i < rulestruct[rule_position].xbit_count; i++) */
 
 
-//    if ( flexbit_total_match == rulestruct[rule_position].flexbit_condition_count )
-//        {
-
-            /* Sanity check on flexbits.  While we are confident the flexbit count is correct,
-               we verify the flexbits are unique.  In certain situations,  we've seen a race
-               condition where the same flexbit is written out twice,  thus squewing the
-               flexbit count numbers */
-
-            for ( i = 0; i < flexbit_total_match; i++ )
-                {
-
-                    s_check = 0;		/* Sanity check count */
-
-                    for ( a =0; a < flexbit_total_match; a++ )
-                        {
-
-                            /* Verify unique values */
-
-                            if ( !memcmp( flexbit_ipc[a].flexbit_name, flexbit_ipc[i].flexbit_name, sizeof(flexbit_ipc[a].flexbit_name) ) )
-                                {
-                                    s_check++;	/* Should always be 1 */
-
-                                    if ( s_check == 1 )
-                                        {
-//					    printf("GOT IT: %s\n", flexbit_ipc[a].flexbit_name);
-                                            s_true_count++;
-                                        }
-
-                                }
-                        }
-
-		    }
-
-
-                    /* If s_true_count less that what we expect, might be a race condition */
-
-/*
-                    if ( s_true_count < rulestruct[rule_position].flexbit_condition_count  )
-                        {
-
-                            if ( debug->debugflexbit )
-                                {
-				    printf("%d < %d\n", s_true_count, rulestruct[rule_position].flexbit_condition_count);
-                                    Sagan_Log(DEBUG, "[%s, line %d] Caught possible race condition.  Returning false.", __FILE__, __LINE__);
-                                }
-
-                            return(false);
-                        }
-	*/
-
-    //            }
-
-
-    //printf("%d == %d\n", s_true_count, rulestruct[rule_position].flexbit_condition_count);
-
-    if ( s_true_count == rulestruct[rule_position].flexbit_condition_count )
+    if ( flexbit_total_match == rulestruct[rule_position].flexbit_condition_count )
         {
-
-
-            /* Passed flexbit count and sanity */
 
             if ( debug->debugflexbit )
                 {
-                    Sagan_Log(DEBUG, "[%s, line %d] Got %d flexbits & needed %d. Got corrent number of flexbits, return true!", __FILE__, __LINE__, s_true_count, rulestruct[rule_position].flexbit_condition_count );
+                    Sagan_Log(DEBUG, "[%s, line %d] Got %d flexbits & needed %d. Got corrent number of flexbits, return true!", __FILE__, __LINE__, flexbit_total_match, rulestruct[rule_position].flexbit_condition_count );
                 }
 
 #ifdef HAVE_LIBFASTJSON
