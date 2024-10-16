@@ -71,6 +71,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
     int a = 0;
 
     int s_check = 0;
+    int s_true_count;
 
     int flexbit_total_match = 0;
     bool flexbit_match = 0;
@@ -687,10 +688,10 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
     if ( flexbit_total_match == rulestruct[rule_position].flexbit_condition_count )
         {
 
-	    /* Sanity check on flexbits.  While we are confident the flexbit count is correct, 
-  	       we verify the flexbits are unique.  In certain situations,  we've seen a race
- 	       condition where the same flexbit is written out twice,  thus squewing the 
-  	       flexbit count numbers */
+            /* Sanity check on flexbits.  While we are confident the flexbit count is correct,
+               we verify the flexbits are unique.  In certain situations,  we've seen a race
+               condition where the same flexbit is written out twice,  thus squewing the
+               flexbit count numbers */
 
             for ( i = 0; i < flexbit_total_match; i++ )
                 {
@@ -700,18 +701,24 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
                     for ( a =0; a < flexbit_total_match; a++ )
                         {
 
-			    /* Verify unique values */
+                            /* Verify unique values */
 
                             if ( !memcmp( flexbit_ipc[a].flexbit_name, flexbit_ipc[i].flexbit_name, sizeof(flexbit_ipc[a].flexbit_name) ) )
                                 {
                                     s_check++;	/* Should always be 1 */
+
+                                    if ( s_check == 1 )
+                                        {
+                                            s_true_count++;
+                                        }
+
                                 }
                         }
 
 
-		    /* If s_check > 1, we have a duplicate flexbit name */
+                    /* If s_true_count less that what we expect, might be a race condition */
 
-                    if ( s_check > 1 )
+                    if ( s_true_count < rulestruct[rule_position].flexbit_condition_count  )
                         {
 
                             if ( debug->debugflexbit )
@@ -724,7 +731,7 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
 
                 }
 
-	    /* Passed flexbit count and sanity */
+            /* Passed flexbit count and sanity */
 
             if ( debug->debugflexbit )
                 {
