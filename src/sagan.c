@@ -171,17 +171,19 @@ int main(int argc, char **argv)
         { "file",	  required_argument,    NULL,   'F' },
         { "quiet", 	  no_argument, 		NULL, 	'Q' },
         { "threads",	  required_argument,    NULL,   't' },
+        { "batch",        required_argument,    NULL,   'b' }, 
         { "rules", 	  required_argument,    NULL,   'r' },
         { "test", 	  no_argument, 		NULL,	'T' },
         {0, 0, 0, 0}
     };
 
     static const char *short_options =
-        "l:f:u:r:F:d:c:t:pDhCQT";
+        "b:l:f:u:r:F:d:c:t:pDhCQT";
 
     int option_index = 0;
 
     uint_fast16_t max_threads_override = 0;
+    uint_fast16_t max_batch_override = 0; 
     uint_fast16_t z = 0;
 
     FILE *test_open;			/* Used to test file access */
@@ -577,6 +579,18 @@ int main(int argc, char **argv)
 
                     break;
 
+                case 'b':
+
+                    max_batch_override = atoi(optarg);
+
+                    if ( max_batch_override == 0 )
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] --batch / -t option is zero or invalid.", __FILE__, __LINE__);
+                        }
+
+                    break;
+
+
                 case 'r':
 
                     config->rules_from_file_flag = true;
@@ -790,6 +804,13 @@ int main(int argc, char **argv)
         }
 
     SaganPassSyslog = malloc(config->max_processor_threads * sizeof(_Sagan_Pass_Syslog));
+
+    /* this is for --batch (over rides the sagan.yaml file) */
+
+    if ( max_batch_override != 0 )
+        {
+            config->max_batch = max_batch_override;
+        }
 
     if ( SaganPassSyslog == NULL )
         {
