@@ -88,6 +88,10 @@ extern struct _Syslog_JSON_Map *Syslog_JSON_Map;
 extern struct _JSON_Message_Map *JSON_Message_Map;
 #endif
 
+#ifdef WITH_OFFLOAD
+#include <curl/curl.h>
+#endif
+
 #define MAX_DEATH_TIME 15
 
 extern struct _SaganCounters *counters;
@@ -183,7 +187,7 @@ void Sig_Handler( void )
 
                     /* Sagan will wait indefinitely for a hung thread to quit.  In the
                        event it has been more that MAX_DEATH_TIME seconds,  we force
-                               an abort and let the user know */
+                       an abort and let the user know */
 
                     if ( max_death_time > MAX_DEATH_TIME )
                         {
@@ -204,6 +208,17 @@ void Sig_Handler( void )
                     // Maybe liblognorm hasnt fired?
 
 #endif
+
+#ifdef WITH_OFFLOAD
+
+                    if ( config->offload_flag == true )
+                        {
+                            curl_global_cleanup();
+                        }
+
+#endif
+
+
 
 #ifdef HAVE_LIBFASTJSON
                     free( Syslog_JSON_Map );

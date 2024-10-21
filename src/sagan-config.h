@@ -230,10 +230,16 @@ struct _SaganConfig
     char        sagan_email_subject[64];
 #endif
 
+    /* Offload */
+
+#ifdef WITH_OFFLOAD
+    bool 	offload_flag;
+#endif
+
     /* Bluedot */
 
 #ifdef WITH_BLUEDOT
-    bool        bluedot_flag;
+    bool         bluedot_flag;
     char         bluedot_device_id[64];
     char	 bluedot_host[128];
     char	 bluedot_ip[64];

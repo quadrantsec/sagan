@@ -134,7 +134,7 @@ extern struct _Rule_Struct *rulestruct;
 
 #ifdef WITH_OFFLOAD
 #include <curl/curl.h>
-extern bool offload_flag;
+bool offload_loaded_flag;
 #endif
 
 struct _Sagan_Pass_Syslog *SaganPassSyslog = NULL;
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
         { "file",	  required_argument,    NULL,   'F' },
         { "quiet", 	  no_argument, 		NULL, 	'Q' },
         { "threads",	  required_argument,    NULL,   't' },
-        { "batch",        required_argument,    NULL,   'b' }, 
+        { "batch",        required_argument,    NULL,   'b' },
         { "rules", 	  required_argument,    NULL,   'r' },
         { "test", 	  no_argument, 		NULL,	'T' },
         {0, 0, 0, 0}
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
     int option_index = 0;
 
     uint_fast16_t max_threads_override = 0;
-    uint_fast16_t max_batch_override = 0; 
+    uint_fast16_t max_batch_override = 0;
     uint_fast16_t z = 0;
 
     FILE *test_open;			/* Used to test file access */
@@ -777,13 +777,13 @@ int main(int argc, char **argv)
     /* Must initialize libcurl before any threads are started.  If we see a signature loaded
        with the "offload" rule option,  we init curl_global_init() now */
 
-    if ( offload_flag == true )
+    if ( config->offload_flag == true && offload_loaded_flag == false )
         {
             curl_global_init(CURL_GLOBAL_ALL);
 
             /* We _don't_ want to call curl_global_init() on reload,  so we set the offload_flag to false */
 
-            offload_flag = false;
+            offload_loaded_flag = true;
         }
 
 #endif

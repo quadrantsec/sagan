@@ -56,7 +56,7 @@ extern struct _Sagan_IPC_Counters *counters_ipc;
 extern struct _Sagan_IPC_Flexbit *flexbit_ipc;
 
 pthread_mutex_t Flexbit_Global_Mutex=PTHREAD_MUTEX_INITIALIZER;
-bool flexbit_global_lock = false; 
+bool flexbit_global_lock = false;
 
 /*****************************************************************************
  * Flexbit_Condition - Used for testing "isset" & "isnotset".  Full
@@ -66,7 +66,7 @@ bool flexbit_global_lock = false;
 bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 {
 
-    pthread_mutex_lock(&Flexbit_Global_Mutex);    
+    pthread_mutex_lock(&Flexbit_Global_Mutex);
     flexbit_global_lock = true;
 
     time_t t;
@@ -813,8 +813,8 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
 
             free( tmp_data );
 
-	    flexbit_global_lock = false;
-	    pthread_mutex_unlock(&Flexbit_Global_Mutex);
+            flexbit_global_lock = false;
+            pthread_mutex_unlock(&Flexbit_Global_Mutex);
 
             return(true);
 
@@ -836,8 +836,8 @@ bool Flexbit_Condition_MMAP(uint_fast32_t rule_position, struct _Sagan_Proc_Sysl
 
     Sagan_Log(WARN, "Shouldn't make it this far in Xbit_Condition()!\n");
 
-            flexbit_global_lock = false;
-            pthread_mutex_unlock(&Flexbit_Global_Mutex);
+    flexbit_global_lock = false;
+    pthread_mutex_unlock(&Flexbit_Global_Mutex);
 
 }  /* End of Xbit_Condition(); */
 
@@ -1672,8 +1672,8 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
     free(flexbit_track);
 
-flexbit_global_lock = false;
-pthread_mutex_unlock(&Flexbit_Global_Mutex);
+    flexbit_global_lock = false;
+    pthread_mutex_unlock(&Flexbit_Global_Mutex);
 
 } /* End of Xbit_Set */
 
