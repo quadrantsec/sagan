@@ -29,10 +29,11 @@
 #  --disable-libfastjson   Enable libfastjson
 #  --enable-tcmalloc	   Enable Google's TCMalloc
 #  --enable-jemalloc	   Enable JEMalloc
+#  --enable-
 
-STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc --disable-gzip --enable-jemalloc"
-ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-gzip --enable-tcmalloc --enable-jemalloc"
-NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-tcmalloc --disable-gzip --disable-jemalloc"
+STANDARD="--disable-bluedot --disable-esmtp --disable-geoip --disable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --disable-tcmalloc --disable-gzip --enable-jemalloc --enable-offload"
+ALLFLAGS="--enable-bluedot --enable-esmtp --enable-geoip --enable-system-strstr --enable-syslog --enable-lognorm --enable-libpcap --enable-libfastjson --enable-redis --enable-gzip --enable-tcmalloc --enable-jemalloc --enable-offload"
+NOFLAG="--disable-syslog --disable-lognorm --disable-esmtp --disable-libpcap --disable-bluedot --disable-geoip --disable-system-strstr --disable-system-strstr --disable-libfastjson --disable-redis --disable-tcmalloc --disable-gzip --disable-jemalloc --disable-offload"
 
 LOG="output.log" 
 

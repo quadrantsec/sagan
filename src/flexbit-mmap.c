@@ -992,11 +992,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = false;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1017,11 +1015,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = false;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1041,11 +1037,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = false;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1065,11 +1059,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = false;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1090,11 +1082,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = false;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1113,11 +1103,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1136,11 +1124,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1162,11 +1148,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1187,11 +1171,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1212,11 +1194,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1239,11 +1219,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1263,11 +1241,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1287,11 +1263,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = 0;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1310,11 +1284,9 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                                 }
 
                                             File_Lock(config->shm_flexbit);
-//                                            pthread_mutex_lock(&Flexbit_Mutex);
 
                                             flexbit_ipc[a].flexbit_state = false;
 
-//                                            pthread_mutex_unlock(&Flexbit_Mutex);
                                             File_Unlock(config->shm_flexbit);
 
                                             flexbit_unset_match = 1;
@@ -1353,7 +1325,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
 
                                     File_Lock(config->shm_flexbit);
-//                                    pthread_mutex_lock(&Flexbit_Mutex);
 
                                     flexbit_ipc[a].flexbit_date = atol(timet);
                                     flexbit_ipc[a].flexbit_expire = atol(timet) + rulestruct[rule_position].flexbit_timeout[i];
@@ -1371,7 +1342,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
                                         }
 
-//                                    pthread_mutex_unlock(&Flexbit_Mutex);
                                     File_Unlock(config->shm_flexbit);
 
                                     flexbit_match = true;
@@ -1428,7 +1398,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                 {
 
                                     File_Lock(config->shm_flexbit);
-//                                    pthread_mutex_lock(&Flexbit_Mutex);
 
                                     flexbit_ipc[a].flexbit_date = atol(timet);
                                     flexbit_ipc[a].flexbit_expire = atol(timet) + rulestruct[rule_position].flexbit_timeout[i];
@@ -1442,7 +1411,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
                                         }
 
-//                                    pthread_mutex_unlock(&Flexbit_Mutex);
                                     File_Unlock(config->shm_flexbit);
 
                                     flexbit_match = true;
@@ -1496,7 +1464,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                 {
 
                                     File_Lock(config->shm_flexbit);
-//                                    pthread_mutex_lock(&Flexbit_Mutex);
 
                                     flexbit_ipc[a].flexbit_date = atol(timet);
                                     flexbit_ipc[a].flexbit_expire = atol(timet) + rulestruct[rule_position].flexbit_timeout[i];
@@ -1510,7 +1477,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
                                         }
 
-//                                    pthread_mutex_unlock(&Flexbit_Mutex);
                                     File_Unlock(config->shm_flexbit);
 
                                     flexbit_match = true;
@@ -1564,7 +1530,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                 {
 
                                     File_Lock(config->shm_flexbit);
-//                                    pthread_mutex_lock(&Flexbit_Mutex);
 
                                     flexbit_ipc[a].flexbit_date = atol(timet);
                                     flexbit_ipc[a].flexbit_expire = atol(timet) + rulestruct[rule_position].flexbit_timeout[i];
@@ -1578,7 +1543,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
                                         }
 
-//                                    pthread_mutex_unlock(&Flexbit_Mutex);
                                     File_Unlock(config->shm_flexbit);
 
                                     flexbit_match = true;
@@ -1633,7 +1597,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
                                 }
 
                             File_Lock(config->shm_flexbit);
-//                            pthread_mutex_lock(&Flexbit_Mutex);
 
                             memcpy(flexbit_ipc[counters_ipc->flexbit_count].ip_src, ip_src, sizeof(flexbit_ipc[counters_ipc->flexbit_count].ip_src));
                             memcpy(flexbit_ipc[counters_ipc->flexbit_count].ip_dst, ip_dst, sizeof(flexbit_ipc[counters_ipc->flexbit_count].ip_dst));
@@ -1663,8 +1626,6 @@ void Flexbit_Set_MMAP(uint_fast32_t rule_position, const char *ip_src, const cha
 
                             File_Unlock(config->shm_counters);
                             File_Unlock(config->shm_flexbit);
-
-//                            pthread_mutex_unlock(&Flexbit_Mutex);
 
                         }
                 }

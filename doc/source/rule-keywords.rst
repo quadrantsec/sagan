@@ -837,7 +837,7 @@ This function is identical to Snort's "within" rule option. For more information
 xbits
 -----
 
-.. option:: xbits:{set|unset|isset},{name},track {ip_src|ip_dst|ip_pair} [,expire <seconds>];
+.. option:: xbits:{set|unset|isset|isnotset},{name},track {ip_src|ip_dst|ip_pair} [,expire <seconds>];
 
 The ``xbits`` rule keyword allows you to track and correlate events between multiple logs.  This is done by detecting an event and using the ``set`` for Sagan to "remember" an event.  Later,  if another event is detected,  xbit can be tested via ``isset`` or ``isnotset`` to determine if an event happened earlier.  For example,  lets say you would like to detect when anti-virus is being shutdown but **not** if it is related to a system reboot or shutdown.  
 
