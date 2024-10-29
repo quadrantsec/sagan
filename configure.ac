@@ -100,6 +100,12 @@ AC_ARG_ENABLE(syslog,
   [ SYSLOG="yes" ]
 )
 
+AC_ARG_ENABLE(asan,
+  [  --enable-asan           Enable address sanitizer.],
+  [ ASAN="$enableval"],
+  [ ASAN="no" ]
+)
+
 AC_ARG_ENABLE(system-strstr,
   [  --enable-system-strstr  Enable system strstr.],
   [ SYSSTRSTR="$enableval"],
@@ -646,6 +652,10 @@ This library is used for Sagan's 'offload' support. To disable this feature use 
         AC_DEFINE(WITH_OFFLOAD, 1, With Offload)
         fi
 
+if test "$ASAN" = "yes"; then
+    AC_MSG_RESULT([------- Address Sanitize enabled -------])
+    CFLAGS="$CFLAGS -fsanitize=address"
+fi
 
 test "x$prefix" = x. || test "x$prefix" = xNONE && prefix=/usr/local
 AC_DEFINE_UNQUOTED(CONFIG_FILE_PATH, "`eval echo "${sysconfdir}/sagan.yaml"`", [Sagan configuration file]) 
