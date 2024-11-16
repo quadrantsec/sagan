@@ -419,6 +419,15 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
                         {
                             Sagan_Log(DEBUG, "[%s, line %d] YAML_MAPPING_END_EVENT", __FILE__, __LINE__);
                         }
+
+                    /* Fix heap-buffer-overflow error */
+                    var = (_SaganVar *) realloc(var, (counters->var_count+1) * sizeof(_SaganVar));
+                    if ( var == NULL )
+                    {
+                        Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for var. Abort!", __FILE__, __LINE__);
+                    }
+
+                    memset(&var[counters->var_count], 0, sizeof(struct _SaganVar));
                 }
 
             else if ( event.type == YAML_SCALAR_EVENT )
