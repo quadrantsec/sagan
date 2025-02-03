@@ -36,9 +36,13 @@ The example above would cause a rule to trigger every day of the week between th
 
 You do not need to include Tuesday (2) in the "days" option. Since the times stretch between two days, Sagan will automatically take this into consideration and make the adjustments. If you were to include "days 12", this would cause Sagan to alert on Monday-Tuesday between 2300 - 0800 and Tuesday-Wednesday 2300-0800.
 
-alert_time can also be used with sagan.yaml variables. For example, if you have "SAGAN_DAYS: 12345" and "SAGAN_HOURS: 0800-1300" in your sagan.yaml (see "aetas-groups" in your sagan.yaml), you could then create a rule like this:
+alert_time can also be used with sagan.yaml variables. For example, if you have "SAGAN_DAYS: 06" and "SAGAN_HOURS: 1302-0759" in your sagan.yaml (see "aetas-groups" in your sagan.yaml), you could then create a rule to fire on weekend days like this:
 
-**alert_time: days $SAGAN_DAYS, hours $SAGAN_HOURS;**
+**alert_time: days $SAGAN_DAYS;**
+
+OR during non-business hours like this:
+
+**alert_time: days $SAGAN_HOURS;**
 
 append_program
 --------------
