@@ -42,7 +42,7 @@ alert_time can also be used with sagan.yaml variables. For example, if you have 
 
 OR during non-business hours like this:
 
-**alert_time: days $SAGAN_HOURS;**
+**alert_time: hours $SAGAN_HOURS;**
 
 append_program
 --------------
