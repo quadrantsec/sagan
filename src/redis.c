@@ -42,7 +42,7 @@
 #include "lockfile.h"
 #include "redis.h"
 
-#define	  MAX_REDIS_KEY_SIZE 		128
+//#define	  MAX_REDIS_KEY_SIZE 		128
 
 extern struct _SaganConfig *config;
 extern struct _SaganDebug *debug;
@@ -78,12 +78,13 @@ void Redis_Writer_Init ( void )
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for Sagan_Redis_Write. Abort!", __FILE__, __LINE__);
         }
 
-    Sagan_Redis_Write->value = malloc( config->message_buffer_size );
+    Sagan_Redis_Write->value = malloc( config->message_buffer_size * 2);
 
     if ( Sagan_Redis_Write->value == NULL )
         {
             Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __FILE__, __LINE__);
         }
+
 
     Sagan_Redis_Write->key = malloc( MAX_REDIS_KEY_SIZE );
 

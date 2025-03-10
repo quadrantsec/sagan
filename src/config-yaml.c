@@ -423,9 +423,9 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
                     /* Fix heap-buffer-overflow error */
                     var = (_SaganVar *) realloc(var, (counters->var_count+1) * sizeof(_SaganVar));
                     if ( var == NULL )
-                    {
-                        Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for var. Abort!", __FILE__, __LINE__);
-                    }
+                        {
+                            Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for var. Abort!", __FILE__, __LINE__);
+                        }
 
                     memset(&var[counters->var_count], 0, sizeof(struct _SaganVar));
                 }

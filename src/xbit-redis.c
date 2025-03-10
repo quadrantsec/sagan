@@ -82,6 +82,16 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
 
     tmp_data[0] = '\0';
 
+    char *tmp_key = malloc( MAX_REDIS_KEY_SIZE );
+
+    if ( tmp_key == NULL )
+        {
+            Sagan_Log(ERROR, "[%s, line %d] Error allocating memory.", __LINE__, __FILE__);
+        }
+
+    tmp_key[0] = '\0';
+
+
     for (r = 0; r < rulestruct[rule_position].xbit_count; r++)
         {
 
@@ -206,9 +216,19 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
                             pthread_mutex_lock(&SaganRedisWorkMutex);
 
                             strlcpy(Sagan_Redis_Write[redis_msgslot].command, "SET", sizeof(Sagan_Redis_Write[redis_msgslot].command));
-                            snprintf(Sagan_Redis_Write[redis_msgslot].key, sizeof(Sagan_Redis_Write[redis_msgslot].key), "%s:%s:%s:%s", REDIS_PREFIX, config->sagan_cluster_name, rulestruct[rule_position].xbit_name[r], tmp_ip);
 
-                            strlcpy(Sagan_Redis_Write[redis_msgslot].value, tmp_data, sizeof(Sagan_Redis_Write[redis_msgslot].value));
+                            snprintf(tmp_key, MAX_REDIS_KEY_SIZE, "%s:%s:%s:%s", REDIS_PREFIX, config->sagan_cluster_name, rulestruct[rule_position].xbit_name[r], tmp_ip);
+
+                            /* Use memcpy not strlcpy to avoid memory corruption */
+
+                            memcpy(Sagan_Redis_Write[redis_msgslot].key, tmp_key, MAX_REDIS_KEY_SIZE);
+                            Sagan_Redis_Write[redis_msgslot].key[ MAX_REDIS_KEY_SIZE - 1] = '\0';
+
+
+                            memcpy(Sagan_Redis_Write[redis_msgslot].value, tmp_data, config->message_buffer_size * 2);
+                            Sagan_Redis_Write[redis_msgslot].value[ (config->message_buffer_size * 2) - 1] = '\0';
+
+
                             Sagan_Redis_Write[redis_msgslot].expire = rulestruct[rule_position].xbit_expire[r];
 
                             redis_msgslot++;

@@ -22,6 +22,9 @@
 
 #include <hiredis/hiredis.h>
 
+#define   MAX_REDIS_KEY_SIZE            128
+
+
 void Redis_Reader_Connect ( void );
 void Redis_Writer (void);
 void Redis_Writer_Init (void);
