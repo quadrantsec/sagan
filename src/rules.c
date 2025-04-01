@@ -213,6 +213,8 @@ void Load_Rules( const char *ruleset )
     uint8_t d=0;
 
     int rc=0;
+    
+    uint_fast8_t z = 0;
 
     uint32_t forward=0;
     uint32_t reverse=0;
@@ -267,6 +269,7 @@ void Load_Rules( const char *ruleset )
             pcre_count=0;
             json_pcre_count=0;
             json_meta_content_count=0;
+	    json_meta_content_converted_count=0;
             content_count=0;
             json_content_count=0;
             json_map_count=0;
@@ -303,6 +306,7 @@ void Load_Rules( const char *ruleset )
                     /* Allocate memory for rules, but not comments */
 
                     rulestruct = (_Rule_Struct *) realloc(rulestruct, (counters->rulecount+1) * sizeof(_Rule_Struct));
+
                     if ( rulestruct == NULL )
                         {
                             Sagan_Log(ERROR, "[%s, line %d] Failed to reallocate memory for rulestruct. Abort!", __FILE__, __LINE__);
@@ -2470,7 +2474,6 @@ void Load_Rules( const char *ruleset )
                                 }
 
                             Between_Quotes(tmptoken, rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count],sizeof(rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count]), ruleset_fullname, linecount, true);
-
 
                             if ( rulestruct[counters->rulecount].json_meta_content_key[json_meta_content_count][0] != '.' )
                                 {

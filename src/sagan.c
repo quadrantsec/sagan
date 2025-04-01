@@ -292,6 +292,8 @@ int main(int argc, char **argv)
             Sagan_Log(ERROR, "[%s, line %d] Failed to allocate memory for config. Abort!", __FILE__, __LINE__);
         }
 
+    memset( config, 0, sizeof(_SaganConfig));
+
     /* Allocate memory for global struct _SaganCounters */
 
     counters = malloc(sizeof(_SaganCounters));
