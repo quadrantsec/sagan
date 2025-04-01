@@ -53,8 +53,8 @@ typedef void json_object;
 #define MAX_SYSLOG_PRIORITY	20
 #define MAX_SYSLOG_LEVEL	15
 #define MAX_SYSLOG_TAG		64
-#define MAX_SYSLOG_DATE		32
-#define MAX_SYSLOG_TIME		32
+#define MAX_SYSLOG_DATE		35
+#define MAX_SYSLOG_TIME		35
 #define MAX_SYSLOG_PROGRAM	50
 
 #define MAX_SYSLOGMSG		32768
