@@ -213,7 +213,7 @@ void Load_Rules( const char *ruleset )
     uint8_t d=0;
 
     int rc=0;
-    
+
     uint_fast8_t z = 0;
 
     uint32_t forward=0;
@@ -629,7 +629,7 @@ void Load_Rules( const char *ruleset )
 
                                             f1++;
 
-                                            is_masked = Netaddr_To_Range(tmptoken, (unsigned char *)&rulestruct[counters->rulecount].flow_1[flow_1_count].range);
+                                            is_masked = Netaddr_To_Range(tok_help, (unsigned char *)&rulestruct[counters->rulecount].flow_1[flow_1_count].range);
 
                                             if(strchr(tmptoken, '/'))
                                                 {
@@ -815,7 +815,7 @@ void Load_Rules( const char *ruleset )
 
                                             f2++;
 
-                                            is_masked = Netaddr_To_Range(tmptoken, (unsigned char *)&rulestruct[counters->rulecount].flow_2[flow_2_count].range);
+                                            is_masked = Netaddr_To_Range(tok_help, (unsigned char *)&rulestruct[counters->rulecount].flow_2[flow_2_count].range);
 
                                             if(strchr(tmptoken, '/'))
                                                 {
