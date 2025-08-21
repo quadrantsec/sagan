@@ -2760,6 +2760,8 @@ void Load_YAML_Config( char *yaml_file, bool is_root_config )
     // Don't perform sanity checks if not root config
     if (!is_root_config)
         {
+	    free(lf1);
+  	    free(lf2);
             return;
         }
 

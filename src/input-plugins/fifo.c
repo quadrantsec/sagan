@@ -270,4 +270,5 @@ void FIFO_Input ( void )
         }
 
     free(syslogstring);
+    free(SaganPassSyslog_LOCAL);
 }

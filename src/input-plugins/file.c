@@ -98,6 +98,7 @@ void File_Input( const char *input_file )
     if (( fd = fopen(input_file, "r" )) == NULL )
         {
             Sagan_Log(WARN, "[%s, line %d] Cannot open %s! [%s]", __FILE__, __LINE__, input_file, strerror(errno));
+	    free(SaganPassSyslog_LOCAL);
             return;
         }
 
@@ -210,6 +211,9 @@ void File_Input( const char *input_file )
 
 
         }
+
+    free(syslogstring);
+    free(SaganPassSyslog_LOCAL);
 
     fclose(fd);
 

@@ -86,8 +86,8 @@ void ZeekIntel_Load_File ( void )
     char *tok = NULL; ;
     char *ptmp = NULL;
 
-    uint_fast32_t line_count;
-    uint_fast32_t i;
+    uint_fast32_t line_count = 0;
+    uint_fast32_t i = 0;
 
     unsigned char bits_ip[MAXIPBIT] = {0};
 

@@ -3669,7 +3669,7 @@ void Load_Rules( const char *ruleset )
 
                                     if ( found == 0 )
                                         {
-                                            Sagan_Log(ERROR, "[%s, line %d] %s on line %d has an unknown \"brointel\" option \"%s\", Abort.", __FILE__, __LINE__, ruleset_fullname, linecount, tmptoken);
+                                            Sagan_Log(ERROR, "[%s, line %d] %s on line %d has an unknown \"zeekintel\" option \"%s\", Abort.", __FILE__, __LINE__, ruleset_fullname, linecount, tmptoken);
                                         }
 
                                     tmptoken = strtok_r(NULL, ",", &saveptrrule3);
