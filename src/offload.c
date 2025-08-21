@@ -69,7 +69,6 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
 
     curl = curl_easy_init();
 
-
     if (curl)
         {
 
@@ -130,6 +129,8 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
                     Sagan_Log(DEBUG, "%s returned \"true\" - Thread ID: %lu", rulestruct[rule_position].offload_location, pthread_self() );
                 }
 
+	    curl_easy_cleanup(curl);
+
             return( true );
         }
 
@@ -138,6 +139,8 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
         {
             Sagan_Log(DEBUG, "%s returned \"false\" - Thread ID: %lu", rulestruct[rule_position].offload_location, pthread_self() );
         }
+
+    curl_easy_cleanup(curl);
 
     return false;
 

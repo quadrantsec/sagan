@@ -728,6 +728,8 @@ void Sagan_Engine ( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL, struct _Sa
                             /* Liblognorm - Do normalization before event_id processing */
                             /************************************************************/
 
+			    /* LOCAL->username is getting cleared on next run */
+
                             if ( flag == true )
                                 {
 

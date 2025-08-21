@@ -398,10 +398,4 @@ void Normalize_Liblognorm( struct _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
     json_object_put(json_norm);
 }
 
-void IPv4_as_6( char *ip )
-{
-
-
-}
-
 #endif
