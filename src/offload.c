@@ -98,6 +98,9 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
                 {
 
                     Sagan_Log( NORMAL, "Offload failed: %s", curl_easy_strerror(res) );
+
+		    curl_easy_cleanup(curl);
+
                     return(false);
 
                 }
@@ -113,6 +116,8 @@ bool Offload( uint_fast32_t rule_position, const char *syslog_host, const char *
                         {
                             Sagan_Log(DEBUG, "Empty response for Thread ID: %lu", pthread_self() );
                         }
+
+		    curl_easy_cleanup(curl);
 
                     return(false);
                 }
