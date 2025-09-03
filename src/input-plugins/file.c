@@ -98,6 +98,7 @@ void File_Input( const char *input_file )
     if (( fd = fopen(input_file, "r" )) == NULL )
         {
             Sagan_Log(WARN, "[%s, line %d] Cannot open %s! [%s]", __FILE__, __LINE__, input_file, strerror(errno));
+	    free(syslogstring);
 	    free(SaganPassSyslog_LOCAL);
             return;
         }
@@ -124,6 +125,7 @@ void File_Input( const char *input_file )
 
             if ( bytes_total >= config->message_buffer_size )
                 {
+		    Sagan_Log(WARN, "Received log over the 'message-buffer-size' size.  Consider increasing this value!");
                     counters->max_bytes_over++;
                 }
 

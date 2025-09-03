@@ -182,7 +182,10 @@ void FIFO_Input ( void )
 
                             if ( bytes_total >= config->message_buffer_size )
                                 {
+
+				    Sagan_Log(WARN, "Received log over the 'message-buffer-size' size.  Consider increasing this value!");
                                     counters->max_bytes_over++;
+
                                 }
 
                             /* Check for "drop" to save CPU from "ignore list" */

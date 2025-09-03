@@ -98,6 +98,8 @@ void GZIP_Input( const char *input_file )
     if (( fd = gzopen(input_file, "rb")) == NULL )
         {
             Sagan_Log(WARN, "[%s, line %d] Cannot open %s! [%s]", __FILE__, __LINE__, input_file, strerror(errno));
+ 	    free(SaganPassSyslog_LOCAL);
+	    free(syslogstring);
             return;
         }
 
@@ -122,6 +124,7 @@ void GZIP_Input( const char *input_file )
 
             if ( bytes_total >= config->message_buffer_size )
                 {
+		    Sagan_Log(WARN, "Received log over the 'message-buffer-size' size.  Consider increasing this value!");
                     counters->max_bytes_over++;
                 }
 
@@ -202,6 +205,7 @@ void GZIP_Input( const char *input_file )
 
         }
 
+    free(SaganPassSyslog_LOCAL);
     free(syslogstring);
     gzclose(fd);
 
