@@ -523,6 +523,8 @@ void Sagan_Bluedot_Clean_Cache ( void )
 
     deleted_count = 0;
 
+    pthread_mutex_lock(&SaganProcBluedotIPWorkMutex);
+
     for (i=0; i < config->bluedot_ip_max_cache; i++ )
         {
 
@@ -534,15 +536,11 @@ void Sagan_Bluedot_Clean_Cache ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] == Deleting IP address from cache -> %u",  __FILE__, __LINE__, SaganBluedotIPCache[i].ip);
                         }
 
-//                    pthread_mutex_lock(&SaganProcBluedotIPWorkMutex);
-
                     memset(SaganBluedotIPCache[i].ip, 0, MAXIPBIT);
                     SaganBluedotIPCache[i].mdate_utime = 0;
                     SaganBluedotIPCache[i].cdate_utime = 0;
                     SaganBluedotIPCache[i].cache_utime = 0;
                     SaganBluedotIPCache[i].alertid = 0;
-
-//                    pthread_mutex_unlock(&SaganProcBluedotIPWorkMutex);
 
                     deleted_count++;
 
@@ -555,16 +553,18 @@ void Sagan_Bluedot_Clean_Cache ( void )
                 }
         }
 
-//    pthread_mutex_lock(&SaganProcBluedotIPWorkMutex);
     deleted_count = counters->bluedot_ip_cache_count - new_bluedot_ip_max_cache;
     counters->bluedot_ip_cache_count = new_bluedot_ip_max_cache;
-//    pthread_mutex_unlock(&SaganProcBluedotIPWorkMutex);
+
+    pthread_mutex_unlock(&SaganProcBluedotIPWorkMutex);
 
     Sagan_Log(NORMAL, "[%s, line %d] Deleted %d IP addresses from Bluedot cache. New IP cache count is %d.",__FILE__, __LINE__, deleted_count, counters->bluedot_ip_cache_count);
 
     /* Clean hash cache */
 
     deleted_count = 0;
+
+    pthread_mutex_lock(&SaganProcBluedotHashWorkMutex);
 
     for (i=0; i < config->bluedot_hash_max_cache; i++ )
         {
@@ -577,13 +577,9 @@ void Sagan_Bluedot_Clean_Cache ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] == Deleting Hash address from cache -> %s",  __FILE__, __LINE__, SaganBluedotHashCache[i].hash);
                         }
 
-//                    pthread_mutex_lock(&SaganProcBluedotHashWorkMutex);
-
                     memset(SaganBluedotHashCache[i].hash, 0, SHA256_HASH_SIZE+1);
                     SaganBluedotHashCache[i].cache_utime = 0;
                     SaganBluedotHashCache[i].alertid = 0;
-
-//                    pthread_mutex_unlock(&SaganProcBluedotHashWorkMutex);
 
                     deleted_count++;
 
@@ -596,16 +592,18 @@ void Sagan_Bluedot_Clean_Cache ( void )
                 }
         }
 
-//    pthread_mutex_lock(&SaganProcBluedotHashWorkMutex);
     deleted_count = counters->bluedot_hash_cache_count - new_bluedot_hash_max_cache;
     counters->bluedot_hash_cache_count = new_bluedot_hash_max_cache;
-//    pthread_mutex_unlock(&SaganProcBluedotHashWorkMutex);
+
+    pthread_mutex_unlock(&SaganProcBluedotHashWorkMutex);
 
     Sagan_Log(NORMAL, "[%s, line %d] Deleted %d hashes from Bluedot cache. New hash cache count is %d.",__FILE__, __LINE__, deleted_count, counters->bluedot_hash_cache_count);
 
     /* Clean URL cache */
 
     deleted_count = 0;
+
+    pthread_mutex_lock(&SaganProcBluedotURLWorkMutex);
 
     for (i=0; i < config->bluedot_url_max_cache; i++ )
         {
@@ -618,13 +616,9 @@ void Sagan_Bluedot_Clean_Cache ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] == Deleting URL address from cache -> %s",  __FILE__, __LINE__, SaganBluedotURLCache[i].url);
                         }
 
-//                    pthread_mutex_lock(&SaganProcBluedotURLWorkMutex);
-
                     memset(SaganBluedotURLCache[i].url, 0, sizeof(SaganBluedotURLCache[i].url));
                     SaganBluedotURLCache[i].cache_utime = 0;
                     SaganBluedotURLCache[i].alertid = 0;
-
-//                    pthread_mutex_unlock(&SaganProcBluedotURLWorkMutex);
 
                     deleted_count++;
 
@@ -637,16 +631,18 @@ void Sagan_Bluedot_Clean_Cache ( void )
                 }
         }
 
-//    pthread_mutex_lock(&SaganProcBluedotURLWorkMutex);
     deleted_count = counters->bluedot_url_cache_count - new_bluedot_url_max_cache;
     counters->bluedot_url_cache_count = new_bluedot_url_max_cache;
-//    pthread_mutex_unlock(&SaganProcBluedotURLWorkMutex);
+
+    pthread_mutex_unlock(&SaganProcBluedotURLWorkMutex);
 
     Sagan_Log(NORMAL, "[%s, line %d] Deleted %d URLs from Bluedot cache. New URL cache count is %d.",__FILE__, __LINE__, deleted_count, counters->bluedot_url_cache_count);
 
     /* Clean Filename cache */
 
     deleted_count = 0;
+
+    pthread_mutex_lock(&SaganProcBluedotFilenameWorkMutex);
 
     for (i=0; i < config->bluedot_filename_max_cache; i++ )
         {
@@ -659,13 +655,9 @@ void Sagan_Bluedot_Clean_Cache ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] == Deleting filename from cache -> %s",  __FILE__, __LINE__, SaganBluedotFilenameCache[i].filename);
                         }
 
-//                    pthread_mutex_lock(&SaganProcBluedotFilenameWorkMutex);
-
                     memset(SaganBluedotFilenameCache[i].filename, 0, sizeof(SaganBluedotFilenameCache[i].filename));
                     SaganBluedotFilenameCache[i].cache_utime = 0;
                     SaganBluedotFilenameCache[i].alertid = 0;
-
-//                    pthread_mutex_unlock(&SaganProcBluedotFilenameWorkMutex);
 
                     deleted_count++;
 
@@ -678,16 +670,18 @@ void Sagan_Bluedot_Clean_Cache ( void )
                 }
         }
 
-//    pthread_mutex_lock(&SaganProcBluedotFilenameWorkMutex);
     deleted_count = counters->bluedot_filename_cache_count - new_bluedot_filename_max_cache;
     counters->bluedot_filename_cache_count = new_bluedot_filename_max_cache;
-//    pthread_mutex_unlock(&SaganProcBluedotFilenameWorkMutex);
+
+    pthread_mutex_unlock(&SaganProcBluedotFilenameWorkMutex);
 
     Sagan_Log(NORMAL, "[%s, line %d] Deleted %d Filenames from Bluedot cache. New Filename cache count is %d.",__FILE__, __LINE__, deleted_count, counters->bluedot_filename_cache_count);
 
     /* Clean JA3 cache */
 
     deleted_count = 0;
+
+    pthread_mutex_lock(&SaganProcBluedotJA3WorkMutex);
 
     for (i=0; i < config->bluedot_ja3_max_cache; i++ )
         {
@@ -700,13 +694,9 @@ void Sagan_Bluedot_Clean_Cache ( void )
                             Sagan_Log(DEBUG, "[%s, line %d] == Deleting JA3 from cache -> %s",  __FILE__, __LINE__, SaganBluedotJA3Cache[i].ja3);
                         }
 
-//                    pthread_mutex_lock(&SaganProcBluedotJA3WorkMutex);
-
                     memset(SaganBluedotJA3Cache[i].ja3, 0, sizeof(SaganBluedotJA3Cache[i].ja3));
-                    SaganBluedotFilenameCache[i].cache_utime = 0;
-                    SaganBluedotFilenameCache[i].alertid = 0;
-
-//                    pthread_mutex_unlock(&SaganProcBluedotJA3WorkMutex);
+                    SaganBluedotJA3Cache[i].cache_utime = 0;
+                    SaganBluedotJA3Cache[i].alertid = 0;
 
                     deleted_count++;
 
@@ -719,10 +709,10 @@ void Sagan_Bluedot_Clean_Cache ( void )
                 }
         }
 
-//    pthread_mutex_lock(&SaganProcBluedotJA3WorkMutex);
     deleted_count = counters->bluedot_ja3_cache_count - new_bluedot_ja3_max_cache;
     counters->bluedot_ja3_cache_count = new_bluedot_ja3_max_cache;
-//    pthread_mutex_unlock(&SaganProcBluedotJA3WorkMutex);
+
+    pthread_mutex_unlock(&SaganProcBluedotJA3WorkMutex);
 
     Sagan_Log(NORMAL, "[%s, line %d] Deleted %d JA3 hashes from Bluedot cache. New Filename cache count is %d.",__FILE__, __LINE__, deleted_count, counters->bluedot_ja3_cache_count);
 
