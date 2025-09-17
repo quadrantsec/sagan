@@ -86,7 +86,7 @@ void Redis_Writer_Init ( void )
         }
 
 
-    Sagan_Redis_Write->key = malloc( MAX_REDIS_KEY_SIZE );
+    Sagan_Redis_Write->key = malloc( MAX_REDIS_KEY_SIZE + 1 );
 
     if ( Sagan_Redis_Write->key == NULL )
         {

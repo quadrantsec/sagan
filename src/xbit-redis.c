@@ -82,7 +82,7 @@ void Xbit_Set_Redis(uint_fast32_t rule_position, struct _Sagan_Proc_Syslog *Saga
 
     tmp_data[0] = '\0';
 
-    char *tmp_key = malloc( MAX_REDIS_KEY_SIZE );
+    char *tmp_key = malloc( MAX_REDIS_KEY_SIZE + 1 );
 
     if ( tmp_key == NULL )
         {
