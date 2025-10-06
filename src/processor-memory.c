@@ -238,7 +238,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
 
     SaganProcSyslog_LOCAL->md5[0] = '\0';
 
-    /* ---- */ 
+    /* ---- */
 
     SaganProcSyslog_LOCAL->sha1 = malloc( SHA1_HASH_SIZE+1 );
 
@@ -333,7 +333,7 @@ void Processor_Memory(  _Sagan_Proc_Syslog *SaganProcSyslog_LOCAL )
         }
 
 //    SaganProcSyslog_LOCAL->correlation_json[0] = '\0';
-    memset( SaganProcSyslog_LOCAL->correlation_json, 0, config->message_buffer_size ); 
+    memset( SaganProcSyslog_LOCAL->correlation_json, 0, config->message_buffer_size );
 
 #endif
 

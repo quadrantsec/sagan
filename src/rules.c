@@ -213,7 +213,7 @@ void Load_Rules( const char *ruleset )
     uint8_t d=0;
 
     int rc=0;
-    
+
     uint_fast8_t z = 0;
 
     uint32_t forward=0;
@@ -269,7 +269,7 @@ void Load_Rules( const char *ruleset )
             pcre_count=0;
             json_pcre_count=0;
             json_meta_content_count=0;
-	    json_meta_content_converted_count=0;
+            json_meta_content_converted_count=0;
             content_count=0;
             json_content_count=0;
             json_map_count=0;

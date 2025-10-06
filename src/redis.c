@@ -383,21 +383,32 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
                     if ( debug->debugredis )
                         {
                             Sagan_Log(DEBUG, "[%s, line %d] Redis Command: \"%s\"", __FILE__, __LINE__, redis_command);
-                            Sagan_Log(DEBUG, "[%s, line %d] Redis Reply: \"%s\"", __FILE__, __LINE__, reply->str);
-
                         }
 
-                    if ( reply->elements == 0 )
+                    if ( reply->type == REDIS_REPLY_STRING && reply->len > 0 )
                         {
+
+                            if ( debug->debugredis )
+                                {
+                                    Sagan_Log(DEBUG, "[%s, line %d] Redis 'string' Reply: \"%s\"", __FILE__, __LINE__, reply->str);
+                                }
+
                             snprintf(str, size, reply->str);
-                        }
-                    else
-                        {
-                            snprintf(str, size, reply->element[0]->str);
-                        }
+                            str[reply->len] = '\0';
 
-                    /* Got good response, free here.  If we don't get a good response
-                       and free, we'll get a fault. */
+                        }
+                    else if ( reply->type == REDIS_REPLY_ARRAY && reply->elements > 0 )
+                        {
+
+                            if ( debug->debugredis )
+                                {
+                                    Sagan_Log(DEBUG, "[%s, line %d] Redis 'array' Reply: \"%s\"", __FILE__, __LINE__, reply->element[0]->str);
+                                }
+
+                            snprintf(str, size, reply->element[0]->str);
+                            str[reply->len] = '\0';
+
+                        }
 
                     freeReplyObject(reply);
                 }
