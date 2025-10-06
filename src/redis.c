@@ -385,11 +385,8 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
                             Sagan_Log(DEBUG, "[%s, line %d] Redis Command: \"%s\"", __FILE__, __LINE__, redis_command);
                         }
 
-                    if ( reply->type == REDIS_REPLY_STRING && reply->len > 0 )
+                    if ( ( reply->type == REDIS_REPLY_STATUS || reply->type == REDIS_REPLY_STRING ) && reply->len > 0 )
                         {
-
-			    printf("----> IN STRING\n");
-			   fflush(stdout);
 
                             if ( debug->debugredis )
                                 {
@@ -402,9 +399,6 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
                         }
                     else if ( reply->type == REDIS_REPLY_ARRAY && reply->elements > 0 )
                         {
-
-                            printf("----> IN ARRAYn");
-                           fflush(stdout);
 
                             if ( debug->debugredis )
                                 {
