@@ -383,6 +383,14 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
                     if ( debug->debugredis )
                         {
                             Sagan_Log(DEBUG, "[%s, line %d] Redis Command: \"%s\"", __FILE__, __LINE__, redis_command);
+
+                            if ( reply->type == REDIS_REPLY_NIL )
+                                {
+
+                                    Sagan_Log(DEBUG, "[%s, line %d] Got NULL response.", __FILE__, __LINE__, redis_command);
+
+                                }
+
                         }
 
                     if ( ( reply->type == REDIS_REPLY_STATUS || reply->type == REDIS_REPLY_STRING ) && reply->len > 0 )
