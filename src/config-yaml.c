@@ -32,6 +32,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <sys/stat.h>
 #include <libgen.h>
 #include <string.h>

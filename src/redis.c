@@ -104,59 +104,95 @@ void Redis_Reader_Connect ( void )
 {
 
     redisReply *reply;
+    bool authenticated = false;
 
-    config->c_reader_redis = NULL;
-
-    while ( config->c_reader_redis == NULL || config->c_reader_redis->err )
+    while ( authenticated == false )
         {
 
-            struct timeval timeout = { 1, 500000 }; // 5.5 seconds
-            config->c_reader_redis = redisConnectWithTimeout(config->redis_server, config->redis_port, timeout);
+            config->c_reader_redis = NULL;
 
-            if (config->c_reader_redis == NULL || config->c_reader_redis->err)
+            while ( config->c_reader_redis == NULL || config->c_reader_redis->err )
                 {
 
-                    if (config->c_reader_redis)
+                    struct timeval timeout = { 1, 500000 }; // 5.5 seconds
+                    config->c_reader_redis = redisConnectWithTimeout(config->redis_server, config->redis_port, timeout);
+
+                    if (config->c_reader_redis == NULL || config->c_reader_redis->err)
                         {
+
+                            if (config->c_reader_redis)
+                                {
+
+                                    /* NULL the context after freeing so the loop
+                                       condition doesn't read freed memory. */
+
+                                    redisFree(config->c_reader_redis);
+                                    config->c_reader_redis = NULL;
+                                    Sagan_Log(WARN, "[%s, line %d] Redis 'reader' connection error! Sleeping for 2 seconds!", __FILE__, __LINE__);
+
+                                }
+                            else
+                                {
+                                    Sagan_Log(WARN, "[%s, line %d] Redis 'reader' connection error - Can't allocate Redis context", __FILE__, __LINE__);
+                                }
+                            sleep(2);
+                        }
+                }
+
+            /******************/
+            /* Log into Redis */
+            /******************/
+
+            if ( config->redis_password[0] != '\0' )
+                {
+
+                    reply = redisCommand(config->c_reader_redis, "AUTH %s", config->redis_password);
+
+                    if ( reply == NULL )
+                        {
+
+                            /* redisCommand() returns NULL when the connection drops
+                               mid-AUTH, which is exactly what happens during Redis
+                               connectivity problems.  Dereferencing reply->str here was
+                               the crash.  Free the context, back off, and retry the
+                               whole connect/auth sequence. */
+
                             redisFree(config->c_reader_redis);
-                            Sagan_Log(WARN, "[%s, line %d] Redis 'reader' connection error! Sleeping for 2 seconds!", __FILE__, __LINE__);
+                            config->c_reader_redis = NULL;
+                            Sagan_Log(WARN, "[%s, line %d] Redis 'reader' disconnected during AUTH! Sleeping for 2 seconds!", __FILE__, __LINE__);
+                            sleep(2);
+                            continue;
+
+                        }
+
+                    if ( reply->str != NULL && !strcmp(reply->str, "OK"))
+                        {
+
+                            if ( debug->debugredis )
+                                {
+
+                                    Sagan_Log( DEBUG, "Authentication success for 'reader' to Redis server at %s:%d (pthread ID: %lu).", config->redis_server, config->redis_port, pthread_self() );
+
+                                }
+
+                            freeReplyObject(reply);
 
                         }
                     else
                         {
-                            Sagan_Log(WARN, "[%s, line %d] Redis 'reader' connection error - Can't allocate Redis context", __FILE__, __LINE__);
-                        }
-                    sleep(2);
-                }
-        }
 
-    /******************/
-    /* Log into Redis */
-    /******************/
+                            /* A real (non-NULL) reply that isn't "OK" means the
+                               password is wrong.  That's fatal, as before. */
 
-    if ( config->redis_password[0] != '\0' )
-        {
-
-            reply = redisCommand(config->c_reader_redis, "AUTH %s", config->redis_password);
-
-            if (!strcmp(reply->str, "OK"))
-                {
-
-                    if ( debug->debugredis )
-                        {
-
-                            Sagan_Log( DEBUG, "Authentication success for 'reader' to Redis server at %s:%d (pthread ID: %lu).", config->redis_server, config->redis_port, pthread_self() );
+                            freeReplyObject(reply);
+                            Remove_Lock_File();
+                            Sagan_Log(ERROR, "Authentication failure for 'reader' to to Redis server at %s:%d (pthread ID: %lu). Abort!", config->redis_server, config->redis_port, pthread_self() );
 
                         }
-
                 }
-            else
-                {
 
-                    Remove_Lock_File();
-                    Sagan_Log(ERROR, "Authentication failure for 'reader' to to Redis server at %s:%d (pthread ID: %lu). Abort!", config->redis_server, config->redis_port, pthread_self() );
+            authenticated = true;
 
-                }
         }
 
     pthread_mutex_lock(&RedisErrorMutex);
@@ -174,63 +210,98 @@ void Redis_Writer_Connect(void)
 {
 
     redisReply *reply;
+    bool authenticated = false;
 
-    c_writer_redis = NULL;
-
-    while ( c_writer_redis == NULL || c_writer_redis->err )
+    while ( authenticated == false )
         {
 
-            struct timeval timeout = { 5, 500000 }; // 5.5 seconds
-            c_writer_redis = redisConnectWithTimeout(config->redis_server, config->redis_port, timeout);
+            c_writer_redis = NULL;
 
-            if (c_writer_redis == NULL || c_writer_redis->err)
+            while ( c_writer_redis == NULL || c_writer_redis->err )
                 {
 
-                    if (c_writer_redis)
+                    struct timeval timeout = { 5, 500000 }; // 5.5 seconds
+                    c_writer_redis = redisConnectWithTimeout(config->redis_server, config->redis_port, timeout);
+
+                    if (c_writer_redis == NULL || c_writer_redis->err)
                         {
 
-                            Sagan_Log(WARN, "[%s, line %d] Redis 'writer' connection error! Sleeping for 2 seconds.", __FILE__, __LINE__);
+                            if (c_writer_redis)
+                                {
+
+                                    /* Free the failed context (was leaked on every
+                                       retry) and NULL it so the loop condition doesn't
+                                       read freed memory. */
+
+                                    redisFree(c_writer_redis);
+                                    c_writer_redis = NULL;
+                                    Sagan_Log(WARN, "[%s, line %d] Redis 'writer' connection error! Sleeping for 2 seconds.", __FILE__, __LINE__);
+
+                                }
+                            else
+                                {
+
+                                    Sagan_Log(ERROR, "[%s, line %d] Redis 'writer' connection error - Can't allocate Redis context.", __FILE__, __LINE__);
+
+                                }
+
+                            sleep(2);
+                        }
+
+                }
+
+            /******************/
+            /* Log into Redis */
+            /******************/
+
+            if ( config->redis_password[0] != '\0' )
+                {
+
+                    reply = redisCommand(c_writer_redis, "AUTH %s", config->redis_password);
+
+                    if ( reply == NULL )
+                        {
+
+                            /* Connection dropped during AUTH.  Free the context, back
+                               off, and retry rather than dereferencing a NULL reply
+                               (crash under Redis connectivity loss). */
+
+                            redisFree(c_writer_redis);
+                            c_writer_redis = NULL;
+                            Sagan_Log(WARN, "[%s, line %d] Redis 'writer' disconnected during AUTH! Sleeping for 2 seconds!", __FILE__, __LINE__);
+                            sleep(2);
+                            continue;
+
+                        }
+
+                    if ( reply->str != NULL && !strcmp(reply->str, "OK"))
+                        {
+
+                            if ( debug->debugredis )
+                                {
+
+                                    Sagan_Log( DEBUG, "Authentication success for 'writer' to Redis server at %s:%d (pthread ID: %lu).", config->redis_server, config->redis_port, pthread_self() );
+
+                                }
+
+                            freeReplyObject(reply);
 
                         }
                     else
                         {
 
-                            Sagan_Log(ERROR, "[%s, line %d] Redis 'writer' connection error - Can't allocate Redis context.", __FILE__, __LINE__);
+                            /* A real (non-NULL) reply that isn't "OK" means the
+                               password is wrong.  That's fatal, as before. */
+
+                            freeReplyObject(reply);
+                            Remove_Lock_File();
+                            Sagan_Log(ERROR, "Authentication failure for 'writer' to to Redis server at %s:%d (pthread ID: %lu). Abort!", config->redis_server, config->redis_port, pthread_self() );
 
                         }
-
-                    sleep(2);
                 }
 
-        }
+            authenticated = true;
 
-    /******************/
-    /* Log into Redis */
-    /******************/
-
-    if ( config->redis_password[0] != '\0' )
-        {
-
-            reply = redisCommand(c_writer_redis, "AUTH %s", config->redis_password);
-
-            if (!strcmp(reply->str, "OK"))
-                {
-
-                    if ( debug->debugredis )
-                        {
-
-                            Sagan_Log( DEBUG, "Authentication success for 'writer' to Redis server at %s:%d (pthread ID: %lu).", config->redis_server, config->redis_port, pthread_self() );
-
-                        }
-
-                }
-            else
-                {
-
-                    Remove_Lock_File();
-                    Sagan_Log(ERROR, "Authentication failure for 'writer' to to Redis server at %s:%d (pthread ID: %lu). Abort!", config->redis_server, config->redis_port, pthread_self() );
-
-                }
         }
 
     pthread_mutex_lock(&RedisErrorMutex);
@@ -365,6 +436,13 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
 
     redisReply *reply;
 
+    char command_copy[512] = { 0 };
+    const char *argv[8] = { NULL };
+    size_t argvlen[8] = { 0 };
+    int argc = 0;
+    char *token = NULL;
+    char *sp = NULL;
+
     if ( connection_read_error == true )
         {
             Sagan_Log(WARN, "[%s, line %d] Redis is an error state.  Cannot write.", __FILE__, __LINE__);
@@ -373,8 +451,33 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
         }
     else
         {
+
+            /* Split the command on spaces and use redisCommandArgv() so the
+               command string is never run through printf-style formatting.
+               The old code passed it as the format string, so a '%' inside
+               a key (or stored data echoed into a command) was interpreted
+               as a printf conversion - undefined behavior/crash. */
+
+            strlcpy(command_copy, redis_command, sizeof(command_copy));
+
+            token = strtok_r(command_copy, " ", &sp);
+
+            while ( token != NULL && argc < 8 )
+                {
+                    argv[argc] = token;
+                    argvlen[argc] = strlen(token);
+                    argc++;
+                    token = strtok_r(NULL, " ", &sp);
+                }
+
+            if ( argc == 0 )
+                {
+                    str[0] = '\0';
+                    return;
+                }
+
             pthread_mutex_lock(&RedisReaderMutex);
-            reply = redisCommand(config->c_reader_redis, redis_command);
+            reply = redisCommandArgv(config->c_reader_redis, argc, argv, argvlen);
             pthread_mutex_unlock(&RedisReaderMutex);
 
             if ( reply != NULL )
@@ -401,11 +504,15 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
                                     Sagan_Log(DEBUG, "[%s, line %d] Redis 'string' Reply: \"%s\"", __FILE__, __LINE__, reply->str);
                                 }
 
-                            snprintf(str, size, reply->str);
-                            str[reply->len] = '\0';
+                            /* Use "%s" so the reply is copied as data, never interpreted
+                               as a printf format.  snprintf() bounds by 'size' and always
+                               NUL-terminates, so do NOT write str[reply->len] (reply->len
+                               can exceed 'size' and that write overran the buffer). */
+
+                            snprintf(str, size, "%s", reply->str);
 
                         }
-                    else if ( reply->type == REDIS_REPLY_ARRAY && reply->elements > 0 )
+                    else if ( reply->type == REDIS_REPLY_ARRAY && reply->elements > 0 && reply->element[0]->str != NULL )
                         {
 
                             if ( debug->debugredis )
@@ -413,8 +520,7 @@ void Redis_Reader ( const char *redis_command, char *str, size_t size )
                                     Sagan_Log(DEBUG, "[%s, line %d] Redis 'array' Reply: \"%s\"", __FILE__, __LINE__, reply->element[0]->str);
                                 }
 
-                            snprintf(str, size, reply->element[0]->str);
-                            str[reply->len] = '\0';
+                            snprintf(str, size, "%s", reply->element[0]->str);
 
                         }
 
