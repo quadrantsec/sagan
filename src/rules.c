@@ -2495,6 +2495,12 @@ void Load_Rules( const char *ruleset )
                             Content_Pipe(tmp1, linecount, ruleset_fullname, rule_tmp, sizeof(rule_tmp));
                             strlcpy(tmp2, rule_tmp, sizeof(tmp2));
 
+                            /* The value index is per container, not per rule:
+                               without this reset the second and later lists of
+                               one rule store their values at an offset and their
+                               counter covers empty leading slots. */
+                            json_meta_content_converted_count = 0;
+
                             ptmp = strtok_r(tmp2, ",", &tok);
 
                             while ( ptmp != NULL )
