@@ -323,9 +323,15 @@ AC_CHECK_FUNCS([select strstr strchr strcmp strlen sizeof write snprintf strncat
 
 AC_CHECK_LIB(m, main,,AC_MSG_ERROR(Sagan needs libm!))
 
-# OSX doesn't have librt - this needs to be fixed!
+# OSX and OpenBSD don't have librt - this needs to be fixed!
 
-AC_CHECK_LIB(rt, main,,AC_MSG_ERROR(Sagan needs librt!))
+case "$host" in
+*-*-openbsd*)
+	;;
+*)
+	AC_CHECK_LIB(rt, main,,AC_MSG_ERROR(Sagan needs librt!))
+	;;
+esac
 
 # libpthread
 AC_ARG_WITH(libpthread_includes,
