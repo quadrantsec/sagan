@@ -1294,6 +1294,14 @@ bool Is_IP_Range (char *str)
 
 int PageSupportsRWX(void)
 {
+#ifdef __OpenBSD__
+    /*
+     * OpenBSD does not permit W^X mappings; calling mprotect() with
+     * PROT_EXEC would get the process killed.  Report that RWX pages
+     * are not supported so PCRE JIT stays disabled.
+     */
+    return 0;
+#else
     int retval = 1;
     void *ptr;
     ptr = mmap(0, getpagesize(), PROT_READ|PROT_WRITE, MAP_ANON|MAP_SHARED, -1, 0);
@@ -1306,6 +1314,7 @@ int PageSupportsRWX(void)
             munmap(ptr, getpagesize());
         }
     return retval;
+#endif
 }
 #endif /* HAVE_SYS_MMAN_H */
 
